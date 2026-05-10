@@ -1,0 +1,26 @@
+{
+  "id": "com.opencode.acode",
+  "name": "OpenCode AI",
+  "version": "1.2.0",
+  "description": "AI-powered coding assistant powered by OpenCode. Get code explanations, fixes, and generation right inside Acode.",
+  "author": {
+    "name": "OpenCode",
+    "email": "opencode@example.com",
+    "url": "https://opencode.ai"
+  },
+  "main": "main.js",
+  "readme": "README.md",
+  "icon": "icon.png",
+  "files": ["main.js", "icon.png", "README.md"],
+  "minAcodeVersion": "1.10.0",
+  "minVersionCode": 290,
+  "price": 0,
+  "categories": ["ai", "developer-tools"],
+  "keywords": ["ai", "copilot", "code-assistant", "open-code", "chat"],
+  "homepage": "https://github.com/opencode/acode-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opencode/acode-plugin"
+  },
+  "license": "MIT"
+}

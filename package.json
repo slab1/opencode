@@ -1,0 +1,13 @@
+{
+  "name": "acode-opencode-plugin",
+  "version": "1.0.0",
+  "description": "OpenCode AI plugin for Acode editor",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/zip.js",
+    "dev": "node scripts/zip.js --watch"
+  },
+  "devDependencies": {
+    "archiver": "^7.0.0"
+  }
+}
