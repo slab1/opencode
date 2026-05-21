@@ -318,14 +318,35 @@ class AgentActivity:
         self.last_trace_len = 0
         self.last_findings = {}
         self.active = []
+        self._cached_ctx = None
+        self._last_mtime = 0
+        self._last_poll = 0.0
+        self._poll_interval = 0.5  # Max 2 polls/sec — prevents I/O thrashing
+
+    def _load_ctx(self):
+        """Read context only if mtime changed. Returns cached ctx otherwise."""
+        try:
+            mtime = os.path.getmtime(CONTEXT_FILE)
+            if mtime == self._last_mtime and self._cached_ctx is not None:
+                return self._cached_ctx
+            with open(CONTEXT_FILE) as f:
+                ctx = json.load(f)
+            self._cached_ctx = ctx
+            self._last_mtime = mtime
+            return ctx
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            return self._cached_ctx or {}
 
     def poll(self):
         """Check for new agent activity. Returns list of activity strings."""
+        now = time.time()
+        if now - self._last_poll < self._poll_interval:
+            return []  # Skip — too soon, prevents I/O thrashing on rapid typing
+        self._last_poll = now
+
         activities = []
-        try:
-            with open(CONTEXT_FILE) as f:
-                ctx = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
+        ctx = self._load_ctx()
+        if not ctx:
             return activities
 
         # Check workflow trace for new steps
@@ -581,6 +602,13 @@ class ChatUI:
         # ── Status bar ──
         self._render_status()
 
+        sys.stdout.flush()
+
+    def render_input_only(self):
+        """Fast partial render — only update input area and status bar.
+        Called on every keystroke during typing (skips full redraw + I/O)."""
+        self._render_input()
+        self._render_status()
         sys.stdout.flush()
 
     def _render_header(self):

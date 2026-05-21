@@ -36,6 +36,7 @@ Chat Keys:
 import json
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -414,10 +415,21 @@ class OpenCodeTUI:
         self.mode = "dashboard"  # dashboard, sessions, findings, chat, help
         self.chat = None
         self._old_term = None  # saved terminal attrs for raw mode
+        self._skip_render = False  # flag to skip full redraw after typing
+        self._resized = False  # flag set by SIGWINCH handler
+
+        # Handle terminal resize (SIGWINCH)
+        try:
+            signal.signal(signal.SIGWINCH, self._on_resize)
+        except (AttributeError, ValueError):
+            pass  # SIGWINCH not available on this platform
 
     def refresh(self, force=False):
-        """Refresh data if interval has passed."""
+        """Refresh data if interval has passed or terminal was resized."""
         now = time.time()
+        if self._resized:
+            self._resized = False
+            force = True
         if force or (now - self.last_refresh) > self.refresh_interval:
             self.ctx = load_context()
             if self.mode == "sessions":
@@ -433,6 +445,10 @@ class OpenCodeTUI:
     def clear_message(self):
         if self.message and (time.time() - self.message_time) > 3:
             self.message = ""
+
+    def _on_resize(self, _signum, _frame):
+        """Handle terminal resize (SIGWINCH) — flag next render to refresh size."""
+        self._resized = True
 
     # ── Panel renderers ─────────────────────────────────────────
 
@@ -707,11 +723,12 @@ class OpenCodeTUI:
                 write_at(x, y + i, line[:width - 3], Style.fg(C["fg"]))
 
     def render_message(self):
-        """Flash message at top."""
+        """Flash message in header bar."""
         if self.message:
-            msg = f"  {self.message}  "
-            msg_x = (self.cols - len(msg)) // 2
-            sys.stdout.write(f"{Style.goto(msg_x, 2)}{Style.bg(C['bg2'])}{Style.fg(C['accent'])}{msg}{Style.RESET}")
+            msg = f" {Style.DOT} {self.message}  "
+            # Place at far right, before version/status info
+            msg_x = max(1, self.cols - len(msg) - 25)
+            sys.stdout.write(f"{Style.goto(msg_x, 1)}{Style.bg(C['header_bg'])}{Style.fg(C['accent'])}{msg}{Style.RESET}")
             self.clear_message()
 
     # ── Layout ─────────────────────────────────────────────────
@@ -795,10 +812,12 @@ class OpenCodeTUI:
         elif action == "dashboard":
             self.mode = "dashboard"
             self.refresh(force=True)
-
-        # Refresh after send/new
-        if action in ("send", "new"):
+        elif action in ("send", "new"):
             self.refresh(force=True)
+        else:
+            # Typing or no-op — render input only and skip next full redraw
+            self.chat.render_input_only()
+            self._skip_render = True
 
     # ── Actions ─────────────────────────────────────────────────
 
@@ -869,7 +888,10 @@ class OpenCodeTUI:
         try:
             while self.running:
                 self.refresh()
-                self.render_dashboard()
+                if self._skip_render:
+                    self._skip_render = False
+                else:
+                    self.render_dashboard()
 
                 key = read_key(0.5)
                 if key is None:
