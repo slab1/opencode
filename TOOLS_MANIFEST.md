@@ -23,6 +23,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `oc-monitor` | Live terminal dashboard (like htop) | May 12 |
 | `oc-context` | Shared context inspection & management | May 21 |
 | `oc-gitpush` | Push OpenCode repo to GitHub (with token auth) | May 12 |
+| `oc-tui` | Keyboard-driven TUI dashboard for OpenCode | May 21 |
 
 ## Cache Scripts (`/data/user/0/com.foxdebug.acode/cache/opencode/`)
 
@@ -49,6 +50,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `vnc-daemon.sh` | VNC server daemon for headed browser mode |
 | `zip.js` | Build script producing `dist/acode-oc.zip` |
 | `oc-gitpush.sh` | Push OpenCode repo to GitHub with token auth |
+| `oc-tui.py` | Terminal UI dashboard for OpenCode (ANSI, zero deps) |
 
 ## Agent Configs (`agents/`)
 
@@ -78,6 +80,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `README.md` | Directory documentation |
 | `findings/*.json` | Per-agent finding files (14 agents, one file each) |
 | `helpers/context.py` | Python helper for agents to read/write context programmatically |
+| `helpers/` | Agent helper scripts (context.py for read/write operations) |
 
 To inspect the shared context at any time:
 ```bash
@@ -158,6 +161,7 @@ oc-cron          # Scheduled task manager
 oc-sync          # Cross-platform sync daemon
 oc-voice         # Voice command simulator
 oc-context       # Shared context inspection
+oc-tui           # Terminal UI dashboard (keyboard-driven)
 oc-gitpush       # Push OpenCode repo to GitHub
 
 # oc-context subcommands:
