@@ -51,6 +51,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `zip.js` | Build script producing `dist/acode-oc.zip` |
 | `oc-gitpush.sh` | Push OpenCode repo to GitHub with token auth |
 | `oc-tui.py` | Terminal UI dashboard for OpenCode (ANSI, zero deps) |
+| `oc_chat.py` | Chat interface module for oc-tui (multi-line, markdown, agent feed) |
 
 ## Agent Configs (`agents/`)
 
@@ -81,6 +82,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `findings/*.json` | Per-agent finding files (14 agents, one file each) |
 | `helpers/context.py` | Python helper for agents to read/write context programmatically |
 | `helpers/` | Agent helper scripts (context.py for read/write operations) |
+| `chat_history.json` | Chat conversation history (auto-managed by oc-tui chat) |
 
 To inspect the shared context at any time:
 ```bash
@@ -161,7 +163,7 @@ oc-cron          # Scheduled task manager
 oc-sync          # Cross-platform sync daemon
 oc-voice         # Voice command simulator
 oc-context       # Shared context inspection
-oc-tui           # Terminal UI dashboard (keyboard-driven)
+oc-tui           # Terminal UI dashboard + Chat (Tab to switch)
 oc-gitpush       # Push OpenCode repo to GitHub
 
 # oc-context subcommands:
