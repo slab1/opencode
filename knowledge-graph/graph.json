@@ -1,0 +1,442 @@
+{
+    "meta": {
+    "version": "1.3.0",
+    "created": "2026-05-06",
+    "updated": "2026-05-21T00:00:00Z",
+    "description": "OpenCode agent registry, capability map, and workflow patterns"
+  },
+
+  "agents": {
+    "build": {
+      "mode": "primary",
+      "capabilities": ["implement", "edit", "write", "bash", "code", "feature", "task"],
+      "strengths": ["feature development", "bug fixes", "prototyping", "production code"],
+      "weaknesses": ["benefits from planning input on complex features"],
+      "permissions": {"edit": "allow", "bash": "ask", "task": "allow"},
+      "file": "agents/build.md",
+      "can_invoke_subagents": true,
+      "invocation_depth": 3
+    },
+    "plan": {
+      "mode": "primary",
+      "capabilities": ["analyze", "breakdown", "roadmap", "design", "strategy", "task"],
+      "strengths": ["task decomposition", "implementation planning", "requirement analysis"],
+      "weaknesses": ["does not write or modify code", "cannot execute commands"],
+      "permissions": {"edit": "deny", "bash": "deny", "todowrite": "allow", "task": "allow"},
+      "file": "agents/plan.md",
+      "can_invoke_subagents": true,
+      "invocation_depth": 3
+    },
+    "architect": {
+      "mode": "subagent",
+      "capabilities": ["design", "evaluate", "webfetch", "bash", "scalability", "patterns"],
+      "strengths": ["system design", "technology decisions", "scalability planning", "integration design"],
+      "weaknesses": ["does not implement code", "does not plan tasks"],
+      "permissions": {"edit": "deny", "bash": "ask", "webfetch": "ask"},
+      "file": "agents/architect.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "debug": {
+      "mode": "subagent",
+      "capabilities": ["diagnose", "trace", "analyze", "bash", "isolate", "profile"],
+      "strengths": ["root cause analysis", "error investigation", "performance profiling"],
+      "weaknesses": ["does not implement fixes"],
+      "permissions": {"edit": "deny", "bash": "ask"},
+      "file": "agents/debug.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "docs": {
+      "mode": "subagent",
+      "capabilities": ["write", "edit", "document", "readme", "api-docs"],
+      "strengths": ["documentation", "README files", "API documentation", "user guides"],
+      "weaknesses": ["does not write functional code"],
+      "permissions": {"edit": "allow", "bash": "deny", "webfetch": "ask"},
+      "file": "agents/docs.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "explore": {
+      "mode": "subagent",
+      "capabilities": ["search", "read", "grep", "glob", "navigate"],
+      "strengths": ["fast codebase exploration", "finding files", "pattern matching"],
+      "weaknesses": ["does not modify code", "does not run commands"],
+      "permissions": {"edit": "deny", "bash": "deny", "todowrite": "deny"},
+      "file": "agents/explore.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "general": {
+      "mode": "subagent",
+      "capabilities": ["research", "analyze", "execute", "websearch", "webfetch", "coordinate"],
+      "strengths": ["multi-step research", "parallel execution", "complex investigations"],
+      "weaknesses": ["no code editing permissions"],
+      "permissions": {"edit": "deny", "bash": "ask", "todowrite": "allow"},
+      "file": "agents/general.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "refactor": {
+      "mode": "subagent",
+      "capabilities": ["edit", "restructure", "optimize", "bash", "patterns"],
+      "strengths": ["code improvement", "pattern application", "performance optimization"],
+      "weaknesses": ["preserves behavior, does not add features"],
+      "permissions": {"edit": "allow", "bash": "ask"},
+      "file": "agents/refactor.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "review": {
+      "mode": "subagent",
+      "capabilities": ["analyze", "bash", "quality", "best-practices"],
+      "strengths": ["code quality review", "best practices enforcement", "PR review"],
+      "weaknesses": ["does not implement changes"],
+      "permissions": {"edit": "deny", "bash": "ask"},
+      "file": "agents/review.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "security": {
+      "mode": "subagent",
+      "capabilities": ["audit", "websearch", "webfetch", "bash", "vulnerability", "cve"],
+      "strengths": ["vulnerability detection", "CVE analysis", "dependency auditing", "security best practices"],
+      "weaknesses": ["does not implement fixes"],
+      "permissions": {"edit": "deny", "bash": "ask"},
+      "file": "agents/security.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "test": {
+      "mode": "subagent",
+      "capabilities": ["edit", "write", "bash", "coverage", "unit-test", "integration-test"],
+      "strengths": ["test writing", "coverage analysis", "test framework integration"],
+      "weaknesses": ["does not write production code"],
+      "permissions": {"edit": "allow", "bash": "ask"},
+      "file": "agents/test.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "orchestrator": {
+      "mode": "primary",
+      "capabilities": ["decompose", "dispatch", "evaluate", "iterate", "synthesize", "verify", "task"],
+      "strengths": ["task orchestration", "multi-agent coordination", "gap detection", "quality assurance"],
+      "weaknesses": ["should delegate specialized work to appropriate agents"],
+      "permissions": {"edit": "allow", "bash": "ask", "todowrite": "allow", "task": "allow", "webfetch": "ask", "websearch": "ask"},
+      "file": "agents/orchestrator.md",
+      "can_invoke_subagents": true,
+      "can_invoke_all": true,
+      "invocation_depth": 5
+    },
+    "video-creator": {
+      "mode": "subagent",
+      "capabilities": ["video", "edit", "write", "bash", "media", "moviepy", "ffmpeg"],
+      "strengths": ["programmatic video creation", "text-to-video", "image slideshows", "video compositing", "platform optimization"],
+      "weaknesses": ["requires FFmpeg and Python dependencies", "no AI model inference for video generation"],
+      "permissions": {"edit": "allow", "bash": "ask", "webfetch": "ask", "websearch": "ask"},
+      "file": "agents/video-creator.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "web-browser": {
+      "mode": "subagent",
+      "capabilities": ["browse", "navigate", "click", "fill-forms", "extract-data", "screenshot", "javascript", "cookies"],
+      "strengths": ["full browser automation", "form filling", "flight booking", "web scraping", "multi-page workflows", "SPA support"],
+      "weaknesses": ["requires Chromium + Playwright", "headless by default", "some sites block automated browsers"],
+      "permissions": {"edit": "allow", "bash": "ask", "webfetch": "ask", "websearch": "ask"},
+      "file": "agents/web-browser.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "display-agent": {
+      "mode": "subagent",
+      "capabilities": ["display", "vnc", "xvfb", "x11vnc", "screenshot", "headed-browser", "video-preview"],
+      "strengths": ["virtual display management", "VNC remote access", "headed browser launch", "video preview on headless servers"],
+      "weaknesses": ["only manages display — does not control browsers or create videos", "requires Xvfb + x11vnc installed"],
+      "permissions": {"edit": "allow", "bash": "ask", "todowrite": "allow"},
+      "file": "agents/display-agent.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    }
+  },
+
+  "invocation_rules": {
+    "primary_can_invoke": ["build", "plan", "orchestrator"],
+    "video_creation_enabled": true,
+    "orchestrator_can_invoke": "all",
+    "max_recursion_depth_primary": 3,
+    "max_recursion_depth_orchestrator": 5,
+    "delegation_rule": "Subagents can invoke other agents ONLY when explicitly delegated by orchestrator or a primary agent.",
+    "depth_tracking": "Track invocation depth in reasoning. Level 1 = direct user task. Each subagent invocation increments depth."
+  },
+
+  "patterns": {
+    "auth-flow": {
+      "name": "Authentication Feature Development",
+      "agents": ["plan", "architect", "build", "security", "test"],
+      "trigger_keywords": ["login", "register", "auth", "oauth", "password", "signup", "signin", "session"],
+      "description": "Authentication and authorization feature development with security review",
+      "sequence": [
+        {"agent": "plan", "task": "Analyze auth requirements and create implementation plan"},
+        {"agent": "architect", "task": "Design auth system architecture and data flow"},
+        {"agent": "build", "task": "Implement the auth feature"},
+        {"agent": "security", "task": "Audit the implementation for vulnerabilities"},
+        {"agent": "test", "task": "Write comprehensive tests for auth flows"}
+      ]
+    },
+    "api-endpoint": {
+      "name": "API Endpoint Development",
+      "agents": ["plan", "build", "test", "docs"],
+      "trigger_keywords": ["endpoint", "api", "route", "handler", "rest", "graphql", "grpc"],
+      "description": "New API endpoint development with tests and documentation",
+      "sequence": [
+        {"agent": "plan", "task": "Plan the endpoint structure and requirements"},
+        {"agent": "build", "task": "Implement the endpoint"},
+        {"agent": "test", "task": "Write unit and integration tests"},
+        {"agent": "docs", "task": "Document the endpoint API"}
+      ]
+    },
+    "bug-fix": {
+      "name": "Bug Investigation and Fix",
+      "agents": ["debug", "build", "test"],
+      "trigger_keywords": ["bug", "error", "crash", "broken", "fail", "issue", "not working"],
+      "description": "Systematic bug investigation, fix implementation, and verification",
+      "sequence": [
+        {"agent": "debug", "task": "Investigate the bug and identify root cause"},
+        {"agent": "build", "task": "Implement the fix based on debug findings"},
+        {"agent": "test", "task": "Write regression tests for the fix"}
+      ]
+    },
+    "refactor": {
+      "name": "Code Refactoring and Improvement",
+      "agents": ["explore", "refactor", "test"],
+      "trigger_keywords": ["refactor", "cleanup", "improve", "restructure", "optimize", "technical debt"],
+      "description": "Code refactoring while preserving behavior",
+      "sequence": [
+        {"agent": "explore", "task": "Explore the codebase area to refactor"},
+        {"agent": "refactor", "task": "Apply refactoring patterns"},
+        {"agent": "test", "task": "Verify behavior is preserved with tests"}
+      ]
+    },
+    "security-audit": {
+      "name": "Security Audit and Remediation",
+      "agents": ["security", "build", "test"],
+      "trigger_keywords": ["security", "vulnerability", "audit", "cve", "exploit", "penetration"],
+      "description": "Comprehensive security audit with fix implementation",
+      "sequence": [
+        {"agent": "security", "task": "Perform security audit and identify vulnerabilities"},
+        {"agent": "build", "task": "Implement fixes for identified vulnerabilities"},
+        {"agent": "test", "task": "Write tests to prevent regression of security fixes"}
+      ]
+    },
+    "full-feature": {
+      "name": "Complete Feature Development Lifecycle",
+      "agents": ["plan", "architect", "build", "test", "docs"],
+      "trigger_keywords": ["feature", "implement", "add", "create", "new", "develop"],
+      "description": "End-to-end feature development from planning to documentation",
+      "sequence": [
+        {"agent": "plan", "task": "Break down feature requirements into implementation tasks"},
+        {"agent": "architect", "task": "Design system architecture if feature is complex"},
+        {"agent": "build", "task": "Implement the complete feature"},
+        {"agent": "test", "task": "Write comprehensive tests"},
+        {"agent": "docs", "task": "Update documentation for the feature"}
+      ]
+    },
+    "code-review": {
+      "name": "Comprehensive Code Review",
+      "agents": ["review", "security"],
+      "trigger_keywords": ["review", "PR", "pull request", "code review", "audit code"],
+      "description": "Multi-faceted code review with security checks",
+      "sequence": [
+        {"agent": "review", "task": "Perform code quality review"},
+        {"agent": "security", "task": "Check for security vulnerabilities"}
+      ]
+    },
+    "performance": {
+      "name": "Performance Investigation and Optimization",
+      "agents": ["debug", "refactor"],
+      "trigger_keywords": ["slow", "performance", "optimize", "bottleneck", "latency", "memory"],
+      "description": "Performance profiling and optimization",
+      "sequence": [
+        {"agent": "debug", "task": "Profile and identify performance bottlenecks"},
+        {"agent": "refactor", "task": "Implement performance optimizations"}
+      ]
+    },
+    "video-creation": {
+      "name": "Video Content Creation",
+      "agents": ["video-creator", "build", "test"],
+      "trigger_keywords": ["video", "video creation", "create video", "make video", "generate video", "video content", "tiktok", "youtube video", "reels", "shorts", "slideshow", "text to video"],
+      "description": "Programmatic video creation for social media platforms using MoviePy + FFmpeg",
+      "sequence": [
+        {"agent": "video-creator", "task": "Create the video using the opencode_video Python module"},
+        {"agent": "build", "task": "Implement any custom video generation scripts or fixes"},
+        {"agent": "test", "task": "Verify the output video renders correctly"}
+      ]
+    },
+    "web-automation": {
+      "name": "Web Browser Automation",
+      "agents": ["web-browser", "build"],
+      "trigger_keywords": ["browse", "web", "website", "browser", "click", "form", "login", "search", "scrape", "extract", "book", "flight", "fill", "navigate", "automate", "crawl"],
+      "description": "Full browser automation: navigate sites, fill forms, click elements, extract data, book flights",
+      "sequence": [
+        {"agent": "web-browser", "task": "Execute browser automation using the opencode_web Python module"},
+        {"agent": "build", "task": "Implement any custom web automation scripts or fix selectors"}
+      ]
+    },
+    "flight-booking": {
+      "name": "Flight Booking Automation",
+      "agents": ["web-browser", "build"],
+      "trigger_keywords": ["flight", "book flight", "book a flight", "airline", "travel", "trip", "airfare", "ticket", "plane"],
+      "description": "Automated flight search and booking on travel sites",
+      "sequence": [
+        {"agent": "web-browser", "task": "Search for flights using opencode_web.workflows.search_flights()"},
+        {"agent": "build", "task": "Customize flight search selectors for specific sites"}
+      ]
+    },
+    "display-management": {
+      "name": "Display / VNC Session Management",
+      "agents": ["display-agent", "build"],
+      "trigger_keywords": ["display", "vnc", "screen", "headed", "virtual display", "xvfb", "gui", "remote desktop", "show browser", "preview video"],
+      "description": "Set up a virtual display with VNC remote access for headed browser and video preview",
+      "sequence": [
+        {"agent": "display-agent", "task": "Start Xvfb virtual framebuffer + fluxbox + x11vnc VNC server"},
+        {"agent": "build", "task": "Additional display configuration if needed"}
+      ]
+    }
+  },
+
+  "quality_gates": {
+    "code_complete": [
+      "Implementation matches all requirements",
+      "Edge cases are handled",
+      "Error handling is in place",
+      "Code follows existing patterns and conventions"
+    ],
+    "tested": [
+      "Unit tests written for new code",
+      "Integration tests for cross-component flows",
+      "Edge case tests included",
+      "Tests pass without failures"
+    ],
+    "secure": [
+      "No known vulnerabilities in implementation",
+      "Input validation on all external data",
+      "No hardcoded secrets or credentials",
+      "Dependencies are up-to-date or pinned safely"
+    ],
+    "documented": [
+      "README or docs updated for user-facing changes",
+      "API documentation for new endpoints",
+      "Complex logic is commented",
+      "Architecture decisions documented"
+    ],
+    "reviewed": [
+      "Code follows best practices",
+      "No obvious bugs or anti-patterns",
+      "Performance considerations addressed",
+      "Maintainability preserved"
+    ],
+    "video_rendered": [
+      "Output video file exists at specified path",
+      "Video duration matches expected length",
+      "Resolution matches target platform preset",
+      "Video plays correctly (valid container and codec)",
+      "Audio is present if specified",
+      "File size is reasonable for the content and platform"
+    ],
+    "rendered_web": [
+      "Browser launches and navigates to target URL",
+      "Page content is successfully retrieved",
+      "Form filling completes without errors where applicable",
+      "Data extraction returns expected content types",
+      "Screenshots capture visible page state",
+      "Browser closes cleanly without resource leaks"
+    ],
+    "display_running": [
+      "Xvfb process is running on the configured display",
+      "x11vnc server is accepting connections on the configured port",
+      "VNC password file exists at /tmp/.opencode_vnc_pass",
+      "DISPLAY environment variable points to the virtual display",
+      "Virtual screen resolution matches configuration",
+      "Processes clean up on stop (no orphaned Xvfb/x11vnc processes)"
+    ]
+  },
+
+  "gap_detection_rules": {
+    "generic_always_check": ["tests", "documentation", "error-handling", "edge-cases", "security"],
+    "domain_considerations": {
+      "auth_tasks": {
+        "consider": ["email-verification", "password-reset", "rate-limiting", "session-management", "csrf-protection", "token-expiration"],
+        "note": "Not all apply to every auth system (e.g., OAuth may skip email verification). Ask the user what scope they want."
+      },
+      "api_tasks": {
+        "consider": ["input-validation", "error-handling", "rate-limiting", "documentation", "pagination", "versioning", "cors-config"],
+        "note": "Internal APIs may not need rate limiting or CORS. Confirm scope with user."
+      },
+      "frontend_tasks": {
+        "consider": ["responsive-check", "accessibility", "browser-compatibility", "error-states", "loading-states", "dark-mode"],
+        "note": "Admin panels may not need mobile responsiveness. Confirm target audience."
+      },
+      "database_tasks": {
+        "consider": ["migrations", "indexing", "backup-strategy", "data-validation", "connection-pooling"],
+        "note": "Prototype projects may skip backups and pooling. Confirm environment."
+      },
+      "deployment_tasks": {
+        "consider": ["environment-config", "health-checks", "logging", "monitoring", "rollback-strategy"],
+        "note": "Local/dev deployments may skip monitoring. Confirm target environment."
+      },
+      "video_tasks": {
+        "consider": ["platform-preset-selection", "audio-integration", "text-overlay-styling", "transition-effects", "output-format", "file-size-optimization", "aspect-ratio-correction"],
+        "note": "Video creation tasks: Use platform presets for correct dimensions. Consider if the user needs specific audio, text overlays, or transition effects."
+      },
+      "web_tasks": {
+        "consider": ["javascript-heavy-sites", "login-authentication", "cookie-consent-handling", "captcha-detection", "pagination-handling", "dynamic-content-wait", "rate-limiting-respect"],
+        "note": "Web automation: Many sites block headless browsers. Use human-like delays between actions. Handle cookie consent popups."
+      },
+      "display_tasks": {
+        "consider": ["xvfb-installed", "x11vnc-installed", "vnc-port-available", "chromium-headed-compatible", "ffplay-available-for-preview", "multiple-display-sessions", "password-security"],
+        "note": "Display management: Xvfb and x11vnc must be installed (apk). Default VNC port 5900 must be available."
+      }
+    }
+  },
+
+  "shared_context": {
+    "version": "2.0.0",
+    "store_path": "~/.config/opencode/shared/context.json",
+    "findings_dir": "~/.config/opencode/shared/findings/",
+    "context_readme": "~/.config/opencode/shared/README.md",
+    "description": "Cross-agent shared context store for memory persistence and workflow continuity",
+    "agents_write_findings": ["debug", "security", "architect", "build", "plan", "review", "test", "general"],
+    "agents_read_context": ["build", "plan", "architect", "debug", "docs", "explore", "general", "refactor", "review", "security", "test", "video-creator", "web-browser", "display-agent"],
+    "context_categories": {
+      "findings": "Agent-specific findings stored per-agent in findings/{agent}.json and aggregated in context.json",
+      "decisions": "Design/architecture/workflow decisions made during sessions",
+      "artifacts": "Files created, modified, or deleted; tests written; docs updated",
+      "cross_references": "Links between agent findings (e.g., 'debug found X → build fixed X → test verified X')",
+      "workflow_trace": "Ordered list of agent invocations and outcomes in the current workflow"
+    },
+    "population_rules": [
+      {"agent": "debug", "saves": ["error_details", "stack_traces", "root_causes", "reproduction_steps"]},
+      {"agent": "security", "saves": ["vulnerabilities", "outdated_packages", "cve_references"]},
+      {"agent": "architect", "saves": ["design_decisions", "technology_recommendations", "tradeoff_analyses"]},
+      {"agent": "build", "saves": ["implementation_details", "files_modified", "api_changes"]},
+      {"agent": "plan", "saves": ["task_breakdowns", "requirements_analyses", "roadmaps"]},
+      {"agent": "review", "saves": ["code_quality_findings", "best_practice_violations"]},
+      {"agent": "test", "saves": ["test_coverage", "failing_tests", "edge_cases_tested"]},
+      {"agent": "general", "saves": ["research_findings", "analysis_results"]},
+      {"agent": "refactor", "saves": ["refactoring_details", "patterns_applied", "structure_changes"]},
+      {"agent": "docs", "saves": ["documentation_changes", "api_docs_updated", "readme_updates"]},
+      {"agent": "explore", "saves": ["code_maps", "structure_discoveries", "dependency_findings"]},
+      {"agent": "video-creator", "saves": ["video_paths", "platform_info", "rendering_results"]},
+      {"agent": "web-browser", "saves": ["extracted_data", "navigation_results", "form_submissions"]},
+      {"agent": "display-agent", "saves": ["display_config", "vnc_connections", "screenshots"]}
+    ],
+    "delegation_context_inclusion": {
+      "enabled": true,
+      "include_findings": true,
+      "include_artifacts": true,
+      "include_workflow_trace": true,
+      "max_findings_per_agent": 5
+    }
+  }
+}

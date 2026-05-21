@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opencode-video"
+version = "1.0.0"
+description = "Programmatic video creation for OpenCode - supports YouTube, TikTok, Instagram, Twitter"
+requires-python = ">=3.10"
+dependencies = [
+    "moviepy>=2.0",
+    "Pillow>=9.2",
+]
+
+[project.scripts]
+oc-video = "opencode_video.__main__:main"
+
+[tool.setuptools.package-dir]
+opencode_video = "."

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {},
+  "model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/deepseek-v4-flash-free",
+  "permission": {
+    "edit": {
+      "packages/opencode/migration/*": "ask",
+    },
+  },
+  "mcp": {},
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false,
+  },
+}
