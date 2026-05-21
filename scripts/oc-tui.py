@@ -342,7 +342,7 @@ def draw_box(top, left, width, height, title="", style=C["border"]):
             f"{top_line[3+insert_at+len(title_str)-2:]}"
         )
         # simpler: just overlay manually
-        top_line = (f"{Style.goto(left+1, top)}"
+        top_line = (f"{Style.goto(left, top)}"
                     f"{b}{Style.TL}{Style.RESET}"
                     f"{Style.fg(style)}{Style.H_LINE * 2}{Style.RESET}"
                     f" {styled(title, Style.BOLD, Style.fg(C['accent']))} "
@@ -933,8 +933,9 @@ class OpenCodeTUI:
             return
 
         if self.mode in ("sessions", "findings"):
-            self.mode = "dashboard"
-            self.refresh(force=True)
+            if key in ("ESC", "q", "Q", "ENTER"):
+                self.mode = "dashboard"
+                self.refresh(force=True)
             return
 
         if key == "q" or key == "Q":
@@ -976,7 +977,11 @@ class OpenCodeTUI:
             self.panel_scroll["wf"] = max(0, self.panel_scroll["wf"] - 1)
         elif key == "DOWN":
             trace_len = len(self.ctx.get("workflow_trace", []))
-            max_scroll = max(0, trace_len - 8)
+            # Visible lines in workflow panel = inner_height - 1
+            # inner_height = panel3_h - 2; panel3_h = (rows-1) - (2+8+1)
+            wf_inner = self.rows - 1 - 11 - 2   # (rows-1) - panel3_y - 2
+            max_visible = max(1, wf_inner - 1)
+            max_scroll = max(0, trace_len - max_visible)
             self.panel_scroll["wf"] = min(max_scroll, self.panel_scroll["wf"] + 1)
 
 
