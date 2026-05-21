@@ -520,15 +520,22 @@ class OpenCodeTUI:
             f" {Style.CHEVRON} {styled('Updated by:', Style.DIM)} {state.get('last_updated_by') or '—'}",
         ]
 
+        # Clear panel area first to prevent scroll doubling
+        for cy in range(height):
+            sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
+
         for i, line in enumerate(lines):
             if y + 1 + i < y + height - 1:
                 write_at(x, y + i, line[:width - 3], Style.fg(C["fg"]))
 
     def render_context_panel(self, x, y, width, height):
         """Shared context summary panel (top-right)."""
+        # Clear panel area first
+        for cy in range(height):
+            sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
+
         findings = self.ctx.get("findings", {})
         artifacts = self.ctx.get("artifacts", {})
-
         line = 0
         # Findings summary
         finding_counts = {a: len(fs) for a, fs in findings.items() if fs}
@@ -573,6 +580,10 @@ class OpenCodeTUI:
         """Workflow trace panel (bottom area)."""
         trace = self.ctx.get("workflow_trace", [])
 
+        # Clear panel area first — essential to prevent scroll doubling
+        for cy in range(height):
+            sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
+
         if not trace:
             write_at(x, y, f" {Style.CIRCLE} {styled('No active workflow trace.', Style.DIM)}", Style.fg(C["fg3"]))
             write_at(x, y + 1, f"   Start a workflow via OpenCode to see steps here.", Style.fg(C["fg3"]))
@@ -585,7 +596,9 @@ class OpenCodeTUI:
         for i in range(max_visible):
             idx = scroll + i
             if idx >= total:
-                break
+                # Clear remaining lines when scrolled near end
+                sys.stdout.write(f"{Style.goto(x + 1, y + i + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
+                continue
             step = trace[idx]
             agent = step.get("agent", "?")
             status = step.get("status", "?")
@@ -611,6 +624,9 @@ class OpenCodeTUI:
 
     def render_sessions_panel(self, x, y, width, height):
         """Sessions list panel (overlay)."""
+        # Clear panel area first
+        for cy in range(height):
+            sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
         sessions = self.sessions or []
         if not sessions:
             write_at(x, y, f" {Style.CIRCLE} {styled('No sessions recorded yet.', Style.DIM)}", Style.fg(C["fg3"]))
@@ -630,6 +646,10 @@ class OpenCodeTUI:
 
     def render_findings_panel(self, x, y, width, height):
         """Findings detail panel (overlay)."""
+        # Clear panel area first
+        for cy in range(height):
+            sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
+
         findings = self.ctx.get("findings", {})
         all_findings = []
         for agent, fs in findings.items():
@@ -656,6 +676,10 @@ class OpenCodeTUI:
 
     def render_help(self, x, y, width, height):
         """Help overlay panel."""
+        # Clear panel area first
+        for cy in range(height):
+            sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
+
         help_lines = [
             f"  {Style.GEAR} {styled('OpenCode TUI Help', Style.BOLD, Style.fg(C['accent']))}",
             f"  {Style.H_LINE * (width - 6)}",
@@ -703,6 +727,9 @@ class OpenCodeTUI:
         """Render the default dashboard layout."""
         cols = self.cols
         rows = self.rows
+
+        # Full clear before any drawing — eliminates scroll doubling
+        sys.stdout.write(Style.erase_display())
 
         # Divide into panels
         header_h = 1
