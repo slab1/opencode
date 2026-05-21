@@ -964,7 +964,7 @@ class OpenCodeTUI:
             self.action_gitpush()
         elif key == "7":
             self.action_monitor()
-        elif key == "\t" or key == "t" or key == "T":  # Tab or t → Chat
+        elif key == "TAB" or key == "t" or key == "T":  # Tab or t → Chat
             self.enter_chat()
         elif key == "s" or key == "S":
             self.action_sessions()

@@ -661,7 +661,7 @@ class ChatUI:
                              f"{S.bg(C['input_bg'])}{' ' * self.cols}{S.RESET}")
 
         # Prompt prefix
-        prompt = f"{S.fg(C['accent'])}>S.RESET "
+        prompt = f"{S.fg(C['accent'])}>{S.RESET} "
         prompt_len = 2
 
         # Render input lines
@@ -720,7 +720,7 @@ class ChatUI:
         """
         if key == "q" or key == "Q":
             return "quit"
-        elif key == "\t":  # Tab
+        elif key == "TAB":  # Tab → dashboard
             return "dashboard"
 
         # Ctrl+S — send
