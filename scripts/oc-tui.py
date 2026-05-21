@@ -2,28 +2,35 @@
 """
 oc-tui — OpenCode Terminal UI
 ================================
-Keyboard-driven dashboard for OpenCode that runs in any ANSI terminal
-(Acode, Alpine Linux, xterm, etc.). Zero external dependencies — uses
-only Python stdlib + ANSI escape codes.
+Keyboard-driven dashboard + Chat interface for OpenCode.
+Runs in any ANSI terminal (Acode, Alpine Linux, xterm, etc.).
+Zero external dependencies — uses only Python stdlib + ANSI codes.
 
 Usage:
     oc-tui                    Launch the TUI dashboard
     oc-tui --dump             Print one-shot status snapshot (no TUI)
 
-Keys:
+Dashboard Keys:
     ↑/↓        Scroll panels
-    Enter      Select menu item
     1-9        Quick actions
     r          Refresh all panels
-    s          Show recent sessions
-    c          Show context summary
-    f          Show findings
-    w          Show workflow trace
-    m          Show monitor dashboard
-    g          Git push
-    /          Search
+    s / 2      Show recent sessions
+    c / 3      Show context summary
+    f / 4      Show findings
+    w / 5      Show workflow trace
+    m / 7      Show monitor dashboard
+    g / 6      Git push
+    Tab / t    Switch to Chat mode
     h / ?      Help
     q / Ctrl+C Quit
+
+Chat Keys:
+    Tab        Switch to Dashboard
+    Ctrl+S     Send message
+    Ctrl+N     New conversation
+    ↑/↓        Scroll messages / Navigate input
+    PgUp/Dn    Scroll page
+    q          Quit
 """
 
 import json
@@ -34,6 +41,26 @@ import sys
 import time
 from datetime import datetime
 from typing import Optional
+
+# ── Chat module (oc_chat.py in same directory) ─────────────────────
+_CHAT_DIR = os.path.dirname(os.path.abspath(__file__))
+_CHAT_MODULE = os.path.join(_CHAT_DIR, "oc_chat.py")
+
+def _import_chat():
+    """Dynamically import oc_chat module from the scripts directory."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("oc_chat", _CHAT_MODULE)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+# Lazy import — the chat module is loaded only when entering chat mode
+_chat_module = None
+def get_chat():
+    global _chat_module
+    if _chat_module is None:
+        _chat_module = _import_chat()
+    return _chat_module
 
 # ── Paths ──────────────────────────────────────────────────────────
 CONFIG_DIR = os.path.expanduser("~/.config/opencode")
@@ -392,7 +419,8 @@ class OpenCodeTUI:
         self.message_time = 0
         self.panel_scroll = {"ctx": 0, "wf": 0, "help": 0}
         self.show_help = False
-        self.mode = "dashboard"  # dashboard, sessions, findings, help
+        self.mode = "dashboard"  # dashboard, sessions, findings, chat, help
+        self.chat = None
 
     def refresh(self, force=False):
         """Refresh data if interval has passed."""
@@ -456,6 +484,7 @@ class OpenCodeTUI:
             ("5", "Workflow", C["accent"]),
             ("6", "GitPush", C["accent"]),
             ("7", "Monitor", C["accent"]),
+            ("Tab", "Chat", C["green"]),
             ("q", "Quit", C["red"]),
         ]
 
@@ -715,6 +744,41 @@ class OpenCodeTUI:
         self.render_footer()
         self.render_message()
 
+    # ── Chat mode ───────────────────────────────────────────────
+
+    def enter_chat(self):
+        """Switch to chat mode, initializing if needed."""
+        chat_mod = get_chat()
+        if self.chat is None:
+            self.chat = chat_mod.ChatUI(parent=self)
+        self.mode = "chat"
+        self.refresh(force=True)
+
+    def render_chat(self):
+        """Render the chat interface."""
+        if self.chat is None:
+            return
+        # Poll for agent activity
+        self.chat.poll_activity()
+        self.chat.render(self.cols, self.rows)
+
+    def handle_chat_key(self, key):
+        """Handle keyboard input in chat mode."""
+        if self.chat is None:
+            return
+
+        action = self.chat.handle_key(key)
+
+        if action == "quit":
+            self.running = False
+        elif action == "dashboard":
+            self.mode = "dashboard"
+            self.refresh(force=True)
+
+        # Refresh after send/new
+        if action in ("send", "new"):
+            self.refresh(force=True)
+
     # ── Actions ─────────────────────────────────────────────────
 
     def action_quit(self):
@@ -787,6 +851,10 @@ class OpenCodeTUI:
 
     def render_dashboard(self):
         """Route to current mode renderer."""
+        if self.mode == "chat":
+            self.render_chat()
+            return
+
         if self.show_help:
             # Help overlay
             self.layout_dashboard()
@@ -826,6 +894,10 @@ class OpenCodeTUI:
 
     def handle_key(self, key):
         """Dispatch keyboard input."""
+        if self.mode == "chat":
+            self.handle_chat_key(key)
+            return
+
         if self.show_help:
             self.show_help = False
             self.refresh(force=True)
@@ -857,6 +929,8 @@ class OpenCodeTUI:
             self.action_gitpush()
         elif key == "7":
             self.action_monitor()
+        elif key == "\t" or key == "t" or key == "T":  # Tab or t → Chat
+            self.enter_chat()
         elif key == "s" or key == "S":
             self.action_sessions()
         elif key == "c" or key == "C":
