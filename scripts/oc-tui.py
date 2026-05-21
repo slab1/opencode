@@ -226,43 +226,33 @@ def get_term_size():
 
 
 def read_key(timeout=0.3):
-    """Read a single keypress without blocking. Returns None if timeout."""
+    """Read a single keypress without blocking. Returns None if timeout.
+    Terminal must already be in raw mode (set by OpenCodeTUI.setup())."""
     import select
-    import termios
-    import tty
 
-    fd = sys.stdin.fileno()
-    old = termios.tcgetattr(fd)
     try:
-        tty.setraw(fd)
         if select.select([sys.stdin], [], [], timeout)[0]:
             ch = sys.stdin.read(1)
             if ch == "\x1b":
-                ch2 = sys.stdin.read(2)
-                if ch2 == "[A":
-                    return "UP"
-                elif ch2 == "[B":
-                    return "DOWN"
-                elif ch2 == "[C":
-                    return "RIGHT"
-                elif ch2 == "[D":
-                    return "LEFT"
-                elif ch2 == "[H":
-                    return "HOME"
-                elif ch2 == "[F":
-                    return "END"
-                elif ch2[0:1] == "[":
-                    ch3 = sys.stdin.read(1)
-                    if ch2[1] == "1" and ch3 == "~":
-                        return "HOME"
-                    elif ch2[1] == "4" and ch3 == "~":
-                        return "END"
-                    elif ch2[1] == "3" and ch3 == "~":
-                        return "DEL"
-                    elif ch2[1] == "5" and ch3 == "~":
-                        return "PAGE_UP"
-                    elif ch2[1] == "6" and ch3 == "~":
-                        return "PAGE_DOWN"
+                # Read up to 3 trailing bytes (CSI sequence) with 50ms per byte
+                rest = ""
+                for _ in range(3):
+                    if select.select([sys.stdin], [], [], 0.05)[0]:
+                        rest += sys.stdin.read(1)
+                    else:
+                        break
+
+                if rest == "[A":      return "UP"
+                if rest == "[B":      return "DOWN"
+                if rest == "[C":      return "RIGHT"
+                if rest == "[D":      return "LEFT"
+                if rest == "[H":      return "HOME"
+                if rest == "[F":      return "END"
+                if rest == "[5~":     return "PAGE_UP"
+                if rest == "[6~":     return "PAGE_DOWN"
+                if rest == "[3~":     return "DEL"
+                if rest == "[1~":     return "HOME"
+                if rest == "[4~":     return "END"
                 return "ESC"
             elif ch == "\r" or ch == "\n":
                 return "ENTER"
@@ -270,10 +260,12 @@ def read_key(timeout=0.3):
                 return "BACK"
             elif ch == "\t":
                 return "TAB"
+            elif ch == "\x03":  # Ctrl+C — handled by main loop
+                raise KeyboardInterrupt()
             return ch
         return None
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    except (ValueError, OSError):
+        return None
 
 
 # ── Data loaders ───────────────────────────────────────────────────
@@ -421,6 +413,7 @@ class OpenCodeTUI:
         self.show_help = False
         self.mode = "dashboard"  # dashboard, sessions, findings, chat, help
         self.chat = None
+        self._old_term = None  # saved terminal attrs for raw mode
 
     def refresh(self, force=False):
         """Refresh data if interval has passed."""
@@ -847,15 +840,27 @@ class OpenCodeTUI:
     # ── Main loop ───────────────────────────────────────────────
 
     def setup(self):
-        """Initialize terminal for TUI mode."""
+        """Initialize terminal for TUI mode — enter raw mode once."""
+        import termios
+        import tty
+        fd = sys.stdin.fileno()
+        self._old_term = termios.tcgetattr(fd)
+        tty.setraw(fd)
         sys.stdout.write(Style.erase_display())
         sys.stdout.write(Style.hide_cursor())
         sys.stdout.flush()
 
     def cleanup(self):
-        """Restore terminal after TUI mode."""
+        """Restore terminal after TUI mode — restore original attrs."""
+        import termios
         sys.stdout.write(Style.show_cursor())
         sys.stdout.write(f"{Style.goto(1, self.rows)}\n")
+        if self._old_term is not None:
+            try:
+                termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, self._old_term)
+            except (ValueError, OSError):
+                pass
+            self._old_term = None
         sys.stdout.flush()
 
     def run(self):
