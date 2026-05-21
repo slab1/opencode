@@ -48,6 +48,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `start.sh` | Quick-start: launches server + CORS proxy |
 | `vnc-daemon.sh` | VNC server daemon for headed browser mode |
 | `zip.js` | Build script producing `dist/acode-oc.zip` |
+| `oc-gitpush.sh` | Push OpenCode repo to GitHub with token auth |
 
 ## Agent Configs (`agents/`)
 
