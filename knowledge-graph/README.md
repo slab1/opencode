@@ -8,7 +8,8 @@ Structured agent registry, capability map, and workflow patterns for the Orchest
 knowledge-graph/
 ├── graph.json          # Main knowledge graph (agents + patterns + rules)
 ├── README.md           # This file
-└── outcomes/           # (Future) Session outcome tracking
+└── outcomes/
+    └── sessions.json   # Session outcome tracker (populated by orchestrator)
 ```
 
 ## graph.json Structure

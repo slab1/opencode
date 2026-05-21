@@ -2,7 +2,7 @@
   "meta": {
     "version": "2.0.0",
     "created": "2026-05-21",
-    "updated": "2026-05-21T00:00:00Z",
+    "updated": "2026-05-21T03:03:44+01:00",
     "description": "Structured shared context store for cross-agent memory and workflow continuity"
   },
   "session": {

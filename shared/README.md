@@ -15,6 +15,8 @@ This directory contains the cross-agent shared context store for OpenCode.
 shared/
 ├── context.json              # Central shared context (all agents write here)
 ├── README.md                 # This file
+├── helpers/
+│   └── context.py            # Python helper — agents call this to read/write context
 └── findings/                 # Per-agent finding files
     ├── debug.json
     ├── security.json
@@ -40,6 +42,48 @@ shared/
 4. **Agent** writes its findings to `context.json` (into its own findings array)
 5. **Orchestrator** reads `context.json` after agent returns, updates workflow trace
 6. **Next agent** gets the accumulated context, including the previous agent's findings
+
+## Agent Helper Script
+
+Use `shared/helpers/context.py` for easy programmatic access:
+
+```bash
+# Read the full context
+python3 ~/.config/opencode/shared/helpers/context.py read
+
+# Read findings (all or by agent)
+python3 ~/.config/opencode/shared/helpers/context.py read-findings
+python3 ~/.config/opencode/shared/helpers/context.py read-findings debug
+
+# Add a finding (raw JSON)
+python3 ~/.config/opencode/shared/helpers/context.py add-finding debug \
+  '{"summary":"Found root cause","severity":"high","detail":"Null pointer in auth.js:45"}'
+
+# Add a finding with automatic JSON construction
+python3 ~/.config/opencode/shared/helpers/context.py merge-finding \
+  --agent build \
+  --summary "Fixed null pointer" \
+  --detail "Added guard clause in auth.js:45" \
+  --severity info \
+  --file src/auth.js \
+  --line 45
+
+# Track artifacts
+python3 ~/.config/opencode/shared/helpers/context.py add-artifact files_modified "src/auth.js"
+python3 ~/.config/opencode/shared/helpers/context.py add-artifact tests_written "tests/auth.test.js"
+
+# Add cross-references between agent findings
+python3 ~/.config/opencode/shared/helpers/context.py add-cross-reference \
+  build debug build-123 debug-456 fixes
+
+# Add trace step to workflow
+python3 ~/.config/opencode/shared/helpers/context.py add-trace-step \
+  '{"agent":"debug","status":"completed","summary":"Identified root cause"}'
+
+# Set session info
+python3 ~/.config/opencode/shared/helpers/context.py set-session \
+  --session-id "ses_xxx" --title "Fix login bug" --pattern "bug-fix"
+```
 
 ## Usage
 

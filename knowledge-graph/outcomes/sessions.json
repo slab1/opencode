@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "version": "1.0",
+    "created": "2026-05-21",
+    "description": "Session outcome tracker for multi-agent workflows"
+  },
+  "aggregated_insights": {
+    "total_sessions": 0,
+    "total_iterations": 0,
+    "total_gaps_found": 0,
+    "patterns_used": {},
+    "agents_used": {},
+    "common_lessons": []
+  },
+  "sessions": []
+}

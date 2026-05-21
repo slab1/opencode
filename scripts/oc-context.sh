@@ -3,22 +3,116 @@
 # Quick inspection and management of the shared context store
 #
 # Usage:
-#   oc-context                    Show full context
-#   oc-context findings [agent]   Show findings (optionally filtered by agent)
-#   oc-context decisions          Show decisions
-#   oc-context artifacts          Show artifacts
-#   oc-context workflow           Show workflow trace
-#   oc-context session            Show current session info
-#   oc-context summary            Show a human-readable summary
-#   oc-context clear              Reset context to empty state (with confirmation)
+#   oc-context                         Show full context
+#   oc-context findings [agent]        Show findings (optionally filtered by agent)
+#   oc-context decisions               Show decisions
+#   oc-context artifacts               Show artifacts
+#   oc-context workflow                Show workflow trace
+#   oc-context session                 Show current session info
+#   oc-context summary                 Show a human-readable summary
+#   oc-context init                    Initialize context if missing
+#   oc-context clear                   Reset context to empty state (with confirmation)
+#   oc-context add-finding <agent> <json>   Append a finding JSON object
 
-CONTEXT_FILE="$HOME/.config/opencode/shared/context.json"
+CONTEXT_DIR="$HOME/.config/opencode/shared"
+CONTEXT_FILE="$CONTEXT_DIR/context.json"
 
-if [ ! -f "$CONTEXT_FILE" ]; then
-  echo "Error: Context file not found at $CONTEXT_FILE"
-  echo "Run 'opencode' to initialize the context store."
-  exit 1
-fi
+ensure_context() {
+  if [ ! -f "$CONTEXT_FILE" ]; then
+    echo "Error: Context file not found at $CONTEXT_FILE"
+    echo "Run 'oc-context init' to create it."
+    exit 1
+  fi
+}
+
+init_context() {
+  mkdir -p "$CONTEXT_DIR"
+  if [ -f "$CONTEXT_FILE" ]; then
+    echo "Context already exists at $CONTEXT_FILE"
+    echo "Use 'oc-context clear' to reset it."
+    exit 0
+  fi
+  python3 -c "
+import json, os
+ctx = {
+    'meta': {
+        'version': '2.0.0',
+        'created': '$(date -I)',
+        'updated': '$(date -Iseconds)',
+        'description': 'Structured shared context store for cross-agent memory and workflow continuity'
+    },
+    'session': {
+        'current_id': None,
+        'current_title': None,
+        'active_agents': [],
+        'workflow_pattern': None,
+        'started_at': None
+    },
+    'state': {
+        'findings_count': 0,
+        'decisions_count': 0,
+        'artifacts_count': 0,
+        'last_updated_by': None,
+        'last_updated_at': None
+    },
+    'findings': {
+        'debug': [], 'security': [], 'architect': [], 'build': [],
+        'plan': [], 'review': [], 'test': [], 'general': [],
+        'refactor': [], 'docs': [], 'explore': [], 'video-creator': [],
+        'web-browser': [], 'display-agent': []
+    },
+    'decisions': {
+        'architecture': [], 'design': [], 'technology': [], 'workflow': []
+    },
+    'artifacts': {
+        'files_created': [], 'files_modified': [], 'files_deleted': [],
+        'tests_written': [], 'documentation_updated': []
+    },
+    'cross_references': [],
+    'workflow_trace': []
+}
+with open(os.path.expanduser('$CONTEXT_FILE'), 'w') as f:
+    json.dump(ctx, f, indent=2)
+print('Context initialized at $CONTEXT_FILE')
+"
+}
+
+add_finding() {
+  local agent="$1"
+  local finding_json="$2"
+  if [ -z "$agent" ] || [ -z "$finding_json" ]; then
+    echo "Usage: oc-context add-finding <agent> <json>"
+    echo "Example: oc-context add-finding debug '{\"summary\":\"Found bug\",\"severity\":\"high\"}'"
+    exit 1
+  fi
+  python3 -c "
+import json, os, sys
+from datetime import datetime, timezone
+
+ctx_path = os.path.expanduser('$CONTEXT_FILE')
+with open(ctx_path) as f:
+    ctx = json.load(f)
+
+agent = '$agent'
+valid_agents = list(ctx['findings'].keys())
+if agent not in valid_agents:
+    print(f'Invalid agent. Valid: {valid_agents}')
+    sys.exit(1)
+
+finding = json.loads('$finding_json')
+finding.setdefault('timestamp', datetime.now(timezone.utc).isoformat())
+finding.setdefault('id', f'{agent}-{int(datetime.now().timestamp())}')
+
+ctx['findings'][agent].append(finding)
+ctx['state']['findings_count'] = sum(len(v) for v in ctx['findings'].values())
+ctx['state']['last_updated_by'] = agent
+ctx['state']['last_updated_at'] = datetime.now(timezone.utc).isoformat()
+
+with open(ctx_path, 'w') as f:
+    json.dump(ctx, f, indent=2)
+print(f'Added finding to {agent} (total: {len(ctx[\"findings\"][agent])})')
+"
+}
 
 show_full() {
   python3 -c "
@@ -249,31 +343,57 @@ print('Context cleared successfully.')
 
 case "${1:-full}" in
   full)
+    ensure_context
     show_full
     ;;
   findings)
+    ensure_context
     show_findings "$2"
     ;;
   decisions)
+    ensure_context
     show_decisions
     ;;
   artifacts)
+    ensure_context
     show_artifacts
     ;;
   workflow)
+    ensure_context
     show_workflow
     ;;
   session)
+    ensure_context
     show_session
     ;;
   summary)
+    ensure_context
     show_summary
     ;;
+  init)
+    init_context
+    ;;
+  add-finding)
+    ensure_context
+    add_finding "$2" "$3"
+    ;;
   clear)
+    ensure_context
     reset_context
     ;;
   *)
-    echo "Usage: oc-context {full|findings [agent]|decisions|artifacts|workflow|session|summary|clear}"
+    echo "Usage: oc-context {full|findings [agent]|decisions|artifacts|workflow|session|summary|init|add-finding|clear}"
+    echo ""
+    echo "  full                    Show full context JSON"
+    echo "  findings [agent]        Show findings (all or filtered by agent)"
+    echo "  decisions               Show architecture/design decisions"
+    echo "  artifacts               Show files created/modified/deleted"
+    echo "  workflow                Show current workflow trace"
+    echo "  session                 Show session state"
+    echo "  summary                 Show human-readable summary"
+    echo "  init                    Initialize context if missing"
+    echo "  add-finding <a> <json>  Append a finding JSON for an agent"
+    echo "  clear                   Reset context to empty (with confirmation)"
     exit 1
     ;;
 esac

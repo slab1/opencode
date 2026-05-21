@@ -77,6 +77,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `context.json` | Structured JSON store — primary machine-readable context |
 | `README.md` | Directory documentation |
 | `findings/*.json` | Per-agent finding files (14 agents, one file each) |
+| `helpers/context.py` | Python helper for agents to read/write context programmatically |
 
 To inspect the shared context at any time:
 ```bash
@@ -106,6 +107,7 @@ oc-context session     # Session state
 |------|---------|
 | `graph.json` | Agent registry, workflow patterns, quality gates, gap detection rules, shared context config |
 | `README.md` | Graph structure documentation |
+| `outcomes/sessions.json` | Session outcome tracker (populated by orchestrator on workflow completion) |
 
 ## Configuration Files
 
