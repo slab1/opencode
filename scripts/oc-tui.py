@@ -115,7 +115,7 @@ class Style:
     def clear_to_eol(): return "\033[K"
 
     @staticmethod
-    def erase_display(): return "\033[2J\033[H"
+    def erase_display(): return "\033[3J\033[2J\033[H"
 
     # Cursor
     @staticmethod
@@ -123,13 +123,6 @@ class Style:
 
     @staticmethod
     def show_cursor(): return "\033[?25h"
-
-    # Alternate screen buffer — isolates TUI from terminal scrollback
-    @staticmethod
-    def enter_alt_screen(): return "\033[?1049h"
-
-    @staticmethod
-    def exit_alt_screen(): return "\033[?1049l"
 
     @staticmethod
     def cursor_up(n=1): return f"\033[{n}A"
@@ -855,7 +848,6 @@ class OpenCodeTUI:
 
     def setup(self):
         """Initialize terminal for TUI mode."""
-        sys.stdout.write(Style.enter_alt_screen())
         sys.stdout.write(Style.erase_display())
         sys.stdout.write(Style.hide_cursor())
         sys.stdout.flush()
@@ -863,7 +855,7 @@ class OpenCodeTUI:
     def cleanup(self):
         """Restore terminal after TUI mode."""
         sys.stdout.write(Style.show_cursor())
-        sys.stdout.write(Style.exit_alt_screen())
+        sys.stdout.write(f"{Style.goto(1, self.rows)}\n")
         sys.stdout.flush()
 
     def run(self):
@@ -906,6 +898,7 @@ class OpenCodeTUI:
 
         if self.mode == "dashboard":
             self.layout_dashboard()
+            sys.stdout.flush()
         elif self.mode == "sessions":
             self.layout_dashboard()
             # Overlay sessions panel
