@@ -518,7 +518,7 @@ class OpenCodeTUI:
             sys.stdout.write(f"{Style.goto(x + 1, y + cy + 1)}{' ' * (width - 2)}{Style.clear_to_eol()}")
 
         for i, line in enumerate(lines):
-            if y + 1 + i < y + height - 1:
+            if y + i < y + height - 1:
                 write_at(x, y + i, line[:width - 3], Style.fg(C["fg"]))
 
     def render_context_panel(self, x, y, width, height):
