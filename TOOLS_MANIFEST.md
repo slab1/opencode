@@ -36,34 +36,85 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `cross-platform-sync.py` | Background sync daemon | 90+ |
 | `bubble-bookmarklet.html` | Floating voice button bookmarklet | 200+ |
 
+## Local Scripts (`scripts/`)
+
+| Script | Purpose |
+|--------|---------|
+| `cors-proxy.js` | CORS proxy for Android WebView (port 9878) |
+| `install.sh` | OpenCode installation script |
+| `oc-context.sh` | Shared context inspection & management CLI |
+| `server.sh` | Start the OpenCode API server |
+| `start.sh` | Quick-start: launches server + CORS proxy |
+| `vnc-daemon.sh` | VNC server daemon for headed browser mode |
+| `zip.js` | Build script producing `dist/acode-oc.zip` |
+
 ## Agent Configs (`agents/`)
 
 | Agent | Mode | Key Permissions |
 |-------|------|-----------------|
-| `build.md` | primary | edit:allow, bash:ask |
-| `plan.md` | primary | edit:deny, todowrite:allow |
-| `orchestrator.md` | primary | (coordinator) |
+| `build.md` | primary | edit:allow, bash:ask, task:allow |
+| `plan.md` | primary | edit:deny, todowrite:allow, task:allow |
+| `orchestrator.md` | primary | edit:allow, bash:ask, task:allow, webfetch:ask, websearch:ask |
 | `architect.md` | subagent | bash:selective, webfetch:ask |
 | `debug.md` | subagent | bash:ask |
 | `docs.md` | subagent | edit:allow, webfetch:ask |
 | `explore.md` | subagent | (fast codebase explorer) |
-| `general.md` | subagent | (general research) |
-| `refactor.md` | subagent | bash:ask |
+| `general.md` | subagent | edit:deny, bash:ask, todowrite:allow, webfetch:ask, websearch:ask |
+| `refactor.md` | subagent | edit:allow, bash:ask |
 | `review.md` | subagent | (code quality) |
 | `security.md` | subagent | bash:selective, webfetch:ask |
-| `test.md` | subagent | (test writing) |
+| `test.md` | subagent | edit:allow, bash:ask |
+| `display-agent.md` | subagent | edit:allow, bash:ask, todowrite:allow |
+| `video-creator.md` | subagent | edit:allow, bash:ask, webfetch:ask, websearch:ask |
+| `web-browser.md` | subagent | edit:allow, bash:ask, webfetch:ask, websearch:ask |
+
+## Shared Context System (`shared/`)
+
+| File | Purpose |
+|------|---------|
+| `context.json` | Structured JSON store — primary machine-readable context |
+| `README.md` | Directory documentation |
+| `findings/*.json` | Per-agent finding files (14 agents, one file each) |
+
+To inspect the shared context at any time:
+```bash
+oc-context summary     # Human-readable summary
+oc-context findings    # All agent findings
+oc-context workflow    # Current workflow trace
+oc-context session     # Session state
+```
 
 ## Configuration Documents
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `AGENTS.md` | 221 | Permission syntax documentation |
+| `AGENTS.md` | 221+ | Permission syntax & agent architecture docs |
 | `AGENT_ROUTER.md` | 110 | Keyword-to-agent routing rules |
-| `SESSION_STATE.md` | 138 | Auto-resume state tracker |
-| `SHARED_CONTEXT.md` | 109 | Cross-agent memory store |
+| `SESSION_STATE.md` | 150+ | Auto-resume state tracker + shared context integration |
+| `SHARED_CONTEXT.md` | 189 | Cross-agent memory store v2 (reference) |
 | `ULTIMATE_PLAN.md` | 383 | Full roadmap & vision |
-| `WORKFLOWS.md` | 261 | 6 multi-agent workflows |
+| `WORKFLOWS.md` | 522+ | 16 multi-agent workflows with context flow |
 | `TOOLS_MANIFEST.md` | — | This file |
+| `changelogs.md` | — | Release changelog |
+| `README.md` | — | Project README |
+
+## Knowledge Graph (`knowledge-graph/`)
+
+| File | Purpose |
+|------|---------|
+| `graph.json` | Agent registry, workflow patterns, quality gates, gap detection rules, shared context config |
+| `README.md` | Graph structure documentation |
+
+## Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `opencode.jsonc` | OpenCode main config (provider, model, permissions, MCP) |
+| `plugin.json` | Acode plugin manifest (id: `com.opencode.acode`) |
+| `package.json` | Node.js package metadata |
+| `tui.json` | Terminal UI configuration |
+| `icon.png` | App icon |
+| `main.js` | Compiled core logic |
 
 ## Shell Integration
 
@@ -88,17 +139,28 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 ## Quick Reference
 
 ```
-# Most-used commands:
-ocr              # Resume session
-ocl              # List sessions
+# System commands:
+ocr              # Resume last session
+ocl              # List recent sessions
+oc-r             # Same as ocr (alias)
 oc-auto "..."    # Smart agent selector
-oc-note "..."    # Quick note
-oc-search "kw"   # Find sessions
-oc-stats         # Dashboard
-oc-monitor       # Live dashboard
-oc-backup create # Backup now
+oc-search "kw"   # Find sessions by keyword
+oc-stats         # Usage statistics dashboard
+oc-monitor       # Live terminal dashboard
+oc-cleanup       # Delete old sessions (with dry-run)
+oc-backup create # Full session backup
+oc-note "..."    # Quick session note (persistent JSON)
+oc-cron          # Scheduled task manager
+oc-sync          # Cross-platform sync daemon
+oc-voice         # Voice command simulator
 oc-context       # Shared context inspection
-oc-context summary   # Human-readable context summary
-oc-context workflow  # Current workflow trace
-oc-context findings  # View all agent findings
+
+# oc-context subcommands:
+oc-context summary     # Human-readable context summary
+oc-context findings    # View all agent findings
+oc-context workflow    # View current workflow trace
+oc-context session     # View session state
+oc-context decisions   # View architecture/design decisions
+oc-context artifacts   # View files created/modified
+oc-context clear       # Reset shared context (with confirmation)
 ```
