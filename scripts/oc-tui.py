@@ -43,7 +43,7 @@ from datetime import datetime
 from typing import Optional
 
 # ── Chat module (oc_chat.py in same directory) ─────────────────────
-_CHAT_DIR = os.path.dirname(os.path.abspath(__file__))
+_CHAT_DIR = os.path.dirname(os.path.realpath(__file__))
 _CHAT_MODULE = os.path.join(_CHAT_DIR, "oc_chat.py")
 
 def _import_chat():
