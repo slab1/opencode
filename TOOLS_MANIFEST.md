@@ -22,6 +22,7 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 | `oc-backup` | Full session backup & restore | May 12 |
 | `oc-monitor` | Live terminal dashboard (like htop) | May 12 |
 | `oc-context` | Shared context inspection & management | May 21 |
+| `oc-gitpush` | Push OpenCode repo to GitHub (with token auth) | May 12 |
 
 ## Cache Scripts (`/data/user/0/com.foxdebug.acode/cache/opencode/`)
 
@@ -154,6 +155,7 @@ oc-cron          # Scheduled task manager
 oc-sync          # Cross-platform sync daemon
 oc-voice         # Voice command simulator
 oc-context       # Shared context inspection
+oc-gitpush       # Push OpenCode repo to GitHub
 
 # oc-context subcommands:
 oc-context summary     # Human-readable context summary
