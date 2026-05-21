@@ -456,7 +456,8 @@ class OpenCodeTUI:
         sys.stdout.write(f"{Style.goto(1, 1)}{Style.bg(C['header_bg'])}{full}{Style.RESET}")
 
         # Left: logo + session
-        left = f" {Style.GEAR} {styled('oc-tui', Style.BOLD, Style.fg(C['accent']))}  {styled(sid[:20], Style.fg(C['fg2']))}"
+        sid_display = (sid or "—")[:20]
+        left = f" {Style.GEAR} {styled('oc-tui', Style.BOLD, Style.fg(C['accent']))}  {styled(sid_display, Style.fg(C['fg2']))}"
         sys.stdout.write(f"{Style.goto(1, 1)}{Style.bg(C['header_bg'])}{left}{Style.RESET}")
 
         # Center: pattern
