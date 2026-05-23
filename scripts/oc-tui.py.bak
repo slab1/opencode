@@ -35,6 +35,7 @@ Chat Keys:
 
 import json
 import os
+import re
 import shutil
 import signal
 import subprocess
@@ -319,6 +320,11 @@ def styled(text, *styles):
     return f"{''.join(styles)}{text}{Style.RESET}"
 
 
+def vis_len(text: str) -> int:
+    """Return visible length of text (excluding ANSI codes)."""
+    return len(re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', text))
+
+
 def draw_box(top, left, width, height, title="", style=C["border"]):
     """Draw a bordered box region. Returns nothing — just writes ANSI."""
     b = Style.fg(style)
@@ -453,60 +459,67 @@ class OpenCodeTUI:
     # ── Panel renderers ─────────────────────────────────────────
 
     def render_header(self):
-        """Top status bar."""
+        """Top status bar — show session, active agents, and version."""
         session = self.ctx.get("session", {})
         sid = session.get("current_id", "—")
-        pattern = session.get("workflow_pattern", "—")
+        title = session.get("current_title", "")
         active = session.get("active_agents", [])
-        status = "● running" if active else "○ idle"
 
         # Background bar
         full = f"{' ' * self.cols}"
         sys.stdout.write(f"{Style.goto(1, 1)}{Style.bg(C['header_bg'])}{full}{Style.RESET}")
 
         # Left: logo + session
-        sid_display = (sid or "—")[:20]
-        left = f" {Style.GEAR} {styled('oc-tui', Style.BOLD, Style.fg(C['accent']))}  {styled(sid_display, Style.fg(C['fg2']))}"
+        sid_display = (sid or "—")[:18]
+        left = f" {Style.GEAR} {styled('oc-tui', Style.BOLD, Style.fg(C['accent']))}"
+        if title:
+            title_disp = title[:int(self.cols * 0.25)]
+            left += f"  {styled(title_disp, Style.ITALIC, Style.fg(C['fg2']))}"
+        else:
+            left += f"  {styled(sid_display, Style.fg(C['fg2']))}"
         sys.stdout.write(f"{Style.goto(1, 1)}{Style.bg(C['header_bg'])}{left}{Style.RESET}")
 
-        # Center: pattern
-        mid = f"  {styled(pattern, Style.fg(C['teal']))}  "
-        mid_x = (self.cols - len(mid)) // 2
-        sys.stdout.write(f"{Style.goto(mid_x, 1)}{Style.bg(C['header_bg'])}{mid}{Style.RESET}")
-
-        # Right: version + status
-        status_color = C["status_ok"] if not active else C["status_run"]
-        right = f"v{self.opencode_ver[:15]:16}  {styled(status, Style.fg(status_color))}  "
-        right_x = self.cols - len(right) + 1
+        # Right: active agents or idle status + version
+        right_parts = []
+        right_parts.append(f"{Style.fg(C['fg3'])}v{self.opencode_ver[:10]}{Style.RESET}")
+        if session.get("chat_pending"):
+            right_parts.append(f"  {Style.DOT} {styled('chat pending', Style.BOLD, Style.fg(C['yellow']))}")
+        elif active:
+            agent_str = ", ".join(active[:4])
+            if len(active) > 4:
+                agent_str += f" +{len(active)-4}"
+            right_parts.append(f"  {Style.DOT} {styled(agent_str, Style.BOLD, Style.fg(C['status_run']))}")
+        else:
+            right_parts.append(f"  {Style.CIRCLE} {styled('idle', Style.fg(C['fg3']))}")
+        right = "".join(right_parts)
+        right_x = self.cols - vis_len(right) + 1
         sys.stdout.write(f"{Style.goto(right_x, 1)}{Style.bg(C['header_bg'])}{right}{Style.RESET}")
 
     def render_footer(self):
-        """Bottom action bar."""
+        """Bottom action bar — keyboard shortcuts."""
         y = self.rows
         full = f"{' ' * self.cols}"
         sys.stdout.write(f"{Style.goto(1, y)}{Style.bg(C['bg2'])}{full}{Style.RESET}")
 
+        # Primary shortcuts (left)
         items = [
             ("1", "Resume", C["accent"]),
-            ("2", "Sessions", C["accent"]),
-            ("3", "Context", C["accent"]),
-            ("4", "Findings", C["accent"]),
-            ("5", "Workflow", C["accent"]),
-            ("6", "GitPush", C["accent"]),
-            ("7", "Monitor", C["accent"]),
             ("Tab", "Chat", C["green"]),
             ("q", "Quit", C["red"]),
         ]
-
         x = 2
         for key, label, color in items:
             item = f" {styled(f'[{key}]', Style.BOLD, Style.fg(color))} {styled(label, Style.fg(C['fg2']))} "
             sys.stdout.write(f"{Style.goto(x, y)}{Style.bg(C['bg2'])}{item}{Style.RESET}")
-            x += len(item)
+            x += vis_len(item)
 
-        # Right side: help hint
-        hint = styled(" [h] Help ", Style.fg(C["fg3"]))
-        sys.stdout.write(f"{Style.goto(self.cols - 10, y)}{Style.bg(C['bg2'])}{hint}{Style.RESET}")
+        # Right: mode indicator + help hint
+        mode_tag = f" [{self.mode}] "
+        sys.stdout.write(f"{Style.goto(self.cols - len(mode_tag) - 10, y)}"
+                         f"{Style.bg(C['bg2'])}{Style.fg(C['fg3'])}{mode_tag}{Style.RESET}")
+        hint = " [h] Help "
+        sys.stdout.write(f"{Style.goto(self.cols - len(hint) + 1, y)}"
+                         f"{Style.bg(C['bg2'])}{Style.fg(C['fg3'])}{hint}{Style.RESET}")
 
     def render_session_panel(self, x, y, width, height):
         """Session info panel (top-left)."""
@@ -518,15 +531,18 @@ class OpenCodeTUI:
         active = session.get("active_agents", [])
         started = session.get("started_at", "")
 
+        chat_pending = session.get("chat_pending")
+        last_chat = session.get("last_chat_message", "")
+        if chat_pending and last_chat:
+            time_line = f" {Style.CLOCK} {styled('chat:', Style.BOLD, Style.fg(C['yellow']))} {last_chat[:width - 20]}"
+        else:
+            time_line = f" {Style.CLOCK} {time_ago(started) if started else '—'}  ·  {Style.DIM}upd:{Style.RESET} {time_ago(state.get('last_updated_at', ''))} by {state.get('last_updated_by') or '—'}"
         lines = [
             f" {Style.CHEVRON} {styled('Session:', Style.BOLD)}  {sid}",
-            f" {Style.CHEVRON} {styled('Title:', Style.BOLD)}   {title}",
+            f" {Style.CHEVRON} {styled('Title:', Style.BOLD)}   {title[:width - 20]}",
             f" {Style.CHEVRON} {styled('Pattern:', Style.BOLD)} {pattern}",
             f" {Style.CHEVRON} {styled('Agents:', Style.BOLD)}  {', '.join(active) if active else styled('none', Style.DIM)}",
-            f" {Style.CHEVRON} {styled('Started:', Style.BOLD)} {time_ago(started) if started else '—'}",
-            "",
-            f" {Style.CLOCK} {styled('Last update:', Style.DIM)} {time_ago(state.get('last_updated_at', ''))}",
-            f" {Style.CHEVRON} {styled('Updated by:', Style.DIM)} {state.get('last_updated_by') or '—'}",
+            time_line,
         ]
 
         # Clear panel area first to prevent scroll doubling
@@ -545,7 +561,29 @@ class OpenCodeTUI:
 
         findings = self.ctx.get("findings", {})
         artifacts = self.ctx.get("artifacts", {})
+        state = self.ctx.get("state", {})
+        session = self.ctx.get("session", {})
         line = 0
+
+        # No data yet — show welcome/help text
+        has_data = any(findings.values()) or any(artifacts.values()) or session.get("current_id")
+        if not has_data:
+            welcome = [
+                f" {Style.STAR} {styled('Welcome to oc-tui', Style.BOLD, Style.fg(C['accent']))}",
+                f"",
+                f" {Style.CHEVRON} Press {styled('1', Style.BOLD, Style.fg(C['green']))} to resume",
+                f"          last session.",
+                f"",
+                f" {Style.CHEVRON} Press {styled('TAB', Style.BOLD, Style.fg(C['green']))} to open the",
+                f"          chat interface.",
+                f"",
+                f" {Style.CHEVRON} Press {styled('h', Style.BOLD, Style.fg(C['green']))} for full help.",
+            ]
+            for i, wl in enumerate(welcome):
+                if i < height:
+                    write_at(x, y + i, wl[:width - 3], Style.fg(C["fg2"]))
+            return
+
         # Findings summary
         finding_counts = {a: len(fs) for a, fs in findings.items() if fs}
         if finding_counts:
@@ -560,25 +598,24 @@ class OpenCodeTUI:
                     for k, v in sorted(sevs.items())
                 )
                 text = f"   {agent:14} {count:3}  [{sev_str}]"
-                if y + line < y + height - 1:
+                if line < height - 1:
                     write_at(x, y + line, text[:width - 3], Style.fg(C["fg2"]))
                     line += 1
 
         # Artifacts
         artifact_counts = {k: len(v) for k, v in artifacts.items() if v}
-        if artifact_counts and y + line + 1 < y + height - 1:
+        if artifact_counts and line + 1 < height - 1:
             line += 1
             write_at(x, y + line, f" {Style.CHEVRON} {styled('Artifacts:', Style.BOLD)}", Style.fg(C["fg"]))
             line += 1
             for k, v in sorted(artifact_counts.items()):
                 text = f"   {k:25} {v}"
-                if y + line < y + height - 1:
+                if line < height - 1:
                     write_at(x, y + line, text[:width - 3], Style.fg(C["fg2"]))
                     line += 1
 
         # State
-        state = self.ctx.get("state", {})
-        if y + line + 1 < y + height - 1:
+        if line + 1 < height - 1:
             line += 1
             updated = state.get("last_updated_at", "")
             mu = state.get("last_updated_by", "—")
@@ -595,11 +632,12 @@ class OpenCodeTUI:
 
         if not trace:
             write_at(x, y, f" {Style.CIRCLE} {styled('No active workflow trace.', Style.DIM)}", Style.fg(C["fg3"]))
-            write_at(x, y + 1, f"   Start a workflow via OpenCode to see steps here.", Style.fg(C["fg3"]))
+            write_at(x, y + 1, f"   {Style.CHEVRON} Start a workflow via 1 (Resume)", Style.fg(C["fg3"]))
+            write_at(x, y + 2, f"   {Style.CHEVRON} Or press Tab to open Chat", Style.fg(C["fg3"]))
             return
 
         scroll = self.panel_scroll["wf"]
-        max_visible = height - 1
+        max_visible = height - 2  # Reserve one row for scroll bar
         total = len(trace)
 
         for i in range(max_visible):
@@ -1004,10 +1042,9 @@ class OpenCodeTUI:
             self.panel_scroll["wf"] = max(0, self.panel_scroll["wf"] - 1)
         elif key == "DOWN":
             trace_len = len(self.ctx.get("workflow_trace", []))
-            # Visible lines in workflow panel = inner_height - 1
-            # inner_height = panel3_h - 2; panel3_h = (rows-1) - (2+8+1)
+            # Visible lines in workflow panel = inner_height - 2 (reserve 1 row for scroll bar)
             wf_inner = self.rows - 1 - 11 - 2   # (rows-1) - panel3_y - 2
-            max_visible = max(1, wf_inner - 1)
+            max_visible = max(1, wf_inner - 2)
             max_scroll = max(0, trace_len - max_visible)
             self.panel_scroll["wf"] = min(max_scroll, self.panel_scroll["wf"] + 1)
 

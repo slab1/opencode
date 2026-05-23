@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "version": "1.0"
+  },
+  "conversations": [
+    {
+      "id": "chat-1779350563",
+      "title": "hi",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi",
+          "timestamp": "2026-05-21T09:02:43.154747"
+        },
+        {
+          "role": "assistant",
+          "content": "\u23f3 Sent to OpenCode. Check the main session for response.",
+          "timestamp": "2026-05-21T09:02:43.183121"
+        },
+        {
+          "role": "assistant",
+          "content": "\u23f3 Sent to OpenCode. Switched to Dashboard (Tab) to track progress.",
+          "timestamp": "2026-05-21T11:56:36.801418"
+        },
+        {
+          "role": "assistant",
+          "content": "\u23f3 Sent to OpenCode. Switched to Dashboard (Tab) to track progress.",
+          "timestamp": "2026-05-21T11:57:36.029522"
+        },
+        {
+          "role": "assistant",
+          "content": "\u23f3 Sent to OpenCode. It will process in the background (initial connection may take ~30s).",
+          "timestamp": "2026-05-21T12:38:21.520511"
+        },
+        {
+          "role": "user",
+          "content": "hii",
+          "timestamp": "2026-05-21T12:43:25.441932"
+        },
+        {
+          "role": "assistant",
+          "content": "\u23f3 Sent to OpenCode. It will process in the background (initial connection may take ~30s).",
+          "timestamp": "2026-05-21T12:43:25.485981"
+        }
+      ],
+      "updated_at": "2026-05-21T12:43:25.488507",
+      "message_count": 7
+    }
+  ]
+}

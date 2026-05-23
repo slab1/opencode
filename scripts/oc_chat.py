@@ -14,6 +14,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import time
 from datetime import datetime
 from typing import Optional
@@ -22,6 +23,18 @@ from typing import Optional
 CONFIG_DIR = os.path.expanduser("~/.config/opencode")
 CHAT_HISTORY_FILE = os.path.join(CONFIG_DIR, "shared", "chat_history.json")
 CONTEXT_FILE = os.path.join(CONFIG_DIR, "shared", "context.json")
+
+# ── Import REPL engine ────────────────────────────────────────────
+# Ensure the scripts directory is on sys.path for dynamic imports
+_SCRIPTS_DIR = os.path.dirname(os.path.realpath(__file__))
+if _SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPTS_DIR)
+
+try:
+    from oc_repl import OpenCodeREPL, REPLPoller, ServerStartError, SendError
+    HAVE_REPL = True
+except ImportError:
+    HAVE_REPL = False
 
 # ── ANSI helpers (same as oc-tui for consistency) ──────────────────
 class S:
@@ -101,6 +114,11 @@ C = {
 # ── Data models ────────────────────────────────────────────────────
 def styled(text, *styles):
     return f"{''.join(styles)}{text}{S.RESET}"
+
+
+def vis_len(text: str) -> int:
+    """Return visible length of text (excluding ANSI codes)."""
+    return len(re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', text))
 
 
 def timestamp_now():
@@ -293,7 +311,7 @@ def markdown_to_ansi(text, width=60):
         for word in words:
             test = f"{line_buf} {word}".strip()
             # Strip ANSI codes for width calculation
-            clean = re.sub(r"\033\[[0-9;]*m", "", test)
+            clean = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', "", test)
             if len(clean) > width - 4:
                 if line_buf:
                     output.append((2, line_num, line_buf))
@@ -428,9 +446,30 @@ class ChatUI:
         self.agent_activity = AgentActivity()
         self.activity_log = []
         self.send_callback = None
+        self._streaming_response = ""  # Accumulated streaming text
+        self._streaming_active = False
+
+        # REPL engine for interactive responses
+        self.repl_poller = REPLPoller() if HAVE_REPL else None
+        self._server_started = False
+        if self.repl_poller:
+            self._start_server_async()
 
         # Load existing or start new
         self._load_latest()
+
+    def _start_server_async(self):
+        """Start the REPL server in background thread (eager startup)."""
+        def _start():
+            try:
+                self.repl_poller.ensure_server()
+                self._server_started = True
+            except ServerStartError as e:
+                self._server_started = False
+                self._server_error = str(e)
+        self._server_error = None
+        thread = threading.Thread(target=_start, daemon=True)
+        thread.start()
 
     def _load_latest(self):
         """Load the most recent conversation."""
@@ -518,16 +557,116 @@ class ChatUI:
             self._default_send(text)
 
     def _default_send(self, text):
-        """Default: run via opencode CLI in background."""
+        """Send message via REPL engine (interactive, streaming response)."""
+        # Prevent sending while a stream is in progress
+        if self._streaming_active:
+            return
+
+        # Write to shared context so the dashboard can show it immediately
+        self._write_shared_context(text)
+
+        if self.repl_poller:
+            try:
+                # Ensure server is running (wait for async startup if needed)
+                try:
+                    self.repl_poller.ensure_server()
+                except ServerStartError as e:
+                    self.add_ai_message(f"⚠ Server unavailable: {e}")
+                    return
+
+                # Add placeholder AI message — will be filled as streaming arrives
+                self._streaming_response = ""
+                self._streaming_active = True
+                placeholder = styled("⠋ ", S.fg(C["accent"])) + "thinking..."
+                self.messages.append({
+                    "role": "assistant",
+                    "content": placeholder,
+                    "timestamp": timestamp_now(),
+                    "_streaming": True,
+                })
+                self._scroll_to_bottom()
+
+                # Start background polling
+                self.repl_poller.start_send(
+                    text,
+                    on_part=self._on_repl_part,
+                )
+
+            except Exception as e:
+                self.add_ai_message(f"⚠ Failed: {e}")
+                self._write_shared_context(text)
+        else:
+            # Fallback: fire-and-forget opencode run
+            self._fallback_send(text)
+
+    def _on_repl_part(self, ptype, data):
+        """Callback for REPL streaming parts.
+        Called from background thread — only enqueue, don't update UI directly."""
+        pass  # Processing happens in poll_activity() on the main thread
+
+    def _fallback_send(self, text):
+        """Fallback: fire and forget via opencode run."""
         try:
+            oc_path = shutil.which("opencode") or "/usr/local/bin/opencode"
             subprocess.Popen(
-                ["opencode", text],
+                [oc_path, "run", text],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
-            self.add_ai_message(f"⏳ Sent to OpenCode. Check the main session for response.")
+            self.add_ai_message(
+                f"⏳ Sent to OpenCode (background)."
+            )
         except FileNotFoundError:
-            self.add_ai_message("⚠ OpenCode CLI not found. Install it to send messages.")
+            self.add_ai_message(
+                f"📝 Message saved to shared context (opencode CLI not found)."
+            )
+
+    def _write_shared_context(self, text):
+        """Write message to shared context for dashboard visibility."""
+        try:
+            ctx = {}
+            try:
+                with open(CONTEXT_FILE) as f:
+                    ctx = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                ctx = {}
+            ctx.setdefault("findings", {})
+            ctx["findings"].setdefault("chat_user", [])
+            ctx["findings"]["chat_user"].append({
+                "id": f"chat-{int(time.time())}",
+                "type": "chat_input",
+                "summary": text[:200],
+                "detail": text,
+                "severity": "info",
+                "timestamp": timestamp_now(),
+                "agent": "user",
+            })
+            ctx.setdefault("session", {})
+            ctx["session"]["chat_pending"] = True
+            ctx["session"]["last_chat_message"] = text[:200]
+            ctx.setdefault("state", {})
+            ctx["state"]["last_updated_at"] = timestamp_now()
+            ctx["state"]["last_updated_by"] = "chat"
+            os.makedirs(os.path.dirname(CONTEXT_FILE), exist_ok=True)
+            with open(CONTEXT_FILE, "w") as f:
+                json.dump(ctx, f, indent=2)
+        except Exception:
+            pass
+
+    def _write_shared_context_done(self):
+        """Mark chat as done in shared context."""
+        try:
+            with open(CONTEXT_FILE) as f:
+                ctx = json.load(f)
+            ctx.setdefault("session", {})
+            ctx["session"]["chat_pending"] = False
+            ctx.setdefault("state", {})
+            ctx["state"]["last_updated_at"] = timestamp_now()
+            ctx["state"]["last_updated_by"] = "chat"
+            with open(CONTEXT_FILE, "w") as f:
+                json.dump(ctx, f, indent=2)
+        except Exception:
+            pass
 
     def set_send_callback(self, callback):
         """Set a custom handler for sending messages."""
@@ -628,7 +767,7 @@ class ChatUI:
                          f"{S.RESET}")
 
         right = f" {styled('Tab Dashboard', S.fg(C['fg3']))}  {styled('[q] Quit', S.fg(C['red']))}  "
-        right_x = self.cols - len(right) + 1
+        right_x = self.cols - vis_len(right) + 1
         sys.stdout.write(f"{S.goto(right_x, 1)}{S.bg(C['header_bg'])}"
                          f"{right}"
                          f"{S.RESET}")
@@ -703,7 +842,7 @@ class ChatUI:
             if y >= input_bot:
                 break
             prefix = prompt if i == 0 else "  "
-            clean = re.sub(r"\033\[[0-9;]*m", "", line)
+            clean = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', "", line)
             display = f"{S.bg(C['input_bg'])}{prefix}{clean[:input_width]}{' ' * (input_width - len(clean[:input_width]))}{S.RESET}"
             sys.stdout.write(f"{S.goto(1, y + 1)}{display}")
 
@@ -714,25 +853,36 @@ class ChatUI:
             sys.stdout.write(f"{S.goto(cursor_x, cursor_y + 1)}")
 
     def _render_status(self):
-        """Render bottom status bar with key hints."""
+        """Render bottom status bar with key hints and streaming status."""
         y = self.rows
         full = f"{' ' * self.cols}"
         sys.stdout.write(f"{S.goto(1, y)}{S.bg(C['bg2'])}{full}{S.RESET}")
 
-        hints = [
-            ("Ctrl+S", "Send", C["green"]),
-            ("Ctrl+N", "New", C["accent"]),
-            ("Tab", "Dash", C["accent"]),
-            ("↑↓", "Nav", C["fg3"]),
-            ("PgUp/Dn", "Scroll", C["fg3"]),
-            ("q", "Quit", C["red"]),
-        ]
+        # Show streaming indicator if active
+        if self._streaming_active:
+            spinner = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"[(int(time.time() * 4)) % 10]
+            status = f" {styled(spinner, S.BOLD, S.fg(C['green']))} {styled('Streaming...', S.fg(C['green']))} "
+            sys.stdout.write(f"{S.goto(2, y)}{S.bg(C['bg2'])}{status}{S.RESET}")
+            x = 2 + vis_len(status)
+        else:
+            hints = [
+                ("Ctrl+S", "Send", C["green"]),
+                ("Ctrl+N", "New", C["accent"]),
+                ("Tab", "Dash", C["accent"]),
+                ("↑↓", "Nav", C["fg3"]),
+                ("PgUp/Dn", "Scroll", C["fg3"]),
+                ("q", "Quit", C["red"]),
+            ]
+            x = 2
+            for key, label, color in hints:
+                item = f" {styled(f'[{key}]', S.BOLD, S.fg(color))} {styled(label, S.fg(C['fg2']))} "
+                sys.stdout.write(f"{S.goto(x, y)}{S.bg(C['bg2'])}{item}{S.RESET}")
+                x += vis_len(item)
 
-        x = 2
-        for key, label, color in hints:
-            item = f" {styled(f'[{key}]', S.BOLD, S.fg(color))} {styled(label, S.fg(C['fg2']))} "
-            sys.stdout.write(f"{S.goto(x, y)}{S.bg(C['bg2'])}{item}{S.RESET}")
-            x += len(item)
+        # Mode indicator (right)
+        mode = f" {styled('REPL', S.BOLD, S.fg(C['teal']))} " if HAVE_REPL else f" {styled('BATCH', S.DIM, S.fg(C['fg3']))} "
+        mode_x = self.cols - vis_len(mode) + 1
+        sys.stdout.write(f"{S.goto(mode_x, y)}{S.bg(C['bg2'])}{mode}{S.RESET}")
 
     # ── Input handling ────────────────────────────────────
 
@@ -912,10 +1062,47 @@ class ChatUI:
     # ── Polling ──────────────────────────────────────────
 
     def poll_activity(self):
-        """Check for new agent activity and update feed."""
+        """Check for new agent activity and REPL streaming updates."""
+        # Tick the REPL poller — processes queued parts on the main thread
+        if self.repl_poller and self._streaming_active:
+            for ptype, data in self.repl_poller.tick():
+                self._process_repl_part(ptype, data)
+
+        # Check shared context for agent activity
         activities = self.agent_activity.poll()
         for act in activities:
             self.add_activity(act)
+
+    def _process_repl_part(self, ptype, data):
+        """Process a REPL part on the main thread (thread-safe)."""
+        if ptype == "text":
+            self._streaming_response += data
+            # Update the streaming message in-place
+            if self.messages and self.messages[-1].get("_streaming"):
+                self.messages[-1]["content"] = self._streaming_response
+        elif ptype == "reasoning":
+            pass  # Could show as dim text later
+        elif ptype == "done":
+            self._streaming_active = False
+            if self.messages and self.messages[-1].get("_streaming"):
+                final_text = self._streaming_response or "(no response)"
+                self.messages[-1].update({
+                    "content": final_text,
+                    "_streaming": False,
+                })
+                self.messages[-1].pop("_streaming", None)
+                self._save()
+            self._write_shared_context_done()
+        elif ptype == "error":
+            self._streaming_active = False
+            self._streaming_response = ""
+            if self.messages and self.messages[-1].get("_streaming"):
+                self.messages[-1].update({
+                    "content": f"⚠ {data}",
+                    "_streaming": False,
+                })
+                self.messages[-1].pop("_streaming", None)
+            self._write_shared_context_done()
 
 
 # ── Quick test ─────────────────────────────────────────────────────
@@ -939,5 +1126,5 @@ And a regular paragraph with some `inline code` to show off.
 """
     result = markdown_to_ansi(test_md, 60)
     for _, _, text in result:
-        clean = re.sub(r"\033\[[0-9;]*m", "", text)
+        clean = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', "", text)
         print(f"  {clean}")
