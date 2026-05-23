@@ -2,3 +2,4 @@ node_modules/
 dist/acode-oc.b64
 /tmp/oc-git-creds
 __pycache__/
+.repl_history

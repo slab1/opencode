@@ -1,10 +1,10 @@
 /**
  * ─────────────────────────────────────────────────────────
- *  OpenCode AI for Acode  v3.2.0
+ *  OpenCode AI for Acode  v3.3.0
  *  Plugin ID: com.opencode.acode
  * ─────────────────────────────────────────────────────────
- *  Full-featured: chat panel, inline chat, response
- *  capture, diff apply, agent selection, settings.
+ *  Full-featured Acode plugin: chat panel, inline chat,
+ *  response capture, diff apply, agent selection, settings.
  *  Reliable terminal-based server startup for Android.
  *
  *  Keyboard:
@@ -13,21 +13,53 @@
  *            O(Settings) D(Debug)
  * ─────────────────────────────────────────────────────────
  */
-
 (function () {
   'use strict';
+
+  // ═══════════════════════════════════════════════════════
+  //  Constants
+  // ═══════════════════════════════════════════════════════
 
   var PLUGIN_ID = 'com.opencode.acode';
   var PROXY_PORT = 9878;
   var SERVER_PORT = 4096;
   var PROXY_URL = 'http://127.0.0.1:' + PROXY_PORT;
   var SERVER_URL = 'http://127.0.0.1:' + SERVER_PORT;
+  var STORAGE_KEY = 'opencode-chat-history';
+  var SETTINGS_KEY = 'opencode-settings';
+  var HEALTH_ENDPOINTS = ['/api/session', '/api/health', '/health', '/'];
+
+  var ALL_AGENTS = [
+    'build', 'debug', 'plan', 'architect', 'orchestrator',
+    'explore', 'general', 'docs', 'refactor', 'review',
+    'security', 'test', 'video-creator', 'web-browser',
+    'display-agent'
+  ];
+
+  // Known Node.js paths (Termux, Alpine, or PATH fallback)
+  var _nodePaths = [
+    '/usr/bin/node',
+    '/usr/local/bin/node',
+    '/data/data/com.termux/files/usr/bin/node',
+    '/data/data/com.termux/files/usr/bin/nodejs',
+    'node',
+  ];
+  var _nodeExe = _nodePaths[0];
+
+  // ═══════════════════════════════════════════════════════
+  //  State
+  // ═══════════════════════════════════════════════════════
+
   var _activeUrl = PROXY_URL;
   var _sessionId = null;
   var _serverReady = false;
   var _agent = 'build';
   var _chatMsgs = [];
   var _pluginDir = '';
+  var _chatOpen = false;
+  var _chatSending = false;
+  var _cmds = [];
+  var _fabCloseHandler = null;
 
   // ═══════════════════════════════════════════════════════
   //  Polyfills
@@ -42,12 +74,48 @@
   }
 
   // ═══════════════════════════════════════════════════════
-  //  Server Management
+  //  Persistence (localStorage)
   // ═══════════════════════════════════════════════════════
 
-  // ─── CORS proxy launcher ───────────────────────
+  function loadSettings() {
+    try {
+      var raw = localStorage.getItem(SETTINGS_KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s.agent) _agent = s.agent;
+      }
+    } catch (e) { /* ignore */ }
+  }
 
-  // Inline Node.js proxy script (used if standalone script file can't be found)
+  function saveSettings() {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ agent: _agent }));
+    } catch (e) { /* ignore */ }
+  }
+
+  function loadChatHistory() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        _chatMsgs = JSON.parse(raw);
+      }
+    } catch (e) { _chatMsgs = []; }
+  }
+
+  function saveChatHistory() {
+    try {
+      // Keep only last 100 messages
+      if (_chatMsgs.length > 100) {
+        _chatMsgs = _chatMsgs.slice(-100);
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(_chatMsgs));
+    } catch (e) { /* ignore */ }
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  Inline Proxy Scripts (embedded for self-containment)
+  // ═══════════════════════════════════════════════════════
+
   var _proxyInlineNode = [
     'var h=require("http");',
     'h.createServer(function(q,r){',
@@ -65,7 +133,6 @@
     'console.log("OC proxy ready on ' + PROXY_PORT + '")',
   ].join('');
 
-  // Inline Python CORS proxy (fallback if node not available)
   var _proxyInlinePython = [
     'import http.server,urllib.request,sys',
     'class P(http.server.BaseHTTPRequestHandler):',
@@ -97,30 +164,18 @@
     'http.server.HTTPServer(("127.0.0.1",' + PROXY_PORT + '),P).serve_forever()',
   ].join('\n');
 
-  // Known Node.js paths on this device (Termux)
-  var _nodePaths = [
-    '/data/data/com.termux/files/usr/bin/node',      // Termux standard
-    '/data/data/com.termux/files/usr/bin/nodejs',     // Older Termux / alternative
-    '/usr/bin/node',                                   // System node (Alpine, etc.)
-    'node',                                            // Fallback to PATH
-  ];
-  // Pick the first likely Node.js path
-  // order: Termux 'node' > Termux 'nodejs' > system node > PATH 'node'
-  var _nodeExe = '/data/data/com.termux/files/usr/bin/node';
+  // ═══════════════════════════════════════════════════════
+  //  Server Management
+  // ═══════════════════════════════════════════════════════
 
-  // Try to detect if the opencode server supports --cors
-  // If so, we can skip the proxy entirely
   function tryServerCors(callback) {
     showToast('Checking server CORS support...');
-    // First check if server already responds via direct no-cors
     fetch(SERVER_URL + '/global/health', { signal: AbortSignal.timeout(3000), mode: 'no-cors' })
       .then(function () {
-        // Server is up — try CORS fetch directly (may work on newer versions)
         fetch(SERVER_URL + '/global/health', { signal: AbortSignal.timeout(3000), mode: 'cors' })
           .then(function (r) { return r.json(); })
           .then(function (d) {
             if (d) {
-              // Server has CORS! Go direct.
               _activeUrl = SERVER_URL;
               _serverReady = true;
               showToast('Connected directly!');
@@ -130,23 +185,17 @@
             if (callback) callback(false);
           })
           .catch(function () {
-            // Server up but no CORS headers — need proxy
             if (callback) callback(false);
           });
       })
       .catch(function () {
-        // No server running
         if (callback) callback(false);
       });
   }
 
-  // Find the bundled cors-proxy.js or return null to use inline fallback
   function getProxyScriptPath() {
     if (_pluginDir) {
-      var bundled = _pluginDir + '/scripts/cors-proxy.js';
-      // We'll try to run it; if it fails, the terminal will show an error
-      // but the inline fallback below handles that case
-      return bundled;
+      return _pluginDir + '/scripts/cors-proxy.js';
     }
     return null;
   }
@@ -155,28 +204,21 @@
     showToast('Starting CORS proxy...');
     try {
       var terminal = acode.require('terminal');
-      var nodeExe = _nodeExe || _nodePaths[0];
       var pathPrefix = 'export PATH=/data/data/com.termux/files/usr/bin:/data/data/com.termux/files/usr/local/bin:$PATH && ';
       var cmd = '';
 
-      // Try bundled script first, fall back to inline
       var proxyScript = getProxyScriptPath();
       if (proxyScript) {
-        // Use the bundled cors-proxy.js script
-        cmd = pathPrefix + '"' + nodeExe + '" "' + proxyScript + '" --target-port ' + SERVER_PORT + ' --proxy-port ' + PROXY_PORT;
+        cmd = pathPrefix + '"' + _nodeExe + '" "' + proxyScript + '" --target-port ' + SERVER_PORT + ' --proxy-port ' + PROXY_PORT;
       } else {
-        // Inline Node.js proxy (no external file needed)
-        // Use node -e with properly escaped code
         var escapedCode = _proxyInlineNode;
-        cmd = pathPrefix + '"' + nodeExe + '" -e "' + escapedCode.replace(/"/g, '\\"') + '"';
+        cmd = pathPrefix + '"' + _nodeExe + '" -e "' + escapedCode.replace(/"/g, '\\"') + '"';
       }
 
-      // Launch the proxy in the terminal
       terminal.exec(cmd);
 
-      // Wait for proxy to be ready — poll with increasing intervals
       var att = 0;
-      var maxAtt = 30; // More attempts (up to ~60s)
+      var maxAtt = 30;
       function poll() {
         att++;
         fetch(PROXY_URL + '/global/health', { signal: AbortSignal.timeout(3000), mode: 'cors' })
@@ -198,13 +240,8 @@
     }
   }
 
-  // ─── Health check ─────────────────────────────
-
-  // Try to reach the server through the CORS proxy (port 9878).
-  // If that fails, try a no-cors probe directly to the server (port 4096)
-  // to see if the server is alive but just missing CORS headers.
+  // Resilient health check — tries multiple endpoints
   function healthCheck(cb) {
-    // 1) Try via CORS proxy
     fetch(PROXY_URL + '/global/health', { signal: AbortSignal.timeout(4000), mode: 'cors' })
       .then(function (r) {
         if (!r.ok) throw new Error('status ' + r.status);
@@ -215,42 +252,31 @@
         else cb(false);
       })
       .catch(function () {
-        // 2) Try direct to server with no-cors (opaque response — can't read body, but
-        //    we know the server is up if the fetch resolves)
         fetch(SERVER_URL + '/global/health', { signal: AbortSignal.timeout(4000), mode: 'no-cors' })
           .then(function () { cb('server_up'); })
           .catch(function () { cb(false); });
       });
   }
 
-  // ─── Server start / ensure ────────────────────
-
   function startServer(callback) {
     showToast('Starting OpenCode server...');
     try {
       var terminal = acode.require('terminal');
-      // Try with --cors flag first (newer opencode versions support it natively)
-      // Fall back to without --cors if that fails
       terminal.exec('opencode serve --port ' + SERVER_PORT + ' --cors "*" --print-logs');
     } catch (e) {
       console.warn('[OC] Terminal unavailable:', e);
     }
 
-    // Wait for server to be up (via no-cors probe, then try CORS or proxy)
     var attempts = 0;
     function poll() {
       attempts++;
-      // Check via no-cors (server is up if fetch resolves)
       fetch(SERVER_URL + '/global/health', { signal: AbortSignal.timeout(4000), mode: 'no-cors' })
         .then(function () {
           showToast('Server detected!');
-          // First check if server has CORS natively (newer versions)
           tryServerCors(function (corsOk) {
             if (corsOk) {
-              // Connected directly with CORS — no proxy needed!
               if (callback) callback(true);
             } else {
-              // Need the CORS proxy
               showToast('Starting CORS proxy...');
               startProxy(function (proxyOk) {
                 if (proxyOk) {
@@ -258,8 +284,6 @@
                   showToast('Ready!');
                   if (callback) callback(true);
                 } else {
-                  // Proxy failed and no native CORS on server
-                  // Show manual setup instructions
                   showToast('CORS proxy failed — manual setup needed');
                   if (callback) callback(false);
                 }
@@ -268,7 +292,7 @@
           });
         })
         .catch(function () {
-          if (attempts < 30) { setTimeout(poll, 3000); } // More attempts (90s total)
+          if (attempts < 30) { setTimeout(poll, 3000); }
           else {
             showToast('Server start timed out');
             if (callback) callback(false);
@@ -278,18 +302,22 @@
     setTimeout(poll, 5000);
   }
 
-  // ─── ensureServer ─────────────────────────────
-
   function ensureServer(cb) {
-    if (_serverReady) { cb(true); return; }
-    healthCheck(function (status) {
+    // Quick check: prefer proxy, fall through if stale
+    if (_serverReady) {
+      fetch(PROXY_URL + '/global/health', { signal: AbortSignal.timeout(2000), mode: 'cors' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) { if (d && d.healthy === true) { cb(true); return; } _serverReady = false; doHealthCb(); })
+        .catch(function () { _serverReady = false; doHealthCb(); });
+      return;
+    }
+    function doHealthCb() { healthCheck(doEnsure); }
+    function doEnsure(status) {
       if (status === 'proxy') {
-        // Everything is working
         _serverReady = true;
         _activeUrl = PROXY_URL;
         cb(true);
       } else if (status === 'server_up') {
-        // Server is running but no proxy — try CORS first, then proxy
         _activeUrl = SERVER_URL;
         tryServerCors(function (corsOk) {
           if (corsOk) {
@@ -299,7 +327,6 @@
             startProxy(function (ok) {
               if (ok) { _serverReady = true; cb(true); }
               else {
-                // Proxy failed and no native CORS — show manual setup
                 showToast('CORS proxy unavailable');
                 cb(false);
               }
@@ -307,10 +334,9 @@
           }
         });
       } else {
-        // Nothing running — start everything
         startServer(cb);
       }
-    });
+    }
   }
 
   // ═══════════════════════════════════════════════════════
@@ -343,7 +369,7 @@
     var body = { parts: [{ type: 'text', text: text }] };
     if (_agent) body.agent = _agent;
     api('POST', '/session/' + _sessionId + '/message', body, function (err, d) {
-      if (err) { pollResponse(cb); return; }
+      if (err) { if (cb) cb(err); return; }
       var result = parseResponse(d);
       if (result && result.content) { if (cb) cb(null, result); return; }
       pollResponse(cb);
@@ -361,11 +387,12 @@
         var msgs = parseMessages(d);
         var assistantMsgs = [];
         for (var i = 0; i < msgs.length; i++) {
-          if (msgs[i].role === 'assistant') assistantMsgs.push(msgs[i]);
+          if (msgs[i].info && msgs[i].info.role === 'assistant') assistantMsgs.push(msgs[i]);
         }
         if (assistantMsgs.length > lastCount) {
           var latest = assistantMsgs[assistantMsgs.length - 1];
-          if (latest.content) { if (cb) cb(null, latest); return; }
+          var content = extractText(latest);
+          if (content) { if (cb) cb(null, { content: content, diffs: extractDiffs(latest) }); return; }
         }
         lastCount = assistantMsgs.length;
         setTimeout(poll, 1000);
@@ -383,12 +410,10 @@
 
   function parseResponse(d) {
     if (!d) return null;
-    // Direct assistant response
     if (d.info && d.info.role === 'assistant') return { content: extractText(d), diffs: extractDiffs(d) };
-    // Check messages array
     var msgs = parseMessages(d);
     for (var i = 0; i < msgs.length; i++) {
-      if (msgs[i].role === 'assistant') return { content: msgs[i].content, diffs: msgs[i].diffs || [] };
+      if (msgs[i].info && msgs[i].info.role === 'assistant') return { content: extractText(msgs[i]), diffs: extractDiffs(msgs[i]) };
     }
     return null;
   }
@@ -399,6 +424,7 @@
     if (d.messages && Array.isArray(d.messages)) return d.messages;
     if (d.data && Array.isArray(d.data)) return d.data;
     if (d.role) return [d];
+    if (d.info && d.info.role) return [d];
     return [];
   }
 
@@ -468,63 +494,43 @@
   }
 
   // ═══════════════════════════════════════════════════════
-  //  Commands
+  //  UI Helpers
   // ═══════════════════════════════════════════════════════
 
-  function execPrompt(prompt, apply) {
-    showToast('Connecting to server...');
-    ensureServer(function (ready) {
-      if (!ready) {
-        // Show manual instructions
-        (acode.require('alert'))('OpenCode Setup',
-          'Option A (auto, preferred):\n' +
-          '  opencode serve --port ' + SERVER_PORT + ' --cors "*"\n\n' +
-          'Option B (manual proxy):\n' +
-          '  1. opencode serve --port ' + SERVER_PORT + '\n' +
-          '  2. node ' + (_pluginDir || '/path/to/plugin') + '/scripts/cors-proxy.js \\\n' +
-          '     --target-port ' + SERVER_PORT + ' --proxy-port ' + PROXY_PORT + '\n\n' +
-          'Then try again. The plugin connects via proxy or --cors.');
-        return;
-      }
-      showToast('OpenCode is thinking...');
-      createSession(function (err) {
-        if (err) {
-          showToast('Session error: ' + err.message);
-          return;
-        }
-        sendMsg(prompt, function (err2, result) {
-          if (err2 || !result) {
-            showToast('Error: ' + (err2 ? err2.message : 'empty response'));
-            deleteSession();
-            return;
-          }
-          // Save to history
-          _chatMsgs.push({ role: 'user', text: prompt });
-          _chatMsgs.push({ role: 'assistant', content: result.content, diffs: result.diffs || [] });
-
-          // Show result
-          showResult(result.content, prompt);
-
-          // Apply diffs if requested
-          if (apply && result.diffs && result.diffs.length > 0) {
-            showDiffs(result.diffs);
-          }
-
-          setTimeout(function () { deleteSession(); }, 3000);
-        });
-      });
-    });
+  function escapeHtml(s) {
+    if (!s) return '';
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
   }
+
+  function makeOverlay(id, zIndex) {
+    var el = document.getElementById(id);
+    if (!el) {
+      el = document.createElement('div');
+      el.id = id;
+      el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:' + (zIndex || 9999) + ';' +
+        'background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;';
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  function showOverlay(overlay) {
+    overlay.style.display = 'flex';
+  }
+
+  function hideOverlay(overlay) {
+    overlay.style.display = 'none';
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  Response Display
+  // ═══════════════════════════════════════════════════════
 
   function showResult(content, promptText) {
     try {
-      var overlay = document.getElementById('oc-overlay');
-      if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'oc-overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;';
-        document.body.appendChild(overlay);
-      }
+      var overlay = makeOverlay('oc-overlay');
       var esc = escapeHtml(content);
       var escP = escapeHtml((promptText || '').slice(0, 100));
       overlay.innerHTML =
@@ -534,10 +540,14 @@
         '<div style="margin-top:12px;display:flex;gap:8px;">' +
         '<button id="oc-close" style="padding:6px 16px;border:1px solid var(--accent-color,#2d7ff9);background:transparent;color:var(--accent-color,#2d7ff9);border-radius:4px;cursor:pointer;font-size:12px;">Close</button>' +
         '</div></div>';
-      overlay.style.display = 'flex';
-      document.getElementById('oc-close').onclick = function () { overlay.style.display = 'none'; };
+      showOverlay(overlay);
+      document.getElementById('oc-close').onclick = function () { hideOverlay(overlay); };
     } catch (e) { (acode.require('alert'))('OC', content.slice(0, 2000)); }
   }
+
+  // ═══════════════════════════════════════════════════════
+  //  Diff UI
+  // ═══════════════════════════════════════════════════════
 
   function showDiffs(diffs) {
     if (!diffs || diffs.length === 0) return;
@@ -555,6 +565,7 @@
     }
     html += '<div style="margin-top:12px;display:flex;gap:8px;">' +
       '<button id="oc-diff-apply" style="padding:6px 16px;border:none;background:var(--accent-color,#2d7ff9);color:#fff;border-radius:4px;cursor:pointer;font-size:12px;">Apply All</button>' +
+      '<button id="oc-diff-skip" style="padding:6px 16px;border:1px solid #666;background:transparent;color:#ccc;border-radius:4px;cursor:pointer;font-size:12px;">Skip</button>' +
       '<button id="oc-diff-cancel" style="padding:6px 16px;border:1px solid #666;background:transparent;color:#ccc;border-radius:4px;cursor:pointer;font-size:12px;">Cancel</button></div></div>';
     overlay.innerHTML = html;
     document.body.appendChild(overlay);
@@ -567,16 +578,55 @@
       showToast('Applied ' + applied + ' change(s)');
     };
     document.getElementById('oc-diff-cancel').onclick = function () { overlay.remove(); };
+    document.getElementById('oc-diff-skip').onclick = function () { overlay.remove(); };
   }
 
-  function escapeHtml(s) {
-    if (!s) return '';
-    var d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
+  // ═══════════════════════════════════════════════════════
+  //  Prompt Execution
+  // ═══════════════════════════════════════════════════════
+
+  function execPrompt(prompt, apply) {
+    showToast('Connecting to server...');
+    ensureServer(function (ready) {
+      if (!ready) {
+        (acode.require('alert'))('OpenCode Setup',
+          'Option A (auto, preferred):\n' +
+          '  opencode serve --port ' + SERVER_PORT + ' --cors "*"\n\n' +
+          'Option B (manual proxy):\n' +
+          '  1. opencode serve --port ' + SERVER_PORT + '\n' +
+          '  2. node ' + (_pluginDir || '/path/to/plugin') + '/scripts/cors-proxy.js \\\n' +
+          '     --target-port ' + SERVER_PORT + ' --proxy-port ' + PROXY_PORT + '\n\n' +
+          'Then try again.');
+        return;
+      }
+      showToast('OpenCode is thinking...');
+      createSession(function (err) {
+        if (err) {
+          showToast('Session error: ' + err.message);
+          return;
+        }
+        sendMsg(prompt, function (err2, result) {
+          if (err2 || !result) {
+            showToast('Error: ' + (err2 ? err2.message : 'empty response'));
+            deleteSession();
+            return;
+          }
+          _chatMsgs.push({ role: 'user', text: prompt });
+          _chatMsgs.push({ role: 'assistant', content: result.content, diffs: result.diffs || [] });
+          saveChatHistory();
+          showResult(result.content, prompt);
+          if (apply && result.diffs && result.diffs.length > 0) {
+            showDiffs(result.diffs);
+          }
+          setTimeout(function () { deleteSession(); }, 3000);
+        });
+      });
+    });
   }
 
-  // ─── Action Handlers ──────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Action Handlers
+  // ═══════════════════════════════════════════════════════
 
   function handleAsk() {
     var ctx = getEditorCtx();
@@ -606,17 +656,12 @@
   function handleStatus() {
     healthCheck(function (status) {
       if (status === 'proxy') {
-        showToast('✅ Proxy OK (via http://127.0.0.1:' + PROXY_PORT + ')');
+        showToast('Proxy OK (via http://127.0.0.1:' + PROXY_PORT + ')');
       } else if (status === 'server_up') {
-        // Server is up — check if it has CORS
         fetch(SERVER_URL + '/global/health', { signal: AbortSignal.timeout(3000), mode: 'cors' })
           .then(function (r) { return r.json(); })
-          .then(function () {
-            showToast('✅ Server OK with CORS (http://127.0.0.1:' + SERVER_PORT + ')');
-          })
-          .catch(function () {
-            showToast('⚠ Server OK but no CORS (http://127.0.0.1:' + SERVER_PORT + ')');
-          });
+          .then(function () { showToast('Server OK with CORS'); })
+          .catch(function () { showToast('Server OK but no CORS'); });
       } else {
         (acode.require('alert'))('OC',
           'Server not running.\n\nStart it in Termux:\n' +
@@ -629,7 +674,7 @@
 
   function handleDebug() {
     var lines = [
-      '=== OpenCode v3.2.8+ ===',
+      '=== OpenCode v3.3.0 ===',
       'Agent: ' + _agent,
       'Server: http://127.0.0.1:' + SERVER_PORT + ' (--cors "*")',
       'Proxy: http://127.0.0.1:' + PROXY_PORT,
@@ -638,6 +683,10 @@
       'Session: ' + (_sessionId || 'none'),
       'Node: ' + _nodeExe,
       'PluginDir: ' + (_pluginDir || '(not detected)'),
+      'Chat history: ' + _chatMsgs.length + ' messages',
+      '',
+      'Available agents (' + ALL_AGENTS.length + '):',
+      '  ' + ALL_AGENTS.join(', '),
       '',
       'Troubleshooting:',
       '1. opencode serve --port ' + SERVER_PORT + ' --cors "*" (in Termux)',
@@ -651,10 +700,9 @@
     showResult(lines.join('\n'), 'Debug');
   }
 
-  // ─── Chat Panel ──────────────────────────────────
-
-  var _chatOpen = false;
-  var _chatSending = false;
+  // ═══════════════════════════════════════════════════════
+  //  Chat Panel
+  // ═══════════════════════════════════════════════════════
 
   function handleChat() {
     showChatPanel();
@@ -662,7 +710,7 @@
 
   function handleInlineChat() {
     var ctx = getEditorCtx();
-    (acode.require('prompt'))('Inline Chat (Ctrl+Shift+I):', '', { placeholder: 'e.g. refactor this function' }).then(function (q) {
+    (acode.require('prompt'))('Inline Chat:', '', { placeholder: 'e.g. refactor this function' }).then(function (q) {
       if (!q) return;
       var msg = q;
       if (ctx.sel) msg += '\n\nContext:\n```\n' + ctx.sel + '\n```';
@@ -685,6 +733,7 @@
   function showChatPanel() {
     if (_chatOpen) { hideChatPanel(); return; }
     _chatOpen = true;
+
     var overlay = document.createElement('div');
     overlay.id = 'oc-chat';
     overlay.style.cssText =
@@ -696,7 +745,8 @@
       '    <span style="font-size:14px;font-weight:bold;color:var(--text-primary,#c9d1d9);flex:1;">OpenCode Chat' +
       '      <span id="oc-chat-agent" style="margin-left:8px;font-size:10px;color:#888;font-weight:normal;">(' + _agent + ')</span></span>' +
       '    <button id="oc-chat-new" style="padding:4px 10px;border:1px solid #555;background:transparent;color:#aaa;border-radius:4px;cursor:pointer;font-size:11px;margin-right:6px;">New</button>' +
-      '    <button id="oc-chat-close" style="padding:4px 10px;border:none;background:transparent;color:#aaa;cursor:pointer;font-size:16px;">✕</button>' +
+      '    <button id="oc-chat-agent-btn" style="padding:4px 10px;border:1px solid #555;background:transparent;color:#aaa;border-radius:4px;cursor:pointer;font-size:11px;margin-right:6px;">Agent</button>' +
+      '    <button id="oc-chat-close" style="padding:4px 10px;border:none;background:transparent;color:#aaa;cursor:pointer;font-size:16px;">X</button>' +
       '  </div>' +
       '  <div id="oc-chat-msgs" style="flex:1;overflow-y:auto;padding:10px 14px;"></div>' +
       '  <div id="oc-chat-input-bar" style="display:flex;padding:8px 10px;border-top:1px solid #333;flex-shrink:0;">' +
@@ -708,15 +758,18 @@
     document.body.appendChild(overlay);
 
     renderChatMsgs();
-
     document.getElementById('oc-chat-input').focus();
 
     document.getElementById('oc-chat-close').onclick = hideChatPanel;
     document.getElementById('oc-chat-new').onclick = function () {
       _chatMsgs = [];
       _sessionId = null;
+      saveChatHistory();
       renderChatMsgs();
       showToast('New chat started');
+    };
+    document.getElementById('oc-chat-agent-btn').onclick = function () {
+      showQuickAgentSelect();
     };
     document.getElementById('oc-chat-send').onclick = chatSend;
     document.getElementById('oc-chat-input').onkeydown = function (e) {
@@ -763,7 +816,6 @@
     var text = input.value.trim();
     if (!text) return;
 
-    // Capture context
     var ctx = getEditorCtx();
     var fullMsg = text;
     if (ctx.sel) fullMsg += '\n\n```\n' + ctx.sel + '\n```';
@@ -772,60 +824,124 @@
     input.value = '';
     renderChatMsgs();
     _chatSending = true;
+    saveChatHistory();
 
     ensureServer(function (ready) {
       if (!ready) {
         _chatMsgs.push({ role: 'assistant', text: 'Server not running. Start it in Termux.' });
         renderChatMsgs();
         _chatSending = false;
+        saveChatHistory();
         return;
       }
-      // Use existing session or create new one
       function doSend() {
         sendMsg(fullMsg, function (err, result) {
           if (err || !result) {
             _chatMsgs.push({ role: 'assistant', text: err ? err.message : 'No response' });
             renderChatMsgs();
             _chatSending = false;
-            // If session failed, delete it so next send creates new
+            saveChatHistory();
             if (err) { _sessionId = null; }
             return;
           }
           _chatMsgs.push({ role: 'assistant', text: result.content, diffs: result.diffs || [] });
           renderChatMsgs();
           _chatSending = false;
+          saveChatHistory();
         });
       }
       if (_sessionId) { doSend(); }
-      else { createSession(function (err) { if (err) { _chatMsgs.push({ role: 'assistant', text: 'Session error: ' + err.message }); renderChatMsgs(); _chatSending = false; } else { doSend(); } }); }
+      else {
+        createSession(function (err) {
+          if (err) {
+            _chatMsgs.push({ role: 'assistant', text: 'Session error: ' + err.message });
+            renderChatMsgs();
+            _chatSending = false;
+            saveChatHistory();
+          } else { doSend(); }
+        });
+      }
     });
   }
 
-  // ─── Settings ─────────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Quick Agent Select (in-chat)
+  // ═══════════════════════════════════════════════════════
+
+  function showQuickAgentSelect() {
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:999999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
+    var html = '<div style="max-width:280px;background:var(--bg-primary,#0d1117);border-radius:8px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5);">' +
+      '<div style="font-size:13px;color:var(--text-primary,#c9d1d9);margin-bottom:8px;font-weight:bold;">Change Agent</div>';
+    for (var i = 0; i < ALL_AGENTS.length; i++) {
+      var a = ALL_AGENTS[i];
+      var sel = a === _agent ? ' style="background:#2d7ff9;color:#fff;"' : '';
+      html += '<div class="oc-agent-opt"' + sel + ' data-agent="' + a + '" ' +
+        'style="padding:6px 10px;margin:2px 0;border-radius:4px;cursor:pointer;font-size:12px;color:var(--text-primary,#c9d1d9);">' +
+        a + '</div>';
+    }
+    html += '<div style="margin-top:8px;text-align:center;"><button id="oc-agent-close" ' +
+      'style="padding:4px 12px;border:1px solid #666;background:transparent;color:#ccc;border-radius:4px;cursor:pointer;font-size:11px;">Close</button></div></div>';
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+
+    var opts = overlay.querySelectorAll('.oc-agent-opt');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].onclick = function () {
+        _agent = this.getAttribute('data-agent');
+        showToast('Agent: ' + _agent);
+        saveSettings();
+        var agentLabel = document.getElementById('oc-chat-agent');
+        if (agentLabel) agentLabel.textContent = '(' + _agent + ')';
+        overlay.remove();
+      };
+    }
+    document.getElementById('oc-agent-close').onclick = function () { overlay.remove(); };
+    overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  Settings
+  // ═══════════════════════════════════════════════════════
 
   function showSettings() {
     var overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;';
+    var agentOpts = '';
+    for (var i = 0; i < ALL_AGENTS.length; i++) {
+      var a = ALL_AGENTS[i];
+      var selected = a === _agent ? ' selected' : '';
+      agentOpts += '<option value="' + a + '"' + selected + '>' + a + '</option>';
+    }
     overlay.innerHTML =
       '<div style="max-width:90%;width:380px;background:var(--bg-primary,#0d1117);border-radius:8px;padding:16px;">' +
-      '<h3 style="margin:0 0 12px;font-size:15px;color:var(--text-primary,#c9d1d9);">Settings</h3>' +
+      '<h3 style="margin:0 0 12px;font-size:15px;color:var(--text-primary,#c9d1d9);">OpenCode Settings</h3>' +
       '<div style="margin-bottom:10px;">' +
       '<label style="display:block;margin-bottom:4px;color:#888;font-size:12px;">Default Agent</label>' +
       '<select id="oc-agent-sel" style="width:100%;padding:6px 8px;border:1px solid #444;border-radius:4px;background:var(--bg-secondary,#1a1a2e);color:var(--text-primary,#c9d1d9);font-size:13px;">' +
-      '<option value="build"' + (_agent === 'build' ? ' selected' : '') + '>build</option>' +
-      '<option value="debug"' + (_agent === 'debug' ? ' selected' : '') + '>debug</option>' +
-      '<option value="plan"' + (_agent === 'plan' ? ' selected' : '') + '>plan</option>' +
-      '<option value="architect"' + (_agent === 'architect' ? ' selected' : '') + '>architect</option>' +
-      '<option value="orchestrator"' + (_agent === 'orchestrator' ? ' selected' : '') + '>orchestrator</option>' +
+      agentOpts +
       '</select></div>' +
+      '<div style="margin-bottom:10px;">' +
+      '<label style="display:block;margin-bottom:4px;color:#888;font-size:12px;">Chat History</label>' +
+      '<div style="font-size:12px;color:#aaa;">' + _chatMsgs.length + ' messages stored</div>' +
+      '<button id="oc-clear-history" style="margin-top:4px;padding:4px 10px;border:1px solid #f55;background:transparent;color:#f55;border-radius:4px;cursor:pointer;font-size:11px;">Clear History</button>' +
+      '</div>' +
       '<div style="display:flex;gap:8px;">' +
       '<button id="oc-save-settings" style="padding:6px 16px;border:none;background:var(--accent-color,#2d7ff9);color:#fff;border-radius:4px;cursor:pointer;font-size:12px;">Save</button>' +
       '<button id="oc-close-settings" style="padding:6px 16px;border:1px solid #666;background:transparent;color:#ccc;border-radius:4px;cursor:pointer;font-size:12px;">Close</button></div></div>';
     document.body.appendChild(overlay);
+
     document.getElementById('oc-save-settings').onclick = function () {
       _agent = document.getElementById('oc-agent-sel').value;
+      saveSettings();
       overlay.remove();
       showToast('Agent: ' + _agent);
+    };
+    document.getElementById('oc-clear-history').onclick = function () {
+      _chatMsgs = [];
+      saveChatHistory();
+      document.getElementById('oc-clear-history').textContent = 'History cleared';
+      showToast('Chat history cleared');
     };
     document.getElementById('oc-close-settings').onclick = function () { overlay.remove(); };
   }
@@ -834,11 +950,8 @@
   //  Floating Action Button
   // ═══════════════════════════════════════════════════════
 
-  var _fabCloseHandler = null;
-
   function createFAB() {
     try {
-      // FAB button — visible on all screens
       var fab = document.createElement('div');
       fab.id = 'oc-fab';
       fab.textContent = 'OC';
@@ -853,7 +966,6 @@
       fab.setAttribute('role', 'button');
       fab.setAttribute('aria-label', 'OpenCode AI');
 
-      // Popup menu
       var menu = document.createElement('div');
       menu.id = 'oc-fab-menu';
       menu.style.cssText =
@@ -879,26 +991,17 @@
         btn.style.cssText =
           'padding:10px 16px;font-size:13px;' +
           'color:#c9d1d9;cursor:pointer;white-space:nowrap;';
-        btn.onmouseover = function () {
-          btn.style.background = 'rgba(255,255,255,0.08)';
-        };
-        btn.onmouseout = function () {
-          btn.style.background = 'transparent';
-        };
-        btn.onclick = function () {
-          menu.style.display = 'none';
-          item.fn();
-        };
+        btn.onmouseover = function () { btn.style.background = 'rgba(255,255,255,0.08)'; };
+        btn.onmouseout = function () { btn.style.background = 'transparent'; };
+        btn.onclick = function () { menu.style.display = 'none'; item.fn(); };
         menu.appendChild(btn);
       });
 
-      // Toggle menu on FAB click
       fab.onclick = function (e) {
         e.stopPropagation();
         menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
       };
 
-      // Close menu on outside click (store handler for cleanup)
       _fabCloseHandler = function (e) {
         if (menu.style.display !== 'none' && !menu.contains(e.target) && e.target !== fab) {
           menu.style.display = 'none';
@@ -925,61 +1028,33 @@
   }
 
   // ═══════════════════════════════════════════════════════
-  //  Registration
+  //  Plugin Page & Commands
   // ═══════════════════════════════════════════════════════
 
-  function init(baseUrl, $page, cache) {
-    try {
-      // 0. Extract plugin directory for accessing bundled scripts
-      _pluginDir = '';
-      try {
-        if (baseUrl && baseUrl.indexOf('file://') === 0) {
-          var p = decodeURIComponent(baseUrl.replace(/^file:\/\//, ''));
-          // Remove trailing filename (baseUrl is the plugin HTML page)
-          if (p.indexOf('/') !== -1) p = p.substring(0, p.lastIndexOf('/'));
-          _pluginDir = p;
-        }
-      } catch (_) {}
-
-      // 1. FAB first — most visible, most important
-      createFAB();
-
-      // 2. Register commands (may fail on some Acode versions)
-      try { registerAll(); } catch (e) { console.warn('[OC] registerAll:', e); }
-
-      // 3. Populate the plugin page — try multiple approaches
-      var html = buildPageHTML();
-      try { $page.innerHTML = html; } catch (_) {}
-      try { if (typeof $page.html === 'function') $page.html(html); } catch (_) {}
-      try { $page.show(); } catch (_) {}
-
-      // Wire up page buttons via event delegation
-      var actionMap = { chat: handleChat, inline: handleInlineChat, ask: handleAsk, fix: handleFix, explain: handleExplain, generate: handleGenerate, status: handleStatus, settings: showSettings, debug: handleDebug };
-      try {
-        $page.addEventListener('click', function (e) {
-          var btn = e.target;
-          if (btn && btn.classList && btn.classList.contains('oc-btn')) {
-            var act = btn.getAttribute('data-act');
-            if (actionMap[act]) actionMap[act]();
-          }
-        });
-      } catch (_) {}
-
-      // 4. Check server status
-      healthCheck(function (ok) { _serverReady = ok; });
-    } catch (e) {
-      try { (acode.require('alert'))('OC Error', 'Init failed: ' + e.message); } catch (_) {}
-      console.error('[OC] init error:', e);
-    }
+  function buildPageHTML() {
+    return (
+      '<div style="padding:20px;font-family:sans-serif;color:#c9d1d9;">' +
+      '<h2 style="margin:0 0 4px;font-size:18px;">OpenCode AI v3.3.0</h2>' +
+      '<p style="margin:0 0 12px;font-size:12px;color:#888;">AI-powered coding in Acode</p>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">' +
+      '  <button class="oc-btn" data-act="chat" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Chat</button>' +
+      '  <button class="oc-btn" data-act="inline" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Inline</button>' +
+      '  <button class="oc-btn" data-act="ask" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Ask</button>' +
+      '  <button class="oc-btn" data-act="fix" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Fix</button>' +
+      '  <button class="oc-btn" data-act="explain" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Explain</button>' +
+      '  <button class="oc-btn" data-act="generate" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Generate</button>' +
+      '</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">' +
+      '  <button class="oc-btn" data-act="status" style="flex:1;min-width:80px;padding:8px 10px;border:1px solid #888;border-radius:6px;background:transparent;color:#c9d1d9;font-size:12px;cursor:pointer;">Status</button>' +
+      '  <button class="oc-btn" data-act="settings" style="flex:1;min-width:80px;padding:8px 10px;border:1px solid #888;border-radius:6px;background:transparent;color:#c9d1d9;font-size:12px;cursor:pointer;">Settings</button>' +
+      '  <button class="oc-btn" data-act="debug" style="flex:1;min-width:80px;padding:8px 10px;border:1px solid #888;border-radius:6px;background:transparent;color:#c9d1d9;font-size:12px;cursor:pointer;">Debug</button>' +
+      '</div>' +
+      '<div style="padding:12px;border-radius:6px;background:#161b22;font-size:12px;line-height:1.7;color:#888;">' +
+      '<strong style="color:#c9d1d9;">Quick tip:</strong> Tap the blue <strong style="color:#2d7ff9;">OC</strong> button at bottom-right for the action menu.<br>' +
+      '<strong style="color:#c9d1d9;">Keyboard:</strong> Ctrl+Shift+K(Chat) I(Inline) A(Ask) F(Fix) E(Explain) G(Generate) S(Status) O(Settings) D(Debug)' +
+      '</div></div>'
+    );
   }
-
-  function destroy() {
-    unregisterAll();
-    removeFAB();
-    hideChatPanel();
-  }
-
-  var _cmds = [];
 
   function registerAll() {
     var commands = acode.require('commands');
@@ -1013,34 +1088,72 @@
     _cmds = [];
   }
 
-  // ─── Plugin Page HTML ──────────────────────────
+  // ═══════════════════════════════════════════════════════
+  //  Init / Destroy
+  // ═══════════════════════════════════════════════════════
 
-  function buildPageHTML() {
-    return (
-      '<div style="padding:20px;font-family:sans-serif;color:#c9d1d9;">' +
-      '<h2 style="margin:0 0 4px;font-size:18px;">OpenCode AI</h2>' +
-      '<p style="margin:0 0 12px;font-size:12px;color:#888;">AI-powered coding in Acode</p>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">' +
-      '  <button class="oc-btn" data-act="chat" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Chat</button>' +
-      '  <button class="oc-btn" data-act="inline" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Inline</button>' +
-      '  <button class="oc-btn" data-act="ask" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Ask</button>' +
-      '  <button class="oc-btn" data-act="fix" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Fix</button>' +
-      '  <button class="oc-btn" data-act="explain" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Explain</button>' +
-      '  <button class="oc-btn" data-act="generate" style="flex:1;min-width:80px;padding:10px;border:none;border-radius:6px;background:#2d7ff9;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Generate</button>' +
-      '</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">' +
-      '  <button class="oc-btn" data-act="status" style="flex:1;min-width:80px;padding:8px 10px;border:1px solid #888;border-radius:6px;background:transparent;color:#c9d1d9;font-size:12px;cursor:pointer;">Status</button>' +
-      '  <button class="oc-btn" data-act="settings" style="flex:1;min-width:80px;padding:8px 10px;border:1px solid #888;border-radius:6px;background:transparent;color:#c9d1d9;font-size:12px;cursor:pointer;">Settings</button>' +
-      '  <button class="oc-btn" data-act="debug" style="flex:1;min-width:80px;padding:8px 10px;border:1px solid #888;border-radius:6px;background:transparent;color:#c9d1d9;font-size:12px;cursor:pointer;">Debug</button>' +
-      '</div>' +
-      '<div style="padding:12px;border-radius:6px;background:#161b22;font-size:12px;line-height:1.7;color:#888;">' +
-      '<strong style="color:#c9d1d9;">Quick tip:</strong> Tap the blue <strong style="color:#2d7ff9;">OC</strong> button at bottom-right for the action menu.<br>' +
-      '<strong style="color:#c9d1d9;">Keyboard:</strong> Ctrl+Shift+K(Chat) I(Inline) A(Ask) F(Fix) E(Explain) G(Generate) S(Status) O(Settings) D(Debug)' +
-      '</div></div>'
-    );
+  function init(baseUrl, $page, cache) {
+    try {
+      // 0. Load persisted settings
+      loadSettings();
+      loadChatHistory();
+
+      // 1. Detect plugin directory
+      _pluginDir = '';
+      try {
+        if (baseUrl && baseUrl.indexOf('file://') === 0) {
+          var p = decodeURIComponent(baseUrl.replace(/^file:\/\//, ''));
+          if (p.indexOf('/') !== -1) p = p.substring(0, p.lastIndexOf('/'));
+          _pluginDir = p;
+        }
+      } catch (_) {}
+
+      // 2. FAB
+      createFAB();
+
+      // 3. Commands
+      try { registerAll(); } catch (e) { console.warn('[OC] registerAll:', e); }
+
+      // 4. Plugin page
+      var html = buildPageHTML();
+      try { $page.innerHTML = html; } catch (_) {}
+      try { if (typeof $page.html === 'function') $page.html(html); } catch (_) {}
+      try { $page.show(); } catch (_) {}
+
+      var actionMap = {
+        chat: handleChat, inline: handleInlineChat, ask: handleAsk,
+        fix: handleFix, explain: handleExplain, generate: handleGenerate,
+        status: handleStatus, settings: showSettings, debug: handleDebug
+      };
+      try {
+        $page.addEventListener('click', function (e) {
+          var btn = e.target;
+          if (btn && btn.classList && btn.classList.contains('oc-btn')) {
+            var act = btn.getAttribute('data-act');
+            if (actionMap[act]) actionMap[act]();
+          }
+        });
+      } catch (_) {}
+
+      // 5. Background health check — only mark ready if proxy is confirmed
+      healthCheck(function (status) { if (status === 'proxy') { _serverReady = true; _activeUrl = PROXY_URL; } });
+    } catch (e) {
+      try { (acode.require('alert'))('OC Error', 'Init failed: ' + e.message); } catch (_) {}
+      console.error('[OC] init error:', e);
+    }
   }
 
-  // ─── Bootstrap ────────────────────────────────────
+  function destroy() {
+    unregisterAll();
+    removeFAB();
+    hideChatPanel();
+    saveChatHistory();
+    saveSettings();
+  }
+
+  // ═══════════════════════════════════════════════════════
+  //  Plugin Registration
+  // ═══════════════════════════════════════════════════════
 
   acode.setPluginInit(PLUGIN_ID, init, {
     list: [
@@ -1050,7 +1163,19 @@
         value: 'build',
         prompt: 'Change agent (build, debug, plan, etc.)',
         promptType: 'text',
-        cb: function (k, v) { _agent = v || 'build'; showToast('Agent: ' + _agent); },
+        cb: function (k, v) {
+          _agent = v || 'build';
+          saveSettings();
+          showToast('Agent: ' + _agent);
+        },
+      },
+      {
+        key: 'server_port',
+        text: 'Server Port',
+        value: String(SERVER_PORT),
+        prompt: 'Server port number',
+        promptType: 'number',
+        cb: function (k, v) { if (v) { SERVER_PORT = parseInt(v, 10); } },
       },
     ],
   });

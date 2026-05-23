@@ -29,7 +29,7 @@ DEFAULT_PORT = 4099
 OPENCODE_DB = os.path.expanduser(
     "/public/.local/share/opencode/opencode.db"
 )
-OPCODE_BIN = shutil.which("opencode") or "/usr/local/lib/node_modules/opencode-linux-arm64-musl/bin/opencode"
+OPCODE_BIN = shutil.which("opencode") or "/usr/local/bin/opencode"
 CONFIG_DIR = os.path.expanduser("~/.config/opencode")
 CONTEXT_FILE = os.path.join(CONFIG_DIR, "shared", "context.json")
 
@@ -73,7 +73,7 @@ class S:
     CODE_BG = "\033[48;5;235m"
 
     CLEAR_LINE = "\033[K"
-    HIDE_CURSOR = "\033[?25h"
+    HIDE_CURSOR = "\033[?25l"
     SHOW_CURSOR = "\033[?25h"
 
 def styled(text, *styles):
@@ -196,15 +196,17 @@ class OpenCodeREPL:
 
     def _is_server_running(self):
         """Check if the server HTTP endpoint is responding."""
-        try:
-            resp = urllib.request.urlopen(
-                f"{self.server_url}/api/session",
-                timeout=2,
-            )
-            return resp.status == 200
-        except (urllib.error.URLError, urllib.error.HTTPError,
-                OSError, ValueError):
-            return False
+        endpoints = ["/api/session", "/api/health", "/health", "/"]
+        for ep in endpoints:
+            try:
+                resp = urllib.request.urlopen(
+                    f"{self.server_url}{ep}", timeout=2)
+                if resp.status < 500:
+                    return True
+            except (urllib.error.URLError, urllib.error.HTTPError,
+                    OSError, ValueError):
+                continue
+        return False
 
     def _kill_server(self):
         """Kill the server process."""

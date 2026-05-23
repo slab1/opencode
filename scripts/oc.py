@@ -42,7 +42,7 @@ CONTEXT_FILE = os.path.join(CONFIG_DIR, "shared", "context.json")
 CONTEXT_HELPER = os.path.join(CONFIG_DIR, "shared", "helpers", "context.py")
 SESSIONS_OUTCOMES = os.path.join(CONFIG_DIR, "knowledge-graph", "outcomes", "sessions.json")
 OPENCODE_DB = os.path.expanduser("/public/.local/share/opencode/opencode.db")
-OPCODE_BIN = shutil.which("opencode") or "/usr/local/lib/node_modules/opencode-ai/bin/opencode.exe"
+OPCODE_BIN = shutil.which("opencode") or "/usr/local/bin/opencode"
 CHAT_HISTORY_FILE = os.path.join(CONFIG_DIR, "shared", "chat_history.json")
 NOTES_FILE = os.path.join(CONFIG_DIR, "shared", "notes.json")
 
@@ -122,13 +122,20 @@ def print_success(msg):
 
 
 def time_ago(ts):
-    """Convert ISO timestamp to relative time string."""
+    """Convert ISO timestamp or Unix ms integer to relative time string."""
     if not ts:
         return "—"
     try:
-        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+        if isinstance(ts, (int, float)):
+            # Unix timestamp in milliseconds
+            dt = datetime.fromtimestamp(ts / 1000, tz=timezone.utc)
+        else:
+            # ISO string
+            dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
         diff = datetime.now().astimezone() - dt
         s = int(diff.total_seconds())
+        if s < 0:
+            return "just now"
         if s < 60: return f"{s}s ago"
         elif s < 3600: return f"{s // 60}m ago"
         elif s < 86400: return f"{s // 3600}h ago"
@@ -219,12 +226,17 @@ class OpenCodeEngine:
         raise RuntimeError(f"Server did not start within {timeout}s")
 
     def _is_running(self):
-        try:
-            resp = urllib.request.urlopen(
-                f"{self.server_url}/api/session", timeout=2)
-            return resp.status == 200
-        except Exception:
-            return False
+        """Check if the server is running by trying common API endpoints."""
+        endpoints = ["/api/session", "/api/health", "/health", "/"]
+        for ep in endpoints:
+            try:
+                resp = urllib.request.urlopen(
+                    f"{self.server_url}{ep}", timeout=2)
+                if resp.status < 500:  # Any non-server-error response means it's running
+                    return True
+            except Exception:
+                continue
+        return False
 
     def server_status(self):
         """Return dict with server status info."""
@@ -420,7 +432,7 @@ class OpenCodeEngine:
         try:
             conn = sqlite3.connect(self.db_path)
             cur = conn.execute(
-                """SELECT id, time_created, json_extract(data, '$.model') as model
+                """SELECT id, time_created, model
                    FROM session ORDER BY time_created DESC LIMIT ?""",
                 (limit,),
             )
@@ -431,18 +443,26 @@ class OpenCodeEngine:
             return []
 
     def get_session(self, session_id):
-        """Get full session details."""
+        """Get full session details. Supports partial ID matching."""
         try:
             conn = sqlite3.connect(self.db_path)
+            # Try exact match first
             cur = conn.execute(
-                "SELECT id, time_created, data FROM session WHERE id = ?",
+                "SELECT id, time_created, title, model FROM session WHERE id = ?",
                 (session_id,),
             )
             row = cur.fetchone()
             if not row:
+                # Try prefix match (for truncated IDs from session list)
+                cur = conn.execute(
+                    "SELECT id, time_created, title, model FROM session WHERE id LIKE ? ORDER BY time_created DESC LIMIT 1",
+                    (session_id + "%",),
+                )
+                row = cur.fetchone()
+            if not row:
                 conn.close()
                 return None
-            session = {"id": row[0], "time_created": row[1], "data": json.loads(row[2])}
+            session = {"id": row[0], "time_created": row[1], "title": row[2], "data": {"model": json.loads(row[3]) if row[3] else None}}
 
             # Get messages
             cur = conn.execute(
@@ -565,9 +585,12 @@ def cmd_session_list(args):
     print()
     print(f"  {styled('Recent Sessions', S.BOLD, S.ACCENT)}")
     print(f"  {styled('─' * 60, S.GRAY)}")
-    for sid, ts, model in sessions:
+    for sid, ts, model_json in sessions:
         age = time_ago(ts)
-        model_str = model or "—"
+        try:
+            model_str = json.loads(model_json).get("id", "—") if model_json else "—"
+        except (json.JSONDecodeError, TypeError, AttributeError):
+            model_str = str(model_json or "—")[:25]
         sid_short = sid[:16] if sid else "—"
         print(f"  {styled(sid_short, S.TEAL):18} {styled(age, S.GRAY):10} {styled(model_str, S.DIM)}")
     print(f"  {styled('─' * 60, S.GRAY)}")
@@ -585,9 +608,10 @@ def cmd_session_show(args):
 
     print()
     print(f"  {styled('Session', S.BOLD, S.ACCENT)}: {session['id']}")
-    print(f"  {styled('Time', S.BOLD)}: {session['time_created']}")
-    model = session['data'].get('model', '—')
-    print(f"  {styled('Model', S.BOLD)}: {model}")
+    print(f"  {styled('Time', S.BOLD)}: {time_ago(session['time_created'])} ({session['time_created']})")
+    model_data = session['data'].get('model', '—')
+    model_name = model_data.get('id', str(model_data)) if isinstance(model_data, dict) else model_data
+    print(f"  {styled('Model', S.BOLD)}: {model_name}")
     print(f"  {styled('Messages', S.BOLD)}: {len(session.get('messages', []))}")
     print()
 
@@ -621,11 +645,11 @@ def cmd_session_resume(args):
 
     sid = sessions[0][0]
     print(f"\n  Resuming session {styled(sid[:16], S.TEAL)}...")
-    out, err, rc = run_cmd(["ocr"])
+    out, err, rc = run_cmd([OPCODE_BIN, "session", "resume", sid], timeout=30)
     if rc != 0:
         print_error(f"Resume failed: {err}")
         return 1
-    print_success("Session resumed via opencode")
+    print_success(f"Session {sid[:16]} resumed")
     return 0
 
 
@@ -718,7 +742,7 @@ def cmd_agent(args):
     print(f"  Message: {styled(message, S.ITALIC, S.GRAY)}")
     print(f"  {styled('─' * 40, S.GRAY)}")
 
-    cmd = [OPCODE_BIN, "--agent", name, "--message", message]
+    cmd = [OPCODE_BIN, "run", "--agent", name, message]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # Stream output
@@ -813,7 +837,7 @@ def cmd_stats(args):
     try:
         conn = sqlite3.connect(engine.db_path)
         cur = conn.execute(
-            "SELECT id, time_created, json_extract(data, '$.model') as model "
+            "SELECT id, time_created, model "
             "FROM session ORDER BY time_created DESC"
         )
         sessions = cur.fetchall()
@@ -856,8 +880,11 @@ def cmd_stats(args):
     # Models used
     if sessions:
         models_used = {}
-        for _, _, model in sessions:
-            m = model or "unknown"
+        for _, _, model_json in sessions:
+            try:
+                m = json.loads(model_json).get("id", "unknown") if model_json else "unknown"
+            except (json.JSONDecodeError, TypeError, AttributeError):
+                m = str(model_json or "unknown")
             models_used[m] = models_used.get(m, 0) + 1
         print()
         print(f"  {styled('Models Used', S.BOLD, S.ACCENT)}")
@@ -948,15 +975,14 @@ def cmd_cleanup(args):
         print_error("No session database found")
         return 1
 
-    cutoff = time.time() - (days * 86400)
-    cutoff_iso = datetime.fromtimestamp(cutoff, tz=timezone.utc).isoformat()
+    cutoff_ms = int((time.time() - (days * 86400)) * 1000)
 
     try:
         conn = sqlite3.connect(engine.db_path)
         # Count old sessions
         cur = conn.execute(
             "SELECT COUNT(*) FROM session WHERE time_created < ?",
-            (cutoff_iso,),
+            (cutoff_ms,),
         )
         count = cur.fetchone()[0]
 
@@ -971,10 +997,11 @@ def cmd_cleanup(args):
             # Show what would be deleted
             cur = conn.execute(
                 "SELECT id, time_created FROM session WHERE time_created < ? ORDER BY time_created LIMIT 10",
-                (cutoff_iso,),
+                (cutoff_ms,),
             )
             for sid, ts in cur.fetchall():
-                print(f"    {styled(sid[:20], S.TEAL)} {ts}")
+                ts_str = time_ago(ts)
+                print(f"    {styled(sid[:20], S.TEAL)} {ts_str}")
             if count > 10:
                 print(f"    ... and {count - 10} more")
         else:
@@ -985,16 +1012,16 @@ def cmd_cleanup(args):
                     "DELETE FROM part WHERE message_id IN "
                     "(SELECT id FROM message WHERE session_id IN "
                     "(SELECT id FROM session WHERE time_created < ?))",
-                    (cutoff_iso,),
+                    (cutoff_ms,),
                 )
                 conn.execute(
                     "DELETE FROM message WHERE session_id IN "
                     "(SELECT id FROM session WHERE time_created < ?)",
-                    (cutoff_iso,),
+                    (cutoff_ms,),
                 )
                 conn.execute(
                     "DELETE FROM session WHERE time_created < ?",
-                    (cutoff_iso,),
+                    (cutoff_ms,),
                 )
                 conn.commit()
                 print_success(f"Deleted {count} sessions")

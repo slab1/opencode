@@ -5,12 +5,28 @@
     "description": "Session outcome tracker for multi-agent workflows"
   },
   "aggregated_insights": {
-    "total_sessions": 0,
+    "total_sessions": 1,
     "total_iterations": 0,
     "total_gaps_found": 0,
-    "patterns_used": {},
-    "agents_used": {},
+    "patterns_used": {
+      "cli-ask": 1
+    },
+    "agents_used": {
+      "general": 1
+    },
     "common_lessons": []
   },
-  "sessions": []
+  "sessions": [
+    {
+      "id": "session-1779533352",
+      "timestamp": "2026-05-23T10:49:12.945454+00:00",
+      "task": "say hello back in one sentence",
+      "pattern_matched": "cli-ask",
+      "agents_used": [
+        "general"
+      ],
+      "outcome": "completed",
+      "response_length": 0
+    }
+  ]
 }
