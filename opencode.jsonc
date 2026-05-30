@@ -4,13 +4,56 @@
   "model": "opencode/deepseek-v4-flash-free",
   "small_model": "opencode/deepseek-v4-flash-free",
   "permission": {
+    "bash": "allow",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
     "edit": {
       "packages/opencode/migration/*": "ask",
+      "*": "allow"
     },
+    "todowrite": "allow",
+    "webfetch": "allow",
+    "websearch": "allow"
   },
-  "mcp": {},
+  "plugin": [
+    "opencode-memfs",
+    "opencode-vibeguard",
+    "opencode-cross-repo",
+    "opencode-worktree",
+    "opencode-notify",
+    "@franlol/opencode-md-table-formatter@latest",
+    "opencode-codebase-index",
+    "opencode-swarm",
+    "oh-my-opencode-slim"
+  ],
+  "mcp": {
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
+      }
+    },
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@context7/mcp"],
+      "enabled": true,
+      "env": {}
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": ["npx", "-y", "firecrawl-mcp"],
+      "enabled": true,
+      "env": {
+        "FIRECRAWL_API_KEY": ""
+      }
+    }
+  },
   "tools": {
     "github-triage": false,
-    "github-pr-search": false,
-  },
+    "github-pr-search": false
+  }
 }
