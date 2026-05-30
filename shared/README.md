@@ -23,14 +23,15 @@ shared/
     ├── architect.json
     ├── build.json
     ├── plan.json
+    ├── pioneer.json
     ├── review.json
     ├── test.json
     ├── general.json
     ├── refactor.json
     ├── docs.json
     ├── explore.json
-    └── video-creator.json
-    └── web-browser.json
+    ├── video-creator.json
+    ├── web-browser.json
     └── display-agent.json
 ```
 

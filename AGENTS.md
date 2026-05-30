@@ -9,6 +9,7 @@ Primary agents interact directly with users in the main conversation.
 - **orchestrator** - Master coordinator: decomposes tasks, dispatches agents, evaluates outputs, detects gaps, iterates until success
 - **build** - Implements features and writes code
 - **plan** - Analyzes code and creates implementation plans
+- **pioneer** - Research & Innovation: explores cutting-edge tech, trends, prototypes, and provides actionable recommendations
 - **compaction** (native) - Summarizes conversation context
 - **summary** (native) - Generates session summaries
 - **title** (native) - Creates session titles
@@ -28,7 +29,7 @@ Subagents are invoked via the `task` tool for specialized work.
 - **web-browser** - Full browser automation (navigate, click, fill forms, book flights)
 
 ### Invocation Rules
-- **Primary agents** (orchestrator, build, plan) can invoke subagents via the `task` tool
+- **Primary agents** (orchestrator, build, plan, pioneer) can invoke subagents via the `task` tool
 - **Orchestrator** can invoke ALL agents (including video-creator, web-browser) and coordinates multi-agent workflows
 - **Subagents** can ONLY invoke other agents when explicitly delegated by the orchestrator or a primary agent (max depth 3)
 - **Max recursion depth**: 3 levels for build/plan, 5 levels for orchestrator
@@ -103,8 +104,8 @@ permission:
 | **edit** | Edit existing files | build, docs, refactor, test |
 | **write** | Write new files | build, docs, refactor, test |
 | **bash** | Run shell commands | build, debug, refactor, test, review, security, architect |
-| **todowrite** | Create/manage todo lists | plan, general, orchestrator |
-| **task** | Invoke subagents | orchestrator, build, plan |
+| **todowrite** | Create/manage todo lists | plan, general, orchestrator, pioneer |
+| **task** | Invoke subagents | orchestrator, build, plan, pioneer |
 | **webfetch** | Fetch URL content | docs, security, architect |
 | **websearch** | Search the web | architect, debug, security |
 | **question** | Ask user questions | build, plan (with restrictions) |
@@ -147,6 +148,7 @@ These agents have `native: true` in their configuration and are managed internal
 - orchestrator
 - build
 - plan
+- pioneer
 - architect
 - debug
 - docs
@@ -158,6 +160,7 @@ These agents have `native: true` in their configuration and are managed internal
 - test
 - video-creator
 - web-browser
+- display-agent
 
 ## Best Practices
 
@@ -177,7 +180,7 @@ Orchestrator Agent (default entry point)
   |
   +---> Handle directly (simple tasks)
   |
-  +---> Delegate to build/plan (implementation tasks)
+  +---> Delegate to build/plan/pioneer (implementation/research tasks)
   |         |
   |         +---> task tool ---> Subagent (architect/debug/docs/etc)
   |                                   |
@@ -201,7 +204,7 @@ Orchestrator Agent (default entry point)
 
 ### Recursive Invocation
 Subagents can invoke other agents ONLY when explicitly delegated by the orchestrator or a primary agent:
-- **Max depth**: 3 levels for build/plan delegations, 5 levels for orchestrator delegations
+- **Max depth**: 3 levels for build/plan/pioneer delegations, 5 levels for orchestrator delegations
 - **Depth tracking**: Delegator must include current depth in the task prompt
 - **Stop condition**: If max depth reached, report back with what still needs to be done
 
@@ -226,7 +229,7 @@ All agents participate in the **cross-agent shared context system** for memory p
 
 ### Agent Responsibilities
 
-- **Primary agents** (orchestrator, build, plan): Manage context flow, include context in delegations
+- **Primary agents** (orchestrator, build, plan, pioneer): Manage context flow, include context in delegations
 - **Subagents**: Read context at start, write findings before finishing
 - All agents follow the finding schema documented in `SHARED_CONTEXT.md`
 

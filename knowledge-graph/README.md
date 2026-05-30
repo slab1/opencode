@@ -45,6 +45,11 @@ Pre-defined workflow patterns that the orchestrator recognizes:
 - **full-feature**: End-to-end development
 - **code-review**: Multi-faceted review
 - **performance**: Profiling and optimization
+- **video-creation**: Video content creation
+- **web-automation**: Browser automation
+- **flight-booking**: Flight search and booking
+- **display-management**: Virtual display / VNC sessions
+- **tech-research**: Technology research & innovation exploration
 
 Each pattern has trigger keywords, agent sequences, and descriptions.
 
@@ -55,11 +60,21 @@ Checklists the orchestrator uses to evaluate completeness:
 - `secure`: Security checks
 - `documented`: Documentation requirements
 - `reviewed`: Code quality checks
+- `video_rendered`: Video output validation
+- `rendered_web`: Browser automation validation
+- `display_running`: Display/VNC session validation
 
 ### `gap_detection_rules`
 Rules for common gaps to check based on task type:
 - Auth tasks → also need email verification, password reset, etc.
 - API tasks → also need input validation, error handling, etc.
+- Frontend tasks → responsive check, accessibility, loading states
+- Database tasks → migrations, indexing, backup strategy
+- Deployment tasks → env config, health checks, monitoring
+- Video tasks → platform presets, audio, transitions
+- Web tasks → JS-heavy sites, auth, cookie handling
+- Display tasks → Xvfb, x11vnc, VNC port availability
+- Research tasks → source verification, date relevancy, ecosystem maturity
 
 ### `shared_context`
 Configuration for the cross-agent shared context system:
@@ -109,6 +124,11 @@ python3 -c "import json; c=json.load(open(os.path.expanduser('~/.config/opencode
 
 ### Adding a New Agent
 Add entry to `.agents` with all required fields. Update `.invocation_rules` if it can invoke subagents.
+Also update:
+- `.shared_context.agents_write_findings` — if agent writes findings
+- `.shared_context.agents_read_context` — if agent reads context
+- `.shared_context.population_rules` — define what the agent saves
+- `.gap_detection_rules.domain_considerations` — domain-specific checks
 
 ### Adding a New Pattern
 Add entry to `.patterns` with name, agents array, trigger keywords, and sequence.
