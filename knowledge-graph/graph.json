@@ -157,11 +157,21 @@
       "file": "agents/display-agent.md",
       "can_invoke_subagents": false,
       "orchestrator_delegation": true
+    },
+    "pioneer": {
+      "mode": "primary",
+      "capabilities": ["research", "experiment", "prototype", "websearch", "webfetch", "bash", "edit", "task", "synthesize"],
+      "strengths": ["technology research", "trend analysis", "innovation exploration", "prototyping", "comparison analysis", "cutting-edge discovery"],
+      "weaknesses": ["does not ship production code", "prototypes are proof-of-concept, not production-ready", "benefits from build/plan agents for production implementation"],
+      "permissions": {"edit": "allow", "bash": "ask", "task": "allow", "websearch": "ask", "webfetch": "ask", "todowrite": "allow"},
+      "file": "agents/pioneer.md",
+      "can_invoke_subagents": true,
+      "invocation_depth": 3
     }
   },
 
   "invocation_rules": {
-    "primary_can_invoke": ["build", "plan", "orchestrator"],
+    "primary_can_invoke": ["build", "plan", "orchestrator", "pioneer"],
     "video_creation_enabled": true,
     "orchestrator_can_invoke": "all",
     "max_recursion_depth_primary": 3,
@@ -302,6 +312,16 @@
         {"agent": "display-agent", "task": "Start Xvfb virtual framebuffer + fluxbox + x11vnc VNC server"},
         {"agent": "build", "task": "Additional display configuration if needed"}
       ]
+    },
+    "tech-research": {
+      "name": "Technology Research & Innovation Exploration",
+      "agents": ["pioneer", "build"],
+      "trigger_keywords": ["research", "explore technology", "trend", "cutting edge", "what's new", "compare", "evaluate", "innovation", "emerging tech", "latest", "new framework", "new tool", "should I use", "technology landscape", "pioneer"],
+      "description": "Research, evaluate, and prototype emerging technologies with actionable recommendations",
+      "sequence": [
+        {"agent": "pioneer", "task": "Research the technology landscape, evaluate options, prototype if needed, and provide recommendations"},
+        {"agent": "build", "task": "Implement production-ready code based on pioneer's validated approach (if applicable)"}
+      ]
     }
   },
 
@@ -396,6 +416,10 @@
       "display_tasks": {
         "consider": ["xvfb-installed", "x11vnc-installed", "vnc-port-available", "chromium-headed-compatible", "ffplay-available-for-preview", "multiple-display-sessions", "password-security"],
         "note": "Display management: Xvfb and x11vnc must be installed (apk). Default VNC port 5900 must be available."
+      },
+      "research_tasks": {
+        "consider": ["source-verification", "date-relevancy", "ecosystem-maturity", "license-compatibility", "production-readiness", "community-health", "learning-resources"],
+        "note": "Technology research tasks: Always verify sources, check dates (tech moves fast), evaluate ecosystem maturity, and assess production readiness. Prototypes are proof-of-concept only."
       }
     }
   },
@@ -406,8 +430,8 @@
     "findings_dir": "~/.config/opencode/shared/findings/",
     "context_readme": "~/.config/opencode/shared/README.md",
     "description": "Cross-agent shared context store for memory persistence and workflow continuity",
-    "agents_write_findings": ["debug", "security", "architect", "build", "plan", "review", "test", "general"],
-    "agents_read_context": ["build", "plan", "architect", "debug", "docs", "explore", "general", "refactor", "review", "security", "test", "video-creator", "web-browser", "display-agent"],
+    "agents_write_findings": ["debug", "security", "architect", "build", "plan", "review", "test", "general", "pioneer"],
+    "agents_read_context": ["build", "plan", "architect", "debug", "docs", "explore", "general", "refactor", "review", "security", "test", "video-creator", "web-browser", "display-agent", "pioneer"],
     "context_categories": {
       "findings": "Agent-specific findings stored per-agent in findings/{agent}.json and aggregated in context.json",
       "decisions": "Design/architecture/workflow decisions made during sessions",
@@ -429,7 +453,8 @@
       {"agent": "explore", "saves": ["code_maps", "structure_discoveries", "dependency_findings"]},
       {"agent": "video-creator", "saves": ["video_paths", "platform_info", "rendering_results"]},
       {"agent": "web-browser", "saves": ["extracted_data", "navigation_results", "form_submissions"]},
-      {"agent": "display-agent", "saves": ["display_config", "vnc_connections", "screenshots"]}
+      {"agent": "display-agent", "saves": ["display_config", "vnc_connections", "screenshots"]},
+      {"agent": "pioneer", "saves": ["technology_research", "trend_analyses", "experiment_results", "prototype_details", "innovation_reports", "comparisons", "recommendations"]}
     ],
     "delegation_context_inclusion": {
       "enabled": true,
