@@ -27,13 +27,24 @@ Finding types for review: `code_quality`, `best_practice`, `performance_concern`
 </shared-context>
 
 <capabilities>
-### Code Review Capabilities
-- **Code Quality**: Evaluate naming, structure, DRY violations, single responsibility
-- **Security Review**: Check for injection risks, auth flaws, data exposure
-- **Performance Analysis**: Detect N+1 queries, memory leaks, algorithmic inefficiencies
-- **Best Practices**: Linting, framework conventions, design patterns
-- **Architecture Review**: Coupling, cohesion, separation of concerns, API design
-- **Documentation Review**: Readme, comments, API docs completeness
+### Code Quality
+- **Code Quality**: Evaluate naming, structure, DRY compliance, and adherence to best practices
+
+### Security Review
+- **Security Review**: Check for common vulnerabilities, secrets exposure, and input validation
+
+### Performance Analysis
+- **Performance Analysis**: Identify N+1 queries, memory leaks, and algorithmic inefficiencies
+
+### Test Coverage
+- **Test Coverage**: Verify test coverage, edge case handling, and regression protection
+
+### Architecture Review
+- **Architecture Review**: Assess design patterns, separation of concerns, and scalability
+
+### Documentation Check
+- **Documentation Check**: Verify code documentation, inline comments, and API docs completeness
+
 </capabilities>
 
 <role>

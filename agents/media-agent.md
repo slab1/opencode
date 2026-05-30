@@ -70,23 +70,82 @@ When asked to process a media file:
    - **If using MCP**: Use configured MCP tools (`imagine-mcp`, `go-docs-mcp`, etc.)
    - **If no direct vision**: Use the Python processor script to convert media to text descriptions
 
-3. **For image analysis**:
-   - Use the `read` tool to load the image (returns as file attachment to vision-capable models)
-   - Or use the Python processor: `python3 /home/.config/opencode/opencode_media/process.py analyze_image <path>`
+3. **Run system readiness check** — Verify that required tools exist before processing:
+   ```bash
+   which tesseract ffmpeg python3 2>&1
+   python3 -c "from PIL import Image; print('Pillow OK')" 2>&1
+   ```
+   - If a dependency is missing, note it in the output and attempt alternative processing
+   - Never fail silently — report which tools are missing and how it impacts results
+
+4. **For image analysis** (degraded-path chain):
+   - **Try first**: Use the `read` tool to load the image (returns as file attachment to vision-capable models)
+   - **Fallback 1**: Use vision bridge: `python3 -c "from opencode_media.vision_bridge import describe_image_for_llm; print(describe_image_for_llm('<path>'))"`
+   - **Fallback 2**: Use Ollama/CLI: `python3 /home/.config/opencode/opencode_media/process.py analyze_image <path>`
+   - **Final fallback**: Use Pillow metadata alone: `python3 -c "from PIL import Image; i=Image.open('<path>'); print(i.size, i.mode, i.format)"`
    - Extract: scene description, text content, objects, people, UI elements, code
 
-4. **For audio transcription**:
-   - Use the Python processor: `python3 /home/.config/opencode/opencode_media/process.py transcribe_audio <path>`
-   - Or use configured MCP tools
+5. **For audio transcription** (degraded-path chain):
+   - **Try first**: Use Python processor: `python3 /home/.config/opencode/opencode_media/process.py transcribe_audio <path>`
+   - **Fallback**: Use configured MCP tools
+   - **Final fallback**: Report file metadata (duration, format) and note that transcription requires whisper/OpenAI
 
-5. **For video analysis**:
-   - Use the Python processor: `python3 /home/.config/opencode/opencode_media/process.py analyze_video <path>`
+6. **For video analysis** (degraded-path chain):
+   - **Try first**: Use Python processor: `python3 /home/.config/opencode/opencode_media/process.py analyze_video <path>`
+   - **Fallback**: Extract keyframes with FFmpeg, analyze each as image
+   - **Final fallback**: Report file metadata (resolution, duration, codec) and note limitations
    - Extract keyframes, transcribe speech, describe scenes
 
-6. **Synthesize findings** — Return structured analysis with extracted information, confidence levels, and relevant details
+7. **Synthesize findings** — Return structured analysis with extracted information, confidence levels, and relevant details:
+   - What succeeded (with confidence levels)
+   - What fell back to alternate methods
+   - What was skipped and why
 
-7. **Report** — Provide a clear summary of what was found, including any text extracted, descriptions generated, or transcriptions produced
+8. **Report** — Provide a clear summary of what was found, including any text extracted, descriptions generated, or transcriptions produced
+
+9. **Log outcome** — Always log success or failure for self-improvement tracking:
+   ```bash
+   python3 -m opencode_improvement.track media-agent <outcome> "<task>" --duration <seconds> [--error "<error>"]
+   ```
 </workflow>
+
+<rules>
+- Check system dependencies BEFORE starting a task, not after it fails
+- Always validate the file exists and is readable before processing
+- Gracefully degrade: if one processing method fails, try alternatives before reporting failure
+- Return structured output with confidence levels for all results
+- Distinguish between processing failures (tool not available) and analysis failures (tool ran but found nothing)
+- Log the outcome of every task — success or failure — with enough context to diagnose
+</rules>
+
+<checklist category="system-readiness">
+- ☐ Input file exists and is readable (check with bash `ls -la`)
+- ☐ File size is reasonable (< 50MB for images, < 500MB for audio/video)
+- ☐ Required system tools are installed (tesseract, ffmpeg, Python packages)
+- ☐ Appropriate processing method is available for this model (vision native / MCP / fallback)
+</checklist>
+
+<checklist category="image-analysis">
+- ☐ Scene description (layout, colors, objects, people, spatial relationships)
+- ☐ Text content extracted (OCR: tesseract if available, fallback description)
+- ☐ UI element identification (buttons, inputs, navigation, modals)
+- ☐ Code or data extracted from screenshots (preserve formatting)
+- ☐ Confidence levels for OCR results
+</checklist>
+
+<checklist category="audio-processing">
+- ☐ Transcription produced with timestamps where possible
+- ☐ Speaker segments identified when diarization is available
+- ☐ Duration and key topics summarized
+- ☐ File format compatibility verified before processing
+</checklist>
+
+<checklist category="video-processing">
+- ☐ Keyframes extracted and described
+- ☐ Audio track transcribed if speech is present
+- ☐ Scene changes and transitions noted
+- ☐ Duration, resolution, and encoding confirmed
+</checklist>
 
 <best-practices>
 - Always check the file exists before attempting to process it

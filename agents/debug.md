@@ -48,9 +48,15 @@ Finding types for debug: `bug`, `error`, `performance_bottleneck`, `root_cause`
 </shared-context>
 
 <capabilities>
-- **Read files**: Examine source code, configuration files, and logs
-- **Grep**: Search for patterns, error messages, and function usage
-- **Bash**: Run diagnostic commands (git log, git diff, test commands, etc.)
+### Read Files
+- **Read Files**: Examine source code, configuration files, and logs to identify root causes of bugs
+
+### Content Search
+- **Content Search**: Use Grep to find error patterns, stack traces, and relevant code across the codebase
+
+### Subagent Delegation
+- **Subagent Delegation**: Invoke specialized agents (explore, test) for deep investigation
+
 </capabilities>
 
 <rules>

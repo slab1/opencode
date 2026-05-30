@@ -33,15 +33,33 @@ The video module is at `/home/.config/opencode/opencode_video/`. Import via `fro
 </context>
 
 <capabilities>
-1. **Text-to-Video** — Create videos from text scripts with background colors, animations, and music
-2. **Image Slideshows** — Compile images into video with transitions, effects, and Ken Burns zoom
-3. **Video Compositing** — Layer text, images, picture-in-picture, and effects
-4. **Platform Optimization** — Render videos optimized for YouTube, YouTube Shorts, TikTok, Instagram (Reels/Posts/Landscape), Twitter/X, LinkedIn, Facebook
-5. **Audio Integration** — Add background music, voiceovers, adjust volumes, loop/trim audio to match video
-6. **Transitions & Effects** — Fade in/out, cross-fade, zoom (Ken Burns), slide in (left/right/top/bottom)
-7. **Script-Based Video** — Multi-scene videos with intro, content, and outro via `VideoScript`
-8. **Crossfade Rendering** — FFmpeg crossfade between clips via `render_with_ffmpeg_crossfade`
-9. **Web-to-Video** — Capture web screenshots and turn them into social media content via `capture_web_screenshot`
+### Text-to-Video
+- **Text-to-Video**: Create videos from text scripts with background colors, animated text, and transitions
+
+### Image-to-Video
+- **Image-to-Video**: Create slideshows from images with configurable durations and effects
+
+### Audio Integration
+- **Audio Integration**: Add background music, voiceovers, and audio tracks to videos
+
+### Platform Presets
+- **Platform Presets**: Pre-configured resolutions for YouTube, TikTok, Instagram, Twitter, LinkedIn, Facebook
+
+### Ken Burns Effect
+- **Ken Burns Effect**: Pan-and-zoom animation on static images for cinematic motion
+
+### Crossfade Transitions
+- **Crossfade Transitions**: Smooth transitions between clips with configurable duration
+
+### Batch Processing
+- **Batch Processing**: Process multiple scenes or projects in sequence with consistent settings
+
+### Font & Text Handling
+- **Font & Text Handling**: Custom fonts, text positioning, and styling for video captions
+
+### Web-to-Video
+- **Web-to-Video**: Capture web page screenshots and incorporate them into video projects
+
 </capabilities>
 
 <examples>

@@ -33,16 +33,42 @@ The web automation module is at `/home/.config/opencode/opencode_web/`. Backend 
 </context>
 
 <capabilities>
-1. **Page Navigation** — Go to any URL, go back/forward, reload
-2. **Element Interaction** — Click buttons/links, hover, focus, scroll, submit forms
-3. **Form Filling** — Type into text fields, character-by-character typing, select dropdowns, check boxes/radios, upload files
-4. **Data Extraction** — Get text, links, HTML, attributes, tables (structured), form data, screenshots (full page too)
-5. **Tab Management** — Open, switch, list, and close multiple tabs
-6. **JavaScript Execution** — Run custom JS expressions or functions in page context
-7. **Multi-step Workflows** — Flight booking (Google Flights, Skyscanner, Expedia, Kayak), form submission, data scraping, `browse_and_extract` action pipeline
-8. **Cookie & Storage Management** — Read/set/clear cookies, localStorage
-9. **Visibility & Waiting** — Check element visibility, wait for selectors, wait for navigation, configurable timeouts
-10. **Value Inspection** — Get current values of form fields, attributes, element visibility state
+### Page Navigation
+- **Page Navigation**: Go to any URL, go back/forward in history, reload pages
+
+### Element Interaction
+- **Element Interaction**: Click, hover, focus, scroll, and interact with page elements
+
+### Form Filling
+- **Form Filling**: Fill text inputs, type with human-like delays, select dropdown options
+
+### Data Extraction
+- **Data Extraction**: Extract text, HTML, attributes, links, and form data from pages
+
+### Screenshots
+- **Screenshots**: Capture full-page or viewport screenshots with configurable paths
+
+### JavaScript Execution
+- **JavaScript Execution**: Run arbitrary JS in page context, evaluate expressions and functions
+
+### Session Management
+- **Session Management**: Multi-tab support, cookie/localStorage management, persistent sessions
+
+### Anti-Detection
+- **Anti-Detection**: Stealth patterns to avoid bot detection: viewport, user-agent, headers
+
+### Wait Strategy
+- **Wait Strategy**: Intelligent waits for element visibility, network idle, and navigation
+
+### Retry Patterns
+- **Retry Patterns**: Exponential backoff retry for flaky selectors and dynamic content
+
+### DOM Resilience
+- **DOM Resilience**: Handle iframes, Shadow DOM, dynamic content, and SPAs
+
+### File Upload
+- **File Upload**: Upload files through file input elements with path validation
+
 </capabilities>
 
 <examples>

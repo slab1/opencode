@@ -32,15 +32,30 @@ The display module is at `/home/.config/opencode/opencode_display/`. Import via 
 </context>
 
 <capabilities>
-1. **Display Lifecycle** — Start/stop/restart Xvfb virtual framebuffer + fluxbox window manager
-2. **VNC Remote Access** — Start x11vnc server with password protection on configurable port
-3. **Headed Browser Launch** — Open Chromium on the virtual display for visible interaction
-4. **Video Preview** — Launch ffplay on the virtual display to preview rendered videos
-5. **Screenshot Capture** — Take screenshots of the virtual display (ImageMagick `import` with xwd fallback)
-6. **Global Singleton** — Multiple agents share one display session via `ensure_display()`
-7. **Display Status** — Full status info via `get_info()` (PID, resolution, VNC address, running state)
-8. **Startup Health Check** — Xvfb readiness verification via `xdpyinfo` with configurable timeout
-9. **Password Management** — VNC password stored in `/tmp/.opencode_vnc_pass` for agent reference
+### Display Lifecycle
+- **Display Lifecycle**: Start, stop, restart Xvfb virtual framebuffer with fluxbox window manager
+
+### Configuration
+- **Configuration**: Configure display number, resolution, VNC port, and authentication
+
+### VNC Server
+- **VNC Server**: Manage x11vnc server for remote access to the virtual display
+
+### Browser Integration
+- **Browser Integration**: Launch headed Chromium on the virtual display for visual debugging
+
+### Screenshot Capture
+- **Screenshot Capture**: Capture screenshots of the virtual display using ImageMagick or xwd
+
+### Health & Diagnostics
+- **Health & Diagnostics**: Check display status, process health, and X11 socket availability
+
+### Troubleshooting
+- **Troubleshooting**: Diagnose common issues: shared memory, socket conflicts, stale lock files
+
+### Multi-Session
+- **Multi-Session**: Run multiple isolated display sessions with independent configurations
+
 </capabilities>
 
 <examples>

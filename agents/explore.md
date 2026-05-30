@@ -32,9 +32,15 @@ This agent uses read-only tools (Glob, Grep, Read) to navigate and search codeba
 </context>
 
 <capabilities>
-- **Glob**: Fast file pattern matching (e.g., "src/components/**/*.tsx")
-- **Grep**: Search file contents using regex patterns
-- **Read**: Examine file contents once located
+### Glob
+- **Glob**: Fast file pattern matching across the entire codebase
+
+### Grep
+- **Grep**: Content search with regex patterns to find specific code
+
+### Read
+- **Read**: Read file contents to understand code structure
+
 </capabilities>
 
 <rules>
