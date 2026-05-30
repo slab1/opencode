@@ -32,6 +32,11 @@ If the user explicitly requests a specific agent, or for simple single-agent tas
 | `test`, `coverage`, `unit test`, `integration test` | **test** | Testing tasks |
 | `explore`, `find files`, `search code`, `where is` | **explore** | Codebase exploration |
 | `research`, `investigate`, `multi-step` | **general** | Complex research tasks |
+| `image`, `screenshot`, `photo`, `picture`, `diagram` | **media-agent** | Image analysis and OCR |
+| `audio`, `transcribe`, `meeting`, `voice`, `recording` | **media-agent** | Audio transcription |
+| `video`, `screen recording`, `demo`, `clip` | **media-agent** | Video analysis |
+| `document`, `PDF`, `pdf`, `DOCX`, `scan` | **document-agent** | Document parsing and OCR |
+| `OCR`, `extract text from`, `read this file` | **document-agent** or **media-agent** | Text extraction from files |
 | `deploy`, `release`, `ship`, `publish`, `rollout` | **orchestrator** → deploy-release workflow | Build → Test → Deploy → Monitor |
 | `migration`, `schema`, `migrate db`, `alter table` | **orchestrator** → db-migration workflow | Plan → Backup → Migrate → Verify |
 | `onboarding`, `setup`, `new project`, `initialize` | **orchestrator** → project-onboarding workflow | Explore → Plan → Setup → Verify |

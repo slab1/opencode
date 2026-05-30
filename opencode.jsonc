@@ -14,7 +14,19 @@
     },
     "todowrite": "allow",
     "webfetch": "allow",
-    "websearch": "allow"
+    "websearch": "allow",
+    // ── Permission rules for media-agent and document-agent ──
+    // media-agent needs: read (for files), bash (for python processor), webfetch, websearch
+    // document-agent needs: read (for files), bash (for pdftotext/pandoc), webfetch, websearch
+    // These wildcard patterns match MCP tool names from configured servers:
+    //   "mcp_filesystem_*" → @modelcontextprotocol/server-filesystem tools
+    //   "mcp_go-docs-mcp_*" → go-docs-mcp tools  
+    //   "mcp_imagine-mcp_*" → imagine-mcp tools
+    //   "mcp_pdf-mcp_*" → pdf-mcp tools
+    "mcp_filesystem_*": "allow",
+    "mcp_go-docs-mcp_*": "allow",
+    "mcp_imagine-mcp_*": "ask",
+    "mcp_pdf-mcp_*": "allow"
   },
   "plugin": [
     "opencode-memfs",
@@ -28,6 +40,7 @@
     "oh-my-opencode-slim"
   ],
   "mcp": {
+    // ── Existing Servers ──
     "supabase": {
       "type": "remote",
       "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
@@ -50,10 +63,42 @@
       "env": {
         "FIRECRAWL_API_KEY": ""
       }
+    },
+    // ── Filesystem with Media Support ──
+    // Provides read_text_file, read_media_file (images/audio), write_file, search, etc.
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem"],
+      "args": ["/home/.config/opencode", "/public", "/data/user/0/com.foxdebug.acode/cache/opencode"],
+      "enabled": true,
+      "env": {}
+    },
+    // ── Multi-Format Document Access ──
+    // go-docs-mcp: 13 tools across PDF, TXT, MD, CSV, DOCX, Images
+    // Tools: list_documents, read_document, search_document, extract_tables, 
+    //        extract_images, ocr_document, read_image, convert_to_markdown, etc.
+    // Falls back to pdftotext+poppler internally, with tesseract for scanned PDFs
+    "go-docs-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "github:drolosoft/go-docs-mcp"],
+      "enabled": false,
+      "env": {}
+    },
+    // ── Advanced PDF Processing ──
+    // pdf-mcp: hybrid search, OCR, table extraction, page rendering for vision models
+    "pdf-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "pdf-mcp"],
+      "enabled": false,
+      "env": {}
     }
   },
   "tools": {
     "github-triage": false,
-    "github-pr-search": false
+    "github-pr-search": false,
+    // Enable media processing tools
+    "analyze_image": true,
+    "transcribe_audio": true,
+    "parse_document": true
   }
 }

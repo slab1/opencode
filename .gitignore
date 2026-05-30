@@ -2,4 +2,17 @@ node_modules/
 dist/acode-oc.b64
 /tmp/oc-git-creds
 __pycache__/
+__pycache__
 .repl_history
+*.pyc
+
+# Ephemeral session state (changes every session)
+shared/context.json
+shared/chat_history.json
+shared/notes.json
+shared/findings/
+/tmp/
+
+# Environment / secrets (users fill these in)
+.env
+*.local

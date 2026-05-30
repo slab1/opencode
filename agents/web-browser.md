@@ -34,13 +34,15 @@ The web automation module is at `/home/.config/opencode/opencode_web/`. Backend 
 
 <capabilities>
 1. **Page Navigation** — Go to any URL, go back/forward, reload
-2. **Element Interaction** — Click buttons/links, hover, focus, scroll
-3. **Form Filling** — Type into text fields, select dropdowns, check boxes, upload files
-4. **Data Extraction** — Get text, links, HTML, attributes, tables, screenshots
-5. **Tab Management** — Open, switch, and close multiple tabs
-6. **JavaScript Execution** — Run custom JS in page context
-7. **Multi-step Workflows** — Flight booking, form submission, data scraping
+2. **Element Interaction** — Click buttons/links, hover, focus, scroll, submit forms
+3. **Form Filling** — Type into text fields, character-by-character typing, select dropdowns, check boxes/radios, upload files
+4. **Data Extraction** — Get text, links, HTML, attributes, tables (structured), form data, screenshots (full page too)
+5. **Tab Management** — Open, switch, list, and close multiple tabs
+6. **JavaScript Execution** — Run custom JS expressions or functions in page context
+7. **Multi-step Workflows** — Flight booking (Google Flights, Skyscanner, Expedia, Kayak), form submission, data scraping, `browse_and_extract` action pipeline
 8. **Cookie & Storage Management** — Read/set/clear cookies, localStorage
+9. **Visibility & Waiting** — Check element visibility, wait for selectors, wait for navigation, configurable timeouts
+10. **Value Inspection** — Get current values of form fields, attributes, element visibility state
 </capabilities>
 
 <examples>
@@ -85,6 +87,50 @@ path = b.screenshot("page.png", full_page=True)
 ```python
 data = b.extract_page_data()
 print(data["title"])
+```
+
+### Table Extraction
+```python
+from opencode_web.workflows import extract_table
+table = extract_table(b, selector="table.pricing")
+for row in table:
+    print(row["Name"], row["Price"])
+```
+
+### Form Workflow (Multi-Field)
+```python
+from opencode_web.workflows import fill_form
+fill_form(b, [
+    {"selector": "#name", "value": "John", "type": "text"},
+    {"selector": "#country", "value": "US", "type": "select"},
+    {"selector": "#agree", "type": "checkbox", "checked": True},
+    {"selector": "#resume", "value": "/path/to/file.pdf", "type": "file"},
+])
+```
+
+### Action Pipeline (browse_and_extract)
+```python
+from opencode_web.workflows import browse_and_extract
+result = browse_and_extract("https://example.com/products", [
+    {"action": "wait", "timeout": 2000},
+    {"action": "extract", "type": "table", "selector": "table.products"},
+    {"action": "click", "selector": "a.next"},
+    {"action": "extract", "type": "text"},
+], screenshot=True)
+```
+
+### Upload File
+```python
+b.upload_file("input[type='file']", "/path/to/document.pdf")
+```
+
+### Select Dropdown / Checkbox
+```python
+b.select_option("select#country", "US")
+b.check("input#agree", checked=True)
+b.get_value("input#email")  # Get current field value
+b.get_attribute("a.link", "href")  # Get element attribute
+b.is_visible(".loading-spinner")  # Check visibility
 ```
 </examples>
 
@@ -142,11 +188,39 @@ d.launch_browser("https://example.com")
 <best-practices>
 - Always use `with Browser() as b:` context manager for clean resource cleanup
 - Add wait times (1-3s) after navigation for JS-heavy sites
-- Use human-readable selectors: aria labels > CSS classes > complex XPaths
+- Use human-readable selectors: `aria-label` > `data-testid` > CSS classes > complex XPaths (they're more resilient to DOM changes)
 - For forms: use `.fill()` (clears first) rather than `.type()` (types char by char)
 - `.press_key("Enter")` after filling search boxes is simpler than finding the search button
 - Extract page data with `.extract_page_data()` for a quick summary
 - Take screenshots to verify page state during debugging
+
+### Selector Strategy (Priority Order)
+1. **`aria-label` / `aria-label` by role**: `button[aria-label='Search']`, `[role='listitem']`
+2. **`data-testid`**: `[data-testid='product-card']` (most stable, rarely changes)
+3. **Text content**: `button:has-text('Submit')`, `a:has-text('Learn more')`
+4. **Placeholder**: `input[placeholder='Email address']`
+5. **CSS class or ID**: Last resort; most likely to change
+
+### Anti-Detection & Stealth
+- Default Playwright sets `navigator.webdriver = true` — some sites detect this
+- For scraping targets, consider: using headed mode with display, adding human-like delays between actions, rotating user agents, using residential proxies
+- Use `.type()` (char-by-char) instead of `.fill()` when human-like typing matters
+- Add random delays: `import random; b.wait(timeout=random.randint(1000, 3000))`
+- Avoid fixed patterns — vary wait times, scroll before clicking, mimic real user behavior
+- Cookie persistence matters: sites track whether you maintain cookies between visits
+
+### Memory Management
+- **Close pages when done**: each open page holds memory — `b.close_page()`
+- **Recycle contexts**, don't create new browser instances per URL
+- For batch scraping: one `Browser()`, multiple pages sequentially
+- If memory grows: reduce concurrent pages, use `--js-flags="--max-old-space-size=512"`
+- A single Chromium process uses 300-800 MB RAM; plan capacity accordingly
+
+### Wait Strategy
+- Use `b.wait_for_selector(selector)` for specific elements rather than fixed timeouts
+- Prefer `wait_until="domcontentloaded"` over `"networkidle"` for speed (networkidle can wait 10s+ on ad-heavy pages)
+- Default timeout: 30s — override per-method with `timeout=10000` for 10s
+- After clicks that trigger navigation, always use `b.wait_for_navigation()` or `b.wait()`
 </best-practices>
 
 <error-handling>
@@ -155,4 +229,23 @@ d.launch_browser("https://example.com")
 - Always use `.wait()` after navigation for dynamic pages
 - Take screenshots on error to debug (`.screenshot()`)
 - Fall back to `.get_text()` or `.get_html()` if structured extraction fails
+- For flaky selectors, try fallback selectors: first with `aria-label`, fallback to CSS
+
+### Retry Pattern
+```python
+import time
+for attempt in range(3):
+    try:
+        b.click("button[aria-label='Search']")
+        break
+    except BrowserError:
+        if attempt == 2: raise
+        time.sleep(2 ** attempt)  # Exponential backoff: 1s, 2s, 4s
+```
+
+### DOM Resilience
+- Not finding an element? It might be inside an `<iframe>` or Shadow DOM
+- For iframes: use `b.evaluate(expression="...")` to reach into iframe content
+- For Shadow DOM: Playwright locators pierce shadow roots by default
+- Check browser console errors when debugging: JS errors in the page often explain why selectors return nothing
 </error-handling>

@@ -47,11 +47,31 @@
       "can_invoke_subagents": false,
       "orchestrator_delegation": true
     },
+    "media-agent": {
+      "mode": "subagent",
+      "capabilities": ["image-analysis", "audio-transcription", "video-analysis", "ocr", "media-description", "vision-fallback"],
+      "strengths": ["image analysis and OCR", "audio transcription", "video keyframe extraction", "media description for LLMs", "vision-to-text fallback"],
+      "weaknesses": ["limited without tesseract (OCR)", "limited without whisper (audio)", "does not implement code changes"],
+      "permissions": {"edit": "deny", "bash": "ask", "webfetch": "ask", "websearch": "ask", "todowrite": "allow"},
+      "file": "agents/media-agent.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
+    "document-agent": {
+      "mode": "subagent",
+      "capabilities": ["document-parsing", "pdf-extraction", "text-extraction", "table-extraction", "format-conversion", "ocr"],
+      "strengths": ["PDF text extraction via pdftotext", "multi-format document parsing", "table extraction", "document search", "format conversion"],
+      "weaknesses": ["limited without pandoc (DOCX/HTML)", "limited without tesseract (scanned PDFs)", "does not implement code changes"],
+      "permissions": {"edit": "deny", "bash": "ask", "webfetch": "ask", "websearch": "ask", "todowrite": "allow"},
+      "file": "agents/document-agent.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
     "docs": {
       "mode": "subagent",
-      "capabilities": ["write", "edit", "document", "readme", "api-docs"],
-      "strengths": ["documentation", "README files", "API documentation", "user guides"],
-      "weaknesses": ["does not write functional code"],
+      "capabilities": ["document", "write", "edit", "webfetch", "readme", "api-docs"],
+      "strengths": ["documentation writing", "README creation", "API reference", "comment improvement", "changelog generation"],
+      "weaknesses": ["does not implement features", "does not debug issues"],
       "permissions": {"edit": "allow", "bash": "deny", "webfetch": "ask"},
       "file": "agents/docs.md",
       "can_invoke_subagents": false,
@@ -72,7 +92,7 @@
       "capabilities": ["research", "analyze", "execute", "websearch", "webfetch", "coordinate"],
       "strengths": ["multi-step research", "parallel execution", "complex investigations"],
       "weaknesses": ["no code editing permissions"],
-      "permissions": {"edit": "deny", "bash": "ask", "todowrite": "allow"},
+      "permissions": {"edit": "deny", "bash": "ask", "todowrite": "allow", "webfetch": "ask", "websearch": "ask"},
       "file": "agents/general.md",
       "can_invoke_subagents": false,
       "orchestrator_delegation": true
@@ -102,7 +122,7 @@
       "capabilities": ["audit", "websearch", "webfetch", "bash", "vulnerability", "cve"],
       "strengths": ["vulnerability detection", "CVE analysis", "dependency auditing", "security best practices"],
       "weaknesses": ["does not implement fixes"],
-      "permissions": {"edit": "deny", "bash": "ask"},
+      "permissions": {"edit": "deny", "bash": "ask", "webfetch": "ask"},
       "file": "agents/security.md",
       "can_invoke_subagents": false,
       "orchestrator_delegation": true
@@ -122,7 +142,7 @@
       "capabilities": ["decompose", "dispatch", "evaluate", "iterate", "synthesize", "verify", "task"],
       "strengths": ["task orchestration", "multi-agent coordination", "gap detection", "quality assurance"],
       "weaknesses": ["should delegate specialized work to appropriate agents"],
-      "permissions": {"edit": "allow", "bash": "ask", "todowrite": "allow", "task": "allow", "webfetch": "ask", "websearch": "ask"},
+      "permissions": {"edit": "allow", "bash": "ask", "todowrite": "allow", "task": "allow", "webfetch": "ask", "websearch": "ask", "question": "ask"},
       "file": "agents/orchestrator.md",
       "can_invoke_subagents": true,
       "can_invoke_all": true,
@@ -130,9 +150,9 @@
     },
     "video-creator": {
       "mode": "subagent",
-      "capabilities": ["video", "edit", "write", "bash", "media", "moviepy", "ffmpeg"],
-      "strengths": ["programmatic video creation", "text-to-video", "image slideshows", "video compositing", "platform optimization"],
-      "weaknesses": ["requires FFmpeg and Python dependencies", "no AI model inference for video generation"],
+      "capabilities": ["video", "edit", "write", "bash", "media", "moviepy", "ffmpeg", "text-to-video", "slideshow", "compositing", "crossfade", "ken-burns", "web-to-video", "platform-presets"],
+      "strengths": ["programmatic video creation across 9 platform presets", "text-to-video with fonts and effects", "image slideshows with Ken Burns zoom", "video compositing with picture-in-picture", "platform optimization with bitrate guidance", "multi-scene script-based video"],
+      "weaknesses": ["requires FFmpeg and Python dependencies", "no AI model inference for video generation", "TextClip may fail without system fonts on Alpine"],
       "permissions": {"edit": "allow", "bash": "ask", "webfetch": "ask", "websearch": "ask"},
       "file": "agents/video-creator.md",
       "can_invoke_subagents": false,
@@ -140,9 +160,9 @@
     },
     "web-browser": {
       "mode": "subagent",
-      "capabilities": ["browse", "navigate", "click", "fill-forms", "extract-data", "screenshot", "javascript", "cookies"],
-      "strengths": ["full browser automation", "form filling", "flight booking", "web scraping", "multi-page workflows", "SPA support"],
-      "weaknesses": ["requires Chromium + Playwright", "headless by default", "some sites block automated browsers"],
+      "capabilities": ["browse", "navigate", "click", "fill-forms", "extract-data", "screenshot", "javascript", "cookies", "table-extraction", "multi-form-workflow", "hover", "scroll", "upload-file", "visibility-check", "element-inspection", "tab-management"],
+      "strengths": ["full browser automation with 40+ Playwright actions", "form filling with multi-field workflows", "flight booking across 4 sites (Google Flights, Skyscanner, Expedia, Kayak)", "structured table extraction", "action pipeline browse_and_extract", "anti-detection and stealth patterns"],
+      "weaknesses": ["requires Chromium + Playwright", "headless by default", "some sites block automated browsers", "navigator.webdriver detection requires stealth patches"],
       "permissions": {"edit": "allow", "bash": "ask", "webfetch": "ask", "websearch": "ask"},
       "file": "agents/web-browser.md",
       "can_invoke_subagents": false,
@@ -150,9 +170,9 @@
     },
     "display-agent": {
       "mode": "subagent",
-      "capabilities": ["display", "vnc", "xvfb", "x11vnc", "screenshot", "headed-browser", "video-preview"],
-      "strengths": ["virtual display management", "VNC remote access", "headed browser launch", "video preview on headless servers"],
-      "weaknesses": ["only manages display — does not control browsers or create videos", "requires Xvfb + x11vnc installed"],
+      "capabilities": ["display", "vnc", "xvfb", "x11vnc", "screenshot", "headed-browser", "video-preview", "multi-display", "display-status", "health-check", "shared-memory", "novnc"],
+      "strengths": ["virtual display lifecycle management", "VNC remote access with password protection", "headed browser launch (auto-integrated with web-browser)", "video preview via ffplay on headless servers", "global singleton for cross-agent sharing", "display health monitoring via xdpyinfo"],
+      "weaknesses": ["only manages display — does not control browsers or create videos", "requires Xvfb + x11vnc installed", "Chromium in containers may need --shm-size increase"],
       "permissions": {"edit": "allow", "bash": "ask", "todowrite": "allow"},
       "file": "agents/display-agent.md",
       "can_invoke_subagents": false,
@@ -322,6 +342,18 @@
         {"agent": "pioneer", "task": "Research the technology landscape, evaluate options, prototype if needed, and provide recommendations"},
         {"agent": "build", "task": "Implement production-ready code based on pioneer's validated approach (if applicable)"}
       ]
+    },
+    "multimodal-file-processing": {
+      "name": "Multimodal File Processing",
+      "agents": ["media-agent", "document-agent", "orchestrator"],
+      "trigger_keywords": ["image", "screenshot", "photo", "picture", "audio", "transcribe", "meeting", "video", "screen recording", "document", "pdf", "scan", "ocr", "extract text", "read this file", "diagram", "ui mockup", "flowchart"],
+      "description": "Process images, audio, video, and documents through modality-aware pipeline with vision-to-text fallback",
+      "sequence": [
+        {"agent": "orchestrator", "task": "Detect file modality, check model capabilities, route to appropriate processor"},
+        {"agent": "media-agent", "task": "Process image/audio/video files using opencode_media module or vision bridge"},
+        {"agent": "document-agent", "task": "Parse documents (PDF, DOCX, CSV, TXT, MD) using pdftotext/pandoc/opencode_media"},
+        {"agent": "orchestrator", "task": "Inject text descriptions as context, verify quality gates, synthesize results"}
+      ]
     }
   },
 
@@ -379,6 +411,17 @@
       "DISPLAY environment variable points to the virtual display",
       "Virtual screen resolution matches configuration",
       "Processes clean up on stop (no orphaned Xvfb/x11vnc processes)"
+    ],
+    "content_extracted": [
+      "Text content successfully extracted from the file",
+      "File metadata (dimensions, duration, page count) parsed when available",
+      "Graceful degradation: missing dependencies reported as warnings, not errors"
+    ],
+    "vision_fallback": [
+      "Model vision capability correctly detected (yes/no)",
+      "Text-only models receive image descriptions as fallback",
+      "Descriptions include: filename, size, dimensions, format, OCR text",
+      "Vision-capable models pass through unmodified"
     ]
   },
 
@@ -420,6 +463,14 @@
       "research_tasks": {
         "consider": ["source-verification", "date-relevancy", "ecosystem-maturity", "license-compatibility", "production-readiness", "community-health", "learning-resources"],
         "note": "Technology research tasks: Always verify sources, check dates (tech moves fast), evaluate ecosystem maturity, and assess production readiness. Prototypes are proof-of-concept only."
+      },
+      "media_tasks": {
+        "consider": ["tesseract-availability", "whisper-availability", "ffmpeg-availability", "pdftotext-availability", "model-vision-capability", "file-size-limits", "graceful-degradation"],
+        "note": "Media processing tasks: Check which system dependencies are installed (tesseract, whisper, ffmpeg, pdftotext). The pipeline degrades gracefully. Ask user if they need OCR/transcription or just file metadata."
+      },
+      "document_tasks": {
+        "consider": ["pdftotext-availability", "pandoc-availability", "document-size", "scanned-vs-digital-pdf", "table-extraction-needs", "image-extraction-needs", "format-conversion-needs"],
+        "note": "Document processing tasks: pdftotext handles most PDFs. Pandoc needed for DOCX/HTML. Scanned PDFs need tesseract OCR. Ask user what format they need the output in."
       }
     }
   },
@@ -430,8 +481,8 @@
     "findings_dir": "~/.config/opencode/shared/findings/",
     "context_readme": "~/.config/opencode/shared/README.md",
     "description": "Cross-agent shared context store for memory persistence and workflow continuity",
-    "agents_write_findings": ["debug", "security", "architect", "build", "plan", "review", "test", "general", "pioneer"],
-    "agents_read_context": ["build", "plan", "architect", "debug", "docs", "explore", "general", "refactor", "review", "security", "test", "video-creator", "web-browser", "display-agent", "pioneer"],
+    "agents_write_findings": ["debug", "security", "architect", "build", "plan", "review", "test", "general", "pioneer", "video-creator", "web-browser", "display-agent", "media-agent", "document-agent"],
+    "agents_read_context": ["build", "plan", "architect", "debug", "docs", "explore", "general", "refactor", "review", "security", "test", "video-creator", "web-browser", "display-agent", "pioneer", "media-agent", "document-agent"],
     "context_categories": {
       "findings": "Agent-specific findings stored per-agent in findings/{agent}.json and aggregated in context.json",
       "decisions": "Design/architecture/workflow decisions made during sessions",
@@ -454,7 +505,9 @@
       {"agent": "video-creator", "saves": ["video_paths", "platform_info", "rendering_results"]},
       {"agent": "web-browser", "saves": ["extracted_data", "navigation_results", "form_submissions"]},
       {"agent": "display-agent", "saves": ["display_config", "vnc_connections", "screenshots"]},
-      {"agent": "pioneer", "saves": ["technology_research", "trend_analyses", "experiment_results", "prototype_details", "innovation_reports", "comparisons", "recommendations"]}
+      {"agent": "pioneer", "saves": ["technology_research", "trend_analyses", "experiment_results", "prototype_details", "innovation_reports", "comparisons", "recommendations"]},
+      {"agent": "media-agent", "saves": ["image_analysis", "audio_transcriptions", "video_analyses", "media_descriptions", "ocr_results"]},
+      {"agent": "document-agent", "saves": ["document_parses", "text_extractions", "table_extractions", "ocr_results", "format_conversions"]}
     ],
     "delegation_context_inclusion": {
       "enabled": true,

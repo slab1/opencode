@@ -547,3 +547,109 @@ The orchestrator will automatically pick up new patterns from the knowledge grap
 | **Gap iteration** | Orchestrator re-dispatches agents to fill detected gaps |
 | **Quality gates** | Every workflow runs applicable quality gates before returning |
 | **Depth limit** | Agent invocation capped at depth 5 (orchestrator) or 3 (build/plan) |
+| **Media fallback** | When a model lacks vision, images/docs are auto-described via the vision bridge |
+
+---
+
+## Workflow 12: Multimodal File Processing
+
+**Pattern**: `multimodal-file-processing`  
+**Trigger**: Any request involving images, audio, video, PDFs, or documents shared via prompt
+
+This workflow enables agents to process images, audio, video, and documents — even when the active model doesn't natively support those modalities.
+
+```
+User shares file (image/audio/video/PDF/doc)
+         │
+         ▼
+  Orchestrator detects media task
+         │
+         ├── Detect file modality → image? audio? video? document?
+         │
+         ├── [FAST PATH] Model has native vision?
+         │   └── Use read tool → model processes file directly ✅
+         │
+         └── [FALLBACK] Text-only model or unsupported modality?
+              │
+              ├──→ task → media-agent (images, audio, video)
+              │         Uses: opencode_media module
+              │         Returns: text description / transcription
+              │
+              ├──→ task → document-agent (PDFs, DOCX, spreadsheets)
+              │         Uses: pdftotext, pandoc, MCP servers
+              │         Returns: extracted text + tables + metadata
+              │
+              └──→ Orchestrator injects text description as context
+                    Original model continues with text-only knowledge
+```
+
+### Context Flow
+
+```
+Step 1: Modality Detection
+  └─ Orchestrator: detect_modality(file) → image|audio|video|document|text
+
+Step 2: Vision Capability Check  
+  └─ Orchestrator: check model's modalities config
+      ├─ Has "image" support? → Use native read tool
+      └─ No image support?   → Route to vision bridge
+
+Step 3: Media Processing
+  └─ media-agent or document-agent dispatched:
+      ├─ Image:   analyze_image() → dimensions + OCR text + metadata
+      ├─ Audio:   transcribe_audio() → transcription + segments
+      ├─ Video:   analyze_video() → keyframes + audio transcription
+      └─ Document: parse_document() → full text + tables + metadata
+
+Step 4: Context Injection
+  └─ Orchestrator: summarize_results() → concise text block
+      Injected into model's context as structured description
+
+Step 5: Continue Workflow
+  └─ Original model receives text description → completes task
+      (All quality gates run as normal)
+```
+
+### Which Agent to Route To
+
+| File Type | Extensions | Agent | Primary Tools |
+|-----------|-----------|-------|--------------|
+| Image | `.png`, `.jpg`, `.gif`, `.webp`, `.svg`, `.bmp` | **media-agent** | `opencode_media.analyze_image()`, Pillow, tesseract |
+| Audio | `.mp3`, `.wav`, `.m4a`, `.flac`, `.ogg`, `.opus` | **media-agent** | Whisper, ffprobe |
+| Video | `.mp4`, `.webm`, `.mkv`, `.avi`, `.mov` | **media-agent** | ffmpeg keyframes, whisper transcription |
+| PDF | `.pdf` | **document-agent** | pdftotext, pdfinfo, go-docs-mcp, pdf-mcp |
+| Word | `.docx` | **document-agent** | pandoc → markdown |
+| Spreadsheet | `.xlsx`, `.csv` | **document-agent** | pandoc, native CSV reader |
+| Text/Code | `.txt`, `.md`, `.py`, `.js`, etc. | **document-agent** | Direct read |
+| HTML | `.html`, `.htm` | **document-agent** | pandoc → markdown |
+
+### Graceful Degradation
+
+The pipeline never crashes — each capability is optional:
+
+| Missing Dependency | What Breaks | What Still Works |
+|-------------------|-------------|-----------------|
+| `tesseract` | OCR on images, scanned PDFs | Pillow dimensions, pdftotext PDFs |
+| `whisper` | Audio transcription | File metadata, duration |
+| `ffmpeg` | Video keyframes, metadata | Basic file info |
+| `pdftotext` | PDF text extraction | File metadata only |
+| `pandoc` | DOCX/HTML/EPUB conversion | Native TXT/MD/CSV reading |
+
+### Quality Gates
+
+- **content_extracted**: Text was successfully extracted from the file
+- **metadata_parsed**: File dimensions, duration, page count available
+- **fallback_available**: Text description generated for non-native modalities
+- **context_injected**: Description was provided to the reasoning model
+- **warnings_surfaced**: Any missing capabilities were reported to the user
+
+### MCP Server Integration
+
+When MCP servers are configured, agents can use them instead of the Python module:
+
+| MCP Server | Tools Added | Use Case |
+|-----------|-------------|----------|
+| `filesystem` (npx) | `read_media_file` | Read images/audio as base64 |
+| `go-docs-mcp` | `read_document`, `search_document`, `extract_tables`, `ocr_document` | Multi-format document access |
+| `pdf-mcp` | `pdf_info`, `pdf_search`, `pdf_read_pages`, `pdf_render_pages` | Advanced PDF processing |
+| `imagine-mcp` | `understand` | Multi-provider image/video understanding |

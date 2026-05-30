@@ -34,11 +34,14 @@ The video module is at `/home/.config/opencode/opencode_video/`. Import via `fro
 
 <capabilities>
 1. **Text-to-Video** — Create videos from text scripts with background colors, animations, and music
-2. **Image Slideshows** — Compile images into video with transitions and effects
+2. **Image Slideshows** — Compile images into video with transitions, effects, and Ken Burns zoom
 3. **Video Compositing** — Layer text, images, picture-in-picture, and effects
-4. **Platform Optimization** — Render videos optimized for YouTube, TikTok, Instagram, Twitter, LinkedIn, Facebook
-5. **Audio Integration** — Add background music, voiceovers, adjust volumes
-6. **Transitions & Effects** — Fade in/out, cross-fade, zoom (Ken Burns), slide in, bounce in
+4. **Platform Optimization** — Render videos optimized for YouTube, YouTube Shorts, TikTok, Instagram (Reels/Posts/Landscape), Twitter/X, LinkedIn, Facebook
+5. **Audio Integration** — Add background music, voiceovers, adjust volumes, loop/trim audio to match video
+6. **Transitions & Effects** — Fade in/out, cross-fade, zoom (Ken Burns), slide in (left/right/top/bottom)
+7. **Script-Based Video** — Multi-scene videos with intro, content, and outro via `VideoScript`
+8. **Crossfade Rendering** — FFmpeg crossfade between clips via `render_with_ffmpeg_crossfade`
+9. **Web-to-Video** — Capture web screenshots and turn them into social media content via `capture_web_screenshot`
 </capabilities>
 
 <examples>
@@ -88,24 +91,57 @@ compose_video(
     overlays=[
         {"type": "text", "source": "Title", "position": "center", "font_size": 60},
         {"type": "image", "source": "logo.png", "position": ("right", "top")},
+        {"type": "video", "source": "pip_clip.mp4", "position": ("right", "bottom"), "size": (320, 240)},
     ],
     output="final.mp4",
     platform="youtube",
 )
 ```
+
+### Crossfade Between Clips
+```python
+from opencode_video.scripts import render_with_ffmpeg_crossfade
+render_with_ffmpeg_crossfade(
+    ["clip1.mp4", "clip2.mp4", "clip3.mp4"],
+    output="crossfade.mp4",
+    crossfade_duration=0.5,
+)
+```
+
+### Ken Burns Zoom Effect
+```python
+from opencode_video.effects import ken_burns, slide_in, zoom_in
+from moviepy import ImageClip
+
+clip = ImageClip("photo.jpg").with_duration(5)
+animated = ken_burns(clip, zoom_amount=0.1)  # 10% slow zoom
+# Or slide in from left
+slide_in_clip = slide_in(clip, direction="left", duration=1.0)
+```
+
+### Web Screenshot to Video
+```python
+from opencode_video.workflows import capture_web_screenshot
+capture_web_screenshot(
+    url="https://example.com",
+    output="web_video.mp4",
+    platform="tiktok",
+)
+```
 </examples>
 
 <platform-presets>
-| Platform | Key | Resolution | Aspect |
-|----------|-----|-----------|--------|
-| YouTube | `youtube` | 1920×1080 | 16:9 |
-| YouTube Shorts | `youtube_shorts` | 1080×1920 | 9:16 |
-| TikTok | `tiktok` | 1080×1920 | 9:16 |
-| Instagram Reel | `instagram_reel` | 1080×1920 | 9:16 |
-| Instagram Post | `instagram_post` | 1080×1080 | 1:1 |
-| Twitter/X | `twitter` | 1280×720 | 16:9 |
-| LinkedIn | `linkedin` | 1920×1080 | 16:9 |
-| Facebook | `facebook` | 1920×1080 | 16:9 |
+| Platform | Key | Resolution | Aspect | Max Duration | Bitrate |
+|----------|-----|-----------|--------|-------------|---------|
+| YouTube | `youtube` | 1920×1080 | 16:9 | Unlimited | 10M |
+| YouTube Shorts | `youtube_shorts` | 1080×1920 | 9:16 | 60s | 8M |
+| TikTok | `tiktok` | 1080×1920 | 9:16 | 180s | 8M |
+| Instagram Reel | `instagram_reel` | 1080×1920 | 9:16 | 90s | 8M |
+| Instagram Post | `instagram_post` | 1080×1080 | 1:1 | 60s | 6M |
+| Instagram Landscape | `instagram_landscape` | 1920×1080 | 16:9 | 60s | 8M |
+| Twitter/X | `twitter` | 1280×720 | 16:9 | 140s | 6M |
+| LinkedIn | `linkedin` | 1920×1080 | 16:9 | 600s | 8M |
+| Facebook | `facebook` | 1920×1080 | 16:9 | 240s | 8M |
 </platform-presets>
 
 <video-preview>
@@ -130,16 +166,62 @@ Connect VNC at `localhost:5900` (password: `opencode`) to watch.
 </workflow>
 
 <best-practices>
-- Use platform presets for correct aspect ratios
+- Use platform presets for correct aspect ratios — don't hardcode resolutions
 - For short-form platforms (TikTok, Shorts, Reels), keep scenes 3-7 seconds
 - For long-form (YouTube), use varied scene lengths for pacing
 - Always verify the output file exists after rendering
 - Use appropriate bitrates for target platforms to balance quality and file size
 - Always verify input files exist before processing
+
+### Performance & Rendering
+- Use `threads=4` (or more) in `write_videofile()` for multi-core encoding
+- Use `preset="fast"` for batch jobs where speed matters over file size
+- For single high-quality renders, `preset="medium"` or `"slow"` gives better compression
+- **Close clips after rendering**: always call `.close()` after `write_videofile()` in batch loops to free ffmpeg processes — especially important when processing many files
+- Process one clip at a time in loops — don't hold multiple clips in memory simultaneously
+- Large batch jobs can exhaust RAM since each clip keeps decoded frames in memory
+
+### Font & Text Handling
+- `TextClip` in MoviePy 2.x uses Pillow by default — ImageMagick is only needed for `method="caption"` word-wrapping
+- On Alpine Linux, common fonts like Arial may not exist — use system fonts or specify explicit paths:
+  ```python
+  {"text": "Hello", "font": "/usr/share/fonts/liberation/LiberationSans-Regular.ttf"}
+  ```
+- Install fonts: `apk add font-liberation font-noto`
+- For text fitting: use `method="caption"` with `size=(width, None)` for auto word-wrap
+- Fall back to simpler fonts or background-only clips if text rendering fails
+
+### Audio Best Practices
+- `audio_volume` parameter accepts 0.0-1.0 range; default 1.0
+- Audio longer than the video gets trimmed to match; shorter audio loops to fill
+- For voiceovers, set `audio_volume=1.0` and reduce background music volume separately
+- Verify audio file exists before passing it — the module warns but continues
+
+### Batch Processing Pattern
+```python
+import os
+from opencode_video import create_video
+
+for i, product in enumerate(products):
+    output = f"products/product_{i}.mp4"
+    create_video(
+        output=output,
+        text=[{"text": product["name"], "font_size": 72}],
+        platform="tiktok",
+        duration_per_clip=5,
+        verbose=True,
+    )
+    # Verify output exists
+    assert os.path.exists(output), f"Failed to render: {output}"
+```
 </best-practices>
 
 <error-handling>
-- If MoviePy raises errors, check FFmpeg is installed (`which ffmpeg`)
-- For text rendering issues, fall back to simpler fonts or background-only clips
-- Log warnings for non-critical failures (missing audio, failed overlay)
+- **FFmpeg required**: MoviePy needs FFmpeg. Check: `which ffmpeg`. If missing: `apk add ffmpeg`
+- **Text rendering fails**: Fall back to simpler fonts (Liberation Sans) or background-only clips
+- **Missing audio**: Warning logged, video renders without audio — not a hard failure
+- **File not found**: Always check input files exist before calling `create_video()` — the function will skip missing files silently with a warning
+- **ImportError for moviepy**: MoviePy 2.x changed from `moviepy.editor` to top-level `moviepy`. If imports fail, check installed version: `pip show moviepy`
+- **Output doesn't exist after render**: Check disk space, FFmpeg availability, and file permissions on output directory
+- **RAM exhaustion in batch**: Process videos sequentially, close clips, use `threads=2` instead of `threads=4`
 </error-handling>
