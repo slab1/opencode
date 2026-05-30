@@ -538,6 +538,96 @@ The orchestrator will automatically pick up new patterns from the knowledge grap
 
 ---
 
+## Workflow 17: Agent Self-Improvement
+
+**Pattern**: `agent-self-improvement`  
+**Trigger**: "improve agent", "evolve", "self-improve", "meta-agent", "audit agents", "performance", "optimize agents", "cross-train", "transfer capabilities"
+
+This workflow implements the HyperAgent concept — a self-referential improvement cycle that evolves agent configurations over time.
+
+### Phase 1: Full System Audit
+```
+User → orchestrator
+         │
+         └─→ task → meta-agent (run full audit)
+                   │
+                   ├─→ Uses: python3 -m opencode_improvement audit
+                   │
+                   └─→ Returns: agent health, performance report, improvement opportunities
+```
+
+### Phase 2: Targeted Agent Improvement
+```
+User → orchestrator ("improve the media-agent")
+         │
+         └─→ task → meta-agent
+                   │
+                   ├─→ 1. Analyze: python3 -m opencode_improvement analyze --agent media-agent
+                   ├─→ 2. Report:  python3 -m opencode_improvement report --agent media-agent
+                   ├─→ 3. Suggest: python3 -m opencode_improvement suggest --agent media-agent
+                   ├─→ 4. Read target .md file
+                   ├─→ 5. Edit to fix gaps (missing sections, permissions, capabilities)
+                   ├─→ 6. Delegate to review for validation
+                   │         └─→ task → review (validate the config edit)
+                   ├─→ 7. Apply patch if validation passes
+                   └─→ 8. Log to shared context: findings.meta_agent.patches_applied
+```
+
+### Phase 3: Cross-Domain Transfer
+```
+User → orchestrator ("transfer web-browser patterns to document-agent")
+         │
+         └─→ task → meta-agent
+                   │
+                   ├─→ 1. Compare success rates: python3 -m opencode_improvement report
+                   ├─→ 2. Extract capabilities from source agent
+                   ├─→ 3. Analyze gaps in target agent
+                   ├─→ 4. Generate capability transfer patch
+                   ├─→ 5. Validate appropriateness for domain
+                   ├─→ 6. Apply patch
+                   └─→ 7. Log: findings.meta_agent.transfer_attempts
+```
+
+### Phase 4: Metacognitive Self-Improvement
+```
+User → orchestrator ("improve the meta-agent itself")
+         │
+         └─→ task → meta-agent
+                   │
+                   ├─→ 1. Self-audit: analyze own config
+                   ├─→ 2. Review transfer_attempts log — which strategies worked?
+                   ├─→ 3. Update self-config with improved strategies
+                   ├─→ 4. Log self-change
+                   └─→ 5. Verify: delegate to test
+```
+
+### Quality Gates
+
+- **config_analyzed**: Agent config was read and evaluated against completeness criteria
+- **patch_validated**: Proposed config change was reviewed before application
+- **patch_applied**: Edit was successfully written to the agent .md file
+- **change_logged**: Patch was recorded in shared context for auditability
+- **performance_logged**: Task outcome was logged in performance tracking system
+
+### Gap Checks
+
+- Config edit breaks agent structure (removes required sections)
+- Performance data insufficient (< 3 entries) for meaningful analysis
+- Transfer suggests capabilities irrelevant to target agent's domain
+- Self-improvement cycle creates infinite recursion guard
+- Multiple conflicting patches applied simultaneously
+
+### Cross-Domain Transfer Matrix
+
+| Source Agent | High-Performing Capabilities | Candidate Targets |
+|-------------|------------------------------|-------------------|
+| **web-browser** (16 caps) | Navigation, Stealth, Wait Strategy, Retry Patterns, Memory Management | media-agent, document-agent, display-agent |
+| **video-creator** (14 caps) | Platform Presets, Ken Burns, Batch Processing, Crossfade | media-agent, display-agent |
+| **display-agent** (12 caps) | Multi-session, Health Checks, Troubleshooting, noVNC | web-browser, video-creator |
+| **pioneer** | Research, Prototyping, Synthesis, Comparison | meta-agent (self-improvement strategies) |
+
+---
+
 ## Workflow Execution Rules
 
 | Rule | Description |

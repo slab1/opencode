@@ -37,6 +37,9 @@ If the user explicitly requests a specific agent, or for simple single-agent tas
 | `video`, `screen recording`, `demo`, `clip` | **media-agent** | Video analysis |
 | `document`, `PDF`, `pdf`, `DOCX`, `scan` | **document-agent** | Document parsing and OCR |
 | `OCR`, `extract text from`, `read this file` | **document-agent** or **media-agent** | Text extraction from files |
+| `improve`, `evolve`, `meta-agent`, `self-improve` | **meta-agent** | Agent self-improvement, performance tracking, config evolution |
+| `audit agents`, `performance`, `optimize agents` | **meta-agent** | System audit and performance review |
+| `cross-train`, `transfer capabilities` | **meta-agent** | Cross-domain capability transfer between agents |
 | `deploy`, `release`, `ship`, `publish`, `rollout` | **orchestrator** → deploy-release workflow | Build → Test → Deploy → Monitor |
 | `migration`, `schema`, `migrate db`, `alter table` | **orchestrator** → db-migration workflow | Plan → Backup → Migrate → Verify |
 | `onboarding`, `setup`, `new project`, `initialize` | **orchestrator** → project-onboarding workflow | Explore → Plan → Setup → Verify |

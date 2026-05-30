@@ -15,6 +15,9 @@
     "todowrite": "allow",
     "webfetch": "allow",
     "websearch": "allow",
+    // ── Permission rules for meta-agent ──
+    // meta-agent needs: edit (for modifying agent .md files), bash (for improvement engine),
+    // task (delegating to review/test/explore), todowrite, webfetch, websearch
     // ── Permission rules for media-agent and document-agent ──
     // media-agent needs: read (for files), bash (for python processor), webfetch, websearch
     // document-agent needs: read (for files), bash (for pdftotext/pandoc), webfetch, websearch
@@ -99,6 +102,10 @@
     // Enable media processing tools
     "analyze_image": true,
     "transcribe_audio": true,
-    "parse_document": true
+    "parse_document": true,
+    // Enable self-improvement tools (meta-agent)
+    "audit_agents": true,
+    "improve_agent": true,
+    "track_performance": true
   }
 }
