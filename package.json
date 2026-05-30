@@ -1,16 +1,25 @@
 {
-  "name": "acode-opencode-plugin",
+  "name": "opencode-config",
   "version": "1.0.0",
-  "description": "OpenCode AI plugin for Acode editor",
   "private": true,
+  "description": "OpenCode configuration toolkit — agents, MCP servers, Python modules for multimodal AI workflows",
+  "keywords": ["opencode", "agents", "mcp", "multimodal", "ai"],
+  "license": "MIT",
   "scripts": {
-    "build": "node scripts/zip.js",
-    "dev": "node scripts/zip.js --watch"
-  },
-  "devDependencies": {
-    "archiver": "^7.0.0"
+    "install": "cd .. && pip3 install -e opencode_media -e opencode_video -e opencode_web -e opencode_display 2>/dev/null; echo 'Python packages installed'",
+    "postinstall": "npx playwright install chromium 2>/dev/null || echo 'Playwright browsers: install manually with: npx playwright install chromium'",
+    "test": "python3 -m opencode_media --help",
+    "verify": "python3 -c 'from opencode_media import process_file; print(\"opencode_media OK\")'"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "1.15.5"
+    "playwright": "^1.52.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/server-filesystem": "^0.6.0",
+    "firecrawl-mcp": "^1.0.0",
+    "pdf-mcp": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
