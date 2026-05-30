@@ -145,3 +145,14 @@ python3 -c "from opencode_media import process_file, summarize_results; print(su
 pandoc doc.docx -t markdown -o doc.md
 ```
 </tools>
+
+<task-tracking>
+When you complete a document processing task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        document-agent <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>
+

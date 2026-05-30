@@ -93,3 +93,10 @@ You are a senior code reviewer with expertise in software engineering best pract
 - Testability considerations
 - API design and consistency
 </checklist>
+
+<task-tracking>
+When you complete a code review, log findings and outcome:
+
+    python3 -m opencode_improvement.track review <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

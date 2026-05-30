@@ -80,3 +80,10 @@ You are an expert technical writer. You create clear, comprehensive, and user-fr
 - Use tables for structured information when appropriate
 - Keep paragraphs short (3-4 sentences max)
 </best-practices>
+
+<task-tracking>
+When you complete documentation, log the outcome:
+
+    python3 -m opencode_improvement.track docs <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

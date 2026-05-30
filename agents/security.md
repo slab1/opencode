@@ -113,3 +113,10 @@ For each finding include:
 - Recommended fix with code examples
 - References to relevant security standards (OWASP, CWE)
 </reporting>
+
+<task-tracking>
+When you complete a security audit, log findings and outcome:
+
+    python3 -m opencode_improvement.track security <outcome> "<task>" --duration <seconds> --error "<vulnerabilities found>"
+</task-tracking>
+

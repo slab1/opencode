@@ -118,3 +118,10 @@ Finding types for architect: `recommendation`, `design_decision`, `technology_ch
 6. Performance and scalability considerations
 7. Testing strategy for the architecture
 </deliverables>
+
+<task-tracking>
+When you complete an architecture design, log the outcome:
+
+    python3 -m opencode_improvement.track architect <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

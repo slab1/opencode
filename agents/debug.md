@@ -103,3 +103,10 @@ Present findings clearly:
 2. **Root Cause**: Why it is happening (with code references)
 3. **Impact**: What is affected and how severely
 4. **Fix Options**: One or more solutions with trade-offs
+
+<task-tracking>
+When you finish debugging, log the root cause and outcome:
+
+    python3 -m opencode_improvement.track debug <outcome> "<task>" --duration <seconds> --error "<root cause if found>"
+</task-tracking>
+

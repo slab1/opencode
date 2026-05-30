@@ -165,3 +165,14 @@ Created `/research/realtime-prototype/` with a working SSE-based Next.js 15 rout
 2. Start with Postgres Changes for data sync, add Presence for collaborative features later
 ```
 </example-output>
+
+<task-tracking>
+When you complete a research/innovation task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        pioneer <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>
+

@@ -50,3 +50,10 @@ This agent uses read-only tools (Glob, Grep, Read) to navigate and search codeba
 3. **Execute**: Search with specific, targeted patterns
 4. **Report**: Return findings with file paths, line numbers, and relevant context
 </workflow>
+
+<task-tracking>
+When you finish exploring the codebase, log what was found:
+
+    python3 -m opencode_improvement.track explore <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

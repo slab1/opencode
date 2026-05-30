@@ -185,3 +185,14 @@ When asked to improve the meta-agent itself:
 | **Self-improve** | Periodically audit your own config and evolve your improvement strategies |
 | **Never break the system** | If a patch would break an agent, report it and skip it |
 | **Respect max depth 3** | You can invoke subagents up to 3 levels deep |
+
+<task-tracking>
+When you complete an improvement cycle (patch, audit, transfer), log the outcome:
+
+    python3 -m opencode_improvement.track \
+        meta-agent <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+This is critical — your own performance data drives metacognitive self-improvement.
+</task-tracking>
+

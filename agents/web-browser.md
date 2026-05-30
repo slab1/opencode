@@ -249,3 +249,14 @@ for attempt in range(3):
 - For Shadow DOM: Playwright locators pierce shadow roots by default
 - Check browser console errors when debugging: JS errors in the page often explain why selectors return nothing
 </error-handling>
+
+<task-tracking>
+When you complete a browser automation task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        web-browser <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>
+

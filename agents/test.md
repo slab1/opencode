@@ -110,3 +110,10 @@ Finding types for test: `test_suite`, `test_case`, `coverage_report`, `regressio
 - [ ] Assertions are specific (not just checking for truthiness)
 - [ ] Tests would catch the bugs they expect to catch
 </quality-checklist>
+
+<task-tracking>
+When you finish writing/running tests, log the outcome:
+
+    python3 -m opencode_improvement.track test <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

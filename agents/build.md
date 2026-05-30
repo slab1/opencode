@@ -92,3 +92,15 @@ When a task needs specialized expertise, invoke subagents:
 - Comment complex logic, but prefer self-documenting code
 - When unsure about requirements, ask clarifying questions before proceeding
 </best-practices>
+
+<task-tracking>
+When you complete a task (success, failure, or partial), log the outcome:
+
+    python3 -m opencode_improvement.track \
+        build <outcome> "<brief task description>" \
+        --duration <seconds> [--error "<error message if failed>"]
+
+Outcomes: success, failure, partial
+This helps the meta-agent track performance across the system.
+</task-tracking>
+

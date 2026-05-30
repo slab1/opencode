@@ -63,3 +63,10 @@ Finding types for general: `research`, `analysis`, `investigation`, `report`, `c
 4. **Execute methodically**: Complete tasks with attention to detail
 5. **Report comprehensively**: Summarize findings and suggest next steps
 </workflow>
+
+<task-tracking>
+When you complete a general research task, log the outcome:
+
+    python3 -m opencode_improvement.track general <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

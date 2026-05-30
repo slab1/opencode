@@ -280,3 +280,10 @@ If an agent fails or returns unusable output:
 3. If the same agent fails twice, try a different approach or agent
 4. Report to the user if recovery is not possible
 </decision-rules>
+
+<task-tracking>
+When a workflow completes, log the overall outcome:
+
+    python3 -m opencode_improvement.track orchestrator <outcome> "<workflow>" --duration <seconds>
+</task-tracking>
+

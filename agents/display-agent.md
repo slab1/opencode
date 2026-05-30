@@ -184,3 +184,14 @@ git clone https://github.com/novnc/noVNC.git /opt/novnc
 | "Xvfb failed to start" | Missing Xvfb install | Run: `apk add xvfb xvfb-run` |
 | Multiple displays conflict | Same display_num used | Use unique display numbers and VNC ports |
 </error-handling>
+
+<task-tracking>
+When you complete a display management task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        display-agent <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>
+

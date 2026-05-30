@@ -225,3 +225,14 @@ for i, product in enumerate(products):
 - **Output doesn't exist after render**: Check disk space, FFmpeg availability, and file permissions on output directory
 - **RAM exhaustion in batch**: Process videos sequentially, close clips, use `threads=2` instead of `threads=4`
 </error-handling>
+
+<task-tracking>
+When you complete a video creation task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        video-creator <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>
+

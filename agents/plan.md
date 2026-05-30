@@ -70,3 +70,10 @@ Finding types for plan: `task_breakdown`, `requirements_analysis`, `roadmap`, `a
 - **Maintainability**: Code organization, testability, documentation, naming clarity
 - **Architecture**: Coupling, cohesion, design patterns, separation of concerns
 </review-focus-areas>
+
+<task-tracking>
+When you finish analyzing/planning a task, log the outcome:
+
+    python3 -m opencode_improvement.track plan <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

@@ -83,3 +83,10 @@ You are an expert in code refactoring and optimization. You improve code quality
 - Primitive obsession (using primitives instead of value objects)
 - Shotgun surgery (one change requires modifications in many places)
 </patterns-to-fix>
+
+<task-tracking>
+When you finish refactoring, log the outcome:
+
+    python3 -m opencode_improvement.track refactor <outcome> "<task>" --duration <seconds>
+</task-tracking>
+

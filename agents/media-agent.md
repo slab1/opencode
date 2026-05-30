@@ -146,3 +146,14 @@ Agent: Processes with OCR → returns structured text with layout preservation
 User: "What was said in this meeting recording?"
 Agent: Transcibes audio → returns full transcription with timestamps + summary
 </examples>
+
+<task-tracking>
+When you complete a media processing task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        media-agent <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>
+
