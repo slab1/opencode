@@ -84,7 +84,7 @@
     "go-docs-mcp": {
       "type": "local",
       "command": ["npx", "-y", "github:drolosoft/go-docs-mcp"],
-      "enabled": false,
+      "enabled": true,
       "env": {}
     },
     // ── Advanced PDF Processing ──
@@ -92,7 +92,7 @@
     "pdf-mcp": {
       "type": "local",
       "command": ["npx", "-y", "pdf-mcp"],
-      "enabled": false,
+      "enabled": true,
       "env": {}
     }
   },
