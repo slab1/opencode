@@ -2,6 +2,9 @@
   "$schema": "https://opencode.ai/config.json",
   "provider": {},
   "model": "opencode/deepseek-v4-flash-free",
+  // 💡 TIP: Set small_model to a cheaper/faster model for simple operations
+  //    (grep, context extraction, simple rewrites) to reduce token costs.
+  //    Example: "small_model": "opencode/gpt-4o-mini"
   "small_model": "opencode/deepseek-v4-flash-free",
   "permission": {
     "bash": "allow",
@@ -38,6 +41,8 @@
     "opencode-worktree",
     "opencode-notify",
     "@franlol/opencode-md-table-formatter@latest",
+    // 🟢 Enabled via LD_PRELOAD shim: /usr/lib/libglibc_compat.so
+    //    Provides glibc *64 symbols + libmvec for the native addon on musl.
     "opencode-codebase-index",
     "opencode-swarm",
     "oh-my-opencode-slim"
@@ -64,7 +69,7 @@
       "command": ["npx", "-y", "firecrawl-mcp"],
       "enabled": true,
       "env": {
-        "FIRECRAWL_API_KEY": ""
+        "FIRECRAWL_API_KEY": "fc-fa44b144989b491fb29968f80107f8d0"
       }
     },
     // ── Filesystem with Media Support ──

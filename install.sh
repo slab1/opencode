@@ -64,8 +64,7 @@ install_system_packages() {
                 poppler-utils \
                 imagemagick \
                 xdpyinfo xwd \
-                chromium chromedriver \
-                font-noto font-noto-cjk font-noto-emoji \
+                chromium \
                 font-dejavu \
                 xauth
             ok "Alpine system packages installed."
@@ -76,7 +75,7 @@ install_system_packages() {
                 xvfb x11vnc fluxbox \
                 ffmpeg poppler-utils \
                 imagemagick x11-utils xwd \
-                chromium-browser chromium-chromedriver \
+                chromium-browser  \
                 fonts-noto fonts-noto-cjk fonts-noto-color-emoji \
                 fonts-dejavu
             ok "Debian system packages installed."
@@ -154,7 +153,7 @@ install_npm_deps() {
     else
         warn "Neither bun nor npm found. Install Node.js first, then run:"
         warn "  cd ~/.config/opencode && npm install"
-        warn "  npx playwright install chromium"
+5        warn "  npx playwright install chromium"
     fi
 }
 

@@ -16,3 +16,10 @@ shared/findings/
 # Environment / secrets (users fill these in)
 .env
 *.local
+
+# Package manager artifacts
+bun.lock
+
+# Memory system logs and data
+memfs.log
+memory/

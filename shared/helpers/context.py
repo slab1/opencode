@@ -26,7 +26,8 @@ CONTEXT_PATH = os.path.expanduser("~/.config/opencode/shared/context.json")
 VALID_AGENTS = [
     "debug", "security", "architect", "build", "plan",
     "review", "test", "general", "refactor", "docs",
-    "explore", "video-creator", "web-browser", "display-agent"
+    "explore", "video-creator", "web-browser", "display-agent",
+    "pioneer", "meta-agent", "media-agent", "document-agent"
 ]
 
 VALID_ARTIFACT_CATEGORIES = [
@@ -35,7 +36,7 @@ VALID_ARTIFACT_CATEGORIES = [
 ]
 
 VALID_DECISION_CATEGORIES = [
-    "architecture", "design", "technology", "workflow"
+    "architecture", "design", "technology", "workflow", "system"
 ]
 
 
@@ -182,6 +183,41 @@ def cmd_add_cross_reference(from_agent, to_agent, from_id, to_id, relation):
     print(f"Added cross-reference: {from_agent}:{from_id} → {to_agent}:{to_id} ({relation})")
 
 
+DEFAULT_CONTEXT = {
+    "meta": {"version": "2.0.0", "updated": None},
+    "session": {
+        "current_id": None, "current_title": None,
+        "active_agents": [], "workflow_pattern": None, "started_at": None
+    },
+    "state": {
+        "findings_count": 0, "artifacts_count": 0, "decisions_count": 0,
+        "last_updated_by": None, "last_updated_at": None
+    },
+    "findings": {agent: [] for agent in VALID_AGENTS},
+    "decisions": {cat: [] for cat in VALID_DECISION_CATEGORIES},
+    "artifacts": {
+        "files_created": [], "files_modified": [], "files_deleted": [],
+        "tests_written": [], "documentation_updated": []
+    },
+    "cross_references": [],
+    "workflow_trace": []
+}
+
+
+def cmd_init():
+    """Initialize the shared context store with default empty structure."""
+    if os.path.exists(CONTEXT_PATH):
+        print(f"Context already exists at {CONTEXT_PATH}", file=sys.stderr)
+        print("Use 'clear' to reset it.", file=sys.stderr)
+        sys.exit(1)
+    now = datetime.now(timezone.utc).isoformat()
+    ctx = DEFAULT_CONTEXT.copy()
+    ctx["meta"]["updated"] = now
+    ctx["state"]["last_updated_at"] = now
+    _save(ctx)
+    print(f"Initialized shared context at {CONTEXT_PATH}")
+
+
 def cmd_set_session(session_id=None, title=None, pattern=None):
     """Set session tracking fields."""
     ctx = _load()
@@ -212,7 +248,13 @@ if __name__ == "__main__":
 
     command = sys.argv[1]
 
-    if command == "read":
+    if command == "init":
+        cmd_init()
+    elif command == "clear":
+        import shutil
+        os.remove(CONTEXT_PATH)
+        cmd_init()
+    elif command == "read":
         cmd_read()
     elif command == "read-findings":
         cmd_read_findings(sys.argv[2] if len(sys.argv) > 2 else None)
