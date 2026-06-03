@@ -4,6 +4,48 @@ Complete inventory of all custom tools and files built for this OpenCode system.
 
 ---
 
+## Memory & Continuity Tools (NEW)
+
+| Command | Purpose |
+|---------|---------|
+| `oc-memory save` | Save session context to `memory/YYYY-MM-DD.md` |
+| `oc-memory list` | List recent daily notes |
+| `oc-memory show <date>` | Show a specific daily note |
+| `oc-memory summary` | Show memory storage summary |
+| `oc-commitments add --desc "..." --due "4h"` | Add a follow-up commitment |
+| `oc-commitments list [--status open\|done\|all]` | List commitments |
+| `oc-commitments done <id>` | Mark commitment as done |
+| `oc-commitments overdue` | List overdue commitments |
+| `oc-doctor [--fix] [--check <name>] [--json]` | Diagnose and repair OpenCode health |
+
+These tools are installed at `/usr/local/bin/oc-{doctor,memory,commitments}`.
+
+## Memory Plugin (`opencode-memory-plugin`)
+
+Installed at `/home/.cache/opencode/packages/opencode-memory-plugin@latest/`.
+
+### Hooks Used
+
+| Hook | Purpose |
+|------|---------|
+| `experimental.session.compacting` | Auto-saves context to daily notes before compaction |
+| `experimental.chat.system.transform` | Injects recent memory context into system prompts |
+| `tool` (memory_search) | Plugin-provided tool for searching past session context |
+
+### Agent Instructions for Using Memory
+
+When building system prompts for agents, include:
+
+> You have access to past session memory. Use `memory_search` to find relevant context
+> from previous sessions. You can also run `oc-memory save` at the end of a session
+> to persist important findings.
+>
+> If you need to track a follow-up (e.g., "check back on this later"), use
+> `oc-commitments add --desc "..." --due "4h"` to create a commitment.
+> Commitments are checked at session start.
+
+---
+
 ## Primary CLI (`/usr/local/bin/oc`)
 
 The main entry point — a polished, unified CLI with subcommands:

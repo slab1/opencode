@@ -208,6 +208,47 @@ Subagents can invoke other agents ONLY when explicitly delegated by the orchestr
 - **Depth tracking**: Delegator must include current depth in the task prompt
 - **Stop condition**: If max depth reached, report back with what still needs to be done
 
+## Memory & Continuity System
+
+OpenCode has a three-tier memory system for cross-session continuity:
+
+### Tier 1: Daily Notes (`memory/YYYY-MM-DD.md`)
+Auto-saved via the `opencode-memory-plugin` before session compaction.
+Contains raw findings, decisions, and artifacts from each session.
+Use `oc-memory save` to manually save, `oc-memory list` to see recent notes.
+
+### Tier 2: Shared Context (`shared/context.json`)
+Machine-readable cross-agent context store.
+Agents read at start and write findings at finish.
+Persists across sessions within a project.
+
+### Tier 3: Commitments (`shared/commitments.json`)
+Lightweight follow-up tracking for things the agent should check back on.
+Create with `oc-commitments add --desc "..." --due "4h"`.
+Check with `oc-commitments list`, mark done with `oc-commitments done <id>`.
+
+### Agent Prompt Template
+
+When building system prompts, include:
+
+> You have persistent memory across sessions:
+> - `memory_search` tool finds relevant past context
+> - `oc-memory save` persists important findings
+> - `oc-commitments` tracks follow-ups the agent promises to check
+> - `oc-doctor --fix` auto-repairs any system issues
+
+### Doctor Command
+
+`oc-doctor` diagnoses common issues:
+```bash
+oc-doctor                    # Full health check
+oc-doctor --fix              # Auto-fix common issues
+oc-doctor --check ld_preload # Single check
+oc-doctor --json             # Machine-readable output
+```
+
+Checks: context, config, memory, plugins, mcp, ld_preload, permissions, api_keys, system.
+
 ## Shared Context System
 
 All agents participate in the **cross-agent shared context system** for memory persistence and workflow continuity.

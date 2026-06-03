@@ -45,7 +45,10 @@
     //    Provides glibc *64 symbols + libmvec for the native addon on musl.
     "opencode-codebase-index",
     "opencode-swarm",
-    "oh-my-opencode-slim"
+    "oh-my-opencode-slim",
+    // 🧠 Memory plugin: auto-flushes context before compaction,
+    //    injects recent context into prompts, provides memory_search tool
+    "opencode-memory-plugin"
   ],
   "mcp": {
     // ── Existing Servers ──
