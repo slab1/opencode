@@ -38,13 +38,10 @@
     "opencode-memfs",
     "opencode-vibeguard",
     "opencode-cross-repo",
-    "opencode-worktree",
-    "opencode-notify",
     "@franlol/opencode-md-table-formatter@latest",
     // 🟢 Enabled via LD_PRELOAD shim: /usr/lib/libglibc_compat.so
     //    Provides glibc *64 symbols + libmvec for the native addon on musl.
     "opencode-codebase-index",
-    "opencode-swarm",
     "oh-my-opencode-slim",
     // 🧠 Memory plugin: auto-flushes context before compaction,
     //    injects recent context into prompts, provides memory_search tool

@@ -53,6 +53,7 @@
   var _activeUrl = PROXY_URL;
   var _sessionId = null;
   var _serverReady = false;
+  var _serverStarting = false;
   var _agent = 'build';
   var _chatMsgs = [];
   var _pluginDir = '';
@@ -215,7 +216,9 @@
         cmd = pathPrefix + '"' + _nodeExe + '" -e "' + escapedCode.replace(/"/g, '\\"') + '"';
       }
 
-      terminal.exec(cmd);
+      // Redirect proxy output too — the inline Node.js script's
+      // console.log() calls would also fill the terminal buffer
+      terminal.exec(cmd + ' > /dev/null 2>&1');
 
       var att = 0;
       var maxAtt = 30;
@@ -259,12 +262,29 @@
   }
 
   function startServer(callback) {
+    // Prevent duplicate spawns if user triggers an action while the
+    // server is still starting up (e.g. rapid key presses)
+    if (_serverStarting) {
+      showToast('Server still starting...');
+      if (callback) callback(false);
+      return;
+    }
+    _serverStarting = true;
+
     showToast('Starting OpenCode server...');
     try {
       var terminal = acode.require('terminal');
-      terminal.exec('opencode serve --port ' + SERVER_PORT + ' --cors "*" --hostname 0.0.0.0 --log-level ERROR');
+      // Redirect ALL output to /dev/null to prevent Acode's terminal
+      // buffer from overflowing (the root cause of the crash when external
+      // browsers connect - their requests flood the terminal with logs).
+      // Server is still running and responsive to health checks.
+      // For server-side debugging, run manually in Termux without redirection.
+      terminal.exec('opencode serve --port ' + SERVER_PORT + ' --cors "*" --hostname 0.0.0.0 --log-level ERROR > /dev/null 2>&1');
     } catch (e) {
       console.warn('[OC] Terminal unavailable:', e);
+      _serverStarting = false;
+      if (callback) callback(false);
+      return;
     }
 
     var attempts = 0;
@@ -275,15 +295,18 @@
           showToast('Server detected!');
           tryServerCors(function (corsOk) {
             if (corsOk) {
+              _serverStarting = false;
               if (callback) callback(true);
             } else {
               showToast('Starting CORS proxy...');
               startProxy(function (proxyOk) {
                 if (proxyOk) {
                   _serverReady = true;
+                  _serverStarting = false;
                   showToast('Ready!');
                   if (callback) callback(true);
                 } else {
+                  _serverStarting = false;
                   showToast('CORS proxy failed — manual setup needed');
                   if (callback) callback(false);
                 }
@@ -294,6 +317,7 @@
         .catch(function () {
           if (attempts < 30) { setTimeout(poll, 3000); }
           else {
+            _serverStarting = false;
             showToast('Server start timed out');
             if (callback) callback(false);
           }

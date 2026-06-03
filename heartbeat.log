@@ -1,0 +1,10 @@
+[2026-06-03T08:56:25+01:00] === Heartbeat started ===
+[2026-06-03T08:56:25+01:00] Workspace: unknown | branch= dirty=0 ahead=0
+[2026-06-03T08:56:25+01:00] System: cpu= mem=82% disk=45%
+[2026-06-03T08:56:25+01:00] OpenCode: agents=20 plugins=10 memory_notes=1
+[2026-06-03T08:56:53+01:00] === Heartbeat started ===
+[2026-06-03T08:56:53+01:00] Workspace: unknown | branch= dirty=0 ahead=0
+[2026-06-03T08:56:53+01:00] System: cpu= mem=82% disk=45%
+[2026-06-03T08:56:53+01:00] OpenCode: agents=20 plugins=10 memory_notes=1
+[2026-06-03T08:56:53+01:00] Context updated
+[2026-06-03T08:56:53+01:00] === Heartbeat complete ===
