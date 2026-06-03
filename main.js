@@ -262,7 +262,7 @@
     showToast('Starting OpenCode server...');
     try {
       var terminal = acode.require('terminal');
-      terminal.exec('opencode serve --port ' + SERVER_PORT + ' --cors "*" --print-logs');
+      terminal.exec('opencode serve --port ' + SERVER_PORT + ' --cors "*" --hostname 0.0.0.0 --log-level ERROR');
     } catch (e) {
       console.warn('[OC] Terminal unavailable:', e);
     }

@@ -1,7 +1,7 @@
 {
   "id": "com.opencode.acode",
   "name": "OpenCode AI",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "description": "AI-powered coding assistant for Acode. Full-featured: response capture, diff apply, agent selection, settings, chat panel. Auto-starts server+CORS-proxy via terminal.",
   "author": {
     "name": "OpenCode",

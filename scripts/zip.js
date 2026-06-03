@@ -31,39 +31,23 @@ async function build() {
   // Ensure output directory exists
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-  // Simple ZIP file creation (raw DEFLATE)
-  // Acode accepts standard ZIP files
-  let archiver;
+  // Load archiver (install if missing)
+  let archiverMod;
   try {
-    archiver = require('archiver');
+    archiverMod = require('archiver');
   } catch (e) {
-    console.log(
-      '[OpenCode] archiver not found. Installing...'
-    );
+    console.log('[OpenCode] archiver not found. Installing...');
     require('child_process').execSync(
       'npm install archiver --no-save',
       { cwd: PLUGIN_DIR, stdio: 'inherit' }
     );
-    archiver = require('archiver');
+    archiverMod = require('archiver');
   }
 
+  const archive = new archiverMod.ZipArchive();
   const output = fs.createWriteStream(PLUGIN_ZIP);
-  const archive = archiver('zip', { zlib: { level: 9 } });
 
-  output.on('close', () => {
-    const size = (archive.pointer() / 1024).toFixed(1);
-    console.log(`\n  ✓ Plugin packaged: ${PLUGIN_ZIP}`);
-    console.log(`  Size: ${size} KB`);
-    console.log(`  Files: ${FILES.length}`);
-    console.log(`\n  Install in Acode:`);
-    console.log(`    Settings → Plugins → Install from ZIP`);
-    console.log(`    Select: ${PLUGIN_ZIP}\n`);
-  });
-
-  archive.on('error', (err) => {
-    throw err;
-  });
-
+  archive.on('error', (err) => { throw err; });
   archive.pipe(output);
 
   // Add each file
@@ -78,6 +62,20 @@ async function build() {
   }
 
   await archive.finalize();
+
+  // Wait for the output stream to finish
+  await new Promise((resolve, reject) => {
+    output.on('close', resolve);
+    output.on('error', reject);
+  });
+
+  const size = (archive.pointer() / 1024).toFixed(1);
+  console.log(`\n  ✓ Plugin packaged: ${PLUGIN_ZIP}`);
+  console.log(`  Size: ${size} KB`);
+  console.log(`  Files: ${FILES.length}`);
+  console.log(`\n  Install in Acode:`);
+  console.log(`    Settings → Plugins → Install from ZIP`);
+  console.log(`    Select: ${PLUGIN_ZIP}\n`);
 }
 
 // ─── Watch mode ──────────────────────────────────
