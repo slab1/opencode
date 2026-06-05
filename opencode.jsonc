@@ -5,7 +5,7 @@
   // 💡 TIP: Set small_model to a cheaper/faster model for simple operations
   //    (grep, context extraction, simple rewrites) to reduce token costs.
   //    Example: "small_model": "opencode/gpt-4o-mini"
-  "small_model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/mimo-v2.5-free",
   "permission": {
     "bash": "allow",
     "read": "allow",
@@ -49,10 +49,12 @@
   ],
   "mcp": {
     // ── Existing Servers ──
+    // DISABLED: SUPABASE_ACCESS_TOKEN env var not set → 401 error
+    // To re-enable: set SUPABASE_ACCESS_TOKEN in environment and change enabled: true
     "supabase": {
       "type": "remote",
       "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
-      "enabled": true,
+      "enabled": false,
       "oauth": false,
       "headers": {
         "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
@@ -66,7 +68,7 @@
     },
     "firecrawl": {
       "type": "local",
-      "command": ["npx", "-y", "firecrawl-mcp"],
+      "command": ["/usr/local/bin/firecrawl-mcp"],
       "enabled": true,
       "env": {
         "FIRECRAWL_API_KEY": "fc-fa44b144989b491fb29968f80107f8d0"
@@ -74,9 +76,10 @@
     },
     // ── Filesystem with Media Support ──
     // Provides read_text_file, read_media_file (images/audio), write_file, search, etc.
+    // Uses globally installed binary (pre-installed via npm i -g @modelcontextprotocol/server-filesystem)
     "filesystem": {
       "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem"],
+      "command": ["/usr/local/bin/mcp-server-filesystem"],
       "args": ["/home/.config/opencode", "/public", "/data/user/0/com.foxdebug.acode/cache/opencode"],
       "enabled": true,
       "env": {}

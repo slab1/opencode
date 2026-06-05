@@ -58,7 +58,31 @@ MEMORY_NOTES=$(ls "$MEMORY_DIR/"*.md 2>/dev/null | wc -l)
 
 log "OpenCode: agents=$AGENT_COUNT plugins=$PLUGIN_COUNT memory_notes=$MEMORY_NOTES"
 
-# ── 4. Write to shared context via Python (avoids shell quoting issues) ──
+# ── 4. Check for overdue commitments ──
+OVERDUE_COUNT=0
+OVERDUE_LIST=""
+COMMITMENTS_FILE="$SHARED_DIR/commitments.json"
+if [ -f "$COMMITMENTS_FILE" ]; then
+    OVERDUE_COUNT=$(python3 -c "
+import json, datetime
+with open('$COMMITMENTS_FILE') as f:
+    data = json.load(f)
+now = datetime.datetime.now(datetime.timezone.utc)
+overdue = 0
+for c in data.get('commitments', []):
+    if c.get('status') == 'pending' and c.get('due'):
+        try:
+            due = datetime.datetime.fromisoformat(c['due'])
+            if due < now:
+                overdue += 1
+        except:
+            pass
+print(overdue)
+" 2>/dev/null)
+    log "Overdue commitments: $OVERDUE_COUNT"
+fi
+
+# ── 5. Write to shared context via Python ──
 python3 << PYEOF 2>&1
 import json, os, subprocess, datetime, time
 
@@ -102,6 +126,9 @@ entry = {
         "agents": agent_count,
         "plugins": plugin_count,
         "memory_notes": memory_notes
+    },
+    "commitments": {
+        "overdue": int(${OVERDUE_COUNT:-0})
     }
 }
 
