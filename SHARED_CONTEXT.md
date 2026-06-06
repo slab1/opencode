@@ -108,16 +108,28 @@ Each finding object should follow this structure:
 
 ## What Each Agent Contributes
 
-| Agent | Contributes |
-|-------|-------------|
-| **debug** | Root causes, error details, stack traces, reproduction steps |
-| **security** | Vulnerabilities, CVEs, outdated packages, risk assessments |
-| **architect** | Design decisions, technology recommendations, trade-off analyses |
-| **build** | Files modified, implementation details, API changes |
-| **plan** | Task breakdowns, requirements analysis, roadmaps |
-| **review** | Code quality findings, best practice violations |
-| **test** | Test coverage, failing tests, edge cases tested |
-| **general** | Research findings, analysis results |
+| Agent | Type | Contributes |
+|-------|------|-------------|
+| **orchestrator** | primary | Workflow outcomes, gap detection, quality assessments, session state |
+| **build** | primary | Implementation details, files modified, API changes |
+| **plan** | primary | Task breakdowns, requirements analysis, roadmaps, architecture decisions |
+| **pioneer** | primary | Technology research, trend analysis, experiment results, prototypes, recommendations |
+| **meta-agent** | primary | Performance logs, config patches, cross-domain transfers, audit reports |
+| **architect** | subagent | Design decisions, technology recommendations, trade-off analyses |
+| **debug** | subagent | Root causes, error details, stack traces, reproduction steps |
+| **docs** | subagent | Documentation changes, API docs updated, README updates |
+| **document-agent** | subagent | Document parses, text/table extractions, OCR results, format conversions |
+| **explore** | subagent | Code maps, structure discoveries, dependency findings |
+| **general** | subagent | Research findings, analysis results, investigation outcomes |
+| **heartbeat** | subagent | System health metrics, anomaly alerts, overdue commitments |
+| **media-agent** | subagent | Image analysis, audio transcriptions, video descriptions, OCR results |
+| **refactor** | subagent | Refactoring details, patterns applied, structure improvements |
+| **review** | subagent | Code quality findings, best practice violations |
+| **security** | subagent | Vulnerabilities, CVEs, outdated packages, risk assessments |
+| **test** | subagent | Test coverage, failing tests, edge cases tested, regression tests |
+| **video-creator** | subagent | Video paths, platform info, rendering results, compositions |
+| **web-browser** | subagent | Extracted data, navigation results, form submissions, screenshots |
+| **display-agent** | subagent | Display config, VNC connections, screenshots, resolution config |
 
 ## How Context Flows Through Workflows
 

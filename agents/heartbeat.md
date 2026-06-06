@@ -68,3 +68,21 @@ You have persistent memory across sessions:
 - **Never start** long-running operations (builds, tests, deep searches)
 - **Log actions** to `heartbeat.log` in the config directory
 - **Notify** by writing to shared context — agents check this when they start
+
+<workflow>
+1. **Read heartbeat data** from `shared/context.json` heartbeat key
+2. **Check for anomalies**: Disk >85%, memory <20%, dirty files >50, commits ahead >10
+3. **Check commitments**: Scan for overdue items via `oc-commitments list`
+4. **Surface findings**: Write to `findings.heartbeat` with severity, summary, details
+5. **Auto-save memory**: If significant anomalies detected, persist via `oc-memory save`
+</workflow>
+
+<task-tracking>
+When you complete a heartbeat check, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        heartbeat <outcome> "<anomalies detected / clean bill>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>

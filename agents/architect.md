@@ -11,6 +11,7 @@ permission:
     "uname*": allow
     "cat /etc/os-release*": allow
   webfetch: ask
+  websearch: ask
 ---
 
 <role>

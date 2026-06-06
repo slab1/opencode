@@ -32,16 +32,16 @@
     "mcp_filesystem_*": "allow",
     "mcp_go-docs-mcp_*": "allow",
     "mcp_imagine-mcp_*": "ask",
-    "mcp_pdf-mcp_*": "allow"
+    "mcp_pdf-mcp_*": "allow",
+    "mcp_higgsfield_*": "allow"
   },
   "plugin": [
     "opencode-memfs",
     "opencode-vibeguard",
     "opencode-cross-repo",
     "@franlol/opencode-md-table-formatter@latest",
-    // 🟢 Enabled via LD_PRELOAD shim: /usr/lib/libglibc_compat.so
-    //    Provides glibc *64 symbols + libmvec for the native addon on musl.
-    "opencode-codebase-index",
+    // 🟡 DISABLED: native addon requires glibc libmvec symbols not available on musl
+    // "opencode-codebase-index",
     "oh-my-opencode-slim",
     // 🧠 Memory plugin: auto-flushes context before compaction,
     //    injects recent context into prompts, provides memory_search tool
@@ -94,6 +94,15 @@
       "command": ["npx", "-y", "github:drolosoft/go-docs-mcp"],
       "enabled": true,
       "env": {}
+    },
+    // ── Video & Image Generation (Higgsfield) ──
+    // 30+ models for video, image, and character generation
+    // Connects via OAuth — sign in with your Higgsfield account on first use
+    // Models include: Seedance 2.0, Sora 2, Veo, Kling, Flux 2, GPT Image 2, etc.
+    "higgsfield": {
+      "type": "remote",
+      "url": "https://mcp.higgsfield.ai/mcp",
+      "enabled": true
     },
     // ── Advanced PDF Processing ──
     // pdf-mcp: hybrid search, OCR, table extraction, page rendering for vision models

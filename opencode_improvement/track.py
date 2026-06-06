@@ -1,118 +1,112 @@
-#!/usr/bin/env python3
 """
-oc-track — Lightweight CLI for agents to log task outcomes.
-
-Usage (from any agent):
-    python3 -m opencode_improvement.track <agent> <outcome> <task_description>
-
-    python3 -m opencode_improvement.track build success "implement-login"
-    python3 -m opencode_improvement.track media-agent failure "analyze-screenshot" --error "tesseract not found"
-    python3 -m opencode_improvement.track web-browser success "navigate-and-scrape" --duration 15
-
-Outcomes: success, failure, partial
+Performance tracking for OpenCode agents.
+Logs task outcomes to shared context for cross-agent analysis.
 """
-import sys
+
 import json
 import os
-import time
+from datetime import datetime, timezone
 from pathlib import Path
 
-# Resolve config dir
-CONFIG_DIR = Path(os.environ.get(
-    "OPENCODE_CONFIG_DIR",
-    Path.home() / ".config" / "opencode"
-))
-CONTEXT_PATH = CONFIG_DIR / "shared" / "context.json"
+
+SHARED_DIR = Path.home() / ".config" / "opencode" / "shared"
+PERFORMANCE_FILE = SHARED_DIR / "performance.json"
+CONTEXT_FILE = SHARED_DIR / "context.json"
 
 
-def load_context() -> dict:
-    if CONTEXT_PATH.exists():
-        try:
-            return json.loads(CONTEXT_PATH.read_text())
-        except (json.JSONDecodeError, PermissionError):
-            return {}
-    return {}
+class PerformanceTracker:
+    """Logs and reports on agent task outcomes."""
 
+    def __init__(self, storage_path=None):
+        self.storage_path = Path(storage_path) if storage_path else PERFORMANCE_FILE
 
-def save_context(data: dict):
-    CONTEXT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    CONTEXT_PATH.write_text(json.dumps(data, indent=2, default=str))
+    def log(self, agent, task, outcome, duration_s=0, error=None, context=None):
+        """Record a task outcome."""
+        entry = {
+            "agent": agent,
+            "task": task,
+            "outcome": outcome,
+            "duration_s": duration_s,
+            "error": error,
+            "config_snapshot": None,
+            "context": context or {},
+            "timestamp": datetime.now(timezone.utc).timestamp(),
+            "timestamp_iso": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        data = self._load()
+        data.append(entry)
+        self._save(data)
+        return entry
 
-
-def log_entry(
-    agent: str,
-    outcome: str,
-    task_description: str,
-    duration_s: float = None,
-    error: str = None,
-    config_snapshot: dict = None,
-    context: dict = None,
-) -> dict:
-    """Record a single task outcome to the shared context."""
-    entry = {
-        "agent": agent,
-        "task": task_description,
-        "outcome": outcome,
-        "duration_s": duration_s,
-        "error": error,
-        "config_snapshot": config_snapshot,
-        "context": context or {},
-        "timestamp": time.time(),
-        "timestamp_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-    }
-
-    data = load_context()
-    if "findings" not in data:
-        data["findings"] = {}
-    if "meta_agent" not in data["findings"]:
-        data["findings"]["meta_agent"] = {}
-    if "performance_log" not in data["findings"]["meta_agent"]:
-        data["findings"]["meta_agent"]["performance_log"] = []
-
-    data["findings"]["meta_agent"]["performance_log"].append(entry)
-    save_context(data)
-    return entry
-
-
-def main():
-    if len(sys.argv) < 4:
-        print("Usage: python3 -m opencode_improvement.track <agent> <outcome> <task> [--duration N] [--error MSG]",
-              file=sys.stderr)
-        return 1
-
-    agent = sys.argv[1]
-    outcome = sys.argv[2]
-    task_parts = []
-    duration = None
-    error = None
-
-    # Parse remaining args
-    i = 3
-    while i < len(sys.argv):
-        if sys.argv[i] == "--duration" and i + 1 < len(sys.argv):
+    def _load(self):
+        if self.storage_path.exists():
             try:
-                duration = float(sys.argv[i + 1])
-            except ValueError:
-                pass
-            i += 2
-        elif sys.argv[i] == "--error" and i + 1 < len(sys.argv):
-            error = sys.argv[i + 1]
-            i += 2
-        else:
-            task_parts.append(sys.argv[i])
-            i += 1
+                return json.loads(self.storage_path.read_text())
+            except (json.JSONDecodeError, OSError):
+                return []
+        return []
 
-    task_description = " ".join(task_parts) if task_parts else "unknown task"
+    def _save(self, data):
+        self.storage_path.parent.mkdir(parents=True, exist_ok=True)
+        self.storage_path.write_text(json.dumps(data, indent=2))
 
-    if outcome not in ("success", "failure", "partial"):
-        print(f"Warning: unknown outcome '{outcome}'. Use: success, failure, partial", file=sys.stderr)
+    def report(self, agent=None):
+        """Aggregate performance data."""
+        data = self._load()
+        if agent:
+            data = [e for e in data if e.get("agent") == agent]
 
-    entry = log_entry(agent, outcome, task_description, duration, error)
+        if not data:
+            return {"status": "ok", "total_entries": 0, "agents": []}
 
-    print(json.dumps(entry, indent=2))
-    print(f"\n✓ Tracked: [{outcome}] {agent} → {task_description}", file=sys.stderr)
-    return 0
+        agents = {}
+        for entry in data:
+            a = entry.get("agent", "unknown")
+            if a not in agents:
+                agents[a] = {
+                    "total": 0, "success": 0, "failure": 0, "partial": 0,
+                    "errors": [], "durations": [],
+                }
+            agents[a]["total"] += 1
+            outcome = entry.get("outcome", "unknown")
+            if outcome == "success":
+                agents[a]["success"] += 1
+            elif outcome == "failure":
+                agents[a]["failure"] += 1
+            elif outcome == "partial":
+                agents[a]["partial"] += 1
+            agents[a]["durations"].append(entry.get("duration_s", 0))
+            if entry.get("error"):
+                agents[a]["errors"].append(entry["error"])
 
+        result = []
+        for agent_name in sorted(agents):
+            stats = agents[agent_name]
+            total = stats["total"]
+            success_count = stats["success"]
+            avg_dur = (
+                round(sum(stats["durations"]) / len(stats["durations"]), 1)
+                if stats["durations"]
+                else 0
+            )
+            last_entries = [e for e in data if e.get("agent") == agent_name]
+            last = last_entries[-1] if last_entries else {}
+            result.append({
+                "agent": agent_name,
+                "total": total,
+                "success": success_count,
+                "failure": stats["failure"],
+                "partial": stats["partial"],
+                "avg_duration_s": avg_dur,
+                "recent_errors": stats["errors"][-3:] if stats["errors"] else [],
+                "last_outcome": last.get("outcome"),
+                "last_task": last.get("task"),
+                "success_rate": round((success_count / total) * 100, 1) if total > 0 else 0,
+            })
 
-if __name__ == "__main__":
-    exit(main())
+        return {
+            "status": "ok",
+            "total_entries": len(data),
+            "agents": result,
+            "as_of": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }

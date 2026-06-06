@@ -24,10 +24,11 @@ from datetime import datetime, timezone
 CONTEXT_PATH = os.path.expanduser("~/.config/opencode/shared/context.json")
 
 VALID_AGENTS = [
-    "debug", "security", "architect", "build", "plan",
-    "review", "test", "general", "refactor", "docs",
-    "explore", "video-creator", "web-browser", "display-agent",
-    "pioneer", "meta-agent", "media-agent", "document-agent"
+    "architect", "build", "debug", "display-agent", "docs",
+    "document-agent", "explore", "general", "heartbeat",
+    "media-agent", "meta-agent", "orchestrator", "pioneer",
+    "plan", "refactor", "review", "security", "test",
+    "video-creator", "web-browser"
 ]
 
 VALID_ARTIFACT_CATEGORIES = [

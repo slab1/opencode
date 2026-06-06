@@ -271,6 +271,41 @@
       "can_invoke_subagents": false,
       "orchestrator_delegation": true
     },
+    "heartbeat": {
+      "mode": "subagent",
+      "capabilities": [
+        "health-check",
+        "monitor",
+        "anomaly-detect",
+        "commitment-scan",
+        "context-logging",
+        "disk-check",
+        "memory-check"
+      ],
+      "strengths": [
+        "periodic workspace health monitoring",
+        "anomaly detection (disk, memory, git state)",
+        "overdue commitment scanning",
+        "lightweight cron-based operation"
+      ],
+      "weaknesses": [
+        "does not run interactive sessions",
+        "only triggered by cron or explicit invocation",
+        "no code modification capabilities"
+      ],
+      "permissions": {
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "read": "allow",
+        "todowrite": "allow",
+        "webfetch": "ask",
+        "websearch": "ask"
+      },
+      "file": "agents/heartbeat.md",
+      "can_invoke_subagents": false,
+      "orchestrator_delegation": true
+    },
     "refactor": {
       "mode": "subagent",
       "capabilities": [
@@ -1391,12 +1426,17 @@
       "build",
       "debug",
       "display-agent",
+      "docs",
       "document-agent",
+      "explore",
       "general",
+      "heartbeat",
       "media-agent",
       "meta-agent",
+      "orchestrator",
       "pioneer",
       "plan",
+      "refactor",
       "review",
       "security",
       "test",
@@ -1412,8 +1452,10 @@
       "document-agent",
       "explore",
       "general",
+      "heartbeat",
       "media-agent",
       "meta-agent",
+      "orchestrator",
       "pioneer",
       "plan",
       "refactor",

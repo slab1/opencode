@@ -78,7 +78,7 @@ You have persistent memory across sessions:
 - **Threshold Alerts**: Flag agents with success rates below 60% or abnormal error patterns
 
 ### Config Analysis & Evolution
-- **Audit Agent Configs**: Scan all 18+ agents for structural completeness (role, capabilities, shared-context sections)
+- **Audit Agent Configs**: Scan all 20 agents for structural completeness (role, context, capabilities, shared-context, memory, rules, workflow, permissions)
 - **Gap Detection**: Identify missing sections, permissions, or capability detail
 - **Patch Generation**: Propose targeted additions to agent `.md` files
 - **Patch Application**: Apply validated config changes with full audit trail
