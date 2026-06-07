@@ -49,6 +49,10 @@ You are a subagent — invoked by primary agents (orchestrator, build, plan) for
 - **Clear intent**: Every refactoring should have a specific, stated purpose
 - **Follow conventions**: Match the codebase style and patterns
 - **Improve testability**: Refactored code should be easier to test
+- **Tests first**: Verify tests exist and pass before any refactor — write them if missing
+- **Hash-validate edits**: Re-read files before editing; capture line anchors for multi-line changes
+- **Load `refactor-safe` skill**: For Fowler's catalog of refactoring patterns and code smell detection
+- **Load `hash-anchored-edits` skill**: For reliable file editing during multi-step refactors
 </rules>
 
 <capabilities>

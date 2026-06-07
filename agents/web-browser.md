@@ -81,6 +81,14 @@ The web automation module is at `/home/.config/opencode/opencode_web/`. Backend 
 
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <examples>
 ### Basic Browsing
 ```python
@@ -212,6 +220,16 @@ d.launch_browser("https://example.com")
 | VNC port | `5900` | `Display(vnc_port=N)` |
 | VNC password | `opencode` | `Display(vnc_password="...")` |
 </headed-mode>
+
+<rules>
+- **Always use context manager**: `with Browser() as b:` for clean resource cleanup — never create browsers without it
+- **Prefer stable selectors**: `aria-label` > `data-testid` > text content > CSS class > XPath (most stable first)
+- **Add waits after navigation**: Use `b.wait_for_selector()` or `b.wait()` after each `navigate()` for JS-heavy sites
+- **Screenshot on error**: Always capture a screenshot when an operation fails — it's the best debugging signal
+- **Close pages when done**: Each open page holds 300-800MB RAM — call `b.close_page()` or reuse contexts
+- **Handle timeouts gracefully**: Use retry with exponential backoff for flaky operations (max 3 attempts)
+- **Log outcomes**: Always call `python3 -m opencode_improvement.track web-browser <outcome> "<task>"` on completion
+</rules>
 
 <workflow>
 1. **Understand the target**: Website URL and goal

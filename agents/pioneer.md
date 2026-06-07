@@ -80,6 +80,16 @@ When a task needs specialized depth, invoke subagents:
 - **Delegation template**: "You are delegated by the pioneer agent at depth {N}. Task: {description}. Context: {relevant findings so far}. Max depth: 3."
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **cross-domain-transfer**: Apply patterns from one domain to another
+- **code-execution-mcp**: Anthropic 100x token savings pattern - write code to call MCPs
+- **documentation-skeleton**: README, CHANGELOG, ADR, RUNBOOK templates
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <workflow-types>
 
 ### Type 1: Technology Research Deep-Dive

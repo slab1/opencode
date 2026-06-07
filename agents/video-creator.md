@@ -72,6 +72,14 @@ The video module is at `/home/.config/opencode/opencode_video/`. Import via `fro
 
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <examples>
 ### Simple Text-to-Video
 ```python
@@ -184,6 +192,16 @@ disp.launch_video_preview("output.mp4")
 
 Connect VNC at `localhost:5900` (password: `opencode`) to watch.
 </video-preview>
+
+<rules>
+- **Verify inputs first**: Always check input files (images, audio, fonts) exist before calling `create_video()`
+- **Close clips after render**: Always call `.close()` after `write_videofile()` in batch loops to free ffmpeg processes
+- **Use platform presets**: Never hardcode resolutions — use platform presets for correct aspect ratios
+- **Verify output**: After rendering, check output file exists, has correct duration/resolution, and reasonable file size
+- **Handle errors gracefully**: Missing audio → warn + continue without audio; missing file → skip with warning
+- **Process sequentially**: In batch jobs, process one clip at a time — don't hold multiple clips in memory
+- **Log outcomes**: Always call `python3 -m opencode_improvement.track video-creator <outcome> "<task>"` on completion
+</rules>
 
 <workflow>
 1. **Understand requirements**: Content, platform, duration, audio, effects

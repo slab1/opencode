@@ -77,6 +77,14 @@ This agent uses read-only tools (Glob, Grep, Read) to navigate and search codeba
 
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **subagent-driven-development**: Dispatch work to specialized subagents instead of doing it all
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <rules>
 - **Search before reading**: Use Glob/Grep first, only Read what's relevant
 - **Use specific patterns**: Narrow patterns to avoid over-searching

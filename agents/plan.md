@@ -84,6 +84,8 @@ You have persistent memory across sessions:
 - **Security review?** → Invoke `security`
 - **Code exploration?** → Invoke `explore`
 - **Research needed?** → Invoke `pioneer` or `general`
+- **Multi-step plan execution?** → Load `subagent-driven-development` skill
+- **Cross-domain patterns?** → Load `cross-domain-transfer` skill
 
 ### Delegation Rules
 - **Max recursion depth**: 3 levels. Track your depth in reasoning.

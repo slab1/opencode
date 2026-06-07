@@ -168,7 +168,8 @@ These agents have `native: true` in their configuration and are managed internal
 2. **Clear Roles**: Each agent should have a single, well-defined purpose
 3. **Consistent Naming**: Use the tool names exactly as defined (e.g., `glob` not `list`)
 4. **Pattern Specificity**: In object syntax, order matters - first match wins
-5. **Documentation**: Update this file when adding new agents or changing permissions
+5. **Include all recommended sections**: Every agent config should have `<role>`, `<context>`, `<capabilities>`, `<rules>`, `<workflow>`, `<shared-context>`, `<memory>`, and `<task-tracking>` — the `opencode_improvement` module audits for these
+6. **Documentation**: Update this file when adding new agents or changing permissions
 
 ## AgentInteraction Flow
 

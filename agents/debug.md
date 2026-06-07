@@ -96,6 +96,8 @@ You have persistent memory across sessions:
 - **Need to verify a fix?** → Invoke `test`
 - **Need to trace a dependency?** → Invoke `explore`
 - **Need performance profiling?** → Invoke `explore` for queries, `general` for research
+- **Need systematic methodology?** → Load `debug-systematic-investigation` skill (RBIER pattern)
+- **Need safe file editing?** → Load `hash-anchored-edits` skill
 
 ### Evidence-Based Reporting
 - **Issue**: What is happening with concrete evidence (screenshots, logs, error messages)

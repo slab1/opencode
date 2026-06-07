@@ -2,9 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "provider": {},
   "model": "opencode/deepseek-v4-flash-free",
-  // 💡 TIP: Set small_model to a cheaper/faster model for simple operations
-  //    (grep, context extraction, simple rewrites) to reduce token costs.
-  //    Example: "small_model": "opencode/gpt-4o-mini"
   "small_model": "opencode/mimo-v2.5-free",
   "permission": {
     "bash": "allow",
@@ -18,17 +15,6 @@
     "todowrite": "allow",
     "webfetch": "allow",
     "websearch": "allow",
-    // ── Permission rules for meta-agent ──
-    // meta-agent needs: edit (for modifying agent .md files), bash (for improvement engine),
-    // task (delegating to review/test/explore), todowrite, webfetch, websearch
-    // ── Permission rules for media-agent and document-agent ──
-    // media-agent needs: read (for files), bash (for python processor), webfetch, websearch
-    // document-agent needs: read (for files), bash (for pdftotext/pandoc), webfetch, websearch
-    // These wildcard patterns match MCP tool names from configured servers:
-    //   "mcp_filesystem_*" → @modelcontextprotocol/server-filesystem tools
-    //   "mcp_go-docs-mcp_*" → go-docs-mcp tools  
-    //   "mcp_imagine-mcp_*" → imagine-mcp tools
-    //   "mcp_pdf-mcp_*" → pdf-mcp tools
     "mcp_filesystem_*": "allow",
     "mcp_go-docs-mcp_*": "allow",
     "mcp_imagine-mcp_*": "ask",
@@ -40,21 +26,14 @@
     "opencode-vibeguard",
     "opencode-cross-repo",
     "@franlol/opencode-md-table-formatter@latest",
-    // 🟡 DISABLED: native addon requires glibc libmvec symbols not available on musl
-    // "opencode-codebase-index",
     "oh-my-opencode-slim",
-    // 🧠 Memory plugin: auto-flushes context before compaction,
-    //    injects recent context into prompts, provides memory_search tool
     "opencode-memory-plugin"
   ],
   "mcp": {
-    // ── Existing Servers ──
-    // DISABLED: SUPABASE_ACCESS_TOKEN env var not set → 401 error
-    // To re-enable: set SUPABASE_ACCESS_TOKEN in environment and change enabled: true
     "supabase": {
       "type": "remote",
       "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
-      "enabled": false,
+      "enabled": true,
       "oauth": false,
       "headers": {
         "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
@@ -62,53 +41,65 @@
     },
     "context7": {
       "type": "local",
-      "command": ["npx", "-y", "@context7/mcp"],
+      "command": [
+        "npx",
+        "-y",
+        "@context7/mcp"
+      ],
       "enabled": true,
       "env": {}
     },
     "firecrawl": {
       "type": "local",
-      "command": ["/usr/local/bin/firecrawl-mcp"],
+      "command": [
+        "/usr/local/bin/firecrawl-mcp"
+      ],
       "enabled": true,
       "env": {
         "FIRECRAWL_API_KEY": "fc-fa44b144989b491fb29968f80107f8d0"
       }
     },
-    // ── Filesystem with Media Support ──
-    // Provides read_text_file, read_media_file (images/audio), write_file, search, etc.
-    // Uses globally installed binary (pre-installed via npm i -g @modelcontextprotocol/server-filesystem)
     "filesystem": {
       "type": "local",
-      "command": ["/usr/local/bin/mcp-server-filesystem"],
-      "args": ["/home/.config/opencode", "/public", "/data/user/0/com.foxdebug.acode/cache/opencode"],
+      "command": [
+        "/usr/local/bin/mcp-server-filesystem"
+      ],
+      "args": [
+        "/home/.config/opencode",
+        "/public",
+        "/data/user/0/com.foxdebug.acode/cache/opencode"
+      ],
       "enabled": true,
       "env": {}
     },
-    // ── Multi-Format Document Access ──
-    // go-docs-mcp: 13 tools across PDF, TXT, MD, CSV, DOCX, Images
-    // Tools: list_documents, read_document, search_document, extract_tables, 
-    //        extract_images, ocr_document, read_image, convert_to_markdown, etc.
-    // Falls back to pdftotext+poppler internally, with tesseract for scanned PDFs
     "go-docs-mcp": {
       "type": "local",
-      "command": ["npx", "-y", "github:drolosoft/go-docs-mcp"],
+      "command": [
+        "npx",
+        "-y",
+        "github:drolosoft/go-docs-mcp"
+      ],
       "enabled": true,
       "env": {}
     },
-    // ── Video & Image Generation (Higgsfield) ──
-    // 30+ models for video, image, and character generation
-    // Connects via OAuth — sign in with your Higgsfield account on first use
-    // Models include: Seedance 2.0, Sora 2, Veo, Kling, Flux 2, GPT Image 2, etc.
     "higgsfield": {
       "type": "remote",
       "url": "https://mcp.higgsfield.ai/mcp",
-      "enabled": true
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer hf_buo9MKYRyJdufHAuDD6GCv0Y9_NmFylQCV_vbLvsTiQTLfygA3ah6GiiUSG3ucZF",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
+        "Origin": "https://higgsfield.ai",
+        "Referer": "https://higgsfield.ai/"
+      }
     },
-    // ── Advanced PDF Processing ──
-    // pdf-mcp: hybrid search, OCR, table extraction, page rendering for vision models
     "pdf-mcp": {
       "type": "local",
-      "command": ["npx", "-y", "pdf-mcp"],
+      "command": [
+        "npx",
+        "-y",
+        "pdf-mcp"
+      ],
       "enabled": true,
       "env": {}
     }
@@ -116,11 +107,9 @@
   "tools": {
     "github-triage": false,
     "github-pr-search": false,
-    // Enable media processing tools
     "analyze_image": true,
     "transcribe_audio": true,
     "parse_document": true,
-    // Enable self-improvement tools (meta-agent)
     "audit_agents": true,
     "improve_agent": true,
     "track_performance": true

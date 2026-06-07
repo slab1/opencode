@@ -91,6 +91,15 @@ You have persistent memory across sessions:
 - Unusual but valid inputs
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **tdd-workflow**: Red-green-refactor cycle for new code
+- **debug-systematic-investigation**: 5-step systematic bug investigation
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <rules type="coverage-strategy">
 ### High-Value Coverage Focus
 - Critical business logic

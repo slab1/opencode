@@ -128,6 +128,11 @@ You have persistent memory across sessions:
 5. Implementation phases and milestones
 6. Performance and scalability considerations
 7. Testing strategy for the architecture
+
+### Skill-Aware Methodology
+- Load `cross-domain-transfer` skill to learn from existing architecture patterns
+- Load `metacognitive-tracking` skill to track which architectural decisions work
+- Load `subagent-driven-development` skill to break large architecture work into parallel subagent tasks
 </deliverables>
 
 <task-tracking>

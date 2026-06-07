@@ -68,6 +68,14 @@ The display module is at `/home/.config/opencode/opencode_display/`. Import via 
 
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <examples>
 ### Quick Start — Context Manager
 ```python
@@ -144,6 +152,15 @@ d2.stop()
 - **Password**: `opencode` (default)
 - Password stored in `/tmp/.opencode_vnc_pass`
 </vnc-connection>
+
+<rules>
+- **Use global singleton**: Call `ensure_display()` for shared sessions; use `Display() as d:` context manager for standalone tasks
+- **Check status**: Always verify `d.is_running` before launching headed applications
+- **Clean up**: Display instances auto-clean via `atexit` — never force-kill Xvfb without cleaning `/tmp/.X*-lock`
+- **Resolution first**: If apps appear tiny or cut off, increase resolution — `Display(resolution="1280x720x24")`
+- **Log outcomes**: Always call `python3 -m opencode_improvement.track display-agent <outcome> "<task>"` on completion
+- **Don't run headless commands**: Display-agent manages Xvfb, fluxbox, x11vnc — not for code build/test tasks
+</rules>
 
 <workflow>
 When asked to set up display/VNC:

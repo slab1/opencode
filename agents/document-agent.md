@@ -83,6 +83,15 @@ You have persistent memory across sessions:
 
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **documentation-skeleton**: README, CHANGELOG, ADR, RUNBOOK templates
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <workflow>
 When asked to process a document:
 
