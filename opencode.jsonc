@@ -19,7 +19,8 @@
     "mcp_go-docs-mcp_*": "allow",
     "mcp_imagine-mcp_*": "ask",
     "mcp_pdf-mcp_*": "allow",
-    "mcp_higgsfield_*": "allow"
+    "mcp_bulkpublish_*": "ask",
+    "mcp_trypost_*": "ask"
   },
   "plugin": [
     "opencode-memfs",
@@ -82,17 +83,6 @@
       "enabled": true,
       "env": {}
     },
-    "higgsfield": {
-      "type": "remote",
-      "url": "https://mcp.higgsfield.ai/mcp",
-      "enabled": true,
-      "headers": {
-        "Authorization": "Bearer hf_buo9MKYRyJdufHAuDD6GCv0Y9_NmFylQCV_vbLvsTiQTLfygA3ah6GiiUSG3ucZF",
-        "User-Agent": "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
-        "Origin": "https://higgsfield.ai",
-        "Referer": "https://higgsfield.ai/"
-      }
-    },
     "pdf-mcp": {
       "type": "local",
       "command": [
@@ -102,6 +92,28 @@
       ],
       "enabled": true,
       "env": {}
+    },
+    "bulkpublish": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@bulkpublish/mcp-server"
+      ],
+      "enabled": false,
+      "env": {
+        "BULKPUBLISH_API_KEY": "{env:BULKPUBLISH_API_KEY}"
+      },
+      "description": "11-platform social media scheduling (enable after getting API key from app.bulkpublish.com)"
+    },
+    "trypost": {
+      "type": "remote",
+      "url": "https://app.trypost.it/mcp/trypost",
+      "enabled": false,
+      "headers": {
+        "Authorization": "Bearer {env:TRYPOST_API_KEY}"
+      },
+      "description": "Self-hosted social media scheduler (enable after self-hosting or cloud signup)"
     }
   },
   "tools": {
@@ -112,6 +124,8 @@
     "parse_document": true,
     "audit_agents": true,
     "improve_agent": true,
-    "track_performance": true
+    "track_performance": true,
+    "free_image_gen": true,
+    "free_video_gen": true
   }
 }
