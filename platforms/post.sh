@@ -299,8 +299,9 @@ send_to_backend() {
             ;;
     esac
 
-    # Log result
-    echo "{\"id\":\"$POST_ID\",\"platform\":\"$platform\",\"backend\":\"$BACKEND\",\"timestamp\":\"$TIMESTAMP\",\"response\":\"$(echo "$response" | head -c 200)\"}" >> "$POSTS_LOG"
+    # Log result (structured)
+    RESPONSE_OK=$(echo "$response" | grep -qE "(success|posted|scheduled|id)" && echo true || echo false)
+    echo "{\"id\":\"$POST_ID\",\"platform\":\"$platform\",\"backend\":\"$BACKEND\",\"timestamp\":\"$TIMESTAMP\",\"success\":$RESPONSE_OK,\"text_length\":${#TEXT},\"has_media\":$([ -n "$MEDIA" ] && echo true || echo false),\"has_url\":$([ -n "$URL" ] && echo true || echo false),\"duration_s\":$SECONDS,\"response\":\"$(echo "$response" | head -c 200)\"}" >> "$POSTS_LOG"
 
     if echo "$response" | grep -qE "(success|posted|scheduled|id)"; then
         echo -e "${GREEN}✓${NC} $platform: Posted"
@@ -352,6 +353,7 @@ fi
 # ─────────────────────────────────────────────────────────
 # Post to all platforms
 # ─────────────────────────────────────────────────────────
+SECONDS=0
 SUCCESS=0
 FAILED=0
 
@@ -428,8 +430,8 @@ EOF
                 PLATFORM_OK=false
             fi
         fi
-        # Log the post
-        echo "{\"id\":\"$POST_ID\",\"platform\":\"$platform\",\"method\":\"adapter\",\"timestamp\":\"$TIMESTAMP\"}" >> "$POSTS_LOG"
+        # Log the post (structured)
+        echo "{\"id\":\"$POST_ID\",\"platform\":\"$platform\",\"method\":\"adapter\",\"timestamp\":\"$TIMESTAMP\",\"success\":$([ "$PLATFORM_OK" = true ] && echo true || echo false),\"text_length\":${#TEXT},\"has_media\":$([ -n "$MEDIA" ] && echo true || echo false),\"duration_s\":$SECONDS}" >> "$POSTS_LOG"
     else
         payload=$(build_payload "$platform")
         if send_to_backend "$platform" "$payload"; then

@@ -1,0 +1,242 @@
+{
+  "background-subagent/SKILL.md": {
+    "hash": "0a073a786f1c6cefd4cbd27154f870a7",
+    "modified": "2026-06-10T19:21:38.152355+00:00",
+    "size": 3819
+  },
+  "code-execution-mcp/SKILL.md": {
+    "hash": "22036c014b6e46de8daa23ccbcc56dc8",
+    "modified": "2026-06-10T19:21:38.156355+00:00",
+    "size": 5861
+  },
+  "cross-domain-transfer/SKILL.md": {
+    "hash": "996b6b5e5f149cc14a84db424a0f7333",
+    "modified": "2026-06-10T19:21:38.160355+00:00",
+    "size": 4100
+  },
+  "debug-systematic-investigation/SKILL.md": {
+    "hash": "28cf9fb29bdd5bc54c282b93f3825c6a",
+    "modified": "2026-06-10T19:21:38.160355+00:00",
+    "size": 3864
+  },
+  "documentation-skeleton/SKILL.md": {
+    "hash": "47e50f079c4f84fd6e63b0e52a02c994",
+    "modified": "2026-06-10T19:21:38.164355+00:00",
+    "size": 4040
+  },
+  "effect/SKILL.md": {
+    "hash": "8ca748ae60e8db429922ae761850f321",
+    "modified": "2026-06-08T14:39:55.020238+00:00",
+    "size": 2794
+  },
+  "error-recovery-protocol/SKILL.md": {
+    "hash": "efdf2912215d1dad353ddb87efe1259d",
+    "modified": "2026-06-10T19:21:38.172355+00:00",
+    "size": 4585
+  },
+  "git-commit-hygiene/SKILL.md": {
+    "hash": "bc9cbd980cbb555fff2874ffc7c0c99d",
+    "modified": "2026-06-10T19:21:38.176355+00:00",
+    "size": 3272
+  },
+  "hash-anchored-edits/SKILL.md": {
+    "hash": "eced11c7649656a156bcbb2a4665a2f1",
+    "modified": "2026-06-10T19:21:38.180355+00:00",
+    "size": 2979
+  },
+  "hash-validate-edit/SKILL.md": {
+    "hash": "ebc421464b3012b166bde4eaf7dc8cff",
+    "modified": "2026-06-10T19:21:38.184355+00:00",
+    "size": 3147
+  },
+  "mcp-demand-activation/SKILL.md": {
+    "hash": "5305d69bb5c608e9a53b8b0398cf7559",
+    "modified": "2026-06-10T19:21:38.188355+00:00",
+    "size": 3233
+  },
+  "metacognitive-tracking/SKILL.md": {
+    "hash": "949eec83bd556095c7e6515f0b694d81",
+    "modified": "2026-06-10T19:21:38.192355+00:00",
+    "size": 4403
+  },
+  "moviepy-2-patterns/SKILL.md": {
+    "hash": "8e10bb53e22f80d49d27b40e49d4d58e",
+    "modified": "2026-06-10T19:21:38.196355+00:00",
+    "size": 5612
+  },
+  "multi-agent-orchestration/SKILL.md": {
+    "hash": "2bb7931d0e373e712f19359b3db97a0e",
+    "modified": "2026-06-10T19:21:38.200355+00:00",
+    "size": 5333
+  },
+  "pdf-extraction-strategies/SKILL.md": {
+    "hash": "42b1b43eabee0b68a68c27e8ed1dea36",
+    "modified": "2026-06-10T19:21:38.204355+00:00",
+    "size": 6266
+  },
+  "playwright-patterns/SKILL.md": {
+    "hash": "68600253dcff23358c3e61dbd44e37cd",
+    "modified": "2026-06-10T19:21:38.208355+00:00",
+    "size": 5615
+  },
+  "refactor-safe/SKILL.md": {
+    "hash": "16daff398b719730d05f53c84b969290",
+    "modified": "2026-06-10T19:21:38.212355+00:00",
+    "size": 5374
+  },
+  "security-audit/SKILL.md": {
+    "hash": "f75e5a0ff7a457b981cb5cd3aed4d0ec",
+    "modified": "2026-06-10T19:21:38.216355+00:00",
+    "size": 4826
+  },
+  "security-threat-model/SKILL.md": {
+    "hash": "2ec6b6e229d4ad7f793c0dc72a94e7db",
+    "modified": "2026-06-10T19:21:38.220355+00:00",
+    "size": 4430
+  },
+  "skill-recommender/SKILL.md": {
+    "hash": "72800f6f127edc55dccca2660103ee2f",
+    "modified": "2026-06-10T19:21:38.228355+00:00",
+    "size": 4342
+  },
+  "skills/background-subagent/SKILL.md": {
+    "hash": "0a073a786f1c6cefd4cbd27154f870a7",
+    "modified": "2026-06-08T14:50:55.610466+00:00",
+    "size": 3819
+  },
+  "skills/code-execution-mcp/SKILL.md": {
+    "hash": "22036c014b6e46de8daa23ccbcc56dc8",
+    "modified": "2026-06-08T14:50:55.614466+00:00",
+    "size": 5861
+  },
+  "skills/content-repurposing-skill/SKILL.md": {
+    "hash": "5a84adeec60dd8f3822bdb05fb180919",
+    "modified": "2026-06-10T18:20:38.028598+00:00",
+    "size": 12157
+  },
+  "skills/cross-domain-transfer/SKILL.md": {
+    "hash": "996b6b5e5f149cc14a84db424a0f7333",
+    "modified": "2026-06-08T14:50:55.622466+00:00",
+    "size": 4100
+  },
+  "skills/debug-systematic-investigation/SKILL.md": {
+    "hash": "28cf9fb29bdd5bc54c282b93f3825c6a",
+    "modified": "2026-06-08T14:50:55.626466+00:00",
+    "size": 3864
+  },
+  "skills/documentation-skeleton/SKILL.md": {
+    "hash": "47e50f079c4f84fd6e63b0e52a02c994",
+    "modified": "2026-06-08T14:50:55.630466+00:00",
+    "size": 4040
+  },
+  "skills/error-recovery-protocol/SKILL.md": {
+    "hash": "efdf2912215d1dad353ddb87efe1259d",
+    "modified": "2026-06-08T14:50:55.638466+00:00",
+    "size": 4585
+  },
+  "skills/git-commit-hygiene/SKILL.md": {
+    "hash": "bc9cbd980cbb555fff2874ffc7c0c99d",
+    "modified": "2026-06-08T14:50:55.646466+00:00",
+    "size": 3272
+  },
+  "skills/hash-anchored-edits/SKILL.md": {
+    "hash": "eced11c7649656a156bcbb2a4665a2f1",
+    "modified": "2026-06-08T14:50:55.654466+00:00",
+    "size": 2979
+  },
+  "skills/hash-validate-edit/SKILL.md": {
+    "hash": "ebc421464b3012b166bde4eaf7dc8cff",
+    "modified": "2026-06-08T14:50:55.662466+00:00",
+    "size": 3147
+  },
+  "skills/instagram-carousel-skill/SKILL.md": {
+    "hash": "0f72dc86aedb6899157903d34222435d",
+    "modified": "2026-06-10T18:20:13.200598+00:00",
+    "size": 9786
+  },
+  "skills/mcp-demand-activation/SKILL.md": {
+    "hash": "5305d69bb5c608e9a53b8b0398cf7559",
+    "modified": "2026-06-08T14:50:55.666466+00:00",
+    "size": 3233
+  },
+  "skills/metacognitive-tracking/SKILL.md": {
+    "hash": "949eec83bd556095c7e6515f0b694d81",
+    "modified": "2026-06-08T14:50:55.674466+00:00",
+    "size": 4403
+  },
+  "skills/moviepy-2-patterns/SKILL.md": {
+    "hash": "8e10bb53e22f80d49d27b40e49d4d58e",
+    "modified": "2026-06-08T14:50:55.678466+00:00",
+    "size": 5612
+  },
+  "skills/multi-agent-orchestration/SKILL.md": {
+    "hash": "2bb7931d0e373e712f19359b3db97a0e",
+    "modified": "2026-06-08T14:50:55.682466+00:00",
+    "size": 5333
+  },
+  "skills/pdf-extraction-strategies/SKILL.md": {
+    "hash": "42b1b43eabee0b68a68c27e8ed1dea36",
+    "modified": "2026-06-08T14:50:55.690466+00:00",
+    "size": 6266
+  },
+  "skills/playwright-patterns/SKILL.md": {
+    "hash": "68600253dcff23358c3e61dbd44e37cd",
+    "modified": "2026-06-08T14:50:55.698466+00:00",
+    "size": 5615
+  },
+  "skills/refactor-safe/SKILL.md": {
+    "hash": "16daff398b719730d05f53c84b969290",
+    "modified": "2026-06-08T14:50:55.706466+00:00",
+    "size": 5374
+  },
+  "skills/security-audit/SKILL.md": {
+    "hash": "f75e5a0ff7a457b981cb5cd3aed4d0ec",
+    "modified": "2026-06-08T14:50:55.714466+00:00",
+    "size": 4826
+  },
+  "skills/security-threat-model/SKILL.md": {
+    "hash": "2ec6b6e229d4ad7f793c0dc72a94e7db",
+    "modified": "2026-06-08T14:50:55.718466+00:00",
+    "size": 4430
+  },
+  "skills/skill-recommender/SKILL.md": {
+    "hash": "72800f6f127edc55dccca2660103ee2f",
+    "modified": "2026-06-08T14:50:55.726466+00:00",
+    "size": 4342
+  },
+  "skills/subagent-driven-development/SKILL.md": {
+    "hash": "626aedc173be6856358631c6a0e0d69a",
+    "modified": "2026-06-08T14:50:55.730466+00:00",
+    "size": 3822
+  },
+  "skills/system-audit/SKILL.md": {
+    "hash": "8b63dcebb8e7b8e757d248bba3ddde28",
+    "modified": "2026-06-08T14:50:55.738466+00:00",
+    "size": 2325
+  },
+  "skills/tdd-workflow/SKILL.md": {
+    "hash": "8a0240d00e1e582023fd1f3785982640",
+    "modified": "2026-06-08T14:50:55.742466+00:00",
+    "size": 2545
+  },
+  "skills/twitter-thread-skill/SKILL.md": {
+    "hash": "4808e92bbfbc726d7417a3fa148097b1",
+    "modified": "2026-06-10T18:19:52.132598+00:00",
+    "size": 8523
+  },
+  "subagent-driven-development/SKILL.md": {
+    "hash": "626aedc173be6856358631c6a0e0d69a",
+    "modified": "2026-06-10T19:21:38.236355+00:00",
+    "size": 3822
+  },
+  "system-audit/SKILL.md": {
+    "hash": "8b63dcebb8e7b8e757d248bba3ddde28",
+    "modified": "2026-06-10T19:21:38.240355+00:00",
+    "size": 2325
+  },
+  "tdd-workflow/SKILL.md": {
+    "hash": "8a0240d00e1e582023fd1f3785982640",
+    "modified": "2026-06-10T19:21:38.252355+00:00",
+    "size": 2545
+  }
+}

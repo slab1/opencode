@@ -19,10 +19,83 @@ import argparse
 import urllib.request
 import urllib.error
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 PLATFORMS_DIR = Path.home() / ".config" / "opencode" / "platforms"
+TOKENS_DIR = PLATFORMS_DIR / "tokens"
+POOL_FILE = TOKENS_DIR / "pool.json"
 API_ENDPOINT = os.environ.get("AI_API_ENDPOINT", "http://localhost:7777/v1")
+
+# ─── Credential Pool ───
+def load_pool() -> dict:
+    """Load credential pool from disk."""
+    if POOL_FILE.exists():
+        return json.loads(POOL_FILE.read_text())
+    return {
+        "version": 1,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "providers": {
+            "ai_api": [
+                {
+                    "id": "local",
+                    "label": "Local AI",
+                    "base_url": API_ENDPOINT,
+                    "priority": 0,
+                    "last_status": None,
+                    "last_error_at": None,
+                    "unhealthy_until": None,
+                    "request_count": 0,
+                    "error_count": 0,
+                }
+            ]
+        },
+        "settings": {
+            "unhealthy_timeout_seconds": 60,
+            "max_retries": 2,
+            "request_timeout": 300,
+        },
+    }
+
+
+def save_pool(pool: dict):
+    """Save credential pool state (health tracking) to disk."""
+    pool["updated_at"] = datetime.now(timezone.utc).isoformat()
+    POOL_FILE.write_text(json.dumps(pool, indent=2))
+
+
+def get_healthy_endpoints(pool: dict) -> list:
+    """Return sorted list of healthy endpoints (by priority)."""
+    now = datetime.now(timezone.utc).isoformat()
+    healthy = []
+    for ep in pool["providers"].get("ai_api", []):
+        if ep.get("unhealthy_until") and ep["unhealthy_until"] > now:
+            continue  # Skip unhealthy endpoints
+        healthy.append(ep)
+    return sorted(healthy, key=lambda e: e.get("priority", 999))
+
+
+def mark_unhealthy(pool: dict, ep_id: str):
+    """Mark an endpoint as unhealthy for the configured timeout."""
+    timeout = pool["settings"].get("unhealthy_timeout_seconds", 60)
+    for ep in pool["providers"].get("ai_api", []):
+        if ep["id"] == ep_id:
+            ep["error_count"] = ep.get("error_count", 0) + 1
+            ep["last_error_at"] = datetime.now(timezone.utc).isoformat()
+            unhealthy_until = (datetime.now(timezone.utc) + timedelta(seconds=timeout)).isoformat()
+            ep["unhealthy_until"] = unhealthy_until
+            save_pool(pool)
+            return
+
+
+def mark_healthy(pool: dict, ep_id: str):
+    """Mark an endpoint as healthy after successful request."""
+    for ep in pool["providers"].get("ai_api", []):
+        if ep["id"] == ep_id:
+            ep["last_status"] = "ok"
+            ep["unhealthy_until"] = None
+            ep["request_count"] = ep.get("request_count", 0) + 1
+            save_pool(pool)
+            return
 
 # ─── Colors ───
 class C:
@@ -52,29 +125,70 @@ VIDEO_MODELS = {
 }
 
 
-def api_request(endpoint: str, payload: dict) -> dict:
-    """Make a request to the AI API at localhost:7777."""
-    url = f"{API_ENDPOINT}/{endpoint.lstrip('/')}"
-    try:
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            url,
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with urllib.request.urlopen(req, timeout=300) as resp:
-            return json.loads(resp.read())
-    except urllib.error.URLError as e:
-        if isinstance(e.reason, ConnectionRefusedError):
-            print(f"{C.R}Error: AI API not running at {API_ENDPOINT}{C.N}")
-            print(f"{C.Y}Start it with: ~/.config/opencode/scripts/setup-free-models.sh{C.N}")
-            sys.exit(1)
-        print(f"{C.R}API Error: {e}{C.N}")
+def api_request(endpoint: str, payload: dict, pool_provider: str = "ai_api") -> dict:
+    """Make a request with credential pool failover.
+
+    Tries endpoints in priority order, skipping unhealthy ones.
+    Marks endpoints unhealthy on failure, retries next endpoint.
+    """
+    pool = load_pool()
+    healthy = get_healthy_endpoints(pool)
+    max_retries = pool["settings"].get("max_retries", 2)
+    last_error = None
+
+    if not healthy:
+        print(f"{C.R}Error: No healthy AI API endpoints available{C.N}")
+        print(f"{C.Y}Start one with: ~/.config/opencode/scripts/setup-free-models.sh{C.N}")
+        print(f"{C.Y}Or add endpoints to: {POOL_FILE}{C.N}")
         sys.exit(1)
-    except json.JSONDecodeError:
-        print(f"{C.R}Error: Invalid JSON response from API{C.N}")
-        sys.exit(1)
+
+    for attempt in range(max_retries + 1):
+        for ep in healthy:
+            base_url = ep.get("base_url", API_ENDPOINT)
+            url = f"{base_url}/{endpoint.lstrip('/')}"
+            try:
+                data = json.dumps(payload).encode("utf-8")
+                req = urllib.request.Request(
+                    url,
+                    data=data,
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req, timeout=pool["settings"].get("request_timeout", 300)) as resp:
+                    result = json.loads(resp.read())
+                mark_healthy(pool, ep["id"])
+                return result
+            except urllib.error.URLError as e:
+                last_error = e
+                if isinstance(e.reason, ConnectionRefusedError):
+                    print(f"{C.Y}⚠ Endpoint '{ep['id']}' not reachable ({ep['base_url']}){C.N}")
+                else:
+                    print(f"{C.Y}⚠ Endpoint '{ep['id']}' error: {e}{C.N}")
+                mark_unhealthy(pool, ep["id"])
+                continue
+            except json.JSONDecodeError as e:
+                last_error = e
+                print(f"{C.Y}⚠ Endpoint '{ep['id']}' returned invalid JSON{C.N}")
+                mark_unhealthy(pool, ep["id"])
+                continue
+            except Exception as e:
+                last_error = e
+                print(f"{C.Y}⚠ Endpoint '{ep['id']}' exception: {e}{C.N}")
+                mark_unhealthy(pool, ep["id"])
+                continue
+
+        # All endpoints failed this attempt — reload pool for fresh health data
+        pool = load_pool()
+        healthy = get_healthy_endpoints(pool)
+        if not healthy:
+            break
+
+    print(f"{C.R}Error: All AI API endpoints exhausted{C.N}")
+    print(f"{C.Y}Start one with: ~/.config/opencode/scripts/setup-free-models.sh{C.N}")
+    print(f"{C.Y}Or add endpoints to: {POOL_FILE}{C.N}")
+    if last_error:
+        print(f"  Last error: {last_error}")
+    sys.exit(1)
 
 
 def generate_image(prompt: str, output: str, model: str = "z-image-turbo",
@@ -391,16 +505,31 @@ def main():
     elif args.cmd == "models":
         list_models()
     elif args.cmd == "test":
-        try:
-            req = urllib.request.Request(f"{args.endpoint}/models")
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                data = json.loads(resp.read())
-                models = data.get("data", [])
-                print(f"{C.G}✓ API connected at {args.endpoint}{C.N}")
-                print(f"{C.B}Available models: {len(models)}{C.N}")
-        except Exception as e:
-            print(f"{C.R}✗ API not reachable at {args.endpoint}{C.N}")
-            print(f"  {e}")
+        print(f"{C.CY}═══ Credential Pool Health ═══{C.N}")
+        pool = load_pool()
+        healthy = get_healthy_endpoints(pool)
+        for ep in pool["providers"].get("ai_api", []):
+            status = "🟢 healthy" if ep in healthy else "🔴 unhealthy"
+            if ep.get("unhealthy_until"):
+                status += f" (until {ep['unhealthy_until']})"
+            print(f"  {status}  {ep.get('id','?')}:{ep.get('base_url','?')}")
+            print(f"         requests={ep.get('request_count',0)}  errors={ep.get('error_count',0)}")
+
+        print(f"\n{C.CY}═══ Testing Endpoints ═══{C.N}")
+        for ep in healthy:
+            try:
+                req = urllib.request.Request(f"{ep['base_url']}/models")
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    data = json.loads(resp.read())
+                    models = data.get("data", [])
+                    print(f"  {C.G}✓{C.N} {ep['id']}: connected ({len(models)} models)")
+            except Exception as e:
+                print(f"  {C.R}✗{C.N} {ep['id']}: {e}")
+                mark_unhealthy(pool, ep["id"])
+
+        if not healthy:
+            print(f"{C.R}✗ No healthy endpoints{C.N}")
+            print(f"{C.Y}Start one with: ~/.config/opencode/scripts/setup-free-models.sh{C.N}")
             sys.exit(1)
 
 
