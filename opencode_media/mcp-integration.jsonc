@@ -1,0 +1,76 @@
+{
+  // ── OpenCode MCP Integration for Multimodal File Processing ──
+  //
+  // Add these MCP server configurations to your opencode.jsonc
+  // to enable agents with image, audio, video, and document processing.
+  //
+  // Each server enables specific capabilities for the agent tools.
+  
+  "mcp": {
+    // ── Document Processing ─────────────────────────────────────
+    // go-docs-mcp: Multi-format document access (PDF, DOCX, CSV, TXT, MD, Images)
+    // 13 tools: read, search, OCR, extract tables, extract images, convert
+    "go-docs-mcp": {
+      "type": "local",
+      "command": ["go-docs-mcp"],
+      "args": [],
+      "enabled": true,
+      "env": {
+        "DOCS_MCP_DIR": "/path/to/your/documents"
+      }
+    },
+
+    // pdf-mcp: Advanced PDF processing with hybrid search, OCR, table extraction
+    "pdf-mcp": {
+      "type": "local",
+      "command": ["uvx", "pdf-mcp"],
+      "enabled": false,  // Enable when needed
+      "env": {}
+    },
+
+    // ── Image & Video Understanding ─────────────────────────────
+    // imagine-mcp: Image/video understanding + generation across Gemini/OpenAI/Grok
+    // 3 tools: understand, generate, config
+    "imagine-mcp": {
+      "type": "local",
+      "command": ["uvx", "imagine-mcp"],
+      "enabled": false,  // Requires API keys
+      "env": {
+        // At least one of these:
+        "GEMINI_API_KEY": "",
+        "OPENAI_API_KEY": "",
+        "GROK_API_KEY": ""
+      }
+    },
+
+    // ── Creative Media Generation & Processing ──────────────────
+    // artificer-mcp: Full media pipeline (image gen, video gen, audio, ImageMagick, FFmpeg)
+    "artificer-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "artificer-mcp"],
+      "enabled": false,  // Requires system deps + API keys
+      "env": {
+        "GOOGLE_API_KEY": ""
+      }
+    },
+
+    // ── OCR / Image Text Extraction ─────────────────────────────
+    // PaddleOCR MCP: OCR for images and PDFs with layout analysis
+    "paddleocr-mcp": {
+      "type": "local",
+      "command": ["uvx", "paddleocr-mcp", "--pipeline", "PP-StructureV3"],
+      "enabled": false,
+      "env": {}
+    },
+
+    // ── Filesystem with Media Support ───────────────────────────
+    // Filesystem MCP: Read/write files, including read_media_file for images/audio
+    "@modelcontextprotocol/server-filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem"],
+      "args": ["/path/to/allowed/directory"],
+      "enabled": false,
+      "env": {}
+    }
+  }
+}

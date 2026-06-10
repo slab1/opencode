@@ -1,0 +1,27 @@
+{
+  "id": "com.opencode.acode",
+  "name": "OpenCode AI",
+  "version": "3.2.9",
+  "description": "AI-powered coding assistant for Acode. Full-featured: response capture, diff apply, agent selection, settings, chat panel. Auto-starts server+CORS-proxy via terminal.",
+  "author": {
+    "name": "OpenCode",
+    "email": "opencode@example.com",
+    "url": "https://github.com/slab1/opencode"
+  },
+  "main": "main.js",
+  "readme": "README.md",
+  "icon": "icon.png",
+  "files": ["main.js", "icon.png", "README.md", "scripts/cors-proxy.js"],
+  "minAcodeVersion": "1.12.0",
+  "minVersionCode": 290,
+  "price": 0,
+  "categories": ["ai", "developer-tools"],
+  "keywords": ["ai", "copilot", "code-assistant", "open-code", "opencode"],
+  "changelogs": "changelogs.md",
+  "homepage": "https://github.com/slab1/opencode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slab1/opencode"
+  },
+  "license": "MIT"
+}
