@@ -1,0 +1,129 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/mimo-v2.5-free",
+  "permission": {
+    "bash": "allow",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "edit": {
+      "packages/opencode/migration/*": "ask",
+      "*": "allow"
+    },
+    "todowrite": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "mcp_filesystem_*": "allow",
+    "mcp_go-docs-mcp_*": "allow",
+    "mcp_imagine-mcp_*": "ask",
+    "mcp_pdf-mcp_*": "allow",
+    "mcp_bulkpublish_*": "ask",
+    "mcp_trypost_*": "ask"
+  },
+  "plugin": [
+    "opencode-memfs",
+    "opencode-vibeguard",
+    "opencode-cross-repo",
+    "@franlol/opencode-md-table-formatter@latest",
+    "oh-my-opencode-slim",
+    "opencode-memory-plugin"
+  ],
+  "mcp": {
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
+      }
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@context7/mcp"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": [
+        "/usr/local/bin/firecrawl-mcp"
+      ],
+      "enabled": true,
+      "env": {
+        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
+      }
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "/usr/local/bin/mcp-server-filesystem"
+      ],
+      "args": [
+        "/root/.config/opencode",
+        "/root/projects"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "go-docs-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "github:drolosoft/go-docs-mcp"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "pdf-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "pdf-mcp"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "bulkpublish": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@bulkpublish/mcp-server"
+      ],
+      "enabled": false,
+      "env": {
+        "BULKPUBLISH_API_KEY": "{env:BULKPUBLISH_API_KEY}"
+      },
+      "description": "11-platform social media scheduling (enable after getting API key from app.bulkpublish.com)"
+    },
+    "trypost": {
+      "type": "remote",
+      "url": "https://app.trypost.it/mcp/trypost",
+      "enabled": false,
+      "headers": {
+        "Authorization": "Bearer {env:TRYPOST_API_KEY}"
+      },
+      "description": "Self-hosted social media scheduler (enable after self-hosting or cloud signup)"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false,
+    "analyze_image": true,
+    "transcribe_audio": true,
+    "parse_document": true,
+    "audit_agents": true,
+    "improve_agent": true,
+    "track_performance": true,
+    "free_image_gen": true,
+    "free_video_gen": true
+  }
+}

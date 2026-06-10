@@ -1,0 +1,397 @@
+{
+  "code_review": {
+    "keywords": [
+      "review",
+      "audit code",
+      "check quality",
+      "lint",
+      "best practice"
+    ],
+    "skills": [
+      "security-audit",
+      "debug-systematic-investigation",
+      "git-commit-hygiene"
+    ],
+    "primary_agent": "review"
+  },
+  "build_feature": {
+    "keywords": [
+      "implement",
+      "build",
+      "add feature",
+      "create",
+      "code",
+      "fix bug"
+    ],
+    "skills": [
+      "hash-anchored-edits",
+      "hash-validate-edit",
+      "tdd-workflow",
+      "git-commit-hygiene",
+      "error-recovery-protocol"
+    ],
+    "primary_agent": "build"
+  },
+  "fix_bug": {
+    "keywords": [
+      "bug",
+      "broken",
+      "doesn't work",
+      "error",
+      "crash",
+      "fail"
+    ],
+    "skills": [
+      "debug-systematic-investigation",
+      "error-recovery-protocol",
+      "hash-anchored-edits"
+    ],
+    "primary_agent": "debug"
+  },
+  "refactor": {
+    "keywords": [
+      "refactor",
+      "clean up",
+      "reorganize",
+      "simplify",
+      "restructure"
+    ],
+    "skills": [
+      "refactor-safe",
+      "hash-anchored-edits",
+      "hash-validate-edit",
+      "tdd-workflow"
+    ],
+    "primary_agent": "refactor"
+  },
+  "write_tests": {
+    "keywords": [
+      "test",
+      "tdd",
+      "coverage",
+      "regression test"
+    ],
+    "skills": [
+      "tdd-workflow",
+      "debug-systematic-investigation"
+    ],
+    "primary_agent": "test"
+  },
+  "research_tech": {
+    "keywords": [
+      "research",
+      "investigate",
+      "explore tech",
+      "compare",
+      "trend",
+      "new tool"
+    ],
+    "skills": [
+      "cross-domain-transfer",
+      "documentation-skeleton"
+    ],
+    "primary_agent": "pioneer"
+  },
+  "design_system": {
+    "keywords": [
+      "design",
+      "architecture",
+      "plan",
+      "decide",
+      "system design"
+    ],
+    "skills": [
+      "subagent-driven-development",
+      "cross-domain-transfer",
+      "security-threat-model",
+      "documentation-skeleton"
+    ],
+    "primary_agent": "architect"
+  },
+  "write_docs": {
+    "keywords": [
+      "document",
+      "readme",
+      "changelog",
+      "guide",
+      "tutorial",
+      "adr"
+    ],
+    "skills": [
+      "documentation-skeleton"
+    ],
+    "primary_agent": "docs"
+  },
+  "security_review": {
+    "keywords": [
+      "security",
+      "vulnerability",
+      "threat",
+      "cve",
+      "exploit",
+      "auth"
+    ],
+    "skills": [
+      "security-audit",
+      "security-threat-model"
+    ],
+    "primary_agent": "security"
+  },
+  "process_video": {
+    "keywords": [
+      "video",
+      "moviepy",
+      "render",
+      "animation",
+      "ffmpeg",
+      "composite"
+    ],
+    "skills": [
+      "mcp-demand-activation",
+      "error-recovery-protocol"
+    ],
+    "primary_agent": "video-creator"
+  },
+  "process_image": {
+    "keywords": [
+      "image",
+      "picture",
+      "photo",
+      "vision",
+      "ocr"
+    ],
+    "skills": [
+      "mcp-demand-activation",
+      "error-recovery-protocol"
+    ],
+    "primary_agent": "media-agent"
+  },
+  "process_audio": {
+    "keywords": [
+      "audio",
+      "transcribe",
+      "speech",
+      "whisper",
+      "mp3",
+      "wav"
+    ],
+    "skills": [
+      "mcp-demand-activation",
+      "error-recovery-protocol"
+    ],
+    "primary_agent": "media-agent"
+  },
+  "process_document": {
+    "keywords": [
+      "pdf",
+      "docx",
+      "spreadsheet",
+      "document parse",
+      "extract text"
+    ],
+    "skills": [
+      "mcp-demand-activation",
+      "documentation-skeleton",
+      "error-recovery-protocol"
+    ],
+    "primary_agent": "document-agent"
+  },
+  "browse_web": {
+    "keywords": [
+      "browser",
+      "scrape",
+      "playwright",
+      "click",
+      "form",
+      "navigate",
+      "book"
+    ],
+    "skills": [
+      "mcp-demand-activation",
+      "error-recovery-protocol"
+    ],
+    "primary_agent": "web-browser"
+  },
+  "explore_code": {
+    "keywords": [
+      "find file",
+      "search code",
+      "where is",
+      "grep",
+      "locate"
+    ],
+    "skills": [
+      "subagent-driven-development"
+    ],
+    "primary_agent": "explore"
+  },
+  "self_improve": {
+    "keywords": [
+      "improve agent",
+      "audit system",
+      "evolve",
+      "self-improve",
+      "meta"
+    ],
+    "skills": [
+      "metacognitive-tracking",
+      "system-audit",
+      "error-recovery-protocol",
+      "documentation-skeleton"
+    ],
+    "primary_agent": "meta-agent"
+  },
+  "long_task": {
+    "keywords": [
+      "long running",
+      "background",
+      "parallel",
+      "scheduled",
+      "cron"
+    ],
+    "skills": [
+      "background-subagent",
+      "mcp-demand-activation"
+    ],
+    "primary_agent": "orchestrator"
+  },
+  "orchestrate": {
+    "keywords": [
+      "coordinate",
+      "multiple agents",
+      "dispatch",
+      "orchestrate",
+      "workflow"
+    ],
+    "skills": [
+      "multi-agent-orchestration",
+      "subagent-driven-development",
+      "background-subagent"
+    ],
+    "primary_agent": "orchestrator"
+  },
+  "git_commit": {
+    "keywords": [
+      "commit",
+      "git",
+      "pr",
+      "merge",
+      "branch"
+    ],
+    "skills": [
+      "git-commit-hygiene"
+    ],
+    "primary_agent": "build"
+  },
+  "mcp_work": {
+    "keywords": [
+      "mcp",
+      "model context protocol",
+      "tool call"
+    ],
+    "skills": [
+      "code-execution-mcp",
+      "mcp-demand-activation"
+    ],
+    "primary_agent": "general"
+  },
+  "deploy_release": {
+    "keywords": [
+      "deploy",
+      "release",
+      "ship",
+      "publish",
+      "docker",
+      "kubernetes",
+      "ci/cd",
+      "pipeline"
+    ],
+    "skills": [
+      "git-commit-hygiene",
+      "error-recovery-protocol",
+      "security-audit"
+    ],
+    "primary_agent": "build"
+  },
+  "performance": {
+    "keywords": [
+      "slow",
+      "performance",
+      "optimize",
+      "profile",
+      "memory leak",
+      "bottleneck"
+    ],
+    "skills": [
+      "debug-systematic-investigation",
+      "refactor-safe"
+    ],
+    "primary_agent": "refactor"
+  },
+  "data_analysis": {
+    "keywords": [
+      "analyze data",
+      "csv",
+      "dataframe",
+      "pandas",
+      "statistics",
+      "metrics",
+      "dashboard"
+    ],
+    "skills": [
+      "code-execution-mcp",
+      "documentation-skeleton"
+    ],
+    "primary_agent": "general"
+  },
+  "ai_ml": {
+    "keywords": [
+      "ai",
+      "ml",
+      "model",
+      "train",
+      "fine-tune",
+      "llm",
+      "prompt",
+      "embedding"
+    ],
+    "skills": [
+      "code-execution-mcp",
+      "cross-domain-transfer",
+      "documentation-skeleton"
+    ],
+    "primary_agent": "pioneer"
+  },
+  "config_setup": {
+    "keywords": [
+      "setup",
+      "configure",
+      "install",
+      "bootstrap",
+      "initialize",
+      "scaffold"
+    ],
+    "skills": [
+      "error-recovery-protocol",
+      "documentation-skeleton"
+    ],
+    "primary_agent": "build"
+  },
+  "monitor_observe": {
+    "keywords": [
+      "monitor",
+      "log",
+      "alert",
+      "metric",
+      "observe",
+      "heartbeat",
+      "health check"
+    ],
+    "skills": [
+      "system-audit",
+      "error-recovery-protocol",
+      "background-subagent"
+    ],
+    "primary_agent": "heartbeat"
+  }
+}

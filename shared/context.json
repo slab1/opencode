@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-06-10T19:00:00Z",
+  "system": {
+    "platform_manager": {
+      "status": "upgraded_with_hermes_insights",
+      "backends_configured": [],
+      "platforms_connected": [],
+      "total_posts": 0,
+      "last_action": "Applied insights from .hermes exploration: SKILL.md upgrade + security + hooks + kanban + config"
+    }
+  },
+  "active_tasks": [],
+  "recent_artifacts": [
+    {"type": "AGENTS.md", "path": "~/.config/opencode/AGENTS.md", "purpose": "Root agent map — Hermes-level dev guide"},
+    {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/AGENTS.md", "purpose": "Platform docs — now with Security, Kanban, Hooks docs"},
+    {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/hooks/AGENTS.md", "purpose": "Hook system documentation"},
+    {"type": "script", "path": "~/.config/opencode/platforms/post.sh", "purpose": "Added --yes flag + confirmation prompt + hook invocation"},
+    {"type": "script", "path": "~/.config/opencode/platforms/calendar.py", "purpose": "Added kanban board, set_status, --draft support"},
+    {"type": "skill", "path": "~/.config/opencode/skills/skills/twitter-thread-skill/SKILL.md", "purpose": "Upgraded to Hermes depth (200+ lines) — safety, troubleshooting, agent workflow"},
+    {"type": "skill", "path": "~/.config/opencode/skills/skills/instagram-carousel-skill/SKILL.md", "purpose": "Upgraded to Hermes depth — dimension reference, caption templates"},
+    {"type": "skill", "path": "~/.config/opencode/skills/skills/content-repurposing-skill/SKILL.md", "purpose": "Upgraded to Hermes depth — full repurposing matrix, cheat sheet"},
+    {"type": "hook", "path": "~/.config/opencode/platforms/hooks/pre-post.sh", "purpose": "Pre-publishing hook (validation, enrichment, abort)"},
+    {"type": "hook", "path": "~/.config/opencode/platforms/hooks/post-post.sh", "purpose": "Post-publishing hook (logging, notifications)"},
+    {"type": "config", "path": "~/.config/opencode/platforms/config.yaml", "purpose": "User preferences — posting defaults, kanban, content gen, analytics"},
+    {"type": "memory", "path": "project/system/human.md", "purpose": "User preferences"},
+    {"type": "memory", "path": "project/system/persona.md", "purpose": "Agent behavior guidelines"},
+    {"type": "memory", "path": "project/system/project.md", "purpose": "Project state and decisions"}
+  ],
+  "decisions": [
+    {"id": "init-001", "date": "2026-06-10", "description": "DOX/AGENTS.md self-documentation pattern applied", "rationale": "agentsmd/agents.md standard (22K stars)"},
+    {"id": "hermes-001", "date": "2026-06-10", "description": "Hermes-level AGENTS.md dev guide with contribution rubric", "rationale": "Pattern 1: NousResearch hermes-agent (189K stars)"},
+    {"id": "hermes-002", "date": "2026-06-10", "description": "Capability Footprint Ladder documented in AGENTS.md", "rationale": "Pattern 2: Least-permanent-surface design principle"},
+    {"id": "hermes-003", "date": "2026-06-10", "description": "Plugin adapter system with auto-discovery (adapters/)", "rationale": "Pattern 3: Hermes plugin architecture — drop-in modules"},
+    {"id": "hermes-004", "date": "2026-06-10", "description": "SKILL.md social media skills (thread, carousel, repurpose)", "rationale": "Pattern 4: Hermes skills system for reusable patterns"},
+    {"id": "hermes-005", "date": "2026-06-10", "description": "Self-improving learning loop (analytics.py learn)", "rationale": "Pattern 5: Hermes closed learning loop — learn from engagement data"},
+    {"id": "insight-001", "date": "2026-06-10", "description": "SKILL.md upgraded to Hermes depth (200+ lines, safety+troubleshooting)", "rationale": "Discovered .hermes xurl SKILL.md was 432 lines with proper sections"},
+    {"id": "insight-002", "date": "2026-06-10", "description": "Security confirmation prompt added to post.sh", "rationale": "Hermes-style safety guardrails: confirm before posting"},
+    {"id": "insight-003", "date": "2026-06-10", "description": "Hook system created (pre/post publish hooks)", "rationale": "Hermes hooks/ directory for event-driven automation"},
+    {"id": "insight-004", "date": "2026-06-10", "description": "Kanban workflow added to calendar.py", "rationale": "Hermes kanban board pattern for content pipeline"},
+    {"id": "insight-005", "date": "2026-06-10", "description": "Config YAML created for user preferences", "rationale": "Hermes single config.yaml pattern for non-secret settings"}
+  ],
+  "cross_agent_notes": {
+    "platform_manager": "All 5 Hermes patterns + 5 insight upgrades applied. See config.yaml for user preferences. post.sh now requires confirmation. calendar.py has kanban board. hooks/ for event automation."
+  }
+}

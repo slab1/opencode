@@ -1,0 +1,700 @@
+#!/usr/bin/env python3
+"""
+╔══════════════════════════════════════════════════════════════╗
+║  REPL — OpenCode Read-Eval-Print Loop                      ║
+║  Fully interactive terminal interface for OpenCode          ║
+╚══════════════════════════════════════════════════════════════╝
+
+Architecture:
+  - Launches `opencode run` as a background subprocess
+  - Polls the local SQLite DB for streaming response parts
+  - Displays with syntax highlighting in real-time
+
+Usage:
+  repl                    Start the interactive REPL
+  repl "ask a question"   One-shot mode
+  repl --help             Show help
+
+Zero external dependencies — pure Python stdlib.
+"""
+
+import json
+import os
+import re
+import shutil
+import sqlite3
+import subprocess
+import sys
+import time
+import argparse
+from pathlib import Path
+
+# ── Paths ──────────────────────────────────────────────────────────
+CONFIG_DIR = Path.home() / ".config" / "opencode"
+OC_BIN = shutil.which("opencode") or "/usr/local/bin/opencode"
+DB_PATH = Path.home() / ".local" / "share" / "opencode" / "opencode.db"
+HISTORY_FILE = CONFIG_DIR / ".repl_history"
+CONTEXT_FILE = CONFIG_DIR / "shared" / "context.json"
+
+# ── ANSI Terminal Styling ──────────────────────────────────────────
+class S:
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    DIM = "\033[2m"
+    ITALIC = "\033[3m"
+
+    @staticmethod
+    def fg(c): return f"\033[38;5;{c}m"
+    @staticmethod
+    def bg(c): return f"\033[48;5;{c}m"
+
+    ACCENT  = "\033[38;5;75m"
+    GREEN   = "\033[38;5;83m"
+    YELLOW  = "\033[38;5;221m"
+    RED     = "\033[38;5;196m"
+    ORANGE  = "\033[38;5;208m"
+    PURPLE  = "\033[38;5;141m"
+    TEAL    = "\033[38;5;43m"
+    GRAY    = "\033[38;5;240m"
+    PINK    = "\033[38;5;212m"
+    WHITE   = "\033[38;5;255m"
+
+
+def styled(text, *styles):
+    return f"{''.join(styles)}{text}{S.RESET}"
+
+
+def strip_ansi(text):
+    return re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', text)
+
+
+# ── Code syntax highlighting ───────────────────────────────────────
+LANG_COLORS = {
+    "python": S.ACCENT, "javascript": S.YELLOW, "typescript": S.TEAL,
+    "js": S.YELLOW, "ts": S.TEAL, "bash": S.GREEN, "sh": S.GREEN,
+    "shell": S.GREEN, "json": S.ORANGE, "yaml": S.PURPLE, "yml": S.PURPLE,
+    "html": S.ORANGE, "css": S.PINK, "sql": S.TEAL, "go": S.ACCENT,
+    "rust": S.ORANGE, "ruby": S.RED, "c": S.ACCENT, "cpp": S.PURPLE,
+}
+
+
+def highlight_code(text):
+    """Highlight ```code blocks``` in text with ANSI colors."""
+    pattern = r'(```(\w*)\n?)(.*?)```'
+    segments = []
+    last_end = 0
+
+    for m in re.finditer(pattern, text, re.DOTALL):
+        if m.start() > last_end:
+            segments.append((text[last_end:m.start()], False))
+
+        lang = m.group(2).lower() or ""
+        code = m.group(3)
+        lang_color = LANG_COLORS.get(lang, S.TEAL)
+
+        header = styled(f" ┌─ {lang or 'code'} ", S.BOLD, lang_color, S.bg(235))
+        code_lines = code.rstrip('\n').split('\n')
+        colored = ""
+        for cl in code_lines:
+            colored += styled(f" │ {cl}", S.fg(252), S.bg(235)) + "\n"
+        footer = styled(" └──", S.bg(235))
+        segments.append((header + "\n" + colored + footer, True))
+        last_end = m.end()
+
+    if last_end < len(text):
+        segments.append((text[last_end:], False))
+    return segments if segments else [(text, False)]
+
+
+# ── Database Polling Engine ────────────────────────────────────────
+class DBPoller:
+    """Polls the SQLite database for response parts from an opencode session."""
+
+    def __init__(self, db_path=None):
+        self.db_path = db_path or DB_PATH
+
+    def get_latest_session_id(self):
+        """Get the ID of the most recent session."""
+        try:
+            conn = sqlite3.connect(str(self.db_path))
+            cur = conn.execute(
+                "SELECT id FROM session ORDER BY time_created DESC LIMIT 1"
+            )
+            row = cur.fetchone()
+            conn.close()
+            return row[0] if row else None
+        except (sqlite3.OperationalError, OSError):
+            return None
+
+    def get_new_parts(self, session_id, seen_ids):
+        """
+        Get new response parts that haven't been seen yet.
+        Returns list of (type, text) tuples.
+        """
+        try:
+            conn = sqlite3.connect(str(self.db_path), timeout=1)
+            cur = conn.execute(
+                """SELECT p.id, p.data, json_extract(m.data, '$.role') as role
+                   FROM part p
+                   JOIN message m ON p.message_id = m.id
+                   WHERE m.session_id = ?
+                   ORDER BY p.time_created""",
+                (session_id,),
+            )
+            results = []
+            for part_id, data_json, role in cur.fetchall():
+                if part_id not in seen_ids:
+                    data = json.loads(data_json)
+                    ptype = data.get("type", "")
+                    text = data.get("text", "")
+                    if ptype in ("text", "reasoning", "error"):
+                        # Skip user message echo
+                        if ptype == "text" and role == "user":
+                            continue
+                        if text:
+                            results.append((ptype, text, part_id))
+                        else:
+                            results.append((ptype, "", part_id))
+                    else:
+                        results.append((ptype, "", part_id))
+            conn.close()
+            return results
+        except (sqlite3.OperationalError, OSError, json.JSONDecodeError):
+            return []
+
+
+# ── OpenCode Engine ────────────────────────────────────────────────
+class OpenCodeEngine:
+    """
+    Sends messages to OpenCode and streams responses via DB polling.
+    
+    Architecture:
+      1. Record the current latest session ID
+      2. Launch `opencode run <message>` as subprocess
+      3. Poll the SQLite DB for new response parts while subprocess runs
+      4. Stream text/reasoning chunks in real-time
+    """
+
+    def __init__(self, bin_path=None):
+        self.bin = bin_path or OC_BIN
+        self.poller = DBPoller()
+
+    def _yield_parts(self, session_id, seen_parts, accumulated):
+        """Read new parts from DB and yield them. Returns True if step-finish seen."""
+        done = False
+        parts = self.poller.get_new_parts(session_id, seen_parts)
+        for ptype, pdata, pid in parts:
+            seen_parts.add(pid)
+            if ptype == "text" and pdata:
+                accumulated.append(pdata)
+                yield ("text", pdata)
+            elif ptype == "reasoning" and pdata:
+                yield ("reasoning", pdata)
+            elif ptype == "error":
+                yield ("error", pdata)
+            elif ptype == "step-finish":
+                done = True
+        return done
+
+    def run(self, message, timeout=600, status_callback=None):
+        """
+        Send a message and yield (type, data) tuples.
+        If status_callback is provided, it is called with (elapsed, spinner_char).
+        
+        Yields:
+          "reasoning" → thinking text
+          "text"      → response text chunk
+          "done"      → final accumulated text  
+          "error"     → error message
+        """
+        if not os.path.exists(self.bin):
+            yield ("error", f"opencode binary not found: {self.bin}")
+            return
+
+        before_sid = self.poller.get_latest_session_id()
+        start_time = time.time()
+
+        # Launch opencode run as background subprocess (capture stderr)
+        try:
+            proc = subprocess.Popen(
+                [self.bin, "run", message],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+        except (FileNotFoundError, OSError) as e:
+            yield ("error", f"Failed to launch opencode: {e}")
+            return
+
+        # ── Wait for subprocess with spinner ──
+        SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+        last_spin_sec = -1
+        spin_idx = 0
+        deadline = time.time() + timeout
+
+        try:
+            while time.time() < deadline:
+                if proc.poll() is not None:
+                    break
+                sec = int(time.time() - start_time)
+                if sec != last_spin_sec:
+                    last_spin_sec = sec
+                    if status_callback:
+                        status_callback(sec, SPINNER[spin_idx % len(SPINNER)])
+                        spin_idx += 1
+                time.sleep(0.3)  # poll 3x/sec — responsive to Ctrl+C
+        except KeyboardInterrupt:
+            if status_callback:
+                status_callback(int(time.time() - start_time), "⏹")
+            proc.kill()
+            proc.wait(timeout=5)
+            yield ("error", "Interrupted by user")
+            yield ("done", "")
+            return
+
+        # Check exit code
+        stderr_text = ""
+        try:
+            _, stderr_text = proc.communicate(timeout=3)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            _, stderr_text = proc.communicate(timeout=3)
+        retcode = proc.returncode
+
+        if retcode != 0:
+            err_msg = stderr_text.strip() or f"opencode exited with code {retcode}"
+            yield ("error", err_msg)
+            yield ("done", "")
+            return
+
+        if time.time() >= deadline:
+            yield ("error", "Timed out waiting for response")
+            yield ("done", "")
+            return
+
+        # ── Find the session created by this run ──
+        session_id = None
+        for _ in range(20):
+            sid = self.poller.get_latest_session_id()
+            if sid and sid != before_sid:
+                session_id = sid
+                break
+            time.sleep(0.5)
+
+        if not session_id:
+            yield ("error", "No session found in database")
+            yield ("done", "")
+            return
+
+        # ── Drain all parts from DB ──
+        seen_parts = set()
+        accumulated = []
+        done_yielded = False
+
+        for _ in range(30):
+            done_yielded = yield from self._yield_parts(session_id, seen_parts, accumulated)
+            if done_yielded:
+                # One final poll for any trailing text
+                yield from self._yield_parts(session_id, seen_parts, accumulated)
+                break
+            time.sleep(0.5)
+
+        yield ("done", "".join(accumulated))
+
+
+# ── REPL Commands ──────────────────────────────────────────────────
+COMMANDS = {
+    "/help":    "Show this help message",
+    "/exit":    "Exit the REPL",
+    "/quit":    "Exit the REPL",
+    "/clear":   "Clear the screen",
+    "/cls":     "Clear the screen",
+    "/history": "Show command history",
+    "/stats":   "Show session statistics",
+    "/context": "Show shared context summary",
+}
+
+COMMAND_LIST = sorted(COMMANDS.keys())
+
+
+def show_help():
+    print(f"""
+  {styled('REPL Commands', S.BOLD, S.ACCENT)}
+  {styled('─' * 50, S.GRAY)}
+""")
+    for cmd, desc in COMMANDS.items():
+        if cmd in ("/exit", "/quit", "/clear", "/cls"):
+            continue
+        print(f"  {styled(cmd, S.TEAL):20} {desc}")
+    print(f"""
+  {styled('Special', S.BOLD, S.ACCENT)}
+  {styled('/exit, /quit', S.TEAL):20} Exit the REPL
+  {styled('/clear, /cls', S.TEAL):20} Clear the screen
+
+  {styled('Tips', S.BOLD, S.ACCENT)}
+  - End a line with {styled('\\\\', S.TEAL)} for multi-line input
+  - {styled('Tab', S.TEAL)} for command completion
+  - {styled('↑/↓', S.TEAL)} navigate history
+  - Code blocks are {styled('syntax highlighted', S.GREEN)}
+""")
+
+
+def show_stats():
+    """Show REPL usage statistics."""
+    try:
+        conn = sqlite3.connect(str(DB_PATH))
+        cur = conn.execute("SELECT COUNT(*) FROM session")
+        total = cur.fetchone()[0]
+        cur = conn.execute(
+            "SELECT COUNT(*), MIN(time_created), MAX(time_created) FROM session"
+        )
+        row = cur.fetchone()
+        conn.close()
+
+        print(f"\n  {styled('OpenCode Statistics', S.BOLD, S.ACCENT)}")
+        print(f"  {styled('─' * 50, S.GRAY)}")
+        print(f"  {styled('Total Sessions:', S.BOLD)} {row[0] if row else 0}")
+        if row and row[0] > 0 and row[1]:
+            from_ts = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(row[1] / 1000))
+            to_ts = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(row[2] / 1000))
+            print(f"  {styled('From:', S.BOLD)} {from_ts}")
+            print(f"  {styled('To:', S.BOLD)}   {to_ts}")
+        print(f"  {styled('Binary:', S.BOLD)}  {OC_BIN}")
+        print()
+    except Exception as e:
+        print(f"  {styled(f'Error: {e}', S.RED)}")
+
+
+def show_context():
+    """Show shared context summary."""
+    try:
+        with open(CONTEXT_FILE) as f:
+            ctx = json.load(f)
+    except FileNotFoundError:
+        print(f"  {styled('No shared context found.', S.YELLOW)}")
+        return
+    except Exception as e:
+        print(f"  {styled(f'Error: {e}', S.RED)}")
+        return
+
+    findings = ctx.get("findings", {})
+    decisions = ctx.get("decisions", {})
+    artifacts = ctx.get("artifacts", {})
+    trace = ctx.get("workflow_trace", [])
+
+    print(f"\n  {styled('Shared Context', S.BOLD, S.ACCENT)}")
+    print(f"  {styled('─' * 50, S.GRAY)}")
+
+    total = sum(len(v) for v in findings.values())
+    print(f"  {styled('Findings:', S.BOLD)} {total} total")
+    for agent, fs in findings.items():
+        if fs:
+            print(f"    {styled(agent, S.TEAL)}: {len(fs)}")
+
+    total_decisions = sum(len(v) for v in decisions.values())
+    print(f"  {styled('Decisions:', S.BOLD)} {total_decisions}")
+
+    created = artifacts.get("files_created", [])
+    modified = artifacts.get("files_modified", [])
+    print(f"  {styled('Files:', S.BOLD)} {len(created)} created, {len(modified)} modified")
+    print(f"  {styled('Workflow Steps:', S.BOLD)} {len(trace)}")
+    print()
+
+
+# ── Tab Completion ─────────────────────────────────────────────────
+class REPLCompleter:
+    def __init__(self):
+        self.commands = COMMAND_LIST
+        self.matches = []
+
+    def complete(self, text, state):
+        if text.startswith("/"):
+            if state == 0:
+                self.matches = [c for c in self.commands if c.startswith(text)]
+            if state < len(self.matches):
+                return self.matches[state]
+        return None
+
+
+def setup_readline():
+    """Configure readline with history and tab completion."""
+    import readline
+
+    try:
+        readline.read_history_file(str(HISTORY_FILE))
+    except FileNotFoundError:
+        pass
+
+    readline.set_history_length(2000)
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(REPLCompleter().complete)
+
+    def save_history():
+        try:
+            readline.write_history_file(str(HISTORY_FILE))
+        except Exception:
+            pass
+
+    return save_history
+
+
+# ── Streaming Display ──────────────────────────────────────────────
+class StreamingDisplay:
+    """Manages how streaming responses are displayed."""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.reasoning_printed = False
+        self.response_started = False
+        self.response_chars = 0
+
+    def show_reasoning(self, text):
+        if not self.reasoning_printed:
+            print(f"  {styled('── thinking ──', S.ITALIC, S.GRAY)}")
+            self.reasoning_printed = True
+        for line in text.split("\n")[:2]:
+            clean = strip_ansi(line.strip())[:80]
+            if clean:
+                print(f"  {styled('  ' + clean, S.ITALIC, S.GRAY)}")
+
+    def show_text(self, text):
+        if not self.response_started:
+            if self.reasoning_printed:
+                print(f"  {styled('── response ──', S.ITALIC, S.GRAY)}")
+            self.response_started = True
+        segments = highlight_code(text)
+        for seg_text, _ in segments:
+            sys.stdout.write(seg_text)
+            sys.stdout.flush()
+        self.response_chars += len(strip_ansi(text))
+
+    def show_footer(self, elapsed, total_chars):
+        print()
+        print(f"  {styled('─' * 40, S.GRAY)}")
+        print(f"  {styled('✓', S.GREEN)} {styled('done', S.BOLD)} "
+              f"{styled(f'({total_chars} chars, {elapsed:.1f}s)', S.GRAY)}")
+
+
+# ── Main REPL Loop ─────────────────────────────────────────────────
+def run_repl(args):
+    """Main REPL loop."""
+    engine = OpenCodeEngine(bin_path=args.bin)
+    display = StreamingDisplay()
+
+    # Splash screen
+    print()
+    print(f"  {styled('OpenCode REPL', S.BOLD, S.ACCENT)}")
+    print(f"  {styled('─' * 50, S.GRAY)}")
+    if DB_PATH.exists():
+        try:
+            conn = sqlite3.connect(str(DB_PATH))
+            count = conn.execute("SELECT COUNT(*) FROM session").fetchone()[0]
+            conn.close()
+            print(f"  {styled(f'{count} previous sessions', S.GRAY)}  "
+                  f"DB polling engine")
+        except Exception:
+            pass
+    print(f"  Type your message. {styled('/exit', S.TEAL)} or Ctrl+D to quit.")
+    print(f"  {styled('/help', S.TEAL)} for commands.")
+    print()
+
+    save_history = setup_readline()
+
+    # ── One-shot mode ──
+    if args.message:
+        print(f"  {styled('──', S.GRAY)} {styled('sending...', S.DIM)}")
+        start = time.time()
+        response_text = ""
+
+        # Spinner callback
+        def spin(elapsed, ch):
+            print(f"\r  {styled(ch, S.TEAL)} {styled(f'{elapsed:.0f}s', S.GRAY)}  ", end="", flush=True)
+
+        for ptype, data in engine.run(args.message, status_callback=spin):
+            if ptype == "text":
+                # Clear spinner line before showing content
+                print(f"\r{' ' * 60}\r", end="", flush=True)
+                display.show_text(data)
+                response_text += data
+            elif ptype == "reasoning":
+                print(f"\r{' ' * 60}\r", end="", flush=True)
+                display.show_reasoning(data)
+            elif ptype == "done":
+                print(f"\r{' ' * 60}\r", end="", flush=True)
+                elapsed = time.time() - start
+                display.show_footer(elapsed, len(response_text))
+            elif ptype == "error":
+                print(f"\n  {styled(f'✗ {data}', S.RED)}")
+        print()
+        return 0
+
+    # ── Interactive loop ──
+    def read_input():
+        """Read multi-line input. Returns text or None on EOF."""
+        lines = []
+        while True:
+            try:
+                if not lines:
+                    p = f"{S.BOLD}{S.ACCENT}repl{S.RESET} {S.fg(250)}>{S.RESET} "
+                else:
+                    p = f"{S.GRAY}...{S.RESET} "
+                line = input(p)
+            except EOFError:
+                print()
+                return None if not lines else "\n".join(lines).strip()
+
+            if line.rstrip().endswith("\\"):
+                lines.append(line.rstrip()[:-1])
+                continue
+            lines.append(line)
+            text = "\n".join(lines).strip()
+            return text if text else ""
+
+    def handle_cmd(cmd):
+        if cmd in ("/exit", "/quit"):
+            return True
+        elif cmd == "/help":
+            show_help()
+        elif cmd in ("/clear", "/cls"):
+            os.system("clear" if os.name == "posix" else "cls")
+        elif cmd == "/history":
+            import readline
+            n = readline.get_current_history_length()
+            for i in range(max(0, n - 50), n):
+                entry = readline.get_history_item(i + 1)
+                if entry:
+                    print(f"  {styled(f'{i+1:4d}', S.GRAY)}  {entry[:80]}")
+        elif cmd == "/stats":
+            show_stats()
+        elif cmd == "/context":
+            show_context()
+        elif cmd.startswith("/"):
+            print(f"  {styled('Unknown command:', S.RED)} {cmd}")
+            print(f"  Type {styled('/help', S.TEAL)} for commands")
+        return False
+
+    try:
+        while True:
+            text = read_input()
+            if text is None:
+                print(f"  {styled('Goodbye!', S.GRAY)}")
+                break
+            if not text:
+                continue
+
+            # Commands
+            if text.startswith("/"):
+                if handle_cmd(text):
+                    break
+                continue
+
+            # Send to OpenCode via DB polling
+            start = time.time()
+
+            # Spinner callback for live progress
+            def spin(elapsed, ch):
+                print(f"\r  {styled(ch, S.TEAL)} {styled(f'{elapsed:.0f}s', S.GRAY)}  ", end="", flush=True)
+
+            display.reset()
+            response_text = ""
+
+            for ptype, data in engine.run(text, status_callback=spin):
+                # Clear spinner line
+                print(f"\r{' ' * 60}\r", end="", flush=True)
+                if ptype == "text":
+                    display.show_text(data)
+                    response_text += data
+                elif ptype == "reasoning":
+                    display.show_reasoning(data)
+                elif ptype == "done":
+                    elapsed = time.time() - start
+                    display.show_footer(elapsed, len(response_text))
+                elif ptype == "error":
+                    print(f"\n  {styled(f'✗ {data}', S.RED)}")
+
+            _save_to_context(text[:200], response_text[:500])
+            print()
+
+    except (EOFError, KeyboardInterrupt):
+        print(f"\n  {styled('Goodbye!', S.GRAY)}")
+    finally:
+        save_history()
+
+    return 0
+
+
+def _save_to_context(summary, detail):
+    """Save REPL interaction to shared context."""
+    try:
+        ctx = {}
+        try:
+            with open(CONTEXT_FILE) as f:
+                ctx = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            ctx = {"meta": {"version": "2.0.0"}, "state": {}, "findings": {},
+                   "decisions": {}, "artifacts": {}, "cross_references": [],
+                   "workflow_trace": [], "session": {}}
+
+        ctx.setdefault("findings", {})
+        ctx["findings"].setdefault("chat_user", [])
+        ctx["findings"]["chat_user"].append({
+            "type": "repl_interaction",
+            "summary": summary[:100],
+            "detail": detail[:500],
+            "severity": "info",
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime()),
+        })
+        ctx.setdefault("state", {})
+        ctx["state"]["last_updated_by"] = "repl"
+        ctx["state"]["last_updated_at"] = time.strftime(
+            "%Y-%m-%dT%H:%M:%S+00:00", time.gmtime())
+
+        CONTEXT_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(CONTEXT_FILE, "w") as f:
+            json.dump(ctx, f, indent=2)
+    except Exception:
+        pass
+
+
+# ── Entry Point ────────────────────────────────────────────────────
+def main():
+    parser = argparse.ArgumentParser(
+        description="OpenCode REPL — Interactive Read-Eval-Print Loop",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""Examples:
+  repl                  Start interactive REPL
+  repl "hello world"    One-shot: send message and exit
+  repl --stats          Show statistics
+  repl --context        Show shared context
+        """,
+    )
+    parser.add_argument("message", nargs="?", default=None,
+                        help="Message to send (one-shot mode)")
+    parser.add_argument("--bin", default=OC_BIN,
+                        help=f"Path to opencode binary")
+    parser.add_argument("--stats", action="store_true",
+                        help="Show statistics and exit")
+    parser.add_argument("--context", action="store_true",
+                        help="Show shared context and exit")
+    parser.add_argument("--version", "-v", action="store_true",
+                        help="Show version and exit")
+
+    args = parser.parse_args()
+
+    if args.version:
+        print("REPL v2.0 — OpenCode Interactive Shell (DB polling engine)")
+        return 0
+    if args.stats:
+        show_stats()
+        return 0
+    if args.context:
+        show_context()
+        return 0
+
+    return run_repl(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
