@@ -155,6 +155,7 @@ with Display() as d:
 | **Imagine MCP** | npx | Disabled | Image generation |
 | **PDF MCP** | npx | Disabled | Advanced PDF processing with OCR |
 | **Go Docs MCP** | npx | Disabled | Multi-format document access |
+| **Mobile Device MCP** | npx | Enabled | Android/iOS phone control — list devices, launch apps, tap, screenshot, UI tree |
 
 ## MCP Servers: What They Do and How to Enable
 
@@ -164,6 +165,31 @@ with Display() as d:
 - **Context7** (`npx`): Context-aware code search and understanding. No env vars needed.
 - **Firecrawl** (`npx`): Website crawling and content extraction. Set `FIRECRAWL_API_KEY` for premium features.
 - **Filesystem** (`npx`): Read/write files, search, and read media files (images/audio as base64). Scoped to: `~/.config/opencode`, `/public`, and the Acode cache directory.
+- **Mobile Device MCP** (`npx`): Control Android and iOS devices over ADB. Auto-detects platform. 13 tools for screenshots, taps, gestures, app launch, UI tree inspection, and on-device code execution.
+
+### Phone Control Quick Start
+
+Connect your Android phone via USB, then:
+
+```bash
+# 1. Verify device is detected
+adb devices
+
+# 2. List available devices (auto-detects Android/iOS)
+#    (call via MCP tool: list_devices)
+
+# 3. Launch an app by package name
+#    (call via MCP tool: launch_app, app_id: "com.twitter.android")
+
+# 4. See what's on screen
+#    (call via MCP tool: screenshot)
+```
+
+**Prerequisites:**
+- **Android**: USB debugging enabled (Settings → Developer Options), phone connected via USB
+- **iOS**: Requires macOS with Xcode (not supported on Linux)
+
+**Available tools** (13 total): `list_devices`, `screenshot`, `uitree`, `tap`, `double_tap`, `long_press`, `scroll`, `type_text`, `press_button`, `launch_app`, `terminate_app`, `list_apps`, `run_code`
 
 ### Disabled but Ready
 

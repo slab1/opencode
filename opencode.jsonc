@@ -15,25 +15,25 @@
     "webfetch": "allow",
     "websearch": "allow",
     "mcp_filesystem_*": "allow",
-    "mcp_go-docs-mcp_*": "allow",
-    "mcp_imagine-mcp_*": "ask",
     "mcp_pdf-mcp_*": "allow",
+    "mcp_firecrawl_*": "ask",
+    "mcp_go-docs-mcp_*": "ask",
     "mcp_bulkpublish_*": "ask",
-    "mcp_trypost_*": "ask"
+    "mcp_trypost_*": "ask",
+    "mcp_mobile-device_*": "allow"
   },
   "plugin": [
     "opencode-memfs",
     "opencode-vibeguard",
     "opencode-cross-repo",
     "@franlol/opencode-md-table-formatter@latest",
-    "oh-my-opencode-slim",
-    "opencode-memory-plugin"
+    "oh-my-opencode-slim"
   ],
   "mcp": {
     "supabase": {
       "type": "remote",
       "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
-      "enabled": true,
+      "enabled": false,
       "oauth": false,
       "headers": {
         "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
@@ -49,16 +49,6 @@
       "enabled": true,
       "env": {}
     },
-    "firecrawl": {
-      "type": "local",
-      "command": [
-        "/usr/local/bin/firecrawl-mcp"
-      ],
-      "enabled": true,
-      "env": {
-        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
-      }
-    },
     "filesystem": {
       "type": "local",
       "command": [
@@ -71,15 +61,27 @@
       "enabled": true,
       "env": {}
     },
-    "go-docs-mcp": {
+    "firecrawl": {
       "type": "local",
       "command": [
         "npx",
         "-y",
-        "github:drolosoft/go-docs-mcp"
+        "firecrawl-mcp"
       ],
-      "enabled": true,
-      "env": {}
+      "enabled": false,
+      "env": {
+        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
+      },
+      "description": "Needs Node >=22 (current: v20). Install: npm install -g firecrawl-mcp"
+    },
+    "go-docs-mcp": {
+      "type": "local",
+      "command": [
+        "/usr/local/bin/go-docs-mcp"
+      ],
+      "enabled": false,
+      "env": {},
+      "description": "Go project — needs 'go install github.com/drolosoft/go-docs-mcp@latest'"
     },
     "pdf-mcp": {
       "type": "local",
@@ -112,6 +114,20 @@
         "Authorization": "Bearer {env:TRYPOST_API_KEY}"
       },
       "description": "Self-hosted social media scheduler (enable after self-hosting or cloud signup)"
+    },
+    "mobile-device": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@srmorete/mobile-device-mcp@latest"
+      ],
+      "enabled": true,
+      "env": {
+        "MDMS_PORT_ANDROID": "18000",
+        "MDMS_PORT_IOS": "19000"
+      },
+      "description": "Control Android/iOS devices via ADB (auto-detects platform). Connect phone via USB with USB debugging enabled, then use list_devices, launch_app, screenshot, tap, etc."
     }
   },
   "tools": {
