@@ -1,0 +1,10 @@
+{
+  "backend": "bulkpublish",
+  "configured": "2026-06-15T00:00:00Z",
+  "status": "pending_credentials",
+  "setup_instructions": {
+    "signup_url": "https://app.bulkpublish.com",
+    "api_key_location": "Settings → API Keys",
+    "notes": "Free tier: 100 req/day. After getting API key, save to platforms/tokens/bulkpublish_api.key"
+  }
+}

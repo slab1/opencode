@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "created": "2026-06-15T00:00:00Z",
+  "accounts": {
+    "twitter": {
+      "name": "X (Twitter)",
+      "status": "configured",
+      "credentials": {
+        "bearer_token": "file:/home/.config/opencode/platforms/tokens/twitter_bearer.token",
+        "api_key": "file:/home/.config/opencode/platforms/tokens/twitter_api_key.token",
+        "api_secret": "file:/home/.config/opencode/platforms/tokens/twitter_api_secret.token",
+        "access_token": "file:/home/.config/opencode/platforms/tokens/twitter_access_token.token",
+        "access_token_secret": "file:/home/.config/opencode/platforms/tokens/twitter_access_token_secret.token"
+      }
+    },
+    "facebook": {
+      "name": "Facebook (Pages)",
+      "status": "pending",
+      "setup_url": "https://developers.facebook.com",
+      "needs_credentials": ["app_id", "app_secret", "page_id"]
+    },
+    "instagram": {
+      "name": "Instagram (Business)",
+      "status": "pending",
+      "setup_url": "https://developers.facebook.com",
+      "needs_credentials": ["app_id", "app_secret", "instagram_business_account_id"]
+    },
+    "tiktok": {
+      "name": "TikTok (Business)",
+      "status": "pending",
+      "setup_url": "https://developers.tiktok.com",
+      "needs_credentials": ["client_key", "client_secret", "open_id"]
+    },
+    "youtube": {
+      "name": "YouTube",
+      "status": "pending",
+      "setup_url": "https://console.cloud.google.com",
+      "needs_credentials": ["oauth_client_id", "oauth_client_secret", "refresh_token"]
+    },
+    "linkedin": {
+      "name": "LinkedIn (Pages)",
+      "status": "pending",
+      "setup_url": "https://www.linkedin.com/developers",
+      "needs_credentials": ["client_id", "client_secret", "organization_urn"]
+    },
+    "pinterest": {
+      "name": "Pinterest (Business)",
+      "status": "pending",
+      "setup_url": "https://developers.pinterest.com",
+      "needs_credentials": ["app_id", "app_secret", "refresh_token"]
+    },
+    "threads": {
+      "name": "Threads",
+      "status": "pending",
+      "setup_url": "https://developers.facebook.com",
+      "needs_credentials": ["app_id", "app_secret"]
+    },
+    "bluesky": {
+      "name": "Bluesky",
+      "status": "pending",
+      "setup_url": "https://docs.bsky.app",
+      "needs_credentials": ["handle", "app_password"]
+    },
+    "mastodon": {
+      "name": "Mastodon",
+      "status": "pending",
+      "setup_url": "https://docs.joinmastodon.org",
+      "needs_credentials": ["instance_url", "access_token"]
+    },
+    "gbp": {
+      "name": "Google Business Profile",
+      "status": "pending",
+      "setup_url": "https://console.cloud.google.com",
+      "needs_credentials": ["oauth_client_id", "oauth_client_secret", "refresh_token"]
+    }
+  }
+}

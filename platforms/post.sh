@@ -174,7 +174,7 @@ echo ""
 # ─────────────────────────────────────────────────────────
 # Generate post ID
 # ─────────────────────────────────────────────────────────
-POST_ID="post_$(date +%Y%m%d_%H%M%S)_$(openssl rand -hex 4)"
+POST_ID="post_$(date +%Y%m%d_%H%M%S)_$(xxd -l 4 -p /dev/urandom 2>/dev/null || od -A n -t x -N 4 /dev/urandom | tr -d ' ')"
 TIMESTAMP=$(date -Iseconds)
 
 # ─────────────────────────────────────────────────────────

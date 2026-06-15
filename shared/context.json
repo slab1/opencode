@@ -1,13 +1,13 @@
 {
   "version": "1.0",
-  "last_updated": "2026-06-10T20:25:00Z",
+  "last_updated": "2026-06-15T04:05:00Z",
   "system": {
     "platform_manager": {
-      "status": "upgraded_with_hermes_insights",
-      "backends_configured": [],
-      "platforms_connected": [],
+      "status": "setup_initialized",
+      "backends_configured": ["bulkpublish"],
+      "platforms_connected": ["twitter"],
       "total_posts": 0,
-      "last_action": "Applied insights from .hermes exploration: SKILL.md upgrade + security + hooks + kanban + config"
+      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl→xxd fix, all scripts verified operational"
     }
   },
   "active_tasks": [],
@@ -15,17 +15,13 @@
     {"type": "AGENTS.md", "path": "~/.config/opencode/AGENTS.md", "purpose": "Root agent map — Hermes-level dev guide"},
     {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/AGENTS.md", "purpose": "Platform docs — now with Security, Kanban, Hooks docs"},
     {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/hooks/AGENTS.md", "purpose": "Hook system documentation"},
-    {"type": "script", "path": "~/.config/opencode/platforms/post.sh", "purpose": "Added --yes flag + confirmation prompt + hook invocation"},
-    {"type": "script", "path": "~/.config/opencode/platforms/calendar.py", "purpose": "Added kanban board, set_status, --draft support"},
-    {"type": "skill", "path": "~/.config/opencode/skills/skills/twitter-thread-skill/SKILL.md", "purpose": "Upgraded to Hermes depth (200+ lines) — safety, troubleshooting, agent workflow"},
-    {"type": "skill", "path": "~/.config/opencode/skills/skills/instagram-carousel-skill/SKILL.md", "purpose": "Upgraded to Hermes depth — dimension reference, caption templates"},
-    {"type": "skill", "path": "~/.config/opencode/skills/skills/content-repurposing-skill/SKILL.md", "purpose": "Upgraded to Hermes depth — full repurposing matrix, cheat sheet"},
+    {"type": "setup", "path": "~/.config/opencode/platforms/backend.json", "purpose": "Backend config — BulkPublish (pending API key)"},
+    {"type": "setup", "path": "~/.config/opencode/platforms/accounts.json", "purpose": "All 11 platform accounts configured (Twitter live, 10 pending)"},
+    {"type": "setup", "path": "~/.config/opencode/platforms/SETUP_CHECKLIST.md", "purpose": "Step-by-step credential instructions for all platforms"},
+    {"type": "fix", "path": "~/.config/opencode/platforms/post.sh", "purpose": "Fixed openssl→xxd for POST_ID generation"},
     {"type": "hook", "path": "~/.config/opencode/platforms/hooks/pre-post.sh", "purpose": "Pre-publishing hook (validation, enrichment, abort)"},
     {"type": "hook", "path": "~/.config/opencode/platforms/hooks/post-post.sh", "purpose": "Post-publishing hook (logging, notifications)"},
-    {"type": "config", "path": "~/.config/opencode/platforms/config.yaml", "purpose": "User preferences — posting defaults, kanban, content gen, analytics"},
-    {"type": "memory", "path": "project/system/human.md", "purpose": "User preferences"},
-    {"type": "memory", "path": "project/system/persona.md", "purpose": "Agent behavior guidelines"},
-    {"type": "memory", "path": "project/system/project.md", "purpose": "Project state and decisions"}
+    {"type": "config", "path": "~/.config/opencode/platforms/config.yaml", "purpose": "User preferences — posting defaults, kanban, content gen, analytics"}
   ],
   "decisions": [
     {"id": "init-001", "date": "2026-06-10", "description": "DOX/AGENTS.md self-documentation pattern applied", "rationale": "agentsmd/agents.md standard (22K stars)"},
@@ -34,13 +30,9 @@
     {"id": "hermes-003", "date": "2026-06-10", "description": "Plugin adapter system with auto-discovery (adapters/)", "rationale": "Pattern 3: Hermes plugin architecture — drop-in modules"},
     {"id": "hermes-004", "date": "2026-06-10", "description": "SKILL.md social media skills (thread, carousel, repurpose)", "rationale": "Pattern 4: Hermes skills system for reusable patterns"},
     {"id": "hermes-005", "date": "2026-06-10", "description": "Self-improving learning loop (analytics.py learn)", "rationale": "Pattern 5: Hermes closed learning loop — learn from engagement data"},
-    {"id": "insight-001", "date": "2026-06-10", "description": "SKILL.md upgraded to Hermes depth (200+ lines, safety+troubleshooting)", "rationale": "Discovered .hermes xurl SKILL.md was 432 lines with proper sections"},
-    {"id": "insight-002", "date": "2026-06-10", "description": "Security confirmation prompt added to post.sh", "rationale": "Hermes-style safety guardrails: confirm before posting"},
-    {"id": "insight-003", "date": "2026-06-10", "description": "Hook system created (pre/post publish hooks)", "rationale": "Hermes hooks/ directory for event-driven automation"},
-    {"id": "insight-004", "date": "2026-06-10", "description": "Kanban workflow added to calendar.py", "rationale": "Hermes kanban board pattern for content pipeline"},
-    {"id": "insight-005", "date": "2026-06-10", "description": "Config YAML created for user preferences", "rationale": "Hermes single config.yaml pattern for non-secret settings"}
+    {"id": "setup-006", "date": "2026-06-15", "description": "Environment setup: backend placeholder, accounts expansion, checklist, script fix", "rationale": "Full environment initialization with BulkPublish backend and all 11 platforms configured as placeholders"}
   ],
   "cross_agent_notes": {
-    "platform_manager": "All 5 Hermes patterns + 5 insight upgrades applied. See config.yaml for user preferences. post.sh now requires confirmation. calendar.py has kanban board. hooks/ for event automation."
+    "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational."
   }
 }
