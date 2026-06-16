@@ -29,16 +29,45 @@
     "@franlol/opencode-md-table-formatter@latest",
     "oh-my-opencode-slim",
     // "opencode-memory-plugin" // DISABLED - was causing terminal crashes and slowdown
+    "graphify"
   ],
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "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"
+      },
+      "models": {
+        "deepseek-ai/deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "deepseek-ai/deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "meta/llama-3.3-70b-instruct": {
+          "name": "Llama 3.3 70B",
+          "limit": { "context": 128000, "output": 4096 }
+        },
+        "mistralai/mistral-large-3-675b-instruct-2512": {
+          "name": "Mistral Large 3 675B",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "meta/llama-3.1-8b-instruct": {
+          "name": "Llama 3.1 8B",
+          "limit": { "context": 128000, "output": 4096 }
+        }
+      }
+    }
+  },
   "mcp": {
     "supabase": {
       "type": "remote",
-      "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii",
-      "enabled": false,
-      "oauth": false,
-      "headers": {
-        "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
-      }
+      "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching",
+      "enabled": true
     },
     "context7": {
       "type": "local",
@@ -129,6 +158,15 @@
         "MDMS_PORT_IOS": "19000"
       },
       "description": "Control Android/iOS devices via ADB (auto-detects platform). Connect phone via USB with USB debugging enabled, then use list_devices, launch_app, screenshot, tap, etc."
+    },
+    "magic-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "@21st-dev/magic"],
+      "enabled": false,
+      "env": {
+        "TWENTY_FIRST_API_KEY": "{env:TWENTY_FIRST_API_KEY}"
+      },
+      "description": "21st.dev Magic MCP - Generate professional React/Tailwind UI components with animations, glassmorphism, gradients. Get API key from https://21st.dev/magic then set TWENTY_FIRST_API_KEY env var and enable."
     }
   },
   "tools": {
