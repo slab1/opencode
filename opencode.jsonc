@@ -37,7 +37,7 @@
       "name": "NVIDIA NIM",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
-        "apiKey": "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"
+        "apiKey": "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"
       },
       "models": {
         "deepseek-ai/deepseek-v4-flash": {
