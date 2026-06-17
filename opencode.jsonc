@@ -27,7 +27,8 @@
     "opencode-vibeguard",
     "opencode-cross-repo",
     "@franlol/opencode-md-table-formatter@latest",
-    "oh-my-opencode-slim"
+    "oh-my-opencode-slim",
+    // "opencode-memory-plugin" // DISABLED - was causing terminal crashes and slowdown
   ],
   "mcp": {
     "supabase": {

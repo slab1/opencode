@@ -14,7 +14,8 @@ All social media management tools, scripts, and config live under `~/.config/ope
 ├── AGENTS.md                  ← THIS FILE — root map + dev guide
 ├── opencode.jsonc             ← Main OpenCode config (MCP servers, permissions, plugins)
 ├── agents/
-│   ├── platform-manager.md    ← Agent config: social media management agent
+│   ├── human.md                ← Agent config: Human analysis — reads code like a senior engineer, searches GitHub/online, fixes ALL kinds of problems
+│   ├── platform-manager.md     ← Agent config: social media management agent
 │   └── ... (20+ other agents)
 ├── platforms/
 │   ├── AGENTS.md              ← Platform manager system docs + architecture

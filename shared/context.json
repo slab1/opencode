@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-06-15T04:05:00Z",
+  "last_updated": "2026-06-17T14:00:00Z",
   "system": {
     "platform_manager": {
       "status": "setup_initialized",
@@ -10,7 +10,9 @@
       "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl→xxd fix, all scripts verified operational"
     }
   },
-  "active_tasks": [],
+  "active_tasks": [
+    {"name": "multios-kernel-compilation-fix", "status": "in_progress", "errors_fixed": "~4700→~3371 (28%)", "current_phase": "root-cause-elimination-complete"}
+  ],
   "recent_artifacts": [
     {"type": "AGENTS.md", "path": "~/.config/opencode/AGENTS.md", "purpose": "Root agent map — Hermes-level dev guide"},
     {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/AGENTS.md", "purpose": "Platform docs — now with Security, Kanban, Hooks docs"},
@@ -21,7 +23,10 @@
     {"type": "fix", "path": "~/.config/opencode/platforms/post.sh", "purpose": "Fixed openssl→xxd for POST_ID generation"},
     {"type": "hook", "path": "~/.config/opencode/platforms/hooks/pre-post.sh", "purpose": "Pre-publishing hook (validation, enrichment, abort)"},
     {"type": "hook", "path": "~/.config/opencode/platforms/hooks/post-post.sh", "purpose": "Post-publishing hook (logging, notifications)"},
-    {"type": "config", "path": "~/.config/opencode/platforms/config.yaml", "purpose": "User preferences — posting defaults, kanban, content gen, analytics"}
+    {"type": "config", "path": "~/.config/opencode/platforms/config.yaml", "purpose": "User preferences — posting defaults, kanban, content gen, analytics"},
+    {"type": "script", "path": "platforms/fix_enums.py", "purpose": "Bulk-add missing enum variants across kernel crate"},
+    {"type": "script", "path": "platforms/fix_imports3.py", "purpose": "Deduplicate Rust imports across kernel crate"},
+    {"type": "fix", "path": "kernel/src/log.rs", "purpose": "Remove log function imports causing E0659 ambiguity with macros"}
   ],
   "decisions": [
     {"id": "init-001", "date": "2026-06-10", "description": "DOX/AGENTS.md self-documentation pattern applied", "rationale": "agentsmd/agents.md standard (22K stars)"},
@@ -30,9 +35,89 @@
     {"id": "hermes-003", "date": "2026-06-10", "description": "Plugin adapter system with auto-discovery (adapters/)", "rationale": "Pattern 3: Hermes plugin architecture — drop-in modules"},
     {"id": "hermes-004", "date": "2026-06-10", "description": "SKILL.md social media skills (thread, carousel, repurpose)", "rationale": "Pattern 4: Hermes skills system for reusable patterns"},
     {"id": "hermes-005", "date": "2026-06-10", "description": "Self-improving learning loop (analytics.py learn)", "rationale": "Pattern 5: Hermes closed learning loop — learn from engagement data"},
-    {"id": "setup-006", "date": "2026-06-15", "description": "Environment setup: backend placeholder, accounts expansion, checklist, script fix", "rationale": "Full environment initialization with BulkPublish backend and all 11 platforms configured as placeholders"}
+    {"id": "setup-006", "date": "2026-06-15", "description": "Environment setup: backend placeholder, accounts expansion, checklist, script fix", "rationale": "Full environment initialization with BulkPublish backend and all 11 platforms configured as placeholders"},
+    {"id": "kernel-001", "date": "2026-06-17", "description": "HashMap→BTreeMap for no_std compatibility", "rationale": "alloc::collections::HashMap not available in no_std; BTreeMap is available and avoids external hashbrown dependency"},
+    {"id": "kernel-002", "date": "2026-06-17", "description": "Eliminate all root-cause cascade errors before fixing deep type issues", "rationale": "Fixing parse errors + duplicate names first unblocks modules and reveals true error count"},
+    {"id": "kernel-003", "date": "2026-06-17", "description": "Log macro/function ambiguity resolution: remove function imports, keep macros", "rationale": "Both #[macro_use] macros and use crate::log fn imports named the same causes E0659"},
+    {"id": "kernel-004", "date": "2026-06-17", "description": "Replace inline pub mod re-exports with proper module declarations", "rationale": "Circular re-exports caused infinite recursion in drivers/mod.rs"}
+  ],
+  "strategy_log": [
+    {
+      "id": "strategy-1717700001",
+      "agent_target": "multios-kernel",
+      "diagnosis": "~4700 compile errors; root causes masked by cascading failures from parse errors and duplicate names",
+      "strategy_chosen": "fix_root_causes_first",
+      "strategy_alternatives_considered": ["fix_by_file_descending_error_count", "fix_by_type_sweep"],
+      "why_this_strategy": "Root causes inflate error counts 2-5x; fixing them reveals true problem magnitude",
+      "applied_at": "2026-06-07T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "E0252/E0255/E0659 and parse errors all eliminated; true error count ~3371 revealed",
+      "duration_s": 36000,
+      "confidence_before": 0.7,
+      "confidence_after": 0.9,
+      "followup": "3371 deep type errors remain; need per-file human analysis for method names, trait bounds, types"
+    },
+    {
+      "id": "strategy-1717700002",
+      "agent_target": "multios-kernel",
+      "diagnosis": "E0659 ambiguous names (33 errors): log functions imported alongside macros",
+      "strategy_chosen": "remove_conflicting_imports",
+      "strategy_alternatives_considered": ["rename_functions", "rename_macros"],
+      "why_this_strategy": "Simplest change with least downstream impact; macros already in scope via #[macro_use]",
+      "applied_at": "2026-06-17T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "33 E0659 → 0",
+      "duration_s": 300,
+      "confidence_before": 0.9,
+      "confidence_after": 1.0,
+      "followup": null
+    },
+    {
+      "id": "strategy-1717700003",
+      "agent_target": "multios-kernel",
+      "diagnosis": "E0252/E0255 duplicate names (30+ errors): same type imported and defined locally, or re-exported from two modules",
+      "strategy_chosen": "deduplicate_names",
+      "strategy_alternatives_considered": ["add_rustc_allow", "rename_types"],
+      "why_this_strategy": "Identified root cause as redundant imports and conflicting module re-exports; removing duplicates preserves API",
+      "applied_at": "2026-06-17T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "E0252/E0255 → 0; unblocked downstream modules",
+      "duration_s": 1800,
+      "confidence_before": 0.8,
+      "confidence_after": 0.95,
+      "followup": "Fixed in service_manager.rs, update/mod.rs, syscall/mod.rs, security/mod.rs, syscall/validator.rs, update/package_integration.rs"
+    },
+    {
+      "id": "strategy-1717700004",
+      "agent_target": "multios-kernel",
+      "diagnosis": "'ambiguous +' parse errors (4 errors) and alloc::collections::HashSet not available in no_std",
+      "strategy_chosen": "direct_syntax_fix_and_replacement",
+      "strategy_alternatives_considered": ["ignore_asm", "use_hashbrown_dependency"],
+      "why_this_strategy": "Parenthesizing trait bounds in dyn types fixes ambiguity; BTreeSet replaces HashSet same as HashMap",
+      "applied_at": "2026-06-17T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "ambiguous + → 0, HashSet → BTreeSet in 4 files",
+      "duration_s": 600,
+      "confidence_before": 0.9,
+      "confidence_after": 1.0,
+      "followup": null
+    }
+  ],
+  "workflow_trace": [
+    {"step": "1", "action": "Install toolchain + target", "files": ["Cargo.toml", ".github/workflows/ci.yml"], "outcome": "nightly-2025-07-01 + x86_64-unknown-none ready"},
+    {"step": "2", "action": "Initial fix pass: asm syntax, doc comments, missing modules, macro visibility, ToString imports", "files": "73+ files", "outcome": "~4700→~1751 (63% fixed)"},
+    {"step": "3", "action": "Import dedup + HashMap→BTreeMap + parsing fixes + asm fixes", "files": "52 files", "outcome": "Commit 8031e4b"},
+    {"step": "4", "action": "E0659 elimination, HashSet→BTreeSet, std→no_std, drivers fix", "files": "17 files", "outcome": "Commit 250b375"},
+    {"step": "5", "action": "E0252/E0255 elimination, ambiguous +, syscall_numbers path fix, MemoryRegion dup", "files": "12 files", "outcome": "Commit 3abbee4; all root causes 0"}
   ],
   "cross_agent_notes": {
-    "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational."
+    "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational.",
+    "multios_kernel": "Compilation errors reduced from ~4700 to ~3371 (28%). All root-cause errors eliminated (duplicate names, parse errors, ambiguous names). Remaining 3371 are genuine type/trait/method issues requiring per-file human analysis. Repo: slab1/MultiOS- on master (3 commits: 8031e4b, 250b375, 3abbee4)."
+  },
+  "strategy_effectiveness": {
+    "fix_root_causes_first": {"uses": 1, "successes": 1, "effectiveness": 1.0},
+    "remove_conflicting_imports": {"uses": 1, "successes": 1, "effectiveness": 1.0},
+    "deduplicate_names": {"uses": 1, "successes": 1, "effectiveness": 1.0},
+    "direct_syntax_fix_and_replacement": {"uses": 1, "successes": 1, "effectiveness": 1.0}
   }
 }
