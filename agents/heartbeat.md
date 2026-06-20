@@ -95,6 +95,15 @@ You have persistent memory across sessions:
 5. **Auto-save memory**: If significant anomalies detected, persist via `oc-memory save`
 </workflow>
 
+<best-practices>
+- **Keep checks fast**: Runtime must be < 10 seconds — no long-running operations
+- **Only report anomalies**: Findings only when something is notable (disk >85%, memory <20%, dirty files >50)
+- **Be actionable**: Every anomaly finding should suggest a remediation action
+- **Check git state**: Track branch, dirty files, and commits ahead/behind to catch workspace drift
+- **Log consistently**: Always append structured JSON to heartbeat.log for trend analysis
+- **Never start work**: Heartbeat monitors only — never trigger builds, tests, or deep searches
+</best-practices>
+
 <task-tracking>
 When you complete a heartbeat check, log the outcome:
 

@@ -1,45 +1,167 @@
 {
   "version": "1.0",
-  "last_updated": "2026-06-17T14:00:00Z",
+  "last_updated": "2026-06-20T10:00:00Z",
   "system": {
     "platform_manager": {
       "status": "setup_initialized",
-      "backends_configured": ["bulkpublish"],
-      "platforms_connected": ["twitter"],
+      "backends_configured": [
+        "bulkpublish"
+      ],
+      "platforms_connected": [
+        "twitter"
+      ],
       "total_posts": 0,
-      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl→xxd fix, all scripts verified operational"
+      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl\u2192xxd fix, all scripts verified operational"
     }
   },
   "active_tasks": [
-    {"name": "multios-kernel-compilation-fix", "status": "in_progress", "errors_fixed": "~4700→~3371 (28%)", "current_phase": "root-cause-elimination-complete"}
+    {
+      "name": "multios-kernel-compilation-fix",
+      "status": "in_progress",
+      "errors_fixed": "~4700\u2192~3371 (28%)",
+      "current_phase": "root-cause-elimination-complete"
+    }
   ],
   "recent_artifacts": [
-    {"type": "AGENTS.md", "path": "~/.config/opencode/AGENTS.md", "purpose": "Root agent map — Hermes-level dev guide"},
-    {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/AGENTS.md", "purpose": "Platform docs — now with Security, Kanban, Hooks docs"},
-    {"type": "AGENTS.md", "path": "~/.config/opencode/platforms/hooks/AGENTS.md", "purpose": "Hook system documentation"},
-    {"type": "setup", "path": "~/.config/opencode/platforms/backend.json", "purpose": "Backend config — BulkPublish (pending API key)"},
-    {"type": "setup", "path": "~/.config/opencode/platforms/accounts.json", "purpose": "All 11 platform accounts configured (Twitter live, 10 pending)"},
-    {"type": "setup", "path": "~/.config/opencode/platforms/SETUP_CHECKLIST.md", "purpose": "Step-by-step credential instructions for all platforms"},
-    {"type": "fix", "path": "~/.config/opencode/platforms/post.sh", "purpose": "Fixed openssl→xxd for POST_ID generation"},
-    {"type": "hook", "path": "~/.config/opencode/platforms/hooks/pre-post.sh", "purpose": "Pre-publishing hook (validation, enrichment, abort)"},
-    {"type": "hook", "path": "~/.config/opencode/platforms/hooks/post-post.sh", "purpose": "Post-publishing hook (logging, notifications)"},
-    {"type": "config", "path": "~/.config/opencode/platforms/config.yaml", "purpose": "User preferences — posting defaults, kanban, content gen, analytics"},
-    {"type": "script", "path": "platforms/fix_enums.py", "purpose": "Bulk-add missing enum variants across kernel crate"},
-    {"type": "script", "path": "platforms/fix_imports3.py", "purpose": "Deduplicate Rust imports across kernel crate"},
-    {"type": "fix", "path": "kernel/src/log.rs", "purpose": "Remove log function imports causing E0659 ambiguity with macros"}
+    {
+      "type": "AGENTS.md",
+      "path": "~/.config/opencode/AGENTS.md",
+      "purpose": "Root agent map \u2014 Hermes-level dev guide"
+    },
+    {
+      "type": "AGENTS.md",
+      "path": "~/.config/opencode/platforms/AGENTS.md",
+      "purpose": "Platform docs \u2014 now with Security, Kanban, Hooks docs"
+    },
+    {
+      "type": "AGENTS.md",
+      "path": "~/.config/opencode/platforms/hooks/AGENTS.md",
+      "purpose": "Hook system documentation"
+    },
+    {
+      "type": "setup",
+      "path": "~/.config/opencode/platforms/backend.json",
+      "purpose": "Backend config \u2014 BulkPublish (pending API key)"
+    },
+    {
+      "type": "setup",
+      "path": "~/.config/opencode/platforms/accounts.json",
+      "purpose": "All 11 platform accounts configured (Twitter live, 10 pending)"
+    },
+    {
+      "type": "setup",
+      "path": "~/.config/opencode/platforms/SETUP_CHECKLIST.md",
+      "purpose": "Step-by-step credential instructions for all platforms"
+    },
+    {
+      "type": "fix",
+      "path": "~/.config/opencode/platforms/post.sh",
+      "purpose": "Fixed openssl\u2192xxd for POST_ID generation"
+    },
+    {
+      "type": "hook",
+      "path": "~/.config/opencode/platforms/hooks/pre-post.sh",
+      "purpose": "Pre-publishing hook (validation, enrichment, abort)"
+    },
+    {
+      "type": "hook",
+      "path": "~/.config/opencode/platforms/hooks/post-post.sh",
+      "purpose": "Post-publishing hook (logging, notifications)"
+    },
+    {
+      "type": "config",
+      "path": "~/.config/opencode/platforms/config.yaml",
+      "purpose": "User preferences \u2014 posting defaults, kanban, content gen, analytics"
+    },
+    {
+      "type": "script",
+      "path": "platforms/fix_enums.py",
+      "purpose": "Bulk-add missing enum variants across kernel crate"
+    },
+    {
+      "type": "script",
+      "path": "platforms/fix_imports3.py",
+      "purpose": "Deduplicate Rust imports across kernel crate"
+    },
+    {
+      "type": "fix",
+      "path": "kernel/src/log.rs",
+      "purpose": "Remove log function imports causing E0659 ambiguity with macros"
+    }
   ],
   "decisions": [
-    {"id": "init-001", "date": "2026-06-10", "description": "DOX/AGENTS.md self-documentation pattern applied", "rationale": "agentsmd/agents.md standard (22K stars)"},
-    {"id": "hermes-001", "date": "2026-06-10", "description": "Hermes-level AGENTS.md dev guide with contribution rubric", "rationale": "Pattern 1: NousResearch hermes-agent (189K stars)"},
-    {"id": "hermes-002", "date": "2026-06-10", "description": "Capability Footprint Ladder documented in AGENTS.md", "rationale": "Pattern 2: Least-permanent-surface design principle"},
-    {"id": "hermes-003", "date": "2026-06-10", "description": "Plugin adapter system with auto-discovery (adapters/)", "rationale": "Pattern 3: Hermes plugin architecture — drop-in modules"},
-    {"id": "hermes-004", "date": "2026-06-10", "description": "SKILL.md social media skills (thread, carousel, repurpose)", "rationale": "Pattern 4: Hermes skills system for reusable patterns"},
-    {"id": "hermes-005", "date": "2026-06-10", "description": "Self-improving learning loop (analytics.py learn)", "rationale": "Pattern 5: Hermes closed learning loop — learn from engagement data"},
-    {"id": "setup-006", "date": "2026-06-15", "description": "Environment setup: backend placeholder, accounts expansion, checklist, script fix", "rationale": "Full environment initialization with BulkPublish backend and all 11 platforms configured as placeholders"},
-    {"id": "kernel-001", "date": "2026-06-17", "description": "HashMap→BTreeMap for no_std compatibility", "rationale": "alloc::collections::HashMap not available in no_std; BTreeMap is available and avoids external hashbrown dependency"},
-    {"id": "kernel-002", "date": "2026-06-17", "description": "Eliminate all root-cause cascade errors before fixing deep type issues", "rationale": "Fixing parse errors + duplicate names first unblocks modules and reveals true error count"},
-    {"id": "kernel-003", "date": "2026-06-17", "description": "Log macro/function ambiguity resolution: remove function imports, keep macros", "rationale": "Both #[macro_use] macros and use crate::log fn imports named the same causes E0659"},
-    {"id": "kernel-004", "date": "2026-06-17", "description": "Replace inline pub mod re-exports with proper module declarations", "rationale": "Circular re-exports caused infinite recursion in drivers/mod.rs"}
+    {
+      "id": "init-001",
+      "date": "2026-06-10",
+      "description": "DOX/AGENTS.md self-documentation pattern applied",
+      "rationale": "agentsmd/agents.md standard (22K stars)"
+    },
+    {
+      "id": "hermes-001",
+      "date": "2026-06-10",
+      "description": "Hermes-level AGENTS.md dev guide with contribution rubric",
+      "rationale": "Pattern 1: NousResearch hermes-agent (189K stars)"
+    },
+    {
+      "id": "hermes-002",
+      "date": "2026-06-10",
+      "description": "Capability Footprint Ladder documented in AGENTS.md",
+      "rationale": "Pattern 2: Least-permanent-surface design principle"
+    },
+    {
+      "id": "hermes-003",
+      "date": "2026-06-10",
+      "description": "Plugin adapter system with auto-discovery (adapters/)",
+      "rationale": "Pattern 3: Hermes plugin architecture \u2014 drop-in modules"
+    },
+    {
+      "id": "hermes-004",
+      "date": "2026-06-10",
+      "description": "SKILL.md social media skills (thread, carousel, repurpose)",
+      "rationale": "Pattern 4: Hermes skills system for reusable patterns"
+    },
+    {
+      "id": "hermes-005",
+      "date": "2026-06-10",
+      "description": "Self-improving learning loop (analytics.py learn)",
+      "rationale": "Pattern 5: Hermes closed learning loop \u2014 learn from engagement data"
+    },
+    {
+      "id": "setup-006",
+      "date": "2026-06-15",
+      "description": "Environment setup: backend placeholder, accounts expansion, checklist, script fix",
+      "rationale": "Full environment initialization with BulkPublish backend and all 11 platforms configured as placeholders"
+    },
+    {
+      "id": "kernel-001",
+      "date": "2026-06-17",
+      "description": "HashMap\u2192BTreeMap for no_std compatibility",
+      "rationale": "alloc::collections::HashMap not available in no_std; BTreeMap is available and avoids external hashbrown dependency"
+    },
+    {
+      "id": "kernel-002",
+      "date": "2026-06-17",
+      "description": "Eliminate all root-cause cascade errors before fixing deep type issues",
+      "rationale": "Fixing parse errors + duplicate names first unblocks modules and reveals true error count"
+    },
+    {
+      "id": "kernel-003",
+      "date": "2026-06-17",
+      "description": "Log macro/function ambiguity resolution: remove function imports, keep macros",
+      "rationale": "Both #[macro_use] macros and use crate::log fn imports named the same causes E0659"
+    },
+    {
+      "id": "kernel-004",
+      "date": "2026-06-17",
+      "description": "Replace inline pub mod re-exports with proper module declarations",
+      "rationale": "Circular re-exports caused infinite recursion in drivers/mod.rs"
+    },
+    {
+      "id": "eval-001",
+      "date": "2026-06-20",
+      "description": "Implemented full agent evaluation system using patterns from 7 harness repos",
+      "rationale": "No eval infrastructure existed; 7 harness patterns synthesized into single cohesive system"
+    }
   ],
   "strategy_log": [
     {
@@ -47,7 +169,10 @@
       "agent_target": "multios-kernel",
       "diagnosis": "~4700 compile errors; root causes masked by cascading failures from parse errors and duplicate names",
       "strategy_chosen": "fix_root_causes_first",
-      "strategy_alternatives_considered": ["fix_by_file_descending_error_count", "fix_by_type_sweep"],
+      "strategy_alternatives_considered": [
+        "fix_by_file_descending_error_count",
+        "fix_by_type_sweep"
+      ],
       "why_this_strategy": "Root causes inflate error counts 2-5x; fixing them reveals true problem magnitude",
       "applied_at": "2026-06-07T00:00:00Z",
       "outcome": "success",
@@ -62,11 +187,14 @@
       "agent_target": "multios-kernel",
       "diagnosis": "E0659 ambiguous names (33 errors): log functions imported alongside macros",
       "strategy_chosen": "remove_conflicting_imports",
-      "strategy_alternatives_considered": ["rename_functions", "rename_macros"],
+      "strategy_alternatives_considered": [
+        "rename_functions",
+        "rename_macros"
+      ],
       "why_this_strategy": "Simplest change with least downstream impact; macros already in scope via #[macro_use]",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "33 E0659 → 0",
+      "outcome_evidence": "33 E0659 \u2192 0",
       "duration_s": 300,
       "confidence_before": 0.9,
       "confidence_after": 1.0,
@@ -77,11 +205,14 @@
       "agent_target": "multios-kernel",
       "diagnosis": "E0252/E0255 duplicate names (30+ errors): same type imported and defined locally, or re-exported from two modules",
       "strategy_chosen": "deduplicate_names",
-      "strategy_alternatives_considered": ["add_rustc_allow", "rename_types"],
+      "strategy_alternatives_considered": [
+        "add_rustc_allow",
+        "rename_types"
+      ],
       "why_this_strategy": "Identified root cause as redundant imports and conflicting module re-exports; removing duplicates preserves API",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "E0252/E0255 → 0; unblocked downstream modules",
+      "outcome_evidence": "E0252/E0255 \u2192 0; unblocked downstream modules",
       "duration_s": 1800,
       "confidence_before": 0.8,
       "confidence_after": 0.95,
@@ -92,32 +223,625 @@
       "agent_target": "multios-kernel",
       "diagnosis": "'ambiguous +' parse errors (4 errors) and alloc::collections::HashSet not available in no_std",
       "strategy_chosen": "direct_syntax_fix_and_replacement",
-      "strategy_alternatives_considered": ["ignore_asm", "use_hashbrown_dependency"],
+      "strategy_alternatives_considered": [
+        "ignore_asm",
+        "use_hashbrown_dependency"
+      ],
       "why_this_strategy": "Parenthesizing trait bounds in dyn types fixes ambiguity; BTreeSet replaces HashSet same as HashMap",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "ambiguous + → 0, HashSet → BTreeSet in 4 files",
+      "outcome_evidence": "ambiguous + \u2192 0, HashSet \u2192 BTreeSet in 4 files",
       "duration_s": 600,
       "confidence_before": 0.9,
       "confidence_after": 1.0,
       "followup": null
+    },
+    {
+      "id": "strategy-1781945530729",
+      "agent_target": "opencode_improvement (audit module)",
+      "diagnosis": "capability_sections count always 0 \u2014 line.startswith('##') catches '###' headings and exits in_caps before counter runs",
+      "strategy_chosen": "fix_parsing_order",
+      "strategy_alternatives_considered": [
+        "rewrite_parser_with_regex",
+        "change_all_agent_headings"
+      ],
+      "why_this_strategy": "Minimal change \u2014 swap two if-statements so ### is checked before ##. This correctly counts sub-section headings under <capabilities>",
+      "applied_at": "2026-06-20T08:52:10.729698Z",
+      "confidence_before": 0.5,
+      "outcome": "success",
+      "outcome_evidence": "architect.md: 0\u21923 counted; all agents will now report actual section counts",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781945613445",
+      "agent_target": "opencode_improvement (audit module)",
+      "diagnosis": "capability_sections count included ### headings outside </capabilities> tag",
+      "strategy_chosen": "add_closing_tag_detection",
+      "strategy_alternatives_considered": [
+        "parse_with_regex",
+        "rewrite_full_parser"
+      ],
+      "why_this_strategy": "Added </capabilities> detection to stop counting before <examples>, <skills>, etc. Now accurately reports 131 total sections across all agents",
+      "applied_at": "2026-06-20T08:53:33.445432Z",
+      "confidence_before": 0.6,
+      "outcome": "success",
+      "outcome_evidence": "web-browser: 22\u219212 (removed examples), display-agent: 21\u21928. All agents now show accurate counts. Average: 5.7/agent",
+      "confidence_after": 0.98
+    },
+    {
+      "id": "strategy-1781945707189",
+      "agent_target": "shared/golden/ (agent evaluation test cases)",
+      "diagnosis": "No golden datasets existed for agent behavior evaluation",
+      "strategy_chosen": "create_golden_datasets",
+      "strategy_alternatives_considered": [
+        "add_eval_to_each_agent_md",
+        "create_python_test_runner"
+      ],
+      "why_this_strategy": "DeepEval-inspired structured test cases with input/expected_output/metrics per agent. 46 test cases across all 23 agents covering 7 categories.",
+      "applied_at": "2026-06-20T08:55:07.189158Z",
+      "confidence_before": 0.85,
+      "outcome": "success",
+      "outcome_evidence": "shared/golden/AGENTS.md + agent_tasks.json created with 46 test cases in 7 categories: tool_correctness, task_completion, refusal_handling, context_adherence, error_recovery, subagent_delegation, output_quality",
+      "confidence_after": 0.92
+    },
+    {
+      "id": "strategy-1781946855537",
+      "agent_target": "all agents",
+      "diagnosis": "eval CLI command referenced in shared/golden/AGENTS.md docs does not exist in __main__.py; --fail-under gate not implemented",
+      "strategy_chosen": "add_missing_command",
+      "strategy_alternatives_considered": [
+        "add_yaml_only",
+        "create_separate_script"
+      ],
+      "why_this_strategy": "Docs already describe the command interface; implementing it completes the eval pipeline. --fail-under gate is the key pattern from Juanllenato eval-harness.",
+      "applied_at": "2026-06-20T09:14:15.537812Z",
+      "confidence_before": 0.85
+    },
+    {
+      "id": "strategy-1781946964635",
+      "agent_target": "all agents",
+      "diagnosis": "shared/eval/ only had AGENTS.md documentation; no YAML eval config driving actual evaluation",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "embed_config_in_python",
+        "use_json_instead"
+      ],
+      "why_this_strategy": "regokan/evalh pattern uses single YAML to drive all eval configuration; YAML is standard for this pattern",
+      "applied_at": "2026-06-20T09:16:04.635696Z",
+      "confidence_before": 0.9
+    },
+    {
+      "id": "strategy-1781947006245",
+      "agent_target": "all agents",
+      "diagnosis": "No persisted baseline existed for regression detection between eval runs",
+      "strategy_chosen": "create_baseline",
+      "strategy_alternatives_considered": [
+        "embed_baseline_in_code",
+        "skip_baseline"
+      ],
+      "why_this_strategy": "Victor-David-Medina pattern uses baseline comparison for regression detection; enables --compare flag",
+      "applied_at": "2026-06-20T09:16:46.245529Z",
+      "confidence_before": 0.95
+    },
+    {
+      "id": "strategy-1781947161908",
+      "agent_target": "all agents",
+      "diagnosis": "No per-agent eval YAML configs existed for targeted agent evaluation",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "single_config_only",
+        "generate_on_demand"
+      ],
+      "why_this_strategy": "regokan/evalh pattern uses per-agent configs for targeted evaluation; easier to maintain than one monolith",
+      "applied_at": "2026-06-20T09:19:21.908482Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "23 per-agent eval YAML files created with all test cases",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781947162506",
+      "agent_target": "all agents",
+      "diagnosis": "CI pipeline existed only for build/release; no automated agent evaluation",
+      "strategy_chosen": "add_ci_workflow",
+      "strategy_alternatives_considered": [
+        "manual_only",
+        "pre_commit_hook"
+      ],
+      "why_this_strategy": "linny006 cron pattern requires automated eval runs; weekly schedule + push triggers provide continuous monitoring",
+      "applied_at": "2026-06-20T09:19:22.506716Z",
+      "confidence_before": 0.85,
+      "outcome": "success",
+      "outcome_evidence": ".github/workflows/agent-eval.yml created with schedule, push, PR triggers and summary output",
+      "confidence_after": 0.9
+    },
+    {
+      "id": "strategy-1781947162973",
+      "agent_target": "all agents",
+      "diagnosis": "Only behavioral test cases existed; no property-based invariants (e.g., all agents must have role section)",
+      "strategy_chosen": "add_property_based_eval",
+      "strategy_alternatives_considered": [
+        "keep_behavioral_only",
+        "add_llm_judge"
+      ],
+      "why_this_strategy": "mpuodziukas-labs 3-layer eval includes property invariants; 7 tests added covering structural requirements",
+      "applied_at": "2026-06-20T09:19:22.973518Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "7 property-based tests added; 53 total test cases; 3-layer eval pattern now operational",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781947163418",
+      "agent_target": "all agents",
+      "diagnosis": "Root AGENTS.md had no documentation of the eval system or how agents are evaluated",
+      "strategy_chosen": "add_documentation",
+      "strategy_alternatives_considered": [
+        "separate_eval_md",
+        "skip_documentation"
+      ],
+      "why_this_strategy": "Documentation skeleton pattern requires system maps to be documented in root; enables discoverability",
+      "applied_at": "2026-06-20T09:19:23.418152Z",
+      "confidence_before": 0.95,
+      "outcome": "success",
+      "outcome_evidence": "Eval System section added to root AGENTS.md with architecture, patterns, and key commands",
+      "confidence_after": 0.98
+    },
+    {
+      "id": "strategy-1781947164080",
+      "agent_target": "meta-agent",
+      "diagnosis": "Strategy library existed only in metacognitive-tracking skill docs; not available programmatically",
+      "strategy_chosen": "codify_strategy_library",
+      "strategy_alternatives_considered": [
+        "keep_in_docs",
+        "create_separate_module"
+      ],
+      "why_this_strategy": "HyperAgents pattern requires strategies to be enumerated in code; enables --list-strategies CLI command",
+      "applied_at": "2026-06-20T09:19:24.080906Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "STRATEGY_LIBRARY dict with 17 strategies added to __init__.py; list-strategies CLI command implemented",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781947190907",
+      "agent_target": "all agents",
+      "diagnosis": "eval CLI command referenced in shared/golden/AGENTS.md docs does not exist in __main__.py",
+      "strategy_chosen": "add_missing_command",
+      "strategy_alternatives_considered": [
+        "add_yaml_only",
+        "create_separate_script"
+      ],
+      "why_this_strategy": "Docs already describe the command interface; implementing it completes the eval pipeline",
+      "applied_at": "2026-06-20T09:19:50.907796Z",
+      "confidence_before": 0.85,
+      "outcome": "success",
+      "outcome_evidence": "eval subcommand added to CLI with --agent, --config, --fail-under, --severity, --compare, --baseline flags",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781950000001",
+      "agent_target": "eval system",
+      "diagnosis": "No way to run offline eval without agent runtime",
+      "strategy_chosen": "add_mock_provider",
+      "strategy_alternatives_considered": ["skip_offline_eval", "record_replay"],
+      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores — enables zero-cost CI eval",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "MockProvider class in __init__.py; --provider mock CLI flag; mock eval path in eval_agents()",
+      "confidence_after": 0.98
+    },
+    {
+      "id": "strategy-1781950000002",
+      "agent_target": "golden datasets",
+      "diagnosis": "Test cases have no version tracking — impossible to know if evaluation drift is from agent changes or test suite changes",
+      "strategy_chosen": "add_task_versioning",
+      "strategy_alternatives_considered": ["no_versioning", "external_version_file"],
+      "why_this_strategy": "Embedding version in each test case's JSON schema ties version to data; baseline.json tracks which version was evaluated",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.85,
+      "outcome": "success",
+      "outcome_evidence": "version: '1.0' added to all 53 test cases; list_task_versions() function; --version CLI flag; version tracked in baseline.json",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781950000003",
+      "agent_target": "golden datasets",
+      "diagnosis": "No way to quantify inter-rater agreement of golden test case categories",
+      "strategy_chosen": "add_cohens_kappa",
+      "strategy_alternatives_considered": ["skip_quality_check", "manual_review"],
+      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with κ < 0.7",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.7,
+      "outcome": "success",
+      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when κ < 0.7",
+      "confidence_after": 0.9
+    },
+    {
+      "id": "strategy-1781950000004",
+      "agent_target": "eval system",
+      "diagnosis": "No semantic quality scoring — only keyword matching and structural audits",
+      "strategy_chosen": "add_llm_judge",
+      "strategy_alternatives_considered": ["skip_semantic_eval", "use_third_party"],
+      "why_this_strategy": "LLM-as-judge measures faithfulness, task_completion, answer_relevancy; heuristic fallback when no endpoint configured",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.75,
+      "outcome": "success",
+      "outcome_evidence": "LLMJudge class with 3 metrics, heuristic fallback, batch evaluation; --judge-model CLI flag; agent_eval.yaml config",
+      "confidence_after": 0.85
+    },
+    {
+      "id": "strategy-1781950000005",
+      "agent_target": "eval system",
+      "diagnosis": "All eval runs sequential — slow for large agent count",
+      "strategy_chosen": "add_async_executor",
+      "strategy_alternatives_considered": ["keep_sync_only", "thread_pool"],
+      "why_this_strategy": "AsyncExecutor uses asyncio.gather for concurrent eval; falls back to SyncExecutor on failure; minimal code change",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.8,
+      "outcome": "success",
+      "outcome_evidence": "SyncExecutor and AsyncExecutor classes; --executor sync|async CLI flag; integrated into eval_agents()",
+      "confidence_after": 0.9
+    },
+    {
+      "id": "strategy-1781950000006",
+      "agent_target": "eval CLI output",
+      "diagnosis": "JSON-only output is hard to scan; no visual overview",
+      "strategy_chosen": "add_scorecard_visualization",
+      "strategy_alternatives_considered": ["keep_json_only", "add_html_report"],
+      "why_this_strategy": "ASCII bar charts with color thresholds provide instant readability; Victor-David-Medina weighted composite scorer pattern",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "render_scorecard() with ASCII bar charts, green/yellow/red thresholds; --scorecard CLI flag",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781950000007",
+      "agent_target": "eval CLI",
+      "diagnosis": "No way to debug individual test case failures — must read full JSON output",
+      "strategy_chosen": "add_inspect_command",
+      "strategy_alternatives_considered": ["manual_parsing", "skip_debugging"],
+      "why_this_strategy": "Dedicated inspect subcommand shows full test case details; regokan/evalh inspect pattern",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "inspect_case() function; inspect subcommand with --agent, --case, --failed flags",
+      "confidence_after": 0.95
+    },
+    {
+      "id": "strategy-1781950000008",
+      "agent_target": "eval system",
+      "diagnosis": "No way to see changes over time — each eval run is isolated",
+      "strategy_chosen": "add_comparison_report",
+      "strategy_alternatives_considered": ["manual_diff", "skip_trend_tracking"],
+      "why_this_strategy": "Markdown comparison report with delta table against baseline; Victor-David-Medina regression pattern",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.85,
+      "outcome": "success",
+      "outcome_evidence": "generate_comparison_report() producing markdown with per-agent deltas; --compare flag; writes to reports/comparison_<date>.md",
+      "confidence_after": 0.92
+    },
+    {
+      "id": "strategy-1781950000009",
+      "agent_target": "eval system",
+      "diagnosis": "No side-by-side comparison of different agent configs against same test suite",
+      "strategy_chosen": "add_ab_comparison",
+      "strategy_alternatives_considered": ["manual_config_swap", "skip_ab_testing"],
+      "why_this_strategy": "A/B testing agent configs enables iterative improvement; victorwhale eval-harness-template pattern",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.8,
+      "outcome": "success",
+      "outcome_evidence": "ab_compare_agents() function; --ab CLI flag requiring --agent; per-case winner determination",
+      "confidence_after": 0.9
+    },
+    {
+      "id": "strategy-1781950000010",
+      "agent_target": "CI system",
+      "diagnosis": "Eval trends run on push/PR but results not persisted for trend analysis",
+      "strategy_chosen": "add_auto_commit_trends",
+      "strategy_alternatives_considered": ["manual_upload", "skip_persistence"],
+      "why_this_strategy": "linny006 cron+diff+commit pattern; schedule-only commit ensures clean history. Extends existing agent-eval.yml workflow",
+      "applied_at": "2026-06-20T10:00:00Z",
+      "confidence_before": 0.85,
+      "outcome": "success",
+      "outcome_evidence": "Save trend data step writes to reports/trends/; Commit trend data step commits only on schedule trigger; bot git config",
+      "confidence_after": 0.93
     }
   ],
   "workflow_trace": [
-    {"step": "1", "action": "Install toolchain + target", "files": ["Cargo.toml", ".github/workflows/ci.yml"], "outcome": "nightly-2025-07-01 + x86_64-unknown-none ready"},
-    {"step": "2", "action": "Initial fix pass: asm syntax, doc comments, missing modules, macro visibility, ToString imports", "files": "73+ files", "outcome": "~4700→~1751 (63% fixed)"},
-    {"step": "3", "action": "Import dedup + HashMap→BTreeMap + parsing fixes + asm fixes", "files": "52 files", "outcome": "Commit 8031e4b"},
-    {"step": "4", "action": "E0659 elimination, HashSet→BTreeSet, std→no_std, drivers fix", "files": "17 files", "outcome": "Commit 250b375"},
-    {"step": "5", "action": "E0252/E0255 elimination, ambiguous +, syscall_numbers path fix, MemoryRegion dup", "files": "12 files", "outcome": "Commit 3abbee4; all root causes 0"}
+    {
+      "step": "1",
+      "action": "Install toolchain + target",
+      "files": [
+        "Cargo.toml",
+        ".github/workflows/ci.yml"
+      ],
+      "outcome": "nightly-2025-07-01 + x86_64-unknown-none ready"
+    },
+    {
+      "step": "2",
+      "action": "Initial fix pass: asm syntax, doc comments, missing modules, macro visibility, ToString imports",
+      "files": "73+ files",
+      "outcome": "~4700\u2192~1751 (63% fixed)"
+    },
+    {
+      "step": "3",
+      "action": "Import dedup + HashMap\u2192BTreeMap + parsing fixes + asm fixes",
+      "files": "52 files",
+      "outcome": "Commit 8031e4b"
+    },
+    {
+      "step": "4",
+      "action": "E0659 elimination, HashSet\u2192BTreeSet, std\u2192no_std, drivers fix",
+      "files": "17 files",
+      "outcome": "Commit 250b375"
+    },
+    {
+      "step": "5",
+      "action": "E0252/E0255 elimination, ambiguous +, syscall_numbers path fix, MemoryRegion dup",
+      "files": "12 files",
+      "outcome": "Commit 3abbee4; all root causes 0"
+    },
+    {
+      "step": "meta-improvement",
+      "action": "Implemented agent evaluation system (8 improvements from 7 harness patterns)",
+      "files": [
+        "opencode_improvement/__init__.py",
+        "opencode_improvement/__main__.py",
+        "shared/eval/ (26 files)",
+        "shared/golden/agent_tasks.json",
+        ".github/workflows/agent-eval.yml",
+        "AGENTS.md"
+      ],
+      "outcome": "53 test cases, 98.1% pass rate, 14 strategies tracked, CI-ready"
+    },
+    {
+      "step": "10-improvements",
+      "action": "Implemented 10 additional eval system improvements (all 10 from harness analysis)",
+      "files": [
+        "opencode_improvement/__init__.py",
+        "opencode_improvement/__main__.py",
+        "shared/eval/agent_eval.yaml",
+        ".github/workflows/agent-eval.yml",
+        "shared/context.json",
+        "shared/golden/agent_tasks.json"
+      ],
+      "outcome": "All 10 improvements implemented: MockProvider, Task Versioning, Cohen's Kappa, LLM Judge, Multi-Executor, Scorecard, Inspect, Comparison Report, A/B Comparison, Auto-Commit Trends"
+    }
   ],
   "cross_agent_notes": {
     "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational.",
     "multios_kernel": "Compilation errors reduced from ~4700 to ~3371 (28%). All root-cause errors eliminated (duplicate names, parse errors, ambiguous names). Remaining 3371 are genuine type/trait/method issues requiring per-file human analysis. Repo: slab1/MultiOS- on master (3 commits: 8031e4b, 250b375, 3abbee4)."
   },
   "strategy_effectiveness": {
-    "fix_root_causes_first": {"uses": 1, "successes": 1, "effectiveness": 1.0},
-    "remove_conflicting_imports": {"uses": 1, "successes": 1, "effectiveness": 1.0},
-    "deduplicate_names": {"uses": 1, "successes": 1, "effectiveness": 1.0},
-    "direct_syntax_fix_and_replacement": {"uses": 1, "successes": 1, "effectiveness": 1.0}
+    "add_missing_command": {
+      "count": 2,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.85,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.1
+    },
+    "add_missing_section": {
+      "count": 2,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.05
+    },
+    "fix_root_causes_first": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.7,
+      "avg_confidence_after": 0.9,
+      "calibration_delta": 0.2
+    },
+    "remove_conflicting_imports": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 1.0,
+      "calibration_delta": 0.1
+    },
+    "deduplicate_names": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.8,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.15
+    },
+    "direct_syntax_fix_and_replacement": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 1.0,
+      "calibration_delta": 0.1
+    },
+    "fix_parsing_order": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.5,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.45
+    },
+    "add_closing_tag_detection": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.6,
+      "avg_confidence_after": 0.98,
+      "calibration_delta": 0.38
+    },
+    "create_golden_datasets": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.85,
+      "avg_confidence_after": 0.92,
+      "calibration_delta": 0.07
+    },
+    "add_ci_workflow": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.85,
+      "avg_confidence_after": 0.9,
+      "calibration_delta": 0.05
+    },
+    "add_property_based_eval": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.05
+    },
+    "add_documentation": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.95,
+      "avg_confidence_after": 0.98,
+      "calibration_delta": 0.03
+    },
+    "codify_strategy_library": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.05
+    },
+    "create_baseline": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.95,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.0
+    },
+    "add_mock_provider": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 0.98,
+      "calibration_delta": 0.08
+    },
+    "add_task_versioning": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.85,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.1
+    },
+    "add_cohens_kappa": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.7,
+      "avg_confidence_after": 0.9,
+      "calibration_delta": 0.2
+    },
+    "add_llm_judge": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.75,
+      "avg_confidence_after": 0.85,
+      "calibration_delta": 0.1
+    },
+    "add_async_executor": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.8,
+      "avg_confidence_after": 0.9,
+      "calibration_delta": 0.1
+    },
+    "add_scorecard_visualization": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.05
+    },
+    "add_inspect_command": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.9,
+      "avg_confidence_after": 0.95,
+      "calibration_delta": 0.05
+    },
+    "add_comparison_report": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.85,
+      "avg_confidence_after": 0.92,
+      "calibration_delta": 0.07
+    },
+    "add_ab_comparison": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.8,
+      "avg_confidence_after": 0.9,
+      "calibration_delta": 0.1
+    },
+    "add_auto_commit_trends": {
+      "count": 1,
+      "completed": 1,
+      "success_rate": 1.0,
+      "avg_confidence_before": 0.85,
+      "avg_confidence_after": 0.93,
+      "calibration_delta": 0.08
+    }
+  },
+  "findings": {
+    "meta_agent": [
+      {
+        "id": "session-eval-system-overhaul",
+        "type": "improvement_plan",
+        "summary": "Implemented full agent evaluation system across 8 improvements",
+        "detail": "Phase 2 meta-agent session: Implemented evaluation system from 7 harness patterns.\n\nImprovements:\n1. eval CLI command with --fail-under gating (Juanllenato pattern)\n2. YAML eval config shared/eval/agent_eval.yaml (regokan/evalh pattern)\n3. 23 per-agent eval YAMLs (one per agent)\n4. baseline.json for regression detection (Victor-David-Medina pattern)\n5. Codified strategy library with 17 strategies (HyperAgents pattern)\n6. GitHub Actions CI workflow for automated eval (linny006 pattern)\n7. 7 property-based test cases added (mpuodziukas-labs pattern)\n8. Eval system documented in root AGENTS.md\n\nCurrent state: 53 test cases, 98.1% pass rate, 15 strategy applications, 14 strategies tracked",
+        "files_changed": [
+          "opencode_improvement/__init__.py",
+          "opencode_improvement/__main__.py",
+          "shared/eval/agent_eval.yaml",
+          "shared/eval/{23 agents}_eval.yaml",
+          "shared/eval/baseline.json",
+          "shared/golden/agent_tasks.json",
+          "shared/golden/AGENTS.md",
+          ".github/workflows/agent-eval.yml",
+          "AGENTS.md"
+        ]
+      },
+      {
+        "id": "session-10-improvements",
+        "type": "improvement_plan",
+        "summary": "Implemented remaining 10 eval system improvements in parallel",
+        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) — deterministic offline eval via --provider mock\n2. Task Versioning (#10) — version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) — kappa subcommand, flags κ < 0.7 datasets\n4. LLM-as-Judge (#1) — LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) — SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) — ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) — inspect subcommand with --case and --failed\n8. Comparison Report (#3) — markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) — --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) — CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
+        "files_changed": [
+          "opencode_improvement/__init__.py",
+          "opencode_improvement/__main__.py",
+          "shared/eval/agent_eval.yaml",
+          ".github/workflows/agent-eval.yml",
+          "shared/context.json",
+          "shared/golden/agent_tasks.json"
+        ]
+      }
+    ]
   }
 }

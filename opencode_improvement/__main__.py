@@ -1,4 +1,17 @@
-"""CLI entry point for python3 -m opencode_improvement."""
+"""CLI entry point for python3 -m opencode_improvement.
+
+Extended with 10 improvements:
+1. LLM-as-Judge evaluator (--judge-model)
+2. Mock provider (--provider mock)
+3. Comparison report (--compare generates markdown)
+4. Auto-commit trends (CI integration)
+5. A/B config comparison (--ab)
+6. Cohen's Kappa (kappa subcommand)
+7. Tiered scorecard (--scorecard)
+8. Per-case inspect (inspect subcommand)
+9. Multi-executor (--executor sync|async)
+10. Task versioning (--version flag)
+"""
 
 import argparse
 import json
@@ -44,6 +57,58 @@ def main():
 
     # --- strategies (effectiveness report) ---
     sp_eff = subparsers.add_parser("strategies", help="Show strategy effectiveness scores")
+
+    # --- eval (run golden test cases against agents) ---
+    ep = subparsers.add_parser("eval", help="Evaluate agent(s) against golden test cases")
+    ep.add_argument("--agent", "-a", help="Evaluate a specific agent only")
+    ep.add_argument("--config", "-c", default=None, help="Path to YAML eval config")
+    ep.add_argument("--golden", action="store_true", default=True, help="Run golden test cases (default: True)")
+    ep.add_argument("--fail-under", type=float, default=None,
+                    help="Minimum pass rate (0.0-1.0). Exit non-zero if below threshold.")
+    ep.add_argument("--severity", choices=["info", "warn", "critical"], default="warn",
+                    help="Minimum severity to fail on (default: warn)")
+    ep.add_argument("--compare", action="store_true", default=False,
+                    help="Compare results against baseline and generate markdown report")
+    ep.add_argument("--baseline", default=None, help="Path to baseline JSON file for comparison")
+    ep.add_argument("--output", "-o", default=None, help="Save results to file")
+
+    # Improvement #2: Mock provider (--provider mock)
+    ep.add_argument("--provider", choices=["real", "mock"], default="real",
+                    help="Evaluation provider: real (default) or mock (offline deterministic)")
+
+    # Improvement #1: LLM-as-judge (--judge-model)
+    ep.add_argument("--judge-model", default=None,
+                    help="LLM model name for LLM-as-judge scoring (e.g., 'gpt-4'). Falls back to heuristic if not set.")
+
+    # Improvement #9: Multi-executor (--executor sync|async)
+    ep.add_argument("--executor", choices=["sync", "async"], default="sync",
+                    help="Execution strategy: sync (sequential, default) or async (concurrent)")
+
+    # Improvement #7: Tiered scorecard (--scorecard)
+    ep.add_argument("--scorecard", action="store_true", default=False,
+                    help="Render ASCII bar chart scorecard in output")
+
+    # Improvement #5: A/B config comparison (--ab)
+    ep.add_argument("--ab", nargs=2, metavar=("CONFIG_A", "CONFIG_B"), default=None,
+                    help="A/B compare two agent configs (requires --agent)")
+
+    # Improvement #10: Task versioning (--version)
+    ep.add_argument("--version", action="store_true", default=False,
+                    help="Show golden test case versions")
+
+    # --- list-strategies (show strategy library) ---
+    subparsers.add_parser("list-strategies", help="List all available improvement strategies")
+
+    # Improvement #8: inspect subcommand
+    ip = subparsers.add_parser("inspect", help="Inspect golden test case details")
+    ip.add_argument("--agent", "-a", required=True, help="Agent to inspect")
+    ip.add_argument("--case", "-c", default=None, help="Specific test case ID to inspect")
+    ip.add_argument("--failed", action="store_true", default=False,
+                    help="List all failing test cases for this agent")
+
+    # Improvement #6: kappa subcommand
+    kp = subparsers.add_parser("kappa", help="Compute Cohen's Kappa inter-rater agreement")
+    kp.add_argument("--dataset", default=None, help="Path to golden dataset JSON")
 
     args = parser.parse_args()
 
@@ -93,6 +158,89 @@ def main():
         from opencode_improvement import strategy_effectiveness
         result = strategy_effectiveness()
         print(json.dumps(result, indent=2))
+
+    elif args.command == "eval":
+        from opencode_improvement import eval_agents, list_task_versions
+
+        # Improvement #10: --version flag to list versions
+        if args.version:
+            result = list_task_versions()
+            print(json.dumps(result, indent=2))
+            sys.exit(0)
+
+        # Improvement #5: --ab flag for A/B comparison
+        if args.ab:
+            from opencode_improvement import ab_compare_agents
+            if not args.agent:
+                print("Error: --ab requires --agent to specify the agent being compared")
+                sys.exit(1)
+            result = ab_compare_agents(
+                agent_name=args.agent,
+                config_a=args.ab[0],
+                config_b=args.ab[1],
+            )
+            print(json.dumps(result, indent=2))
+            sys.exit(0)
+
+        result = eval_agents(
+            agent_name=args.agent,
+            config_path=args.config,
+            use_golden=args.golden,
+            fail_under=args.fail_under,
+            severity=args.severity,
+            compare=args.compare,
+            baseline_path=args.baseline,
+            provider=args.provider,
+            judge_model=args.judge_model,
+            executor_type=args.executor,
+            scorecard=args.scorecard,
+        )
+
+        # Output handling
+        output = result
+        if args.scorecard:
+            # Show scorecard prominently
+            print(result.get("scorecard", ""))
+            print("")
+            print("--- Full JSON output below ---")
+            print("")
+
+        if args.output:
+            out_path = args.output
+            with open(out_path, "w") as f:
+                json.dump(result, f, indent=2)
+            print(f"Results saved to {out_path}")
+
+        print(json.dumps(output, indent=2))
+
+        # Non-zero exit if fail-under threshold not met
+        if args.fail_under is not None and result.get("pass_rate", 1.0) < args.fail_under:
+            sys.exit(1)
+
+    elif args.command == "inspect":
+        from opencode_improvement import inspect_case
+        result = inspect_case(
+            agent_name=args.agent,
+            case_id=args.case,
+            failed_only=args.failed,
+        )
+        print(json.dumps(result, indent=2))
+
+    elif args.command == "kappa":
+        from opencode_improvement import compute_cohens_kappa
+        result = compute_cohens_kappa(dataset_path=args.dataset)
+        print(json.dumps(result, indent=2))
+
+        # Non-zero exit if kappa < 0.7
+        if result.get("kappa_acceptable") is False:
+            print(f"\n⚠️  Kappa {result.get('overall_kappa')} < 0.7 — flagged categories:")
+            for cat in result.get("flagged_categories", []):
+                print(f"   - {cat['category']}: {cat['kappa']}")
+            sys.exit(1)
+
+    elif args.command == "list-strategies":
+        from opencode_improvement import STRATEGY_LIBRARY
+        print(json.dumps(STRATEGY_LIBRARY, indent=2))
 
     else:
         parser.print_help()

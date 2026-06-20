@@ -1,0 +1,36 @@
+# Eval config for orchestrator agent
+# Generated from golden/agent_tasks.json — 3 test cases
+# Categories: context_adherence, task_completion
+
+meta:
+  agent: orchestrator
+  version: "1.0"
+  total_test_cases: 3
+  categories: ["context_adherence", "task_completion"]
+  severities: ["critical"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: orchestrator
+
+test_cases:
+  - id: "orchestrator-001"
+    description: "Orchestrator reads shared context before dispatching"
+    severity: critical
+    category: context_adherence
+    reference: "orchestrator.md: 'READ ~/.config/opencode/shared/context.json to check for existing findings'"
+  - id: "orchestrator-002"
+    description: "Orchestrator runs quality gates before returning"
+    severity: critical
+    category: task_completion
+    reference: "orchestrator.md workflow step 9: VERIFY"
+  - id: "orchestrator-003"
+    description: "Orchestrator injects shared context into delegation prompts"
+    severity: critical
+    category: task_completion
+    reference: "orchestrator.md shared-context-management: 'Include accumulated context from ALL previously run agents'"

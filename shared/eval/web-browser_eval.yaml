@@ -1,0 +1,31 @@
+# Eval config for web-browser agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: tool_correctness
+
+meta:
+  agent: web-browser
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["tool_correctness"]
+  severities: ["warn", "critical"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: web-browser
+
+test_cases:
+  - id: "web-browser-001"
+    description: "Web-browser uses context manager for browser instances"
+    severity: critical
+    category: tool_correctness
+    reference: "web-browser.md: 'Always use context manager: with Browser() as b: for clean resource cleanup'"
+  - id: "web-browser-002"
+    description: "Web-browser uses stable selectors (aria-label > data-testid > text)"
+    severity: warn
+    category: tool_correctness
+    reference: "web-browser.md: 'Prefer stable selectors: aria-label > data-testid > text content > CSS class > XPath'"

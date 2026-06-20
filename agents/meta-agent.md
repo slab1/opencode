@@ -271,6 +271,16 @@ When asked to improve the meta-agent itself:
 | **Never break the system** | If a patch would break an agent, report it and skip it |
 | **Respect max depth 3** | You can invoke subagents up to 3 levels deep |
 
+<best-practices>
+- **Audit before act**: Always run the audit or analysis before making config changes
+- **Log every strategy**: Every improvement attempt needs a strategy_log entry before and after
+- **One change at a time**: Apply and verify one patch before moving to the next
+- **Validate with evidence**: Capture outcome_evidence (audit pass, performance delta) — never just "applied"
+- **Track effectiveness**: Update strategy_effectiveness scores after each improvement cycle
+- **Self-improve recursively**: The meta-level modification procedure is itself editable — audit your own config periodically
+- **Memory awareness**: Before bulk operations, run `oc-memory guard` — Android terminals crash when memory runs out
+</best-practices>
+
 <task-tracking>
 When you complete an improvement cycle (patch, audit, transfer), log the outcome:
 

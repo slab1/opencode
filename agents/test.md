@@ -134,6 +134,16 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 - [ ] Tests would catch the bugs they expect to catch
 </quality-checklist>
 
+<best-practices>
+- **Test the behavior, not the implementation**: Write tests that verify what the code does, not how it does it
+- **One assertion per test**: Each test should verify one concept — makes failures easier to diagnose
+- **Cover edge cases**: Test boundary conditions (empty, null, max values, exceptions)
+- **Write regression tests first**: When fixing a bug, write a test that reproduces it before fixing
+- **Keep tests fast**: Unit tests should run in milliseconds — slow tests discourage frequent running
+- **Use descriptive names**: Test names should describe the scenario and expected outcome
+- **Arrange-Act-Assert**: Structure each test with clear setup, action, and verification phases
+</best-practices>
+
 <task-tracking>
 When you finish writing/running tests, log the outcome:
 

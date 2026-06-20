@@ -103,6 +103,18 @@ The agent logs every analysis strategy and outcome to `shared/context.json` unde
 - Confidence before/after: How sure was the fix would work
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **metacognitive-tracking**: Log strategy decisions and track effectiveness (HyperAgents pattern)
+- **hash-anchored-edits**: LINE#ID content-hash pattern for reliable edits
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+- **codebase-inspection**: Inspect codebases with pygount: LOC, languages, ratios
+- **system-audit**: Structural audit of all agents
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <workflow-types>
 
 ### Root Cause Analysis
@@ -216,6 +228,16 @@ When facing wrong API calls (across versions):
 - **Use regex for flexible patterns**: `(?s)` for multi-line, `.*` for wildcards
 - **Fall back to web search** when GitHub code search returns nothing useful
 </rules>
+
+<best-practices>
+- **Read before edit**: Never edit a file you haven't read. Never guess line numbers.
+- **Root cause first**: Fix parse errors and import errors before type errors — they cascade dramatically
+- **Smallest change wins**: A 1-line fix that works is better than a 50-line refactor
+- **Search before you write**: If unsure of an API, search GitHub for real usage patterns first
+- **One change, verify**: Verify after each batch of changes — don't change 20 files then fail
+- **Log your strategy**: Every fix strategy goes to metacognitive tracking for future improvement
+- **Use ast_grep for bulk**: Prefer AST-aware transformations over sed for multi-line patterns
+</best-practices>
 
 <task-tracking>
 Log every significant fix operation:

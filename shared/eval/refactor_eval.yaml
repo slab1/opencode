@@ -1,0 +1,31 @@
+# Eval config for refactor agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: task_completion, output_quality
+
+meta:
+  agent: refactor
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["task_completion", "output_quality"]
+  severities: ["info", "critical"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: refactor
+
+test_cases:
+  - id: "refactor-001"
+    description: "Refactor agent verifies tests exist before changing code"
+    severity: critical
+    category: task_completion
+    reference: "refactor.md: 'Test before refactor: Ensure tests exist and pass before changing any code'"
+  - id: "refactor-002"
+    description: "Refactor agent makes one change at a time"
+    severity: info
+    category: output_quality
+    reference: "refactor.md: 'Change one thing at a time: Make incremental changes and verify after each step'"

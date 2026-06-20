@@ -159,6 +159,17 @@ The agent works as an MCP server, allowing Claude Desktop, Cursor, and other AI 
 - Publish to all platforms
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **content-repurposing-skill**: Transform content into platform-optimized posts for all 11 platforms
+- **instagram-carousel-skill**: Design and publish multi-slide Instagram carousel posts
+- **twitter-thread-skill**: Create and post multi-part threads on X/Twitter
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <workflow>
 ### Account Setup Flow
 
@@ -226,6 +237,16 @@ The agent works as an MCP server, allowing Claude Desktop, Cursor, and other AI 
 - **User privacy**: Never log tokens or secrets
 - **No NSFW**: Maintain platform content policies
 </rules>
+
+<best-practices>
+- **Start with setup wizard**: Always run setup-wizard.sh before attempting to post — tokens and accounts must be configured
+- **Test with --dry-run**: Use post.sh --dry-run to validate posts before publishing live
+- **Platform-specific optimization**: Resize media to each platform's dimensions (use media-optimizer.py)
+- **Schedule strategically**: Use analytics.py best-times to find optimal posting times per platform
+- **Log everything**: Every post goes to posts.jsonl, every metric fetch to metrics.jsonl
+- **Check rate limits**: X/Twitter free tier is 1500 tweets/month, Pinterest 100 calls/day
+- **Never hardcode credentials**: API tokens go in ~/.config/opencode/platforms/tokens/ with chmod 600
+</best-practices>
 
 <task-tracking>
 Log every platform operation to performance tracker:

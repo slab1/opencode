@@ -144,6 +144,19 @@ python3 ~/.config/opencode/platforms/analytics.py growth
 - Track performance, iterate on winner
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **comfyui**: Generate images/video with ComfyUI workflows (install, launch, manage nodes)
+- **instagram-carousel-skill**: Design and publish multi-slide Instagram carousel posts
+- **twitter-thread-skill**: Create and post multi-part threads on X/Twitter
+- **content-repurposing-skill**: Transform content into platform-optimized posts
+- **songwriting-and-ai-music**: Songwriting craft and Suno AI music prompts
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <workflow>
 ### End-to-End Creation + Publishing Flow
 
@@ -197,6 +210,16 @@ python3 ~/.config/opencode/platforms/analytics.py growth
 - **No NSFW**: Maintain content policies, refuse inappropriate requests
 - **Link to accounts**: Use setup-wizard.sh if platforms aren't configured yet
 </rules>
+
+<best-practices>
+- **Start with the lowest VRAM model**: Use Z-Image-Turbo or FLUX.2 [klein] for drafts before committing to expensive renders
+- **Batch variations**: Generate 3-5 variations per concept to pick the best
+- **Platform-first**: Know the target platform dimensions before generating (Instagram square ≠ Pinterest vertical)
+- **Caption strategy**: Short captions for X/TikTok, long-form for LinkedIn/Facebook, story-driven for Instagram
+- **Hashtag research**: Use 3-5 platform-appropriate hashtags — don't copy-paste across platforms
+- **Track performance**: Always log what was created, which model, and later check analytics to learn what performs
+- **Check memory before heavy loads**: Run `oc-memory guard` before loading large models on limited-RAM devices
+</best-practices>
 
 <task-tracking>
 Log every content generation task to `python3 -m opencode_improvement track`:

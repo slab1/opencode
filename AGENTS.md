@@ -212,3 +212,47 @@ When editing any file under `platforms/` or `shared/`:
 3. Update the corresponding `AGENTS.md` if the change affects the directory structure, available commands, or conventions
 4. Test with `--dry-run` where available
 5. Log the action in `shared/performance.json`
+
+---
+
+## Eval System — Agent Evaluation & CI Gating
+
+The eval system evaluates agent configs against golden test cases, enforces quality gates,
+and detects regressions. Inspired by 7 eval harness repos.
+
+### Architecture
+
+```
+shared/eval/
+├── AGENTS.md              ← Eval system documentation
+├── agent_eval.yaml        ← Main eval config (regokan/evalh pattern)
+├── build_eval.yaml        ← Per-agent eval configs
+├── ... 22 more ...
+└── baseline.json          ← Baseline snapshot (Victor-David-Medina pattern)
+
+shared/golden/
+├── AGENTS.md              ← Golden dataset documentation
+└── agent_tasks.json       ← 53 test cases: behavioral + property-based
+```
+
+### Patterns Implemented
+
+| Pattern | Source | What It Does |
+|---------|--------|--------------|
+| **Structured golden datasets** | DeepEval (⭐7k) | Input/expected/metrics per test case |
+| **YAML-driven eval config** | regokan/evalh | Single `agent_eval.yaml` drives all eval |
+| **`--fail-under` CI gate** | Juanllenato | Non-zero exit blocks CI when pass rate drops |
+| **Baseline comparison** | Victor-David-Medina | Snapshot current state, detect regressions |
+| **3-layer eval** | mpuodziukas-labs | Golden + property invariants + LLM-judge |
+| **CI cron + diff** | linny006 | Weekly scheduled eval runs with auto-tracking |
+
+### Key Commands
+
+| Action | Command |
+|--------|---------|
+| Evaluate all agents | `python3 -m opencode_improvement eval` |
+| Evaluate one agent | `python3 -m opencode_improvement eval --agent build` |
+| With fail-under gate | `python3 -m opencode_improvement eval --fail-under 0.8` |
+| Compare vs baseline | `python3 -m opencode_improvement eval --compare` |
+| List available strategies | `python3 -m opencode_improvement list-strategies` |
+| View strategy effectiveness | `python3 -m opencode_improvement strategies` |

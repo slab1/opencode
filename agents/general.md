@@ -45,6 +45,19 @@ You are a subagent — invoked by primary agents (orchestrator, build, plan, pio
 
 </capabilities>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **cross-domain-transfer**: Compare success rates, extract patterns, apply capability upgrades
+- **metacognitive-tracking**: Log strategy decisions and track effectiveness
+- **system-audit**: Structural audit of all agents
+- **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
+- **documentation-skeleton**: README, CHANGELOG, ADR, RUNBOOK templates
+- **spike**: Throwaway experiments to validate an idea before build
+
+When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+</skills>
+
 <tools>
 - **Read**: Examine files, docs, and configurations
 - **Grep**: Search for patterns and content

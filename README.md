@@ -1,6 +1,6 @@
 # OpenCode Configuration Toolkit
 
-A production-ready [OpenCode](https://opencode.ai) configuration with **18 agents**, multimodal file processing, web automation, video creation, virtual display management, and MCP server integration.
+A production-ready [OpenCode](https://opencode.ai) configuration with **23 agents**, multimodal file processing, web automation, video creation, virtual display management, MCP server integration, and a **self-improving agent evaluation system**.
 
 ## Quick Start
 
@@ -24,7 +24,7 @@ After install, restart OpenCode. The toolkit activates automatically.
 ├── opencode.jsonc          # Main configuration
 ├── install.sh              # Bootstrap installer
 ├── package.json            # npm dependencies for MCP servers
-├── agents/                 # 18 OpenCode agent definitions
+├── agents/                 # 23 OpenCode agent definitions
 │   ├── orchestrator.md
 │   ├── build.md
 │   ├── plan.md
@@ -34,15 +34,31 @@ After install, restart OpenCode. The toolkit activates automatically.
 │   ├── web-browser.md      # Full browser automation
 │   ├── video-creator.md    # Programmatic video
 │   ├── display-agent.md    # Virtual display manager
-│   └── ... (9 more)
+│   ├── meta-agent.md       # Self-improvement engine
+│   ├── platform-manager.md # Social media management
+│   ├── content-creator.md  # AI content generation
+│   ├── heartbeat.md        # Periodic health monitoring
+│   └── ... (10 more)
+├── opencode_improvement/   # Self-improvement engine
+│   ├── __init__.py         # Evaluators, strategies, audit, A/B comparison
+│   ├── __main__.py         # CLI: audit, eval, kappa, inspect, strategies
+│   └── track.py            # Performance tracking
 ├── knowledge-graph/
 │   └── graph.json          # Agent registry & workflow patterns
 ├── opencode_media/         # Python module for multimodal processing
 ├── opencode_video/         # Python module for video creation
 ├── opencode_web/           # Python module for web automation
 ├── opencode_display/       # Python module for virtual display
+├── reports/
+│   └── trends/             # Auto-committed eval trend data (CI)
 └── shared/
-    ├── README.md           # Shared context usage guide
+    ├── context.json        # Cross-agent shared state (READ FIRST)
+    ├── eval/               # Agent evaluation configuration
+    │   ├── agent_eval.yaml # Main YAML eval config (regokan/evalh pattern)
+    │   ├── baseline.json   # Baseline for regression detection
+    │   └── {agent}_eval.yaml  # Per-agent eval configs (23 files)
+    ├── golden/
+    │   └── agent_tasks.json # 53 test cases (46 behavioral + 7 property)
     └── helpers/context.py  # Context management helpers
 ```
 
@@ -204,6 +220,90 @@ To enable a disabled MCP server, edit `opencode.jsonc` and change `"enabled": fa
 }
 ```
 
+## Agent Evaluation System (Self-Improvement Engine)
+
+The toolkit includes a built-in evaluation system for measuring and improving agent quality, inspired by patterns from 7 evaluation harness repos (DeepEval ⭐7k, regokan/evalh, linny006, Juanllenato, Victor-David-Medina, mpuodziukas-labs, victorwhale).
+
+### Architecture
+
+```
+opencode_improvement/          # Python module — CLI + evaluators
+├── __init__.py                # 24 strategies, 8 evaluator classes, audit
+└── __main__.py                # CLI: audit, eval, kappa, inspect, strategies
+
+shared/
+├── eval/
+│   ├── agent_eval.yaml        # YAML-driven eval config (regokan/evalh)
+│   ├── baseline.json          # Baseline snapshot (Victor-David-Medina)
+│   └── {23}_eval.yaml         # Per-agent configs
+├── golden/
+│   └── agent_tasks.json       # 53 test cases (53 total, 46 behavioral + 7 property)
+└── context.json               # Strategy log for metacognitive tracking
+```
+
+### CLI Commands
+
+| Command | Description | Source Pattern |
+|---------|-------------|----------------|
+| `audit` | Structural completeness check of all agent configs | Built-in |
+| `eval` | Run golden test cases with configurable pass thresholds | Juanllenato `--fail-under` |
+| `eval --compare` | Generate markdown comparison report against baseline | Victor-David-Medina |
+| `eval --scorecard` | ASCII bar chart scorecard with green/yellow/red tiers | Weighted composite |
+| `eval --provider mock` | Offline eval using MockProvider (no agent runtime needed) | Deterministic CI pattern |
+| `eval --judge-model` | LLM-as-judge semantic scoring (3 metrics) | DeepEval LLM-as-judge |
+| `eval --executor async` | Concurrent evaluation via asyncio.gather | regokan/evalh |
+| `eval --ab config_a config_b` | A/B compare two agent configs | victorwhale |
+| `eval --version` | List all test case versions | EleutherAI lm-eval |
+| `inspect` | Per-case test case details and failure debugging | regokan/evalh inspect |
+| `kappa` | Cohen's Kappa inter-rater agreement for dataset quality | mpuodziukas-labs |
+| `list-strategies` | List all 24 improvement strategies with descriptions | HyperAgents |
+| `strategies` | Show strategy effectiveness scores from logged applications | Metacognitive tracking |
+
+### Usage Examples
+
+```bash
+# Run full evaluation with pass threshold
+python3 -m opencode_improvement eval --fail-under 0.8
+
+# Offline eval with scorecard visualization
+python3 -m opencode_improvement eval --provider mock --scorecard
+
+# Compare against baseline and generate report
+python3 -m opencode_improvement eval --compare --output results.json
+
+# Debug a specific test case
+python3 -m opencode_improvement inspect --agent web-browser --case web-browser-001
+
+# Validate dataset quality with Cohen's Kappa
+python3 -m opencode_improvement kappa
+
+# A/B compare two versions of an agent config
+python3 -m opencode_improvement eval --agent web-browser --ab config_v1.yaml config_v2.yaml
+
+# Check strategy effectiveness
+python3 -m opencode_improvement strategies
+```
+
+### Key Metrics
+
+- **53 test cases**: 46 behavioral (per-agent, 7 categories) + 7 property-based (universal invariants)
+- **24 strategies** in the strategy library with effectiveness tracking
+- **23 agents** evaluated against structural, behavioral, and property-based tests
+- **CI integration**: Weekly cron + push/PR triggers auto-commit trend data to `reports/trends/`
+- **Baseline comparison**: Detect regressions before they ship
+
+### Agent Catalog Updates
+
+The system now manages **23 agents** (up from 18), including:
+
+| New Agent | File | Purpose |
+|-----------|------|---------|
+| **meta-agent** | `agents/meta-agent.md` | Self-improvement — audits, patches, transfers capabilities |
+| **platform-manager** | `agents/platform-manager.md` | Social media management across 11 platforms |
+| **content-creator** | `agents/content-creator.md` | AI image/video/text content generation |
+| **human** | `agents/human.md` | Human analysis — reads code like a senior engineer |
+| **heartbeat** | `agents/heartbeat.md` | Periodic health monitoring and proactive insights |
+
 ## Configuration
 
 ### Environment Variables
@@ -238,7 +338,7 @@ The toolkit includes a knowledge graph (`knowledge-graph/graph.json`) that OpenC
 
 ### What's Registered
 
-- **18 agents** with capabilities, permissions, and shared context rules
+- **23 agents** with capabilities, permissions, and shared context rules
 - **14 workflow patterns** from simple code edits to complex multimodal file processing
 - **17 population rules** controlling how agents appear in the roster
 - **11 domain considerations** including media_tasks, document_tasks, security_audit, data_migration

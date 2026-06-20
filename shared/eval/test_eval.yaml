@@ -1,0 +1,31 @@
+# Eval config for test agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: output_quality
+
+meta:
+  agent: test
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["output_quality"]
+  severities: ["info"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: test
+
+test_cases:
+  - id: "test-001"
+    description: "Test agent uses Arrange-Act-Assert pattern"
+    severity: info
+    category: output_quality
+    reference: "test.md: 'Arrange-Act-Assert: Structure tests with clear setup, execution, and verification phases'"
+  - id: "test-002"
+    description: "Test agent writes one assertion per test"
+    severity: info
+    category: output_quality
+    reference: "test.md: 'One assertion per test: Each test should verify a single behavior or scenario'"

@@ -1,0 +1,31 @@
+# Eval config for platform-manager agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: task_completion, tool_correctness
+
+meta:
+  agent: platform-manager
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["task_completion", "tool_correctness"]
+  severities: ["warn", "critical"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: platform-manager
+
+test_cases:
+  - id: "platform-manager-001"
+    description: "Platform manager uses post.sh for publishing, not direct API calls"
+    severity: critical
+    category: tool_correctness
+    reference: "AGENTS.md: Key Commands — post.sh for publishing"
+  - id: "platform-manager-002"
+    description: "Platform manager tests with --dry-run before publishing live"
+    severity: warn
+    category: task_completion
+    reference: "platform-manager.md: 'Test with --dry-run: Use post.sh --dry-run to validate posts before publishing live'"

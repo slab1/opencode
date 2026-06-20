@@ -117,6 +117,15 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 | Find tests for a file | `glob "**/*.test.*"` or `glob "**/*.spec.*"` | `grep "import.*filename"` in test dirs |
 </search-patterns>
 
+<best-practices>
+- **Search before reading**: Use Glob/Grep first, only Read what's relevant
+- **Narrow then broaden**: Start with specific patterns, broaden if no results — avoid search explosion
+- **Use multiple patterns**: Try alternative patterns when the first search yields nothing
+- **Batch parallel calls**: Use multiple Glob/Grep calls simultaneously when exploring different angles
+- **Include context**: Request 3-5 context lines around matches for understanding
+- **Know when to escalate**: If results are too sparse or complex, delegate to `general` for deeper analysis
+</best-practices>
+
 <task-tracking>
 When you finish exploring the codebase, log what was found:
 
