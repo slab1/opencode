@@ -14,6 +14,7 @@ Extended with 10 improvements:
 """
 
 import argparse
+import datetime
 import json
 import sys
 
@@ -96,8 +97,30 @@ def main():
     ep.add_argument("--version", action="store_true", default=False,
                     help="Show golden test case versions")
 
+    # --- patterns (delegation pattern mining) ---
+    pp = subparsers.add_parser("patterns", help="Mine delegation patterns from historical data")
+    pp.add_argument("--recommend", "-r", type=str, default=None,
+                    help="Recommend an agent for a task description")
+    pp.add_argument("--trends", "-t", action="store_true",
+                    help="Show delegation trends")
+    pp.add_argument("--heatmap", "-m", action="store_true",
+                    help="Show delegation heatmap matrix")
+
     # --- list-strategies (show strategy library) ---
     subparsers.add_parser("list-strategies", help="List all available improvement strategies")
+
+    # --- spawn (multi-agent team spawning) ---
+    sp_spawn = subparsers.add_parser("spawn", help="Spawn a multi-agent team for a complex task")
+    sp_spawn.add_argument("--task", "-t", default="", help="Task description")
+    sp_spawn.add_argument("--complexity", "-c", choices=["simple", "moderate", "complex"],
+                          default="moderate", help="Task complexity (determines team size)")
+    sp_spawn.add_argument("--template", choices=["bug-fix", "feature", "research", "content", "full-audit"],
+                          help="Team template name (overrides default role composition)")
+    sp_spawn.add_argument("--list-teams", action="store_true", help="List all active spawned teams")
+    sp_spawn.add_argument("--cleanup-stale", action="store_true",
+                          help="Remove teams older than --max-age")
+    sp_spawn.add_argument("--max-age", type=int, default=24,
+                          help="Max age in hours for stale cleanup (default: 24)")
 
     # Improvement #8: inspect subcommand
     ip = subparsers.add_parser("inspect", help="Inspect golden test case details")
@@ -109,6 +132,19 @@ def main():
     # Improvement #6: kappa subcommand
     kp = subparsers.add_parser("kappa", help="Compute Cohen's Kappa inter-rater agreement")
     kp.add_argument("--dataset", default=None, help="Path to golden dataset JSON")
+
+    # --- memory (cross-session memory loop) ---
+    mp = subparsers.add_parser("memory", help="Cross-session memory loop — generate feedback and handoff records")
+    mp.add_argument("--status", "-s", action="store_true", help="Show session summary from shared context")
+    mp.add_argument("--handoff", "-H", action="store_true", help="Write handoff record for next session")
+    mp.add_argument("--feedback", "-f", action="store_true", help="Read past cross-session feedback")
+
+    # --- benchmark ---
+    bp = subparsers.add_parser("benchmark", help="Competitive benchmarking against other code agents")
+    bp.add_argument("--export-template", action="store_true", help="Generate JSON template for manual results entry")
+    bp.add_argument("--import", dest="import_file", default=None, help="Import competitor results JSON file")
+    bp.add_argument("--compare", action="store_true", help="Compare imported results against self-evaluation")
+    bp.add_argument("--report", action="store_true", help="Generate full markdown comparison report")
 
     args = parser.parse_args()
 
@@ -238,9 +274,104 @@ def main():
                 print(f"   - {cat['category']}: {cat['kappa']}")
             sys.exit(1)
 
+    elif args.command == "memory":
+        from opencode_improvement.memory_loop import run_cli as memory_cli
+        memory_cli(sys.argv[2:] if len(sys.argv) > 2 else ["--status"])
+
+    elif args.command == "benchmark":
+        from opencode_improvement.benchmark import BenchmarkRunner, render_comparison_table, report_to_markdown, generate_comparison
+
+        runner = BenchmarkRunner()
+
+        if args.export_template:
+            template = runner.export_template()
+            out = runner.results_dir / "benchmark_template.json"
+            out.write_text(json.dumps(template, indent=2))
+            print(f"Template written to {out}")
+            print(f"Edit {out} with competitor results, then use --import to load.")
+            sys.exit(0)
+
+        if args.import_file:
+            data = runner.import_results(args.import_file)
+            agent = data.get("meta", {}).get("agent", "unknown")
+            summary = data.get("summary", {})
+            print(f"Imported results for '{agent}': {summary.get('passed', 0)}/{summary.get('total', 0)} passed ({summary.get('pass_rate', 0):.1%})")
+            # Save for comparison
+            import_path = runner.results_dir / f"results_{agent}_{datetime.date.today().isoformat()}.json"
+            import_path.write_text(json.dumps(data, indent=2))
+            print(f"Saved to {import_path}")
+            sys.exit(0)
+
+        if args.compare or args.report:
+            # Run self-eval first
+            self_result = runner.run_self_eval()
+            all_results = {runner.agent_name: self_result}
+
+            # Load imported competitor results
+            for f in sorted(runner.results_dir.glob("results_*.json")):
+                try:
+                    comp_data = json.loads(f.read_text())
+                    comp_agent = comp_data.get("meta", {}).get("agent", f.stem)
+                    all_results[comp_agent] = comp_data
+                except (json.JSONDecodeError, OSError):
+                    continue
+
+            if len(all_results) < 2:
+                print("Need at least 2 agents to compare. Import results first.")
+                print("  python3 -m opencode_improvement benchmark --export-template")
+                print("  python3 -m opencode_improvement benchmark --import results_cursor.json")
+                sys.exit(1)
+
+            comparison = generate_comparison(all_results)
+            if args.compare:
+                print(render_comparison_table(comparison))
+            elif args.report:
+                print(report_to_markdown(comparison))
+            sys.exit(0)
+
+        # Default: run self-eval
+        result = runner.run_self_eval()
+        print(json.dumps(result, indent=2))
+
+    elif args.command == "patterns":
+        from opencode_improvement.pattern_miner import run_cli
+        run_cli(sys.argv[2:] if len(sys.argv) > 2 else [])
+
     elif args.command == "list-strategies":
         from opencode_improvement import STRATEGY_LIBRARY
         print(json.dumps(STRATEGY_LIBRARY, indent=2))
+
+    elif args.command == "spawn":
+        from opencode_improvement.spawner import (
+            spawn_team, list_active_teams, cleanup_stale_teams, TEAM_TEMPLATES,
+        )
+
+        if args.list_teams:
+            teams = list_active_teams()
+            if teams:
+                print(json.dumps(teams, indent=2))
+            else:
+                print("No active teams.")
+            sys.exit(0)
+
+        if args.cleanup_stale:
+            result = cleanup_stale_teams(max_age_hours=args.max_age)
+            print(json.dumps(result, indent=2))
+            sys.exit(0)
+
+        if not args.task:
+            print("Error: --task is required (or use --list-teams / --cleanup-stale)")
+            sys.exit(1)
+
+        task = {
+            "description": args.task,
+            "complexity": args.complexity,
+        }
+        if args.template:
+            task["template"] = args.template
+
+        result = spawn_team(task)
+        print(json.dumps(result, indent=2))
 
     else:
         parser.print_help()

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-06-20T10:00:00Z",
+  "last_updated": "2026-06-20T20:30:00Z",
   "system": {
     "platform_manager": {
       "status": "setup_initialized",
@@ -23,6 +23,51 @@
     }
   ],
   "recent_artifacts": [
+    {
+      "type": "package",
+      "path": "~/.config/opencode/agent-eval/",
+      "purpose": "Standalone agent evaluation toolkit (pip-installable)"
+    },
+    {
+      "type": "script",
+      "path": "~/.config/opencode/agent-eval/auto_evolve.py",
+      "purpose": "Automatic agent evolution from eval results"
+    },
+    {
+      "type": "module",
+      "path": "~/.config/opencode/opencode_improvement/pattern_miner.py",
+      "purpose": "Delegation pattern mining and agent recommendation"
+    },
+    {
+      "type": "module",
+      "path": "~/.config/opencode/opencode_improvement/spawner.py",
+      "purpose": "Dynamic multi-agent team spawning"
+    },
+    {
+      "type": "module",
+      "path": "~/.config/opencode/opencode_improvement/benchmark.py",
+      "purpose": "Competitive benchmarking against other code agents"
+    },
+    {
+      "type": "module",
+      "path": "~/.config/opencode/opencode_improvement/memory_loop.py",
+      "purpose": "Cross-session memory loop with handoff records"
+    },
+    {
+      "type": "dashboard",
+      "path": "~/.config/opencode/dashboard/",
+      "purpose": "Live FastAPI dashboard showing eval scores, strategy effectiveness, agent health"
+    },
+    {
+      "type": "spec",
+      "path": "~/.config/opencode/AGENTS_SPEC.md",
+      "purpose": "Formal AGENTS.md discoverability protocol specification"
+    },
+    {
+      "type": "installer",
+      "path": "~/.config/opencode/install.sh",
+      "purpose": "Single-command system installer with dependency detection"
+    },
     {
       "type": "AGENTS.md",
       "path": "~/.config/opencode/AGENTS.md",
@@ -57,16 +102,6 @@
       "type": "fix",
       "path": "~/.config/opencode/platforms/post.sh",
       "purpose": "Fixed openssl\u2192xxd for POST_ID generation"
-    },
-    {
-      "type": "hook",
-      "path": "~/.config/opencode/platforms/hooks/pre-post.sh",
-      "purpose": "Pre-publishing hook (validation, enrichment, abort)"
-    },
-    {
-      "type": "hook",
-      "path": "~/.config/opencode/platforms/hooks/post-post.sh",
-      "purpose": "Post-publishing hook (logging, notifications)"
     },
     {
       "type": "config",
@@ -161,6 +196,54 @@
       "date": "2026-06-20",
       "description": "Implemented full agent evaluation system using patterns from 7 harness repos",
       "rationale": "No eval infrastructure existed; 7 harness patterns synthesized into single cohesive system"
+    },
+    {
+      "id": "strat-009",
+      "date": "2026-06-20",
+      "description": "Standalone agent-eval package extracted from opencode_improvement",
+      "rationale": "pip-installable eval toolkit enables ANY code agent system to use our evaluation framework"
+    },
+    {
+      "id": "strat-010",
+      "date": "2026-06-20",
+      "description": "Auto-evolution script creates self-healing agent configs from eval failures",
+      "rationale": "Closes the loop between evaluation and improvement \u2014 agents that fix themselves"
+    },
+    {
+      "id": "strat-011",
+      "date": "2026-06-20",
+      "description": "Delegation pattern mining learns optimal agent routing from performance history",
+      "rationale": "Recommendations improve over time as more data accumulates"
+    },
+    {
+      "id": "strat-012",
+      "date": "2026-06-20",
+      "description": "Dynamic agent spawning creates ephemeral multi-agent teams per task",
+      "rationale": "Complex tasks need specialized, coordinated agents without permanent overhead"
+    },
+    {
+      "id": "strat-013",
+      "date": "2026-06-20",
+      "description": "Competitive benchmarking framework enables comparison vs Claude Code, Codex, etc.",
+      "rationale": "Establishes our eval suite as a reference standard for agent quality"
+    },
+    {
+      "id": "strat-014",
+      "date": "2026-06-20",
+      "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+      "rationale": "Each session generates structured handoff so the next session picks up context"
+    },
+    {
+      "id": "strat-015",
+      "date": "2026-06-20",
+      "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+      "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+    },
+    {
+      "id": "strat-016",
+      "date": "2026-06-20",
+      "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+      "rationale": "If others adopt it, our conventions become the standard"
     }
   ],
   "strategy_log": [
@@ -424,8 +507,11 @@
       "agent_target": "eval system",
       "diagnosis": "No way to run offline eval without agent runtime",
       "strategy_chosen": "add_mock_provider",
-      "strategy_alternatives_considered": ["skip_offline_eval", "record_replay"],
-      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores — enables zero-cost CI eval",
+      "strategy_alternatives_considered": [
+        "skip_offline_eval",
+        "record_replay"
+      ],
+      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores \u2014 enables zero-cost CI eval",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.9,
       "outcome": "success",
@@ -435,9 +521,12 @@
     {
       "id": "strategy-1781950000002",
       "agent_target": "golden datasets",
-      "diagnosis": "Test cases have no version tracking — impossible to know if evaluation drift is from agent changes or test suite changes",
+      "diagnosis": "Test cases have no version tracking \u2014 impossible to know if evaluation drift is from agent changes or test suite changes",
       "strategy_chosen": "add_task_versioning",
-      "strategy_alternatives_considered": ["no_versioning", "external_version_file"],
+      "strategy_alternatives_considered": [
+        "no_versioning",
+        "external_version_file"
+      ],
       "why_this_strategy": "Embedding version in each test case's JSON schema ties version to data; baseline.json tracks which version was evaluated",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.85,
@@ -450,20 +539,26 @@
       "agent_target": "golden datasets",
       "diagnosis": "No way to quantify inter-rater agreement of golden test case categories",
       "strategy_chosen": "add_cohens_kappa",
-      "strategy_alternatives_considered": ["skip_quality_check", "manual_review"],
-      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with κ < 0.7",
+      "strategy_alternatives_considered": [
+        "skip_quality_check",
+        "manual_review"
+      ],
+      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with \u03ba < 0.7",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.7,
       "outcome": "success",
-      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when κ < 0.7",
+      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when \u03ba < 0.7",
       "confidence_after": 0.9
     },
     {
       "id": "strategy-1781950000004",
       "agent_target": "eval system",
-      "diagnosis": "No semantic quality scoring — only keyword matching and structural audits",
+      "diagnosis": "No semantic quality scoring \u2014 only keyword matching and structural audits",
       "strategy_chosen": "add_llm_judge",
-      "strategy_alternatives_considered": ["skip_semantic_eval", "use_third_party"],
+      "strategy_alternatives_considered": [
+        "skip_semantic_eval",
+        "use_third_party"
+      ],
       "why_this_strategy": "LLM-as-judge measures faithfulness, task_completion, answer_relevancy; heuristic fallback when no endpoint configured",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.75,
@@ -474,9 +569,12 @@
     {
       "id": "strategy-1781950000005",
       "agent_target": "eval system",
-      "diagnosis": "All eval runs sequential — slow for large agent count",
+      "diagnosis": "All eval runs sequential \u2014 slow for large agent count",
       "strategy_chosen": "add_async_executor",
-      "strategy_alternatives_considered": ["keep_sync_only", "thread_pool"],
+      "strategy_alternatives_considered": [
+        "keep_sync_only",
+        "thread_pool"
+      ],
       "why_this_strategy": "AsyncExecutor uses asyncio.gather for concurrent eval; falls back to SyncExecutor on failure; minimal code change",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.8,
@@ -489,7 +587,10 @@
       "agent_target": "eval CLI output",
       "diagnosis": "JSON-only output is hard to scan; no visual overview",
       "strategy_chosen": "add_scorecard_visualization",
-      "strategy_alternatives_considered": ["keep_json_only", "add_html_report"],
+      "strategy_alternatives_considered": [
+        "keep_json_only",
+        "add_html_report"
+      ],
       "why_this_strategy": "ASCII bar charts with color thresholds provide instant readability; Victor-David-Medina weighted composite scorer pattern",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.9,
@@ -500,9 +601,12 @@
     {
       "id": "strategy-1781950000007",
       "agent_target": "eval CLI",
-      "diagnosis": "No way to debug individual test case failures — must read full JSON output",
+      "diagnosis": "No way to debug individual test case failures \u2014 must read full JSON output",
       "strategy_chosen": "add_inspect_command",
-      "strategy_alternatives_considered": ["manual_parsing", "skip_debugging"],
+      "strategy_alternatives_considered": [
+        "manual_parsing",
+        "skip_debugging"
+      ],
       "why_this_strategy": "Dedicated inspect subcommand shows full test case details; regokan/evalh inspect pattern",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.9,
@@ -513,9 +617,12 @@
     {
       "id": "strategy-1781950000008",
       "agent_target": "eval system",
-      "diagnosis": "No way to see changes over time — each eval run is isolated",
+      "diagnosis": "No way to see changes over time \u2014 each eval run is isolated",
       "strategy_chosen": "add_comparison_report",
-      "strategy_alternatives_considered": ["manual_diff", "skip_trend_tracking"],
+      "strategy_alternatives_considered": [
+        "manual_diff",
+        "skip_trend_tracking"
+      ],
       "why_this_strategy": "Markdown comparison report with delta table against baseline; Victor-David-Medina regression pattern",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.85,
@@ -528,7 +635,10 @@
       "agent_target": "eval system",
       "diagnosis": "No side-by-side comparison of different agent configs against same test suite",
       "strategy_chosen": "add_ab_comparison",
-      "strategy_alternatives_considered": ["manual_config_swap", "skip_ab_testing"],
+      "strategy_alternatives_considered": [
+        "manual_config_swap",
+        "skip_ab_testing"
+      ],
       "why_this_strategy": "A/B testing agent configs enables iterative improvement; victorwhale eval-harness-template pattern",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.8,
@@ -541,7 +651,10 @@
       "agent_target": "CI system",
       "diagnosis": "Eval trends run on push/PR but results not persisted for trend analysis",
       "strategy_chosen": "add_auto_commit_trends",
-      "strategy_alternatives_considered": ["manual_upload", "skip_persistence"],
+      "strategy_alternatives_considered": [
+        "manual_upload",
+        "skip_persistence"
+      ],
       "why_this_strategy": "linny006 cron+diff+commit pattern; schedule-only commit ensures clean history. Extends existing agent-eval.yml workflow",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.85,
@@ -609,6 +722,25 @@
         "shared/golden/agent_tasks.json"
       ],
       "outcome": "All 10 improvements implemented: MockProvider, Task Versioning, Cohen's Kappa, LLM Judge, Multi-Executor, Scorecard, Inspect, Comparison Report, A/B Comparison, Auto-Commit Trends"
+    },
+    {
+      "step": "9-differentiators",
+      "action": "Implemented 9 strategic differentiators (all from strategic analysis)",
+      "files": [
+        "agent-eval/ (standalone package)",
+        "agent-eval/auto_evolve.py",
+        "opencode_improvement/pattern_miner.py",
+        "opencode_improvement/spawner.py",
+        "opencode_improvement/benchmark.py",
+        "opencode_improvement/memory_loop.py",
+        "opencode_improvement/__main__.py",
+        "dashboard/main.py + templates/",
+        "AGENTS_SPEC.md",
+        "install.sh",
+        "AGENTS.md (updated)",
+        "shared/context.json (updated)"
+      ],
+      "outcome": "All 9 differentiators implemented: auto-evolution, agent spawning, delegation mining, live dashboard, competitive benchmarking, memory loop, single-command install, AGENTS.md spec, standalone eval toolkit"
     }
   ],
   "cross_agent_notes": {
@@ -832,7 +964,7 @@
         "id": "session-10-improvements",
         "type": "improvement_plan",
         "summary": "Implemented remaining 10 eval system improvements in parallel",
-        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) — deterministic offline eval via --provider mock\n2. Task Versioning (#10) — version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) — kappa subcommand, flags κ < 0.7 datasets\n4. LLM-as-Judge (#1) — LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) — SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) — ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) — inspect subcommand with --case and --failed\n8. Comparison Report (#3) — markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) — --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) — CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
+        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) \u2014 deterministic offline eval via --provider mock\n2. Task Versioning (#10) \u2014 version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) \u2014 kappa subcommand, flags \u03ba < 0.7 datasets\n4. LLM-as-Judge (#1) \u2014 LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) \u2014 SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) \u2014 ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) \u2014 inspect subcommand with --case and --failed\n8. Comparison Report (#3) \u2014 markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) \u2014 --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) \u2014 CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
         "files_changed": [
           "opencode_improvement/__init__.py",
           "opencode_improvement/__main__.py",
@@ -842,6 +974,196 @@
           "shared/golden/agent_tasks.json"
         ]
       }
+    ],
+    "memory_loop": [
+      {
+        "generated_at": "2026-06-20T19:54:37.743653Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 20,
+          "total_strategies_logged": 26,
+          "total_workflow_steps": 8,
+          "recent_artifacts": 20
+        },
+        "performance_summary": {
+          "total_tasks": 24,
+          "success_count": 24,
+          "success_rate": 1.0
+        },
+        "key_decisions": [
+          {
+            "id": "strat-012",
+            "description": "Dynamic agent spawning creates ephemeral multi-agent teams per task",
+            "rationale": "Complex tasks need specialized, coordinated agents without permanent overhead"
+          },
+          {
+            "id": "strat-013",
+            "description": "Competitive benchmarking framework enables comparison vs Claude Code, Codex, etc.",
+            "rationale": "Establishes our eval suite as a reference standard for agent quality"
+          },
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      }
     ]
+  },
+  "session": {
+    "last_handoff": "2026-06-20T19:54:37.743653Z"
   }
 }

@@ -192,6 +192,44 @@ verify_installation() {
         fi
     done
 
+    # Verify new modules
+    info "  New modules..."
+    for mod in pattern_miner spawner benchmark memory_loop; do
+        if [ -f "$OPENCODE_CONFIG_DIR/opencode_improvement/${mod}.py" ]; then
+            ok "    $mod.py — OK"
+        else
+            warn "    $mod.py — not found (optional)"
+        fi
+    done
+
+    # Verify agent-eval standalone package
+    if [ -f "$OPENCODE_CONFIG_DIR/agent-eval/pyproject.toml" ]; then
+        ok "  agent-eval package — found"
+    else
+        warn "  agent-eval package — not found (optional)"
+    fi
+
+    # Verify dashboard
+    if [ -f "$OPENCODE_CONFIG_DIR/dashboard/main.py" ]; then
+        ok "  dashboard/ — found"
+    else
+        warn "  dashboard/ — not found (optional)"
+    fi
+
+    # Verify install.sh
+    if [ -f "$OPENCODE_CONFIG_DIR/AGENTS_SPEC.md" ]; then
+        ok "  AGENTS_SPEC.md — found"
+    else
+        warn "  AGENTS_SPEC.md — not found (optional)"
+    fi
+
+    # Verify AGENTS_SPEC.md
+    if [ -f "$OPENCODE_CONFIG_DIR/install.sh" ]; then
+        ok "  install.sh — found"
+    else
+        warn "  install.sh — not found (optional)"
+    fi
+
     # Verify config file
     if [ -f "$OPENCODE_CONFIG_DIR/opencode.jsonc" ]; then
         ok "  opencode.jsonc — found"

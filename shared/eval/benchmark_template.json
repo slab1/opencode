@@ -1,0 +1,343 @@
+{
+  "meta": {
+    "agent": "enter-agent-name",
+    "version": "enter-version",
+    "date": "2026-06-20",
+    "model": "enter-model-name",
+    "notes": "How were these results obtained?"
+  },
+  "results": {
+    "build-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "build-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "subagent_delegation",
+      "notes": ""
+    },
+    "orchestrator-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "context_adherence",
+      "notes": ""
+    },
+    "orchestrator-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "meta-agent-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "architect-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "security-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "refusal_handling",
+      "notes": ""
+    },
+    "debug-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "platform-manager-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "content-creator-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "refusal_handling",
+      "notes": ""
+    },
+    "explore-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "test-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "docs-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "human-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "web-browser-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "display-agent-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "video-creator-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "document-agent-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "media-agent-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "security-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "refactor-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "general-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "refusal_handling",
+      "notes": ""
+    },
+    "pioneer-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "plan-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "review-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "heartbeat-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "meta-agent-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "human-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "orchestrator-003": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "build-003": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "platform-manager-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "test-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "debug-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "refactor-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "docs-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "content-creator-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "video-creator-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "web-browser-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "media-agent-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "plan-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "architect-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "general-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "review-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "pioneer-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "task_completion",
+      "notes": ""
+    },
+    "document-agent-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "tool_correctness",
+      "notes": ""
+    },
+    "explore-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "output_quality",
+      "notes": ""
+    },
+    "property-001": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    },
+    "property-002": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    },
+    "property-003": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    },
+    "property-004": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    },
+    "property-005": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    },
+    "property-006": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    },
+    "property-007": {
+      "pass": false,
+      "score": 0.0,
+      "category": "property_based",
+      "notes": ""
+    }
+  },
+  "summary": {
+    "total": 53,
+    "passed": 0,
+    "pass_rate": 0.0,
+    "by_category": {
+      "tool_correctness": 0.0,
+      "subagent_delegation": 0.0,
+      "context_adherence": 0.0,
+      "task_completion": 0.0,
+      "output_quality": 0.0,
+      "refusal_handling": 0.0,
+      "property_based": 0.0
+    }
+  }
+}

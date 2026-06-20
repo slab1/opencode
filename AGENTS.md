@@ -116,6 +116,27 @@ Inspired by Hermes Agent's design principle: **capability should reach users thr
 
 ---
 
+## What Makes This System Stand Out
+
+This system implements 9 strategic differentiators beyond what typical code agents offer:
+
+### 🔥 Genuinely Novel
+1. **Automatic Agent Evolution** — `agent-eval/auto_evolve.py` reads eval results, patches failing agent configs, re-evaluates until scores improve. Self-healing agent configurations.
+2. **Dynamic Agent Spawning** — `opencode_improvement/spawner.py` creates transient multi-agent teams for complex tasks. Ephemeral pods with shared context and automatic cleanup.
+3. **Delegation Pattern Mining** — `opencode_improvement/pattern_miner.py` learns which agents excel at which tasks from historical performance data. Recommends optimal routing.
+
+### 🥈 High-Visibility
+4. **Live Agent Dashboard** — `dashboard/main.py` FastAPI web UI showing eval scores, strategy effectiveness, agent health, and performance trends.
+5. **Competitive Benchmarking** — `opencode_improvement/benchmark.py` runs the 53 golden test cases and compares results against other agent systems.
+6. **Cross-Session Memory Loop** — `opencode_improvement/memory_loop.py` generates structured handoff records so each session learns from the last.
+
+### 🥉 Polished Infrastructure
+7. **Single-Command Setup** — `install.sh` provisions the entire system with `bash <(curl -fsSL ...)`.
+8. **AGENTS.md Protocol Spec** — `AGENTS_SPEC.md` formalizes the discoverability protocol for other projects.
+9. **Standalone Eval Toolkit** — `agent-eval/` is a pip-installable package for evaluating ANY agent system.
+
+---
+
 ## Key Commands
 
 | Action | Command |
@@ -129,6 +150,12 @@ Inspired by Hermes Agent's design principle: **capability should reach users thr
 | Optimize media | `python3 ~/.config/opencode/platforms/media-optimizer.py input.jpg --platforms instagram,twitter` |
 | List platform adapters | `python3 ~/.config/opencode/platforms/post.sh --list-adapters` |
 | Run learning loop | `python3 ~/.config/opencode/platforms/analytics.py learn` |
+| Auto-evolve agents | `python3 ~/.config/opencode/agent-eval/auto_evolve.py [--agent NAME] [--dry-run]` |
+| Delegation patterns | `python3 -m opencode_improvement patterns --recommend "fix login bug"` |
+| Spawn agent team | `python3 -m opencode_improvement spawn --task "..." --complexity moderate` |
+| Benchmark vs other agents | `python3 -m opencode_improvement benchmark --compare` |
+| Memory handoff | `python3 -m opencode_improvement memory --handoff` |
+| Live dashboard | `python3 ~/.config/opencode/dashboard/main.py --port 8080` |
 
 ---
 
