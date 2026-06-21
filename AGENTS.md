@@ -25,6 +25,7 @@ All social media management tools, scripts, and config live under `~/.config/ope
 │   ├── analytics.py           ← Cross-platform analytics reporter
 │   ├── content-gen.py         ← AI content generation (images, video, captions)
 │   ├── media-optimizer.py     ← Auto-resize media for each platform's dimensions
+│   ├── understand-bridge.py   ← Understand Anything knowledge graph → shared context bridge
 │   ├── adapters/              ← Pluggable platform adapter modules (Hermes-inspired)
 │   └── tokens/                ← API tokens (chmod 600, gitignored)
 ├── shared/
@@ -156,6 +157,10 @@ This system implements 9 strategic differentiators beyond what typical code agen
 | Benchmark vs other agents | `python3 -m opencode_improvement benchmark --compare` |
 | Memory handoff | `python3 -m opencode_improvement memory --handoff` |
 | Live dashboard | `python3 ~/.config/opencode/dashboard/main.py --port 8080` |
+| Bridge U-A graph | `python3 ~/.config/opencode/platforms/understand-bridge.py --input graph.json --output context.json --project NAME` |
+| View graph summary | `python3 ~/.config/opencode/platforms/understand-bridge.py --input graph.json --summary` |
+| Generate guided tour | `python3 ~/.config/opencode/platforms/understand-bridge.py --input graph.json --generate-tour --output TOUR.md` |
+| Diff graph versions | `python3 ~/.config/opencode/platforms/understand-bridge.py --input new.json --diff old.json` |
 
 ---
 
