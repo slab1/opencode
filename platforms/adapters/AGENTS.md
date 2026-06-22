@@ -64,7 +64,8 @@ def validate_credentials() -> bool:
 
 | Adapter | Status | Type | Auth Method |
 |---------|--------|------|-------------|
-| *(none yet — add yours)* | — | — | — |
+| voicebox | ✅ Active | Local API (REST + MCP) | Local app check (no API key) |
+| bluesky | ✅ Active | AT Protocol API | App password |
 
 ## Testing
 
