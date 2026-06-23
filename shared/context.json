@@ -1,6 +1,24 @@
 {
   "version": "1.0",
-  "last_updated": "2026-06-20T20:30:00Z",
+  "last_updated": "2026-06-23T17:43:00Z",
+  "checkpoints": {
+    "enabled": true,
+    "directory": "~/.config/opencode/shared/checkpoints/",
+    "active_runs": {},
+    "default_retention_hours": 168,
+    "keep_completed_runs": 5
+  },
+  "db_maintenance": {
+    "last_purge": "2026-06-23T17:43:00Z",
+    "db_size_before_mb": 348,
+    "db_size_after_mb": 18,
+    "wal_size_before_mb": 208,
+    "space_reclaimed_mb": 330,
+    "events_deleted": 68982,
+    "cron_schedule": "0 3 * * 0",
+    "keep_sessions": 5,
+    "purge_tool": "python3 -m opencode_improvement purge --keep 5"
+  },
   "system": {
     "platform_manager": {
       "status": "setup_initialized",
@@ -244,6 +262,12 @@
       "date": "2026-06-20",
       "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
       "rationale": "If others adopt it, our conventions become the standard"
+    },
+    {
+      "id": "db-maint-001",
+      "date": "2026-06-23",
+      "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+      "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
     }
   ],
   "strategy_log": [
@@ -661,6 +685,19 @@
       "outcome": "success",
       "outcome_evidence": "Save trend data step writes to reports/trends/; Commit trend data step commits only on schedule trigger; bot git config",
       "confidence_after": 0.93
+    },
+    {
+      "id": "strategy-1782239511993",
+      "agent_target": "opencode session DB",
+      "diagnosis": "opencode-memfs event-sourcing creates 68K+ orphaned events per session lifecycle; owner_id NULL for all 349 aggregates causing unbounded DB growth (556 MB) and breaking 'opencode --continue'",
+      "strategy_chosen": "purge_orphan_events",
+      "strategy_alternatives_considered": [],
+      "why_this_strategy": "Events are intermediate streaming state, final session state is in message/part tables",
+      "applied_at": "2026-06-23T18:31:51.993184Z",
+      "confidence_before": 0.9,
+      "outcome": "success",
+      "outcome_evidence": "DB: 556 MB -> 18 MB (95% reduction). Sessions list: timeout -> 3ms. opencode --continue restored.",
+      "confidence_after": 0.98
     }
   ],
   "workflow_trace": [
@@ -741,11 +778,22 @@
         "shared/context.json (updated)"
       ],
       "outcome": "All 9 differentiators implemented: auto-evolution, agent spawning, delegation mining, live dashboard, competitive benchmarking, memory loop, single-command install, AGENTS.md spec, standalone eval toolkit"
+    },
+    {
+      "step": "db-event-cleanup",
+      "action": "Purged 68,882 orphaned event-sourcing events from opencode session DB",
+      "files": [
+        "opencode_improvement/purge.py",
+        "opencode_improvement/__main__.py",
+        "shared/context.json"
+      ],
+      "outcome": "DB: 556 MB \u2192 18 MB (95% reduction). Sessions list: timeout \u2192 3ms. opencode --continue restored. Weekly cron for auto-cleanup installed. Created purge CLI tool."
     }
   ],
   "cross_agent_notes": {
     "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational.",
-    "multios_kernel": "Compilation errors reduced from ~4700 to ~3371 (28%). All root-cause errors eliminated (duplicate names, parse errors, ambiguous names). Remaining 3371 are genuine type/trait/method issues requiring per-file human analysis. Repo: slab1/MultiOS- on master (3 commits: 8031e4b, 250b375, 3abbee4)."
+    "multios_kernel": "Compilation errors reduced from ~4700 to ~3371 (28%). All root-cause errors eliminated (duplicate names, parse errors, ambiguous names). Remaining 3371 are genuine type/trait/method issues requiring per-file human analysis. Repo: slab1/MultiOS- on master (3 commits: 8031e4b, 250b375, 3abbee4).",
+    "db_maintenance": "2026-06-23: Purged 68,882 orphaned events from opencode DB (556 MB \u2192 18 MB). Created purge CLI tool at opencode_improvement/purge.py. Weekly cron for auto-cleanup. Root cause: opencode-memfs event-sourcing creates message.part.updated.1 events per streamed token; owner_id in event_sequence was NULL for all 349 aggregates causing orphans."
   },
   "strategy_effectiveness": {
     "add_missing_command": {
@@ -1160,10 +1208,195 @@
           "Continue using 'add_missing_section' strategy \u2014 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
+      },
+      {
+        "generated_at": "2026-06-20T20:43:28.025083Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 20,
+          "total_strategies_logged": 26,
+          "total_workflow_steps": 8,
+          "recent_artifacts": 20
+        },
+        "performance_summary": {
+          "total_tasks": 32,
+          "success_count": 32,
+          "success_rate": 1.0
+        },
+        "key_decisions": [
+          {
+            "id": "strat-012",
+            "description": "Dynamic agent spawning creates ephemeral multi-agent teams per task",
+            "rationale": "Complex tasks need specialized, coordinated agents without permanent overhead"
+          },
+          {
+            "id": "strat-013",
+            "description": "Competitive benchmarking framework enables comparison vs Claude Code, Codex, etc.",
+            "rationale": "Establishes our eval suite as a reference standard for agent quality"
+          },
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
       }
     ]
   },
   "session": {
-    "last_handoff": "2026-06-20T19:54:37.743653Z"
+    "last_handoff": "2026-06-20T20:43:28.025083Z"
   }
 }

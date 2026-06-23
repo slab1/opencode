@@ -243,8 +243,20 @@ Then **persist the agent's contribution to shared context**:
 - Update `state.last_updated_by` and `state.last_updated_at`
 - Add cross-references between this agent's findings and previous agents
 - Remove the agent from `session.active_agents`
+- **Save a checkpoint** for this stage (see `<checkpoints>` section):
+  ```python
+  from shared.checkpoint_manager import save_checkpoint
+  save_checkpoint(
+      agent_name="orchestrator",
+      run_id=current_run_id,   # generated at workflow start
+      stage="evaluate_persist",  # or current workflow step
+      status="completed",
+      artifacts={"outcome": outcome_summary, "files": modified_files},
+  )
+  ```
 
-This ensures the NEXT agent in the workflow can see what was done.
+This ensures the NEXT agent in the workflow can see what was done,
+and the workflow can be resumed if interrupted.
 
 ### 6. DETECT GAPS
 **Tier 1 — Hard gaps (always enforce):** tests, documentation, error handling, edge cases, security. Re-dispatch immediately.
@@ -284,6 +296,19 @@ Record the session outcome in two places:
 - Set `session.current_id` and `session.current_title` to final values
 - Keep findings/decisions/artifacts for cross-session reference
 - The shared context persists beyond the current session for future agent use
+
+**Final Checkpoint:** Mark the last stage as `completed` and the run as `completed`:
+```python
+from shared.checkpoint_manager import save_checkpoint
+save_checkpoint(
+    agent_name="orchestrator",
+    run_id=current_run_id,
+    stage="complete",
+    status="completed",
+    artifacts={"outcome": "all_stages_complete"},
+    snapshot={"workflow_trace": context_workflow_trace},
+)
+```
 </workflow>
 
 <gap-detection-checklist>
@@ -315,6 +340,64 @@ If an agent fails or returns unusable output:
 3. If the same agent fails twice, try a different approach or agent
 4. Report to the user if recovery is not possible
 </decision-rules>
+
+<checkpoints>
+## Checkpoint System — State Persistence for Agent Workflows
+
+The checkpoint system (`shared/checkpoint_manager.py`) provides stage-based state
+persistence so workflows can survive session restarts and interruptions.
+
+### Key Concepts
+- **Run**: A single execution of a workflow, identified by a `run_id` (e.g., `run_20260623_abc123`)
+- **Stage**: A named step in the workflow (understand, path_selection, delegation_check, split_parallelize, execute, verify)
+- **Checkpoint**: A JSON file saved after each stage, containing stage status, artifacts, and a state snapshot
+- **Resume Packet**: The latest checkpoint + completed stages list + next stage recommendation
+
+### When to Checkpoint
+1. **At the end of each workflow stage**: Call `save_checkpoint()` with the completed stage and its artifacts
+2. **Before dispatching a subagent**: Save an `in_progress` checkpoint for the current stage
+3. **After a subagent returns**: Update the checkpoint to `completed` status with subagent results as artifacts
+4. **On error/failure**: Save a `failed` checkpoint with the error message for recovery
+
+### How to Checkpoint
+```python
+from shared.checkpoint_manager import save_checkpoint, get_next_stage, resume_run
+
+# Save after completing a stage
+path = save_checkpoint(
+    agent_name="orchestrator",
+    run_id="run_20260623_abc123",
+    stage="dispatch",
+    status="completed",
+    artifacts={
+        "dispatched_agents": ["explore", "librarian"],
+        "subtasks": ["search codebase", "check docs"],
+    },
+    snapshot={
+        "active_tasks": 3,
+        "decisions_made": ["delegated to explore"],
+    },
+    metadata={"model": "deepseek-v4-flash-free"},
+)
+
+# Resume after restart
+packet = resume_run("orchestrator", "run_20260623_abc123")
+if packet:
+    next_stage = packet["next_stage"]  # resume from here
+    completed = packet["completed_stages"]
+    artifacts = packet["last_artifacts"]
+
+# CLI usage (from terminal or subagent):
+# python3 -m opencode_improvement checkpoint resume --agent orchestrator --run <run_id>
+# python3 -m opencode_improvement checkpoint list --agent orchestrator
+# python3 -m opencode_improvement checkpoint inspect --agent orchestrator --run <run_id>
+```
+
+### Integration with Workflow
+- **UPDATE** the workflow step below (EVALUATE & PERSIST CONTEXT) to also save a checkpoint after each stage
+- **RUN-ID** generation: At the start of each workflow, generate a run_id as `run_<YYYYMMDD>_<random6>`
+- **RESUME** on session start: Check if there's an active run for this session ID, and if so, call `resume_run()`
+</checkpoints>
 
 <best-practices>
 - **Decompose before dispatching**: Break complex requests into concrete subtasks with clear dependencies

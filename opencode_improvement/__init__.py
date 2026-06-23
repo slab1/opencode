@@ -5,6 +5,12 @@ import datetime
 from pathlib import Path
 from typing import List, Any, Optional
 
+# Import from adapted OpenMontage modules
+from opencode_improvement.scoring import StrategyScore, score_strategy, rank_strategies, format_ranking
+from opencode_improvement.delivery_promise import DeliveryPromise, PromiseType, classify_from_config
+from opencode_improvement.cost_tracker import CostTracker, BudgetExceededError, ApprovalRequiredError, BudgetMode
+from opencode_improvement.risk_scoring import score_eval_risk, RiskScoreResult
+
 # Paths
 BASE_DIR = Path.home() / ".config" / "opencode"
 AGENTS_DIR = BASE_DIR / "agents"

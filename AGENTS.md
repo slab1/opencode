@@ -31,6 +31,8 @@ All social media management tools, scripts, and config live under `~/.config/ope
 ├── shared/
 │   ├── AGENTS.md              ← Shared context system docs
 │   ├── context.json           ← Cross-agent shared context (READ FIRST)
+│   ├── checkpoint_manager.py  ← Stage-based checkpoint system for state persistence
+│   ├── checkpoints/           ← Checkpoint files (agent workflows / stage snapshots)
 │   ├── commitments.json       ← Cross-agent commitments tracker
 │   ├── performance.json       ← Performance tracking data
 │   └── free-models-guide.md   ← Guide to free AI models
@@ -161,6 +163,15 @@ This system implements 9 strategic differentiators beyond what typical code agen
 | View graph summary | `python3 ~/.config/opencode/platforms/understand-bridge.py --input graph.json --summary` |
 | Generate guided tour | `python3 ~/.config/opencode/platforms/understand-bridge.py --input graph.json --generate-tour --output TOUR.md` |
 | Diff graph versions | `python3 ~/.config/opencode/platforms/understand-bridge.py --input new.json --diff old.json` |
+| List checkpoint runs | `python3 -m opencode_improvement checkpoint list [--agent NAME]` |
+| Inspect checkpoint | `python3 -m opencode_improvement checkpoint inspect --agent NAME --run RUN_ID` |
+| Resume from checkpoint | `python3 -m opencode_improvement checkpoint resume --agent NAME --run RUN_ID` |
+| Save a checkpoint | `python3 -m opencode_improvement checkpoint save --agent NAME --run RUN_ID --stage STAGE --status STATUS` |
+| Prune old checkpoints | `python3 -m opencode_improvement checkpoint prune --dry-run` (add `--force` to execute) |
+| Get next stage | `python3 -m opencode_improvement checkpoint next-stage --agent NAME --run RUN_ID` |
+| Analyze DB events | `python3 -m opencode_improvement purge --analyze` |
+| Purge orphaned events | `python3 -m opencode_improvement purge --keep 5` (keep 5 recent sessions' events) |
+| Purge dry-run | `python3 -m opencode_improvement purge --dry-run` |
 
 ---
 

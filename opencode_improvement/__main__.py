@@ -17,6 +17,12 @@ import argparse
 import datetime
 import json
 import sys
+from pathlib import Path
+
+# Ensure shared/ is importable
+_shared_dir = Path(__file__).resolve().parent.parent / "shared"
+if _shared_dir.exists():
+    sys.path.insert(0, str(_shared_dir.parent))
 
 
 def main():
@@ -132,6 +138,35 @@ def main():
     # Improvement #6: kappa subcommand
     kp = subparsers.add_parser("kappa", help="Compute Cohen's Kappa inter-rater agreement")
     kp.add_argument("--dataset", default=None, help="Path to golden dataset JSON")
+    # --- risk (eval result quality risk scoring -- adapted from OpenMontage) ---
+    rk = subparsers.add_parser("risk", help="Score eval result quality risk across 6 dimensions")
+    rk.add_argument("--file", "-f", default=None,
+                    help="Path to eval result JSON file (omit to run eval_agents first)")
+    rk.add_argument("--agent", "-a", default=None,
+                    help="Agent to evaluate (default: all)")
+    rk.add_argument("--provider", choices=["real", "mock"], default="mock",
+                    help="Eval provider (default: mock for speed)")
+    rk.add_argument("--output", "-o", default=None,
+                    help="Save risk assessment to file")
+
+    # --- checkpoint (state persistence for agent workflows) ---
+    from opencode_improvement.checkpoint import add_subparser as add_checkpoint_subparser
+    checkpoint_parser = add_checkpoint_subparser(subparsers)
+
+    # --- purge (clean orphaned events from opencode session DB) ---
+    from opencode_improvement.purge import add_subparser as add_purge_subparser
+    purge_parser = add_purge_subparser(subparsers)
+
+    # --- score (strategy effectiveness scoring -- adapted from OpenMontage) ---
+    sc = subparsers.add_parser("score", help="Score and rank improvement strategies for an agent")
+    sc.add_argument("--agent", "-a", required=True,
+                    help="Agent to score strategies for")
+    sc.add_argument("--gap", "-g", default="",
+                    help="Diagnosed gap description for task fit computation")
+    sc.add_argument("--strategies", "-s", nargs="*", default=None,
+                    help="Specific strategies to score (default: all from STRATEGY_LIBRARY)")
+    sc.add_argument("--top-n", type=int, default=5,
+                    help="Number of top strategies to show (default: 5)")
 
     # --- memory (cross-session memory loop) ---
     mp = subparsers.add_parser("memory", help="Cross-session memory loop — generate feedback and handoff records")
@@ -372,6 +407,94 @@ def main():
 
         result = spawn_team(task)
         print(json.dumps(result, indent=2))
+
+
+    elif args.command == "risk":
+        from opencode_improvement.risk_scoring import score_eval_risk
+        from opencode_improvement import eval_agents
+
+        if args.file:
+            import json
+            with open(args.file) as f:
+                eval_result = json.load(f)
+        else:
+            print("Running eval first...")
+            eval_result = eval_agents(
+                agent_name=args.agent,
+                provider=args.provider,
+                use_golden=True,
+            )
+
+        risk = score_eval_risk(eval_result)
+        verdict = risk.get("verdict", "unknown")
+        print(
+            f"  Eval Risk Assessment: average={risk.get('average', 0)}, verdict={verdict}"
+        )
+        for dim_name, dim_data in risk.get("dimensions", {}).items():
+            print(f"    {dim_name}: {dim_data['score']} — {dim_data['reason']}")
+
+        if args.output:
+            import json
+            with open(args.output, "w") as f:
+                json.dump(risk, f, indent=2)
+            print(f"  Risk assessment saved to {args.output}")
+
+        # Non-zero exit for 'fail' verdict
+        if verdict == "fail":
+            print("  ❌ Risk verdict is FAIL - eval results should not be trusted.")
+            sys.exit(1)
+
+    elif args.command == "score":
+        from opencode_improvement.scoring import StrategyScore, score_strategy, rank_strategies, format_ranking
+        from opencode_improvement import STRATEGY_LIBRARY
+        import json
+
+        agent = args.agent
+        gap = args.gap
+        strategy_names = args.strategies or list(STRATEGY_LIBRARY.keys())
+
+        scores = []
+        for sname in strategy_names:
+            if sname not in STRATEGY_LIBRARY:
+                continue
+            entry = STRATEGY_LIBRARY[sname]
+            best_for = {entry.get("best_for", "")}
+            score = score_strategy(
+                strategy_name=sname,
+                agent_target=agent,
+                best_for=best_for,
+                gap_description=gap,
+                strategy_config={
+                    "dry_run_support": True,
+                    "tests_before_apply": "tests" in sname or "test" in sname,
+                    "parameterized_prompts": True,
+                },
+                stability="production" if entry.get("risk") == "Low" else "beta" if entry.get("risk") == "Medium" else "experimental",
+            )
+            scores.append(score)
+
+        ranked = rank_strategies(scores)
+        print("")
+        print("  Strategy ranking for agent '" + str(agent) + "' (gap: '" + str(gap or 'unspecified') + "')")
+        print("")
+        print(format_ranking(ranked, top_n=args.top_n))
+        print("")
+
+        json_output = {
+            "agent": agent,
+            "gap": gap,
+            "ranking": [s.to_dict() for s in ranked[:args.top_n]],
+        }
+        print("--- JSON ---")
+        print(json.dumps(json_output, indent=2))
+
+    elif args.command == "checkpoint":
+        from opencode_improvement.checkpoint import run_checkpoint
+        sys.exit(run_checkpoint(args))
+
+    elif args.command == "purge":
+        from opencode_improvement.purge import run_purge
+        sys.exit(run_purge(args))
 
     else:
         parser.print_help()
