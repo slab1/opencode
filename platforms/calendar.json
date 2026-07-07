@@ -1,0 +1,50 @@
+{
+  "posts": [
+    {
+      "id": "cal_20260702_084927_000",
+      "title": "Post 1",
+      "text": "twitter post",
+      "platforms": [
+        "twitter"
+      ],
+      "media": "",
+      "hashtags": [],
+      "first_comment": "",
+      "schedule": "2026-07-02T07:49:27.080522+00:00",
+      "status": "draft",
+      "created": "2026-07-02T07:49:27.080722+00:00",
+      "recurring": null
+    },
+    {
+      "id": "cal_20260702_085245_001",
+      "title": "Post 2",
+      "text": "twitter post",
+      "platforms": [
+        "twitter"
+      ],
+      "media": "",
+      "hashtags": [],
+      "first_comment": "",
+      "schedule": "2026-07-02T07:52:45.633322+00:00",
+      "status": "draft",
+      "created": "2026-07-02T07:52:45.633658+00:00",
+      "recurring": null
+    },
+    {
+      "id": "cal_20260702_092824_002",
+      "title": "Post 3",
+      "text": "twitter post",
+      "platforms": [
+        "twitter"
+      ],
+      "media": "",
+      "hashtags": [],
+      "first_comment": "",
+      "schedule": "2026-07-02T08:28:24.577618+00:00",
+      "status": "draft",
+      "created": "2026-07-02T08:28:24.577859+00:00",
+      "recurring": null
+    }
+  ],
+  "recurring": []
+}

@@ -1,0 +1,86 @@
+# Platform Manager — User Preferences
+# ====================================
+# Edit this file to customize posting behavior.
+# This is NOT for secrets (use tokens/ directory).
+# This is NOT for connection config (use backend.json).
+
+# ─────────────────────────────────────────────────────────
+# General Preferences
+# ─────────────────────────────────────────────────────────
+preferences:
+  # Default platforms to post to when none specified
+  default_platforms: [twitter, linkedin]
+
+  # Default timezone for scheduling (IANA format)
+  timezone: UTC
+
+  # Auto-confirm posts without prompt (true for batch/automated)
+  # WARNING: Only set to true if you understand the risk
+  auto_confirm: false
+
+  # Dry-run by default (always preview before posting)
+  # Set to false once you're comfortable with the system
+  dry_run_default: true
+
+# ─────────────────────────────────────────────────────────
+# Posting Defaults
+# ─────────────────────────────────────────────────────────
+posting:
+  # Default hashtag count per platform
+  hashtag_count:
+    twitter: 2
+    linkedin: 5
+    instagram: 15
+    facebook: 5
+    threads: 3
+    bluesky: 2
+    mastodon: 3
+    tiktok: 3
+    pinterest: 8
+
+  # Stagger interval in hours when posting same content
+  # to multiple platforms (avoids content fatigue)
+  stagger_hours: 2
+
+  # Default tone for AI-generated captions
+  default_tone: professional
+
+# ─────────────────────────────────────────────────────────
+# Content Generation
+# ─────────────────────────────────────────────────────────
+content_gen:
+  # AI model endpoint
+  endpoint: http://localhost:7777
+
+  # Image generation model
+  image_model: z-image-turbo
+
+  # Video generation model
+  video_model: z-video-turbo
+
+  # Caption generation model
+  caption_model: default
+
+# ─────────────────────────────────────────────────────────
+# Analytics
+# ─────────────────────────────────────────────────────────
+analytics:
+  # Enable learning loop (analytics.py learn)
+  learning_enabled: true
+
+  # Min posts before learning kicks in
+  min_posts_for_learning: 10
+
+  # Reporting preferences
+  report_currency: USD
+  report_include_ghost: false
+
+# ─────────────────────────────────────────────────────────
+# Kanban Board
+# ─────────────────────────────────────────────────────────
+kanban:
+  # Posts shown per column (0 = unlimited)
+  max_per_column: 8
+
+  # Default status for new posts
+  default_status: draft

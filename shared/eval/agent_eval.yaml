@@ -1,0 +1,97 @@
+meta:
+  version: '1.0'
+  description: OpenCode Agent Evaluation Config
+  inspired_by: "regokan/evalh \u2014 single YAML-driven evaluation framework"
+  last_updated: '2026-06-20'
+systems:
+  all_agents:
+    pattern: '*.md'
+    path: agents/
+    count: 23
+datasets:
+  primary:
+    path: shared/golden/agent_tasks.json
+    description: 46 golden test cases across 7 categories
+  property:
+    enabled: true
+    description: Universal property-based invariants
+    invariants:
+    - agent_never_exposes_secrets
+    - agent_reads_context_first
+    - agent_completes_required_sections
+    - agent_uses_correct_tools
+evaluators:
+  structural_audit:
+    type: config_analysis
+    description: Check agent for structural completeness
+    metrics:
+    - structure_complete (boolean)
+    - capability_sections (count)
+    - frontmatter_valid (boolean)
+  golden_test:
+    type: keyword_matching
+    description: Match golden test case references against agent configs
+    pass_condition: score >= 0.5
+    source: shared/golden/agent_tasks.json
+  property_check:
+    type: invariant_verification
+    description: Verify universal agent properties
+    pass_condition: all invariants pass
+thresholds:
+  fail_under:
+    default: 0.8
+    critical: 0.95
+    warn: 0.85
+    info: 0.7
+tiers:
+  critical:
+    description: "Core agent behavior broken \u2014 block deployment"
+    exit_code: 2
+    require_pass: true
+  warn:
+    description: Important but not blocking
+    exit_code: 1
+    require_pass: false
+  info:
+    description: "Best practice violation \u2014 log only"
+    exit_code: 0
+    require_pass: false
+baseline:
+  path: shared/eval/baseline.json
+  auto_update: true
+  regression_threshold: -0.05
+ci:
+  schedule: 0 6 * * 1
+  on_push: true
+  on_cron: true
+  output_format: json
+llm_judge:
+  enabled: false
+  model: auto
+  metrics:
+  - faithfulness
+  - task_completion
+  description: LLM-as-judge evaluator for agent outputs. Falls back to heuristic when
+    no endpoint configured.
+mock_provider:
+  enabled: true
+  description: Deterministic offline eval provider. Activates via --provider mock
+    flag.
+executor:
+  default: sync
+  async_available: true
+  description: SyncExecutor runs sequentially. AsyncExecutor uses asyncio.gather for
+    concurrent eval.
+scorecard:
+  enabled: true
+  bar_width: 20
+  thresholds:
+    green: 0.8
+    yellow: 0.6
+    red: 0.0
+  description: ASCII bar chart scorecard per agent with color thresholds.
+task_versioning:
+  enabled: true
+  current_version: '1.0'
+  description: Each golden test case carries a version field. --version flag lists
+    all versions.

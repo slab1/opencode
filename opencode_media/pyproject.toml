@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opencode-media"
+version = "0.2.0"
+description = "Multimodal file processing for OpenCode — image analysis, audio transcription, video analysis, document parsing"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["opencode", "multimodal", "media", "vision", "ocr", "document-parsing"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "Pillow>=9.2",
+]
+
+[project.optional-dependencies]
+ocr = ["pytesseract"]
+audio = ["openai-whisper"]
+all = [
+    "pytesseract",
+    "openai-whisper",
+    "moviepy",
+]
+
+[project.scripts]
+oc-media = "opencode_media.__main__:main"
+oc-vision = "opencode_media.vision_bridge:main"
+
+[tool.setuptools.packages.find]
+where = ["."]

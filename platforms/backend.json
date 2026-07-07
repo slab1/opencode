@@ -1,0 +1,22 @@
+{
+  "backend": "bulkpublish",
+  "configured": "2026-07-02T09:15:00Z",
+  "status": "ready",
+  "api_key_file": "tokens/bulkpublish_api.key",
+  "channels": {
+    "youtube": {
+      "name": "Balogun Saheed",
+      "account_id": "UCNSN-ywK60W1Zkoo5lLqIJw",
+      "token_status": "expiring_soon",
+      "token_expires": "2026-07-02T09:07:24Z",
+      "needs_reconnect": true
+    },
+    "pinterest": {
+      "name": "slablaykon",
+      "account_id": "slablaykon",
+      "token_status": "valid",
+      "token_expires": "2026-08-01T08:08:08Z",
+      "needs_reconnect": false
+    }
+  }
+}

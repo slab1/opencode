@@ -1,0 +1,399 @@
+#!/bin/bash
+# oc-context - OpenCode Shared Context CLI
+# Quick inspection and management of the shared context store
+#
+# Usage:
+#   oc-context                         Show full context
+#   oc-context findings [agent]        Show findings (optionally filtered by agent)
+#   oc-context decisions               Show decisions
+#   oc-context artifacts               Show artifacts
+#   oc-context workflow                Show workflow trace
+#   oc-context session                 Show current session info
+#   oc-context summary                 Show a human-readable summary
+#   oc-context init                    Initialize context if missing
+#   oc-context clear                   Reset context to empty state (with confirmation)
+#   oc-context add-finding <agent> <json>   Append a finding JSON object
+
+CONTEXT_DIR="$HOME/.config/opencode/shared"
+CONTEXT_FILE="$CONTEXT_DIR/context.json"
+
+ensure_context() {
+  if [ ! -f "$CONTEXT_FILE" ]; then
+    echo "Error: Context file not found at $CONTEXT_FILE"
+    echo "Run 'oc-context init' to create it."
+    exit 1
+  fi
+}
+
+init_context() {
+  mkdir -p "$CONTEXT_DIR"
+  if [ -f "$CONTEXT_FILE" ]; then
+    echo "Context already exists at $CONTEXT_FILE"
+    echo "Use 'oc-context clear' to reset it."
+    exit 0
+  fi
+  python3 -c "
+import json, os
+ctx = {
+    'meta': {
+        'version': '2.0.0',
+        'created': '$(date -I)',
+        'updated': '$(date -Iseconds)',
+        'description': 'Structured shared context store for cross-agent memory and workflow continuity'
+    },
+    'session': {
+        'current_id': None,
+        'current_title': None,
+        'active_agents': [],
+        'workflow_pattern': None,
+        'started_at': None
+    },
+    'state': {
+        'findings_count': 0,
+        'decisions_count': 0,
+        'artifacts_count': 0,
+        'last_updated_by': None,
+        'last_updated_at': None
+    },
+    'findings': {
+        'debug': [], 'security': [], 'architect': [], 'build': [],
+        'plan': [], 'review': [], 'test': [], 'general': [],
+        'refactor': [], 'docs': [], 'explore': [], 'video-creator': [],
+        'web-browser': [], 'display-agent': []
+    },
+    'decisions': {
+        'architecture': [], 'design': [], 'technology': [], 'workflow': []
+    },
+    'artifacts': {
+        'files_created': [], 'files_modified': [], 'files_deleted': [],
+        'tests_written': [], 'documentation_updated': []
+    },
+    'cross_references': [],
+    'workflow_trace': []
+}
+with open(os.path.expanduser('$CONTEXT_FILE'), 'w') as f:
+    json.dump(ctx, f, indent=2)
+print('Context initialized at $CONTEXT_FILE')
+"
+}
+
+add_finding() {
+  local agent="$1"
+  local finding_json="$2"
+  if [ -z "$agent" ] || [ -z "$finding_json" ]; then
+    echo "Usage: oc-context add-finding <agent> <json>"
+    echo "Example: oc-context add-finding debug '{\"summary\":\"Found bug\",\"severity\":\"high\"}'"
+    exit 1
+  fi
+  python3 -c "
+import json, os, sys
+from datetime import datetime, timezone
+
+ctx_path = os.path.expanduser('$CONTEXT_FILE')
+with open(ctx_path) as f:
+    ctx = json.load(f)
+
+agent = '$agent'
+valid_agents = list(ctx['findings'].keys())
+if agent not in valid_agents:
+    print(f'Invalid agent. Valid: {valid_agents}')
+    sys.exit(1)
+
+finding = json.loads('$finding_json')
+finding.setdefault('timestamp', datetime.now(timezone.utc).isoformat())
+finding.setdefault('id', f'{agent}-{int(datetime.now().timestamp())}')
+
+ctx['findings'][agent].append(finding)
+ctx['state']['findings_count'] = sum(len(v) for v in ctx['findings'].values())
+ctx['state']['last_updated_by'] = agent
+ctx['state']['last_updated_at'] = datetime.now(timezone.utc).isoformat()
+
+with open(ctx_path, 'w') as f:
+    json.dump(ctx, f, indent=2)
+print(f'Added finding to {agent} (total: {len(ctx[\"findings\"][agent])})')
+"
+}
+
+show_full() {
+  python3 -c "
+import json, sys
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+print(json.dumps(ctx, indent=2))
+"
+}
+
+show_findings() {
+  local agent="$1"
+  if [ -n "$agent" ]; then
+    python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+findings = ctx['findings'].get('$agent', [])
+if findings:
+    print(f'=== Findings for agent: $agent ===')
+    print(json.dumps(findings, indent=2))
+else:
+    print(f'No findings for agent: $agent')
+"
+  else
+    python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+for agent, findings in ctx['findings'].items():
+    if findings:
+        print(f'--- {agent} ({len(findings)} findings) ---')
+        for f in findings[-3:]:  # Show last 3
+            print(f\"  [{f.get('severity','info').upper():8}] {f.get('summary','')[:80]}\")
+        print()
+"
+  fi
+}
+
+show_decisions() {
+  python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+for category, decisions in ctx['decisions'].items():
+    if decisions:
+        print(f'=== {category} ===')
+        for d in decisions:
+            print(f\"  {d.get('summary','')[:100]}\")
+        print()
+"
+}
+
+show_artifacts() {
+  python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+for category, items in ctx['artifacts'].items():
+    if items:
+        print(f'=== {category} ({len(items)} items) ===')
+        for item in items[-5:]:  # Show last 5
+            print(f\"  {item[:100]}\")
+        print()
+"
+}
+
+show_workflow() {
+  python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+trace = ctx.get('workflow_trace', [])
+if trace:
+    print(f'Workflow Trace ({len(trace)} steps):')
+    for i, step in enumerate(trace, 1):
+        agent = step.get('agent', 'unknown')
+        status = step.get('status', 'unknown')
+        summary = step.get('summary', '')[:80]
+        print(f'  {i}. [{status:10}] {agent}: {summary}')
+else:
+    print('No workflow trace found.')
+print()
+session = ctx.get('session', {})
+print(f'Session: {session.get(\"current_id\", \"none\")}')
+print(f'Pattern: {session.get(\"workflow_pattern\", \"none\")}')
+print(f'Active Agents: {session.get(\"active_agents\", [])}')
+"
+}
+
+show_session() {
+  python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+session = ctx.get('session', {})
+state = ctx.get('state', {})
+print('=== Session Info ===')
+print(f'  ID:        {session.get(\"current_id\", \"none\")}')
+print(f'  Title:     {session.get(\"current_title\", \"none\")}')
+print(f'  Pattern:   {session.get(\"workflow_pattern\", \"none\")}')
+print(f'  Started:   {session.get(\"started_at\", \"none\")}')
+print(f'  Agents:    {session.get(\"active_agents\", [])}')
+print()
+print('=== State ===')
+print(f'  Findings:  {state.get(\"findings_count\", 0)}')
+print(f'  Decisions: {state.get(\"decisions_count\", 0)}')
+print(f'  Artifacts: {state.get(\"artifacts_count\", 0)}')
+print(f'  Updated:   {state.get(\"last_updated_at\", \"none\")} by {state.get(\"last_updated_by\", \"none\")}')
+"
+}
+
+show_summary() {
+  python3 -c "
+import json
+with open('$CONTEXT_FILE') as f:
+    ctx = json.load(f)
+
+session = ctx.get('session', {})
+state = ctx.get('state', {})
+findings = ctx.get('findings', {})
+artifacts = ctx.get('artifacts', {})
+
+print('╔══════════════════════════════════════════╗')
+print('║     OpenCode Shared Context Summary      ║')
+print('╚══════════════════════════════════════════╝')
+print()
+
+# Session
+if session.get('current_id'):
+    print(f'Session: {session[\"current_id\"]}')
+    if session.get('current_title'):
+        print(f'Title:   {session[\"current_title\"]}')
+    if session.get('workflow_pattern'):
+        print(f'Pattern: {session[\"workflow_pattern\"]}')
+    print()
+
+# Findings summary
+finding_counts = {agent: len(fs) for agent, fs in findings.items() if fs}
+if finding_counts:
+    print('Findings by agent:')
+    for agent, count in sorted(finding_counts.items()):
+        sevs = {}
+        for f in findings[agent]:
+            sevs[f.get('severity','info')] = sevs.get(f.get('severity','info'), 0) + 1
+        sev_str = ', '.join(f'{k}={v}' for k,v in sorted(sevs.items()))
+        print(f'  {agent:20} {count:3} total  [{sev_str}]')
+    print()
+
+# Artifacts summary
+artifact_counts = {k: len(v) for k, v in artifacts.items() if v}
+if artifact_counts:
+    print('Artifacts:')
+    for k, v in sorted(artifact_counts.items()):
+        print(f'  {k:25} {v}')
+    print()
+
+# Workflow trace
+trace = ctx.get('workflow_trace', [])
+if trace:
+    print(f'Workflow steps: {len(trace)}')
+    for step in trace:
+        agent = step.get('agent', '?')
+        status = step.get('status', '?')
+        print(f'  [{status:10}] {agent}')
+    print()
+
+# Cross-references
+xrefs = ctx.get('cross_references', [])
+if xrefs:
+    print(f'Cross-references: {len(xrefs)}')
+    print()
+"
+}
+
+reset_context() {
+  echo "WARNING: This will clear ALL shared context data."
+  echo "This cannot be undone. Are you sure? [y/N]"
+  read -r response
+  if [[ "$response" =~ ^[Yy]$ ]]; then
+    python3 -c "
+import json, os
+ctx = {
+    'meta': {
+        'version': '2.0.0',
+        'created': '$(date -I)',
+        'updated': '$(date -Iseconds)',
+        'description': 'Structured shared context store for cross-agent memory and workflow continuity'
+    },
+    'session': {
+        'current_id': None,
+        'current_title': None,
+        'active_agents': [],
+        'workflow_pattern': None,
+        'started_at': None
+    },
+    'state': {
+        'findings_count': 0,
+        'decisions_count': 0,
+        'artifacts_count': 0,
+        'last_updated_by': None,
+        'last_updated_at': None
+    },
+    'findings': {
+        'debug': [], 'security': [], 'architect': [], 'build': [],
+        'plan': [], 'review': [], 'test': [], 'general': [],
+        'refactor': [], 'docs': [], 'explore': [], 'video-creator': [],
+        'web-browser': [], 'display-agent': []
+    },
+    'decisions': {
+        'architecture': [], 'design': [], 'technology': [], 'workflow': []
+    },
+    'artifacts': {
+        'files_created': [], 'files_modified': [], 'files_deleted': [],
+        'tests_written': [], 'documentation_updated': []
+    },
+    'cross_references': [],
+    'workflow_trace': []
+}
+with open(os.path.expanduser('$CONTEXT_FILE'), 'w') as f:
+    json.dump(ctx, f, indent=2)
+print('Context cleared successfully.')
+"
+  else
+    echo "Cancelled."
+  fi
+}
+
+case "${1:-full}" in
+  full)
+    ensure_context
+    show_full
+    ;;
+  findings)
+    ensure_context
+    show_findings "$2"
+    ;;
+  decisions)
+    ensure_context
+    show_decisions
+    ;;
+  artifacts)
+    ensure_context
+    show_artifacts
+    ;;
+  workflow)
+    ensure_context
+    show_workflow
+    ;;
+  session)
+    ensure_context
+    show_session
+    ;;
+  summary)
+    ensure_context
+    show_summary
+    ;;
+  init)
+    init_context
+    ;;
+  add-finding)
+    ensure_context
+    add_finding "$2" "$3"
+    ;;
+  clear)
+    ensure_context
+    reset_context
+    ;;
+  *)
+    echo "Usage: oc-context {full|findings [agent]|decisions|artifacts|workflow|session|summary|init|add-finding|clear}"
+    echo ""
+    echo "  full                    Show full context JSON"
+    echo "  findings [agent]        Show findings (all or filtered by agent)"
+    echo "  decisions               Show architecture/design decisions"
+    echo "  artifacts               Show files created/modified/deleted"
+    echo "  workflow                Show current workflow trace"
+    echo "  session                 Show session state"
+    echo "  summary                 Show human-readable summary"
+    echo "  init                    Initialize context if missing"
+    echo "  add-finding <a> <json>  Append a finding JSON for an agent"
+    echo "  clear                   Reset context to empty (with confirmation)"
+    exit 1
+    ;;
+esac

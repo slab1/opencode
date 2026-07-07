@@ -1,0 +1,196 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/mimo-v2.5-free",
+  "permission": {
+    "bash": "allow",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "edit": {
+      "packages/opencode/migration/*": "ask",
+      "*": "allow"
+    },
+    "todowrite": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "mcp_filesystem_*": "allow",
+    "mcp_pdf-mcp_*": "allow",
+    "mcp_firecrawl_*": "ask",
+    "mcp_go-docs-mcp_*": "ask",
+    "mcp_bulkpublish_*": "ask",
+    "mcp_trypost_*": "ask",
+    "mcp_mobile-device_*": "allow",
+    "mcp_voicebox_*": "allow"
+  },
+  "plugin": [
+    "opencode-memfs",
+    "opencode-vibeguard",
+    "opencode-cross-repo",
+    "@franlol/opencode-md-table-formatter@latest",
+    "oh-my-opencode-slim",
+    // "opencode-memory-plugin" // DISABLED - was causing terminal crashes and slowdown
+    "graphify"
+  ],
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "{env:NVIDIA_API_KEY}"
+      },
+      "models": {
+        "deepseek-ai/deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "deepseek-ai/deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "meta/llama-3.3-70b-instruct": {
+          "name": "Llama 3.3 70B",
+          "limit": { "context": 128000, "output": 4096 }
+        },
+        "mistralai/mistral-large-3-675b-instruct-2512": {
+          "name": "Mistral Large 3 675B",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "meta/llama-3.1-8b-instruct": {
+          "name": "Llama 3.1 8B",
+          "limit": { "context": 128000, "output": 4096 }
+        }
+      }
+    }
+  },
+  "mcp": {
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp?project_ref=reewcfpjlnufktvahtii&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching",
+      "enabled": true
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@context7/mcp"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "/usr/local/bin/mcp-server-filesystem"
+      ],
+      "args": [
+        "/root/.config/opencode",
+        "/root/projects"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "firecrawl-mcp"
+      ],
+      "enabled": true,
+      "env": {
+        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
+      },
+      "description": "Web scraping MCP — Node v22 installed globally"
+    },
+    "go-docs-mcp": {
+      "type": "local",
+      "command": [
+        "/usr/local/bin/go-docs-mcp"
+      ],
+      "enabled": true,
+      "env": {
+        "DROLO_DOCS_DIR": "/root/.config/opencode/shared"
+      },
+      "description": "Go-based docs MCP — installed with go1.26.4"
+    },
+    "pdf-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "pdf-mcp"
+      ],
+      "enabled": true,
+      "env": {}
+    },
+    "bulkpublish": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@bulkpublish/mcp-server"
+      ],
+      "enabled": false,
+      "env": {
+        "BULKPUBLISH_API_KEY": "{env:BULKPUBLISH_API_KEY}"
+      },
+      "description": "11-platform social media scheduling (enable after getting API key from app.bulkpublish.com)"
+    },
+    "trypost": {
+      "type": "remote",
+      "url": "https://app.trypost.it/mcp/trypost",
+      "enabled": false,
+      "headers": {
+        "Authorization": "Bearer {env:TRYPOST_API_KEY}"
+      },
+      "description": "Self-hosted social media scheduler (enable after self-hosting or cloud signup)"
+    },
+    "mobile-device": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@srmorete/mobile-device-mcp@latest"
+      ],
+      "enabled": true,
+      "env": {
+        "MDMS_PORT_ANDROID": "18000",
+        "MDMS_PORT_IOS": "19000"
+      },
+      "description": "Control Android/iOS devices via ADB (auto-detects platform). Connect phone via USB with USB debugging enabled, then use list_devices, launch_app, screenshot, tap, etc."
+    },
+    "magic-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "@21st-dev/magic"],
+      "enabled": false,
+      "env": {
+        "TWENTY_FIRST_API_KEY": "{env:TWENTY_FIRST_API_KEY}"
+      },
+      "description": "21st.dev Magic MCP - Generate professional React/Tailwind UI components with animations, glassmorphism, gradients. Get API key from https://21st.dev/magic then set TWENTY_FIRST_API_KEY env var and enable."
+    },
+    "voicebox": {
+      "type": "remote",
+      "url": "http://127.0.0.1:17493/mcp",
+      "enabled": false,
+      "headers": {
+        "X-Voicebox-Client-Id": "opencode"
+      },
+      "description": "Voicebox AI voice studio MCP — agents speak, transcribe, manage voices. Enable when Voicebox app or Docker is running on localhost:17493. Install from voicebox.sh or https://github.com/slab1/voicebox"
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false,
+    "analyze_image": true,
+    "transcribe_audio": true,
+    "parse_document": true,
+    "audit_agents": true,
+    "improve_agent": true,
+    "track_performance": true,
+    "free_image_gen": true,
+    "free_video_gen": true
+  }
+}

@@ -1,0 +1,36 @@
+# Eval config for build agent
+# Generated from golden/agent_tasks.json — 3 test cases
+# Categories: subagent_delegation, task_completion, tool_correctness
+
+meta:
+  agent: build
+  version: "1.0"
+  total_test_cases: 3
+  categories: ["subagent_delegation", "task_completion", "tool_correctness"]
+  severities: ["warn", "critical"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: build
+
+test_cases:
+  - id: "build-001"
+    description: "Build agent should use hash-anchored edits before modifying files"
+    severity: critical
+    category: tool_correctness
+    reference: "build.md rules: 'Hash-validate edits: Before any edit call on a file read more than 30 seconds ago, re-read and verify'"
+  - id: "build-002"
+    description: "Build agent delegates architecture questions to architect"
+    severity: warn
+    category: subagent_delegation
+    reference: "build.md subagent delegation"
+  - id: "build-003"
+    description: "Build agent implements complete solutions, not partial snippets"
+    severity: warn
+    category: task_completion
+    reference: "build.md: 'Write complete solutions: Implement full working solutions, not partial snippets'"

@@ -1,0 +1,13 @@
+{
+  "description": "Per-agent finding files for the OpenCode shared context system",
+  "created": "2026-06-06",
+  "agent_count": 20,
+  "agents": [
+    "architect", "build", "debug", "display-agent", "docs",
+    "document-agent", "explore", "general", "heartbeat",
+    "media-agent", "meta-agent", "orchestrator", "pioneer",
+    "plan", "refactor", "review", "security", "test",
+    "video-creator", "web-browser"
+  ],
+  "note": "Each agent writes per-session findings here. Aggregate data lives in shared/context.json"
+}

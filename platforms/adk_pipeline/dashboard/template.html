@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Pipeline Dashboard</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --gray: #484f58;
+    --radius: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    margin-bottom: 20px;
+  }
+  header h1 { font-size: 20px; font-weight: 600; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+  }
+  .badge-live { background: var(--green); color: #fff; }
+  .badge-dry { background: var(--yellow); color: #000; }
+  .badge-pid { background: var(--surface2); color: var(--text2); font-size: 11px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+  }
+  .card h3 { font-size: 13px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .card .value { font-size: 28px; font-weight: 700; }
+  .card .sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+  .section { margin-bottom: 20px; }
+  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .platform-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .platform-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 20px;
+    font-size: 13px; border: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-green { background: var(--green); }
+  .dot-gray { background: var(--gray); }
+  .dot-yellow { background: var(--yellow); }
+  .chip-note { font-size: 11px; color: var(--text2); margin-left: 4px; }
+
+  .post-form {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+  }
+  .post-form textarea {
+    width: 100%; min-height: 80px; padding: 12px;
+    background: var(--bg); color: var(--text); border: 1px solid var(--border);
+    border-radius: 6px; font-size: 14px; font-family: inherit;
+    resize: vertical; margin-bottom: 12px;
+  }
+  .post-form textarea:focus { outline: none; border-color: var(--blue); }
+  .form-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 20px; border-radius: 6px; border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: opacity .2s;
+  }
+  .btn:hover { opacity: .85; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .toggle-label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+  .toggle-label input { accent-color: var(--blue); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 12px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 12px; text-transform: uppercase; white-space: nowrap; }
+  td { vertical-align: top; }
+  .text-cell { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .plat-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; margin: 1px;
+  }
+  .plat-badge-ok { background: rgba(63,185,80,.15); color: var(--green); }
+  .plat-badge-dry { background: rgba(210,153,34,.15); color: var(--yellow); }
+
+  .output-box {
+    background: #000; color: #0f0; padding: 12px;
+    border-radius: 6px; font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px; white-space: pre-wrap; max-height: 300px; overflow-y: auto;
+    margin-top: 12px; display: none;
+  }
+
+  .empty { color: var(--text2); font-style: italic; padding: 20px 0; text-align: center; }
+
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    header { flex-direction: column; gap: 8px; text-align: center; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────
+let state = {
+  data: { dry_run: true, backend: '', backend_ready: false, platforms: [], history: [], last_run: '', pipeline_pid: 0 },
+  running: false,
+  runDuration: '',
+};
+
+function configuredCount() {
+  return state.data.platforms.filter(p => p.status === 'configured').length;
+}
+
+function formatTime(ts) {
+  if (!ts) return '';
+  return new Date(ts).toLocaleString();
+}
+
+// ── Render ─────────────────────────────────────────────────────
+function render() {
+  const d = state.data;
+  const app = document.getElementById('app');
+
+  app.innerHTML = `
+    <header>
+      <h1>Content Pipeline</h1>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="badge ${d.dry_run ? 'badge-dry' : 'badge-live'}">
+          ${d.dry_run ? 'Dry Run' : 'Live'}
+        </span>
+        ${d.pipeline_pid > 0 ? `<span class="badge badge-pid">PID ${d.pipeline_pid}</span>` : ''}
+        ${d.last_run ? `<span class="badge badge-pid">Last: ${formatTime(d.last_run)}</span>` : ''}
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Backend</h3>
+        <div class="value">${d.backend || 'none'}</div>
+        <div class="sub">${d.backend_ready ? 'Ready' : 'Pending'}</div>
+      </div>
+      <div class="card">
+        <h3>Configured Platforms</h3>
+        <div class="value">${configuredCount()}</div>
+        <div class="sub">of ${d.platforms.length} platforms</div>
+      </div>
+      <div class="card">
+        <h3>Recent Posts</h3>
+        <div class="value">${d.history.length}</div>
+        <div class="sub">last 50 entries</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Platforms</div>
+      <div class="platform-grid">
+        ${d.platforms.map(p => `
+          <div class="platform-chip">
+            <span class="dot ${p.status === 'configured' ? 'dot-green' : 'dot-gray'}"></span>
+            <span>${p.name}</span>
+            ${p.token_status === 'expiring_soon' ? '<span class="dot dot-yellow" title="Token expiring soon"></span>' : ''}
+            ${p.note ? '<span class="chip-note">!</span>' : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="post-form">
+      <textarea id="promptInput" placeholder="What do you want to post? (e.g., 'post about our summer collection'). Leave empty for a quick update."></textarea>
+      <div class="form-row">
+        <button class="btn btn-primary" id="runBtn">
+          ${state.running ? 'Running...' : 'Run Pipeline'}
+        </button>
+        <label class="toggle-label">
+          <input type="checkbox" id="dryRunToggle" ${d.dry_run ? 'checked' : ''}>
+          Dry run
+        </label>
+        ${state.runDuration ? `<span style="font-size:12px;color:var(--text2)"> ${state.runDuration}</span>` : ''}
+      </div>
+      <div class="output-box" id="outputBox"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Post History</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Platform</th>
+              <th>Content</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${d.history.length === 0 ? `
+              <tr><td colspan="4" class="empty">No posts yet. Run the pipeline above to get started.</td></tr>
+            ` : d.history.map(e => `
+              <tr>
+                <td style="white-space:nowrap">${formatTime(e.timestamp)}</td>
+                <td><span class="plat-badge ${e.dry_run ? 'plat-badge-dry' : 'plat-badge-ok'}">${e.platform || (e.platforms ? e.platforms.join(', ') : '')}</span></td>
+                <td class="text-cell" title="${escapeHtml(e.text)}">${escapeHtml(e.text)}</td>
+                <td>
+                  ${e.dry_run ? '<span style="color:var(--yellow)">dry-run</span>' : '<span style="color:var(--green)">posted</span>'}
+                  ${e.post_id ? `<span style="font-size:11px;color:var(--text2)"> ${e.post_id}</span>` : ''}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  // Bind events
+  document.getElementById('runBtn').addEventListener('click', runPipeline);
+}
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── API calls ──────────────────────────────────────────────────
+async function fetchData() {
+  try {
+    const r = await fetch('/api/status');
+    state.data = await r.json();
+    render();
+  } catch(e) { console.error('fetch error', e); }
+}
+
+async function runPipeline() {
+  state.running = true;
+  state.runDuration = '';
+  render();
+
+  const box = document.getElementById('outputBox');
+  if (box) {
+    box.style.display = 'block';
+    box.textContent = 'Running pipeline...\n';
+  }
+
+  const prompt = document.getElementById('promptInput')?.value?.trim() || '';
+  const dryRun = document.getElementById('dryRunToggle')?.checked ?? true;
+
+  try {
+    const r = await fetch('/api/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt || 'post a quick update', dry_run: dryRun }),
+    });
+    const result = await r.json();
+    const box2 = document.getElementById('outputBox');
+    if (box2) box2.textContent = result.output || '(no output)';
+    state.runDuration = result.duration;
+    if (result.success) {
+      await fetchData(); // refresh stats
+    }
+  } catch(e) {
+    const box2 = document.getElementById('outputBox');
+    if (box2) box2.textContent = 'Error: ' + e.message;
+  } finally {
+    state.running = false;
+    render();
+  }
+}
+
+// ── Init ───────────────────────────────────────────────────────
+fetchData();
+setInterval(fetchData, 30000);
+</script>
+</body>
+</html>

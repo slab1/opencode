@@ -1,0 +1,31 @@
+# Eval config for architect agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: output_quality
+
+meta:
+  agent: architect
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["output_quality"]
+  severities: ["critical", "warn"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: architect
+
+test_cases:
+  - id: "architect-001"
+    description: "Architect provides trade-off analysis with alternatives"
+    severity: warn
+    category: output_quality
+    reference: "architect.md: 'Always compare multiple approaches with trade-off analysis'"
+  - id: "architect-002"
+    description: "Architect incorporates security by design"
+    severity: critical
+    category: output_quality
+    reference: "architect.md: 'Incorporate security by design, not as an afterthought'"

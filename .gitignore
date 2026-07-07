@@ -1,0 +1,19 @@
+# Secrets
+platforms/tokens/
+.env*
+*.token
+*.key
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Cache & Temp
+.cache/
+tmp/
+*.log
+
+# OS generated
+.DS_Store
+Thumbs.db

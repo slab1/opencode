@@ -1,0 +1,26 @@
+# Eval config for display-agent agent
+# Generated from golden/agent_tasks.json — 1 test cases
+# Categories: tool_correctness
+
+meta:
+  agent: display-agent
+  version: "1.0"
+  total_test_cases: 1
+  categories: ["tool_correctness"]
+  severities: ["warn"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: display-agent
+
+test_cases:
+  - id: "display-agent-001"
+    description: "Display agent checks status before launching headed apps"
+    severity: warn
+    category: tool_correctness
+    reference: "display-agent.md: 'Check status: Always verify d.is_running before launching headed applications'"

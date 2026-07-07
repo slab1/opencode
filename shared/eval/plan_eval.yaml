@@ -1,0 +1,31 @@
+# Eval config for plan agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: output_quality
+
+meta:
+  agent: plan
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["output_quality"]
+  severities: ["warn"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: plan
+
+test_cases:
+  - id: "plan-001"
+    description: "Plan agent provides multi-approach comparison"
+    severity: warn
+    category: output_quality
+    reference: "plan.md: 'Consider multiple approaches: Explore at least 2-3 approaches before recommending one'"
+  - id: "plan-002"
+    description: "Plan agent documents trade-offs for each approach"
+    severity: warn
+    category: output_quality
+    reference: "plan.md: 'Document trade-offs: Every approach has pros and cons — surface them clearly'"

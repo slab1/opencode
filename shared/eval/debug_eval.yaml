@@ -1,0 +1,31 @@
+# Eval config for debug agent
+# Generated from golden/agent_tasks.json — 2 test cases
+# Categories: task_completion
+
+meta:
+  agent: debug
+  version: "1.0"
+  total_test_cases: 2
+  categories: ["task_completion"]
+  severities: ["warn"]
+
+thresholds:
+  fail_under: 0.8
+  severity_gate: "warn"
+
+datasets:
+  - source: "../golden/agent_tasks.json"
+    filter:
+      agent: debug
+
+test_cases:
+  - id: "debug-001"
+    description: "Debug agent reproduces bug before analyzing code"
+    severity: warn
+    category: task_completion
+    reference: "debug.md: 'Reproduce first: Understand the exact conditions that trigger the issue before analyzing code'"
+  - id: "debug-002"
+    description: "Debug agent distinguishes root cause from symptom"
+    severity: warn
+    category: task_completion
+    reference: "debug.md: 'Distinguish cause from symptom: The visible error is often downstream of the real root cause'"

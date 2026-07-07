@@ -1,0 +1,74 @@
+{
+  "version": "1.0",
+  "created": "2026-07-02T09:15:00Z",
+  "accounts": {
+    "twitter": {
+      "name": "X (Twitter)",
+      "status": "configured",
+      "via": "local",
+      "credentials": {
+        "bearer_token": "file:/root/.config/opencode/platforms/tokens/twitter_bearer.token",
+        "api_key": "file:/root/.config/opencode/platforms/tokens/twitter_api_key.token",
+        "api_secret": "file:/root/.config/opencode/platforms/tokens/twitter_api_secret.token",
+        "access_token": "file:/root/.config/opencode/platforms/tokens/twitter_access_token.token",
+        "access_token_secret": "file:/root/.config/opencode/platforms/tokens/twitter_access_token_secret.token"
+      }
+    },
+    "youtube": {
+      "name": "YouTube",
+      "status": "configured",
+      "via": "bulkpublish",
+      "account_name": "Balogun Saheed",
+      "token_status": "expiring_soon",
+      "note": "YouTube token expires within minutes — reconnect in BulkPublish dashboard"
+    },
+    "pinterest": {
+      "name": "Pinterest (Business)",
+      "status": "configured",
+      "via": "bulkpublish",
+      "account_name": "slablaykon",
+      "token_status": "valid",
+      "token_expires": "2026-08-01"
+    },
+    "facebook": {
+      "name": "Facebook (Pages)",
+      "status": "pending",
+      "setup_url": "https://developers.facebook.com"
+    },
+    "instagram": {
+      "name": "Instagram (Business)",
+      "status": "pending",
+      "setup_url": "https://developers.facebook.com"
+    },
+    "tiktok": {
+      "name": "TikTok (Business)",
+      "status": "pending",
+      "setup_url": "https://developers.tiktok.com"
+    },
+    "linkedin": {
+      "name": "LinkedIn (Pages)",
+      "status": "pending",
+      "setup_url": "https://www.linkedin.com/developers"
+    },
+    "threads": {
+      "name": "Threads",
+      "status": "pending",
+      "setup_url": "https://developers.facebook.com"
+    },
+    "bluesky": {
+      "name": "Bluesky",
+      "status": "pending",
+      "setup_url": "https://docs.bsky.app"
+    },
+    "mastodon": {
+      "name": "Mastodon",
+      "status": "pending",
+      "setup_url": "https://docs.joinmastodon.org"
+    },
+    "gbp": {
+      "name": "Google Business Profile",
+      "status": "pending",
+      "setup_url": "https://console.cloud.google.com"
+    }
+  }
+}

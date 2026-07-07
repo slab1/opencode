@@ -1,0 +1,23 @@
+[
+  {
+    "id": "bb4f43f1",
+    "description": "Review docker-compose config",
+    "status": "closed-unresolved",
+    "scope": "general",
+    "created_at": "2026-06-03T03:58:22.106287+00:00",
+    "updated_at": "2026-06-27T15:39:00+00:00",
+    "due_at": "2026-06-04T03:58:22.106355+00:00",
+    "from_session": null,
+    "closed_reason": "Stale commitment — 23 days overdue. Debug agent closed during config folder audit 2026-06-27."
+  },
+  {
+    "id": "956474fa",
+    "description": "Check PR status on slab1/opencode",
+    "status": "done",
+    "scope": "general",
+    "created_at": "2026-06-03T03:58:21.486597+00:00",
+    "updated_at": "2026-06-03T03:59:16.219701+00:00",
+    "due_at": "2026-06-03T07:58:21.486718+00:00",
+    "from_session": null
+  }
+]

@@ -1,0 +1,68 @@
+======================================================================
+PHASE 8 BASELINE REPORT - 2026-06-07
+======================================================================
+
+## Structural Health
+  Total agents:      20
+  All complete:      True
+  Total size:        167.7 KB
+  Avg agent size:    8.4 KB
+  Largest:           15.5 KB
+
+## Skills System
+  Total skills:      18
+  Agents covered:    20
+  Avg skills/agent:  3.3
+
+  Skills by coverage:
+    code-execution-mcp              6 agents
+    error-recovery-protocol         6 agents
+    mcp-demand-activation           6 agents
+    background-subagent             6 agents
+    cross-domain-transfer           5 agents
+    documentation-skeleton          5 agents
+    git-commit-hygiene              5 agents
+    subagent-driven-development     5 agents
+    debug-systematic-investigation  4 agents
+    hash-anchored-edits             4 agents
+    multi-agent-orchestration       4 agents
+    security-threat-model           4 agents
+    tdd-workflow                    4 agents
+    hash-validate-edit              3 agents
+    refactor-safe                   3 agents
+    security-audit                  3 agents
+    system-audit                    2 agents
+    metacognitive-tracking          1 agents
+
+## Metacognitive Tracking
+  Total strategies:  4
+  Total applications: 4
+  Best strategy:     add_capability_from_research
+
+    add_capability_from_research        count=1 success=100% delta=0.05
+    add_rule                            count=1 success=100% delta=0.07
+    add_capability_from_external_research count=1 success=100% delta=0.08
+    add_skill_reference                 count=1 success=100% delta=0.05
+
+## Performance Log
+  Total entries:     16
+  Agents tracked:    1 (meta-agent)
+    success    16
+  Total tracked time: 2.7 hours
+
+## New Tools Added (Phase 8)
+  oc-mcp-toggle  - Demand-activate heavy MCPs (higgsfield, firecrawl, pdf-mcp)
+  oc-bg          - Run agents in background (oc-bg list/status/log/kill/clean)
+
+## New Scripts
+  /home/.config/opencode/scripts/oc-mcp-toggle.sh
+  /home/.config/opencode/scripts/oc-bg.sh
+
+## Skills Created (Phase 8)
+  tdd-workflow                   Red-green-refactor cycle for new code
+  git-commit-hygiene             Conventional Commits format and clean history
+  error-recovery-protocol        4-step recovery for tool failures, MCP errors, timeouts
+  documentation-skeleton         README, CHANGELOG, ADR, RUNBOOK templates
+  security-threat-model          STRIDE-based threat modeling for new systems
+  mcp-demand-activation          Toggle heavy MCPs on/off on demand
+  background-subagent            Run OpenCode agents in background for long/parallel work
