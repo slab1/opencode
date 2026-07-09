@@ -1,0 +1,163 @@
+# Agent Evaluation Workflow
+# =============================
+# Inspired by: linny006/agent-eval-harness — cron + diff + auto-updated tracker
+# Patterns: Juanllenato --fail-under gating, Victor-David-Medina baseline comparison
+#
+# Runs agent golden test evaluations on schedule and on push.
+# Fails CI if pass rate drops below threshold.
+# Auto-commits trend data to reports/trends/ (Improvement #4).
+
+name: Agent Eval
+
+on:
+  schedule:
+    # Weekly eval: Monday 6am UTC (linny006 cron pattern)
+    - cron: '0 6 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - 'agents/*.md'
+      - 'shared/golden/**'
+      - 'shared/eval/**'
+      - 'opencode_improvement/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'agents/*.md'
+      - 'shared/golden/**'
+      - 'shared/eval/**'
+      - 'opencode_improvement/**'
+  workflow_dispatch:
+    inputs:
+      fail_under:
+        description: 'Minimum pass rate (0.0-1.0)'
+        required: false
+        default: '0.8'
+      agent:
+        description: 'Specific agent to evaluate (empty = all)'
+        required: false
+
+permissions:
+  contents: write  # Needed for auto-commit of trend data
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install pyyaml 2>/dev/null || true
+
+      - name: Run audit
+        run: |
+          echo "## Agent Audit" >> $GITHUB_STEP_SUMMARY
+          python3 -m opencode_improvement audit >> audit.json
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          cat audit.json >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: Run golden tests
+        run: |
+          echo "## Agent Evaluation" >> $GITHUB_STEP_SUMMARY
+          AGENT_FLAG="${{ github.event.inputs.agent }}"
+          FAIL_UNDER="${{ github.event.inputs.fail_under || '0.8' }}"
+
+          if [ -n "$AGENT_FLAG" ]; then
+            python3 -m opencode_improvement eval \
+              --agent "$AGENT_FLAG" \
+              --fail-under "$FAIL_UNDER" \
+              --compare \
+              --baseline shared/eval/baseline.json \
+              --scorecard \
+              --output eval_results.json
+          else
+            python3 -m opencode_improvement eval \
+              --fail-under "$FAIL_UNDER" \
+              --compare \
+              --baseline shared/eval/baseline.json \
+              --scorecard \
+              --output eval_results.json
+          fi
+
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          python3 -c "
+import json
+r = json.load(open('eval_results.json'))
+s = r['summary']
+print(f'Total tests: {s[\"total_tests\"]}')
+print(f'Passed: {s[\"passed\"]}')
+print(f'Failed: {s[\"failed\"]}')
+print(f'Pass rate: {s[\"pass_rate\"]}')
+if r.get('regression'):
+    print(f\"Regression vs baseline: {r['regression']['delta']:+.1%}\")
+print()
+# Print scorecard if available
+if r.get('scorecard'):
+    print(r['scorecard'])
+" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Check strategy effectiveness
+        run: |
+          echo "## Strategy Effectiveness" >> $GITHUB_STEP_SUMMARY
+          python3 -m opencode_improvement strategies >> strategies.json
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          python3 -c "
+import json
+r = json.load(open('strategies.json'))
+print(f'Total strategies: {r[\"total_strategies\"]}')
+print(f'Total applications: {r[\"total_applications\"]}')
+print(f'Best strategy: {r[\"best_strategy\"]}')
+" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Save trend data
+        run: |
+          mkdir -p reports/trends
+          DATE=$(date -u +"%Y-%m-%d_%H-%M-%S")
+          if [ -f eval_results.json ]; then
+            python3 -c "
+import json
+r = json.load(open('eval_results.json'))
+trend = {
+    'timestamp': r.get('eval_timestamp', ''),
+    'summary': r.get('summary', {}),
+    'regression': r.get('regression'),
+    'pass_rate': r.get('pass_rate', 0),
+    'ci_run': True,
+    'workflow': '${{ github.run_id }}',
+}
+with open(f'reports/trends/trend_{DATE}.json', 'w') as f:
+    json.dump(trend, f, indent=2)
+print(f'Saved trend data: reports/trends/trend_{DATE}.json')
+"
+          fi
+
+      - name: Upload evaluation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-eval-results
+          path: |
+            audit.json
+            eval_results.json
+            strategies.json
+            reports/trends/*.json
+          retention-days: 30
+
+      - name: Commit trend data (weekly only)
+        if: github.event_name == 'schedule'
+        run: |
+          git config user.name "opencode-bot"
+          git config user.email "bot@opencode.local"
+          git add reports/trends/
+          git diff --staged --quiet || git commit -m "chore(eval): auto-commit trend data [$(date -u +'%Y-%m-%d')]"
+          git push
