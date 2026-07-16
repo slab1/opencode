@@ -15,6 +15,12 @@ Thumbs.db
 # Runtime pid files (machine-specific, not portable)
 *.pid
 
-# NOTE: tokens/ and build binaries (pipeline, dashboard) ARE committed on
-# purpose so the system runs out-of-the-box on other machines. See
-# .gitignore.keep for the patterns that would normally exclude them.
+# Secrets — NEVER commit (repo is public)
+platforms/tokens/
+.env*
+*.token
+*.key
+
+# NOTE: build binaries (pipeline, dashboard) ARE committed on purpose so the
+# system runs out-of-the-box on other machines. See .gitignore.keep for the
+# patterns that would normally exclude them.
