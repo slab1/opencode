@@ -1,9 +1,10 @@
 #!/bin/bash
 # Start the ADK pipeline as a background web service.
-# Usage: ./start-web.sh [port]
+# Usage: ./start-web.sh [port] [--auto-approve]
 set -e
 
 PORT="${1:-8080}"
+AUTO_APPROVE="${2:-}"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 PID_FILE="$DIR/pipeline.pid"
 LOG_FILE="$DIR/pipeline-web.log"
@@ -25,6 +26,12 @@ fi
 if [ ! -f "$DIR/pipeline" ]; then
     echo "Building pipeline..."
     go build -o pipeline . 2>&1
+fi
+
+# Set auto-approve env if requested
+if [ "$AUTO_APPROVE" = "--auto-approve" ]; then
+    export ADK_PIPELINE_AUTO_APPROVE=true
+    echo "⚠ PRODUCTION MODE: auto-approve enabled (no HITL)"
 fi
 
 echo "Starting pipeline web service on port $PORT..."

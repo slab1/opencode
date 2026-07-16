@@ -134,9 +134,15 @@ Built with ADK Go 2.0 (`google.golang.org/adk/v2`). Uses a **dynamic node** to i
 | Pipe input | `echo "your prompt" \| ./pipeline console` |
 | Web UI + API | `./pipeline web --port 8080 api webui` (sublaunchers as positional args) |
 | API only | `./pipeline web --port 8080 api` |
-| Background daemon | `make start` / `make stop` (tmux-free nohup wrapper) |
+| Background daemon | `bash start-web.sh [port] [--auto-approve]` (tmux-free nohup) |
+| Dashboard | `bash start-dashboard.sh` (port 8081) |
 | Config | `ADK_PIPELINE_DRY_RUN=true\|false` (default: auto-detect from backend.json) |
+| Auto-approve | `ADK_PIPELINE_AUTO_APPROVE=true` (production mode, no HITL) |
 | Check API | `curl http://localhost:8080/api/list-apps` (returns `["content_pipeline"]`) |
+
+**Production mode:** `bash start-web.sh 8080 --auto-approve` runs with `ADK_PIPELINE_AUTO_APPROVE=true` — posts go live automatically without manual HITL approval.
+
+**Custom Dashboard:** `dashboard/dashboard.go` serves a status page at `http://localhost:8081` showing backend status, platform config, post history, and a run button. Build: `cd dashboard && go build -o ../dashboard/dashboard .`
 
 **What it integrates with:**
 
@@ -147,5 +153,7 @@ Built with ADK Go 2.0 (`google.golang.org/adk/v2`). Uses a **dynamic node** to i
 | `analytics.py` | Triggered on completion (`fetch` mode) |
 | `backend.json` | Auto-detects if backends are ready for live posting |
 | `accounts.json` | Reads configured platforms automatically |
+
+**⚠ Post.sh + BulkPublish gotcha:** `post.sh` must send `channels` (array of channel IDs) in the payload, NOT `channel`. The BulkPublish API returns `VALIDATION_ERROR: At least one channel is required` if you use singular `channel`. Channel IDs are looked up from `GET /api/channels` and matched by platform name. Free plan = 3 posts/day quota.
 
 **Patterns demonstrated:** dynamic node with `RunNode` loop, HITL via `ResumeOrRequestInput`, typed generics, sub-branch isolation per platform child, sequential + dynamic composition. Same `agent.Agent` interface works with any runner.

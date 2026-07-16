@@ -47,6 +47,7 @@ var (
 	postsLog   = filepath.Join(platformsDir, "posts.jsonl")
 	calendarFile = filepath.Join(platformsDir, "calendar.json")
 	dryRun     = true
+	autoApprove = false
 )
 
 func init() {
@@ -54,6 +55,9 @@ func init() {
 		dryRun = v != "false"
 	} else {
 		dryRun = !backendIsReady()
+	}
+	if v := os.Getenv("ADK_PIPELINE_AUTO_APPROVE"); v != "" {
+		autoApprove = v != "false"
 	}
 	os.MkdirAll(outputDir, 0755)
 }
@@ -321,8 +325,8 @@ func postBody(ctx agent.Context, assets OptimizedAssets, emit func(*session.Even
 			Media:    assets.Variants[platform],
 		}
 
-		// HITL: ask before real posts
-		if !dryRun {
+		// HITL: ask before real posts (unless auto-approve is enabled for production)
+		if !dryRun && !autoApprove {
 			_, err := workflow.ResumeOrRequestInput(ctx, emit, session.RequestInput{
 				InterruptID: fmt.Sprintf("approve_%s_%d_%d", platform, i, time.Now().UnixNano()),
 				Message:     fmt.Sprintf("Approve posting to %s?\n\nText: %s", platform, assets.Content.Text),
@@ -331,6 +335,8 @@ func postBody(ctx agent.Context, assets OptimizedAssets, emit func(*session.Even
 				return nil, err // ErrNodeInterrupted pauses graph
 			}
 			log.Printf("  ✅ [hitl] %s approved", platform)
+		} else if !dryRun && autoApprove {
+			log.Printf("  ✅ [auto-approve] %s (production mode)", platform)
 		}
 
 		result, err := workflow.RunNode[PostResult](ctx, postNode, input,
@@ -432,6 +438,8 @@ func main() {
 	log.Printf("Content Pipeline Agent: %s", a.Name())
 	if dryRun {
 		log.Printf("Mode: DRY RUN (set ADK_PIPELINE_DRY_RUN=false for live + HITL)")
+	} else if autoApprove {
+		log.Printf("Mode: LIVE — PRODUCTION (auto-approve enabled, no HITL)")
 	} else {
 		log.Printf("Mode: LIVE (HITL approval required per platform)")
 	}

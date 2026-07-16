@@ -178,6 +178,28 @@ POST_ID="post_$(date +%Y%m%d_%H%M%S)_$(xxd -l 4 -p /dev/urandom 2>/dev/null || o
 TIMESTAMP=$(date -Iseconds)
 
 # ─────────────────────────────────────────────────────────
+# BulkPublish channel lookup
+# ─────────────────────────────────────────────────────────
+# Returns the channel ID for a given platform from BulkPublish
+bulkpublish_channel_id() {
+    local platform="$1"
+    local API_KEY="$2"
+    curl -s -H "Authorization: Bearer $API_KEY" \
+        https://app.bulkpublish.com/api/channels 2>/dev/null \
+        | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    for ch in data.get('channels', []):
+        if ch.get('platform') == '$platform' and ch.get('isActive'):
+            print(ch.get('id'))
+            break
+except Exception:
+    pass
+" 2>/dev/null
+}
+
+# ─────────────────────────────────────────────────────────
 # Build per-platform payloads
 # ─────────────────────────────────────────────────────────
 build_payload() {
@@ -238,17 +260,28 @@ $URL"
     esac
 
     # Build JSON payload for this platform
-    python3 << EOF
+    local channel_field=""
+    if [ "$BACKEND" = "bulkpublish" ]; then
+        local API_KEY=$(cat "$TOKENS_DIR/bulkpublish_api.key" 2>/dev/null)
+        local CHANNEL_ID=$(bulkpublish_channel_id "$platform" "$API_KEY")
+        if [ -n "$CHANNEL_ID" ]; then
+            channel_field=", \"channels\": [$CHANNEL_ID]"
+        fi
+    fi
+
+    local payload=$(python3 << EOF
 import json
 payload = {
     "platform": "$platform",
     "text": """$platform_text""",
     "media": "$platform_media" if "$platform_media" else None,
     "schedule": "$SCHEDULE" if "$SCHEDULE" else None,
-    "first_comment": """$FIRST_COMMENT""" if "$FIRST_COMMENT" else None
+    "first_comment": """$FIRST_COMMENT""" if "$FIRST_COMMENT" else None$channel_field
 }
 print(json.dumps(payload, ensure_ascii=False))
 EOF
+)
+    echo "$payload"
 }
 
 # ─────────────────────────────────────────────────────────

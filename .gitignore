@@ -17,3 +17,9 @@ tmp/
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Build artifacts & runtime
+platforms/adk_pipeline/pipeline
+platforms/adk_pipeline/dashboard/dashboard
+*.pid
+
