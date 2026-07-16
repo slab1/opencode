@@ -1,0 +1,8 @@
+# These patterns are intentionally NOT enforced so that secrets and binaries
+# are committed for portability across machines. Kept here as documentation
+# of what would normally be ignored.
+#
+# platforms/tokens/          # API keys + tokens (bulkpublish, twitter, etc.)
+# *.key  *.token  *.env*     # secret file extensions
+# platforms/adk_pipeline/pipeline          # built Go binary (34MB)
+# platforms/adk_pipeline/dashboard/dashboard # built Go binary (8MB)
