@@ -850,6 +850,78 @@
       "confidence_before": 0.8,
       "confidence_after": 0.95,
       "followup": "Verify effectiveness by running complex tickers and checking if 'CRITICAL_FLAW' triggers refinement."
+    },
+    {
+      "id": "strategy-1783448000",
+      "agent_target": "system-wide",
+      "diagnosis": "Agents often jump to conclusions without a verification signal or a traceable thought process, leading to 'hallucinated' confidence.",
+      "strategy_chosen": "implement_agentic_reasoning_framework",
+      "strategy_alternatives_considered": [
+        "increase_model_size",
+        "more_detailed_prompts"
+      ],
+      "why_this_strategy": "Based on Anthropic/Mila Bay agentic design: integrating Thought-Trace (Working Memory), Signal-First Iteration, and Budget/Escalation rails transforms the system from a chatbot to a reasoning engine.",
+      "applied_at": "2026-07-07T17:55:00Z",
+      "outcome": "success",
+      "outcome_evidence": "Created shared/reasoning_guidelines.md and integrated the 'Skeptic' loop in TradingAgents.",
+      "duration_s": 600,
+      "confidence_before": 0.7,
+      "confidence_after": 0.9,
+      "followup": "Propagate reasoning_guidelines to all agent configs via meta-agent."
+    },
+    {
+      "id": "strategy-1783449000",
+      "agent_target": "opencode_improvement",
+      "diagnosis": "Skills are static assets that do not improve based on real-world performance data.",
+      "strategy_chosen": "implement_skill_evolution_loop",
+      "strategy_alternatives_considered": [
+        "manual_prompt_tuning",
+        "automated_fine_tuning"
+      ],
+      "why_this_strategy": "Inspired by Microsoft Research 'Skill Opt'. Treating the skill document as a trainable artifact allows for model-agnostic improvement through a loop of Rollout -> Reflection -> Verification.",
+      "applied_at": "2026-07-07T18:10:00Z",
+      "outcome": "success",
+      "outcome_evidence": "Implemented TrajectoryLogger, skill-optimizer agent, and skill_evolution_loop framework.",
+      "duration_s": 900,
+      "confidence_before": 0.8,
+      "confidence_after": 0.95,
+      "followup": "Wire the loop into a daily cron job for key agents."
+    },
+    {
+      "id": "strategy-1784310001",
+      "agent_target": "opencode_web",
+      "diagnosis": "Crash on Termux: hardcoded Alpine paths (/usr/bin/chromium, /home/.cache/ms-playwright, wrong NODE_PATH) and no browser installed; Playwright threw 'executable doesn't exist at /usr/bin/chromium'.",
+      "strategy_chosen": "fix_root_causes_first_plus_env_aware_resolution",
+      "strategy_alternatives_considered": [
+        "install_only_system_chromium_via_apt",
+        "hardcode_termux_prefix_path"
+      ],
+      "why_this_strategy": "Root cause was non-portable hardcoded paths AND missing browser. Made resolution env-aware (works on Termux/proot/Alpine/Linux) and let Playwright manage its own browser, so no single path is assumed. Minimal, portable fix.",
+      "applied_at": "2026-07-10T19:20:00Z",
+      "outcome": "success",
+      "outcome_evidence": "Browser().start() succeeded; navigated to example.com, got title, closed cleanly. Also installed Playwright chromium v1223 to /root/.cache/ms-playwright.",
+      "duration_s": 900,
+      "confidence_before": 0.7,
+      "confidence_after": 0.98,
+      "followup": "On user's Termux: pkg install chromium then opencode_web auto-detects $PREFIX/bin/chromium. Headed mode still needs a VNC display."
+    },
+    {
+      "id": "strategy-1784310501",
+      "agent_target": "opencode_web + skills",
+      "diagnosis": "User requested integrating chrome-cdp (Chrome DevTools Protocol) skills found on GitHub so OpenCode has browser automation that does not depend on Playwright's Chromium download (which crashed on Termux).",
+      "strategy_chosen": "clone_and_harden",
+      "strategy_alternatives_considered": [
+        "use_only_playwright_patterns_skill",
+        "write_own_cdp_wrapper"
+      ],
+      "why_this_strategy": "Both skills are zero-dependency Node 22+ CLIs; cloning + a small Termux/Playwright chrome-path patch (reusing the opencode_web resolution logic) made them work on this env without reinventing a CDP client.",
+      "applied_at": "2026-07-11T14:35:00Z",
+      "outcome": "success",
+      "outcome_evidence": "Both skills installed and verified against headless chromium on :9222 (zeke list/open OK; lotreace newTab/snapshot OK).",
+      "duration_s": 600,
+      "confidence_before": 0.7,
+      "confidence_after": 0.95,
+      "followup": "Documented in agents/web-browser.md. Could add a shared CHROME_PATH hint to opencode.jsonc for convenience."
     }
   ],
   "workflow_trace": [
@@ -1613,6 +1685,32 @@
         "thesis": "Strong fundamental long-term growth prospects despite current technical volatility. Price at $192.53 testing critical 200-day SMA ($190.43).",
         "sizing": "Initial tranche deployment, sized for 2.20 beta"
       }
+    },
+    "opencode_web_termux": {
+      "id": "opencode-web-termux-crash",
+      "type": "bugfix",
+      "summary": "opencode_web crashed on Termux/proot: hardcoded Alpine paths + no browser",
+      "detail": "Root cause: browser.py hardcoded NODE_PATH='/usr/local/lib/node_modules', executable_path='/usr/bin/chromium', BROWSERS_PATH default '/home/.cache/ms-playwright'. On Termux/proot-distro Ubuntu none of these exist. Playwright launches and throws 'Failed to launch chromium because executable doesn't exist at /usr/bin/chromium'. Fix: added env-aware resolution (_resolve_node_path, _resolve_browsers_path, _resolve_chromium_executable, _find_playwright_browser). Browser() now auto-detects Chromium via $PREFIX/bin/chromium (Termux), /usr/bin/chromium-browser, PATH, or falls back to a Playwright-managed browser. backend/browser.js now omits executablePath when none provided. Clear actionable error raised when no browser exists.",
+      "files_changed": [
+        "opencode_web/browser.py",
+        "opencode_web/backend/browser.js"
+      ],
+      "verification": "Browser().start() + navigate('https://example.com') + get_title() + close() => OK",
+      "severity": "high"
+    },
+    "cdp_skills_integration": {
+      "id": "cdp-skills-integration",
+      "type": "integration",
+      "summary": "Integrated two zero-dependency Chrome DevTools Protocol (CDP) skills for OpenCode",
+      "detail": "Cloned and installed two CDP skills into ~/.config/opencode/skills/skills/:\n1. faster-chrome-devtools-skill (zeke) \u2014 Node 22+ built-in WebSocket CLI (cdp.mjs); connects to a running Chrome via CDP_HTTP_ENDPOINT/CDP_WS_ENDPOINT; commands list/open/snapshot/screenshot/navigate/evaluate/click/fill/type/press.\n2. cdp-skill (lotreace) \u2014 JSON step pipeline CLI (cdp-skill.js); newTab/snapshot/click/fill/type/hover/drag/evaluate/screenshot; auto-launches Chrome.\nBoth avoid Playwright's Chromium-download crash on Termux. Patched lotreace's findChromePath() to be Termux/Playwright-aware (honors OPCODE_WEB_CHROMIUM, $PREFIX/bin/chromium, Playwright-managed chromium), matching the opencode_web fix. Verified end-to-end against a headless Playwright chromium on port 9222.",
+      "files_changed": [
+        "skills/skills/faster-chrome-devtools-skill/ (new, from zeke/faster-chrome-devtools-skill)",
+        "skills/skills/cdp-skill/ (new, from lotreace/cdp-skill)",
+        "skills/skills/cdp-skill/scripts/cdp/browser.js (Termux/Playwright chrome-path detection)",
+        "agents/web-browser.md (added <cdp-skills> doc section)"
+      ],
+      "verification": "zeke: `list`+`open https://example.com` OK. lotreace: newTab+snapshot returned title 'Example Domain' + a11y snapshot OK.",
+      "severity": "info"
     }
   },
   "session": {

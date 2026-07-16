@@ -138,6 +138,10 @@ handlers.init = async (args) => {
   const isHeadless = args.headless !== false;
   const userDataDir = `/tmp/playwright_profile_${Date.now()}`;
 
+  // executablePath: undefined => let Playwright use its managed browser.
+  // Only use a real path when the Python wrapper resolved one.
+  const chromiumPath = args.executablePath || undefined;
+
   if (!isHeadless) {
     try { require('child_process').execSync('pkill -9 -f remote-debugging', { stdio: 'ignore' }); } catch (e) {}
   }
@@ -145,7 +149,7 @@ handlers.init = async (args) => {
   if (isHeadless) {
     context = await chromium.launchPersistentContext(userDataDir, {
       headless: true,
-      executablePath: args.executablePath || '/usr/bin/chromium',
+      executablePath: chromiumPath,
       args: [
         '--no-sandbox',
         '--disable-dev-shm-usage',
@@ -165,7 +169,7 @@ handlers.init = async (args) => {
   } else {
     context = await chromium.launchPersistentContext(userDataDir, {
       headless: true,
-      executablePath: args.executablePath || '/usr/bin/chromium',
+      executablePath: chromiumPath,
       args: [
         '--no-sandbox',
         '--disable-dev-shm-usage',
@@ -196,7 +200,13 @@ handlers.init = async (args) => {
       'about:blank',
     ];
 
-    chromeProc = spawn(args.executablePath || '/usr/bin/chromium', headedArgs, {
+    if (!chromiumPath) {
+      throw new Error(
+        'Headed mode requires a real Chromium/Chrome executable. ' +
+        'Set executable_path (e.g. OPCODE_WEB_CHROMIUM) or run headless=True.'
+      );
+    }
+    chromeProc = spawn(chromiumPath, headedArgs, {
       stdio: ['ignore', 'ignore', 'ignore'],
       env: { ...process.env },
     });

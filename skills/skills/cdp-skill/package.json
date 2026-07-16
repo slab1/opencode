@@ -1,0 +1,61 @@
+{
+  "name": "cdp-skill",
+  "version": "1.0.20",
+  "description": "Browser automation skill using Chrome DevTools Protocol for Claude Code and AI agents",
+  "type": "module",
+  "main": "scripts/index.js",
+  "bin": {
+    "cdp-skill": "scripts/cdp-skill.js"
+  },
+  "exports": {
+    ".": "./scripts/index.js",
+    "./utils": "./scripts/utils.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "postinstall": "node install.js",
+    "preuninstall": "node uninstall.js",
+    "test": "node --test --test-force-exit scripts/tests/*.test.js",
+    "test:run": "node --test --test-force-exit --test-reporter spec scripts/tests/*.test.js"
+  },
+  "files": [
+    "install.js",
+    "uninstall.js",
+    "SKILL.md",
+    "EXAMPLES.md",
+    "scripts/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lotreace/cdp-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lotreace/cdp-skill/issues"
+  },
+  "homepage": "https://github.com/lotreace/cdp-skill#readme",
+  "keywords": [
+    "cdp",
+    "chrome",
+    "devtools",
+    "browser",
+    "automation",
+    "claude-code",
+    "codex",
+    "ai-agent",
+    "skill",
+    "testing",
+    "e2e",
+    "web-scraping"
+  ],
+  "skill": {
+    "name": "cdp-skill",
+    "description": "Automate Chrome browser interactions via CDP",
+    "entry": "./SKILL.md"
+  },
+  "author": "Cezar Lotrean",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

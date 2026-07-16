@@ -91,6 +91,46 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 - **metacognitive-tracking**: Log improvement strategies and track their effectiveness (HyperAgents pattern). Record diagnosis, strategy_chosen, alternatives, confidence_before/after, and outcome_evidence for every improvement attempt.
 </skills>
 
+<cdp-skills>
+## Chrome DevTools Protocol (CDP) Skills — zero-dependency browser control
+
+Two zero-dependency CDP skills are integrated (OpenCode auto-discovers them in
+`~/.config/opencode/skills/skills/`). They drive a real/running Chrome over a
+WebSocket CDP connection, so they **avoid the Chromium-download crash** that
+`opencode_web` can hit on Termux/proot. Use them to attach to a user's live,
+logged-in browser session, or when Playwright's bundled browser is unavailable.
+
+### faster-chrome-devtools-skill  (`skill: faster-chrome-devtools-skill`)
+- CLI: `node ~/.config/opencode/skills/skills/faster-chrome-devtools-skill/scripts/cdp.mjs --help`
+- Point it at a running Chrome: `CDP_HTTP_ENDPOINT=http://127.0.0.1:9222` (or `CDP_WS_ENDPOINT=ws://…`).
+- Commands: `list`, `open <url>`, `snapshot <target>`, `screenshot`, `navigate`, `evaluate`, `html`, `click`, `fill`, `type`, `press`.
+- Termux: launch Chrome with `--remote-debugging-port=9222` (the Playwright-managed chromium at `/root/.cache/ms-playwright/chromium-*/chrome-linux/chrome` works).
+
+### cdp-skill / lotreace  (`skill: cdp-skill`)
+- CLI: `echo '{"steps":[...]}' | node ~/.config/opencode/skills/skills/cdp-skill/scripts/cdp-skill.js`
+- JSON step pipeline: `newTab`, `snapshot` (a11y refs), `click`, `fill`, `type`, `hover`, `drag`, `evaluate`, `screenshot`. Auto-launches Chrome if none is running.
+- **Termux-aware**: honors `CHROME_PATH`, `OPCODE_WEB_CHROMIUM`, `$PREFIX/bin/chromium`, and the Playwright-managed chromium (same resolution logic as `opencode_web`).
+- Note: on first visit to a domain it emits `actionRequired: createSiteProfile` — follow its steps to record a site profile before automating.
+
+### Relationship to `opencode_web`
+- `opencode_web` (Playwright) = full Python API, headless scraping, flight workflows. Needs a Chromium binary.
+- CDP skills = attach to a live browser, no download, great for authenticated pages. Pick whichever fits: Playwright for headless batch jobs, CDP for live-session interaction.
+
+### Launcher helper (recommended)
+Use `~/.config/opencode/scripts/chrome-cdp.sh` to start a CDP-ready Chrome with the
+Termux-safe flags (`--headless=old --use-gl=swiftshader` — `--headless=new` makes
+`Page.captureScreenshot` time out on this env). It auto-detects the Chromium binary
+(PREFIX/bin/chromium, Playwright-managed, /usr/bin/*) and skips the Ubuntu snap stub.
+
+```bash
+bash ~/.config/opencode/scripts/chrome-cdp.sh            # headless on :9222
+bash ~/.config/opencode/scripts/chrome-cdp.sh --port 9333 --url https://example.com
+bash ~/.config/opencode/scripts/chrome-cdp.sh --dry-run  # print the command only
+# then:
+export CDP_HTTP_ENDPOINT=http://127.0.0.1:9222
+```
+</cdp-skills>
+
 <examples>
 ### Basic Browsing
 ```python

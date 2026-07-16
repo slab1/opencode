@@ -7,6 +7,7 @@ Provides a clean, Pythonic API for browser automation.
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -15,8 +16,121 @@ from pathlib import Path
 from typing import Any, Optional
 
 BACKEND_SCRIPT = Path(__file__).parent / "backend" / "browser.js"
-NODE_PATH = "/usr/local/lib/node_modules"
-BROWSERS_PATH = os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "/home/.cache/ms-playwright")
+
+
+# ---------------------------------------------------------------------------
+# Environment-aware resolution (Termux / proot-distro / Alpine / standard Linux)
+# ---------------------------------------------------------------------------
+
+def _resolve_node_path() -> str:
+    """
+    Build a NODE_PATH that actually resolves the `playwright` module.
+
+    The previous hard-coded value ("/usr/local/lib/node_modules") only matched
+    Alpine-style installs and broke on Termux / proot-distro Ubuntu where the
+    global modules live elsewhere (e.g. /usr/local/lib/node-v22/lib/node_modules)
+    and playwright is often installed locally under the project.
+    """
+    candidates = []
+    if os.environ.get("NODE_PATH"):
+        candidates.append(os.environ["NODE_PATH"])
+    # Project-local node_modules (where playwright is installed in this repo)
+    candidates.append(str(Path(__file__).resolve().parent.parent / "node_modules"))
+    # Common global roots across Termux / proot / standard Linux
+    candidates.append("/usr/local/lib/node-v22/lib/node_modules")
+    candidates.append("/usr/local/lib/node_modules")
+    candidates.append("/usr/lib/node_modules")
+    if os.environ.get("PREFIX"):
+        candidates.append(os.path.join(os.environ["PREFIX"], "lib", "node_modules"))
+    # De-duplicate while preserving order
+    seen = set()
+    paths = []
+    for c in candidates:
+        if c and c not in seen and os.path.isdir(c):
+            seen.add(c)
+            paths.append(c)
+    return os.pathsep.join(paths)
+
+
+def _resolve_browsers_path() -> str:
+    """
+    Resolve the Playwright browser cache directory.
+
+    PLAYWRIGHT_BROWSERS_PATH (if set) wins; otherwise fall back to the real
+    cache locations instead of the hard-coded "/home/.cache/ms-playwright"
+    which does not exist in Termux / proot environments.
+    """
+    if os.environ.get("PLAYWRIGHT_BROWSERS_PATH"):
+        return os.environ["PLAYWRIGHT_BROWSERS_PATH"]
+    home = os.environ.get("HOME", "/root")
+    for cand in (
+        os.path.join(home, ".cache", "ms-playwright"),
+        "/root/.cache/ms-playwright",
+        "/home/.cache/ms-playwright",
+    ):
+        if os.path.isdir(cand):
+            return cand
+    # Default to HOME cache even if not yet populated
+    return os.path.join(home, ".cache", "ms-playwright")
+
+
+def _find_playwright_browser(browsers_path: str) -> bool:
+    """Return True if a Playwright-managed chromium is present in browsers_path."""
+    if not browsers_path or not os.path.isdir(browsers_path):
+        return False
+    for name in os.listdir(browsers_path):
+        if name.startswith("chromium") and os.path.isdir(os.path.join(browsers_path, name)):
+            return True
+    return False
+
+
+def _resolve_chromium_executable() -> Optional[str]:
+    """
+    Locate a usable Chromium/Chrome executable across environments.
+
+    Order:
+      1. OPCODE_WEB_CHROMIUM / CHROMIUM_PATH env overrides
+      2. Termux prefix (proot)  $PREFIX/bin/chromium
+      3. Standard Linux paths    /usr/bin/chromium, /usr/bin/chromium-browser
+      4. PATH lookup
+      5. Playwright-managed browser -> return None so Playwright launches its own
+
+    Returns the path, or None when Playwright should manage the browser itself.
+    """
+    env_override = os.environ.get("OPCODE_WEB_CHROMIUM") or os.environ.get("CHROMIUM_PATH")
+    if env_override and os.path.isfile(env_override):
+        return env_override
+
+    prefix = os.environ.get("PREFIX")
+    candidates = []
+    if prefix:
+        candidates.append(os.path.join(prefix, "bin", "chromium"))
+    candidates += [
+        "/data/data/com.termux/files/usr/bin/chromium",
+        "/usr/bin/chromium",
+        "/usr/bin/chromium-browser",
+        "/usr/bin/google-chrome",
+        "/usr/bin/google-chrome-stable",
+    ]
+    for cand in candidates:
+        if cand and os.path.isfile(cand):
+            return cand
+
+    # PATH-based lookup
+    for name in ("chromium", "chromium-browser", "google-chrome", "google-chrome-stable"):
+        found = shutil.which(name)
+        if found:
+            return found
+
+    # Fall back to a Playwright-managed browser if one is installed
+    if _find_playwright_browser(_resolve_browsers_path()):
+        return None
+
+    return None
+
+
+NODE_PATH = _resolve_node_path()
+BROWSERS_PATH = _resolve_browsers_path()
 
 
 class BrowserError(Exception):
@@ -36,14 +150,16 @@ class Browser:
         self,
         headless: bool = True,
         viewport: Optional[dict] = None,
-        executable_path: str = "/usr/bin/chromium",
+        executable_path: Optional[str] = None,
         timeout: int = 30000,
         verbose: bool = False,
         auto_display: bool = True,
     ):
         self.headless = headless
         self.viewport = viewport or {"width": 1280, "height": 720}
+        # None -> auto-detect a Chromium executable for this environment.
         self.executable_path = executable_path
+        self._executable_resolved = False
         self.timeout = timeout
         self.verbose = verbose
         self.auto_display = auto_display
@@ -126,6 +242,35 @@ class Browser:
         cmd.update(kwargs)
         return self._send_command(cmd)
 
+    def _resolve_executable(self):
+        """
+        Resolve the Chromium executable to use.
+
+        If `executable_path` was not provided, auto-detect it for the current
+        environment (Termux / proot / Alpine / standard Linux). When no system
+        Chromium is found but a Playwright-managed browser is installed, let
+        Playwright launch its own. Raises a clear, actionable BrowserError when
+        no browser is available at all (instead of Playwright's cryptic crash).
+        """
+        if self._executable_resolved:
+            return
+
+        exe = self.executable_path
+        if not exe:
+            exe = _resolve_chromium_executable()
+
+        if exe is None and not _find_playwright_browser(BROWSERS_PATH):
+            raise BrowserError(
+                "No Chromium/Chrome browser found. Install one and retry:\n"
+                "  • Termux/proot:   pkg install chromium   (or: apt-get install -y chromium)\n"
+                "  • Or let Playwright manage it:  node node_modules/.bin/playwright install chromium\n"
+                "  • Or set OPCODE_WEB_CHROMIUM=/path/to/chromium\n"
+                f"(searched NODE_PATH={NODE_PATH}, BROWSERS_PATH={BROWSERS_PATH})"
+            )
+
+        self.executable_path = exe  # None => Playwright-managed browser
+        self._executable_resolved = True
+
     def start(self):
         """Initialize the browser (launch Chromium)."""
         if self._initialized:
@@ -141,17 +286,22 @@ class Browser:
                     "Install it or use headless=True."
                 )
 
+        self._resolve_executable()
         self._start_backend()
 
         extra_args = []
 
-        result = self._exec(
-            "init",
+        # Only send executable_path when we have a real file; otherwise let the
+        # backend/Playwright fall back to its own managed browser.
+        init_kwargs = dict(
             headless=self.headless,
             viewport=self.viewport,
-            executable_path=self.executable_path,
             args=extra_args,
         )
+        if self.executable_path:
+            init_kwargs["executable_path"] = self.executable_path
+
+        result = self._exec("init", **init_kwargs)
         self._initialized = True
         return result
 

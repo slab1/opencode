@@ -361,5 +361,27 @@
     "context": {},
     "timestamp": 1783446248.927017,
     "timestamp_iso": "2026-07-07T17:44:08Z"
+  },
+  {
+    "agent": "human",
+    "task": "Fixed opencode_web crash on Termux/proot: replaced hardcoded Alpine paths (NODE_PATH, /usr/bin/chromium, /home/.cache/ms-playwright) with env-aware resolution; Browser auto-detects Termux PREFIX chromium or Playwright-managed browser; backend omits executablePath when none resolved; clear actionable error when no browser. Verified end-to-end: launch+navigate+title+close OK. Also installed Playwright chromium v1223.",
+    "outcome": "success",
+    "duration_s": 900,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1783775942.170492,
+    "timestamp_iso": "2026-07-11T13:19:02Z"
+  },
+  {
+    "agent": "web-browser",
+    "task": "Integrated two zero-dependency Chrome DevTools Protocol skills (faster-chrome-devtools-skill by zeke, cdp-skill by lotreace) into skills/skills/. Patched lotreace findChromePath() for Termux/Playwright chrome resolution. Verified end-to-end against headless chromium on :9222.",
+    "outcome": "success",
+    "duration_s": 600,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1783776897.544883,
+    "timestamp_iso": "2026-07-11T13:34:57Z"
   }
 ]
