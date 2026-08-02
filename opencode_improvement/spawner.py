@@ -10,7 +10,7 @@ import time
 import uuid
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict, Any
 
 BASE_DIR = Path.home() / ".config" / "opencode"
 SPAWNED_DIR = BASE_DIR / "shared" / "spawned"
@@ -64,7 +64,7 @@ def _team_path(team_id: str) -> Path:
     return SPAWNED_DIR / f"{team_id}.json"
 
 
-def spawn_team(task: dict) -> dict:
+def spawn_team(task: dict, cognitive_packet: Optional[Dict[str, Any]] = None) -> dict:
     """Create a transient agent team for a complex task.
 
     Args:
@@ -73,7 +73,7 @@ def spawn_team(task: dict) -> dict:
             - complexity: str — "simple" | "moderate" | "complex"
             - template: str — optional team template name (default: auto-pick)
             - roles: list — optional override of agent roles
-
+        cognitive_packet: Optional dict containing L2, L3, L4 context from MemoryController
     Returns:
         dict with team_id, members, shared_context_path
     """
@@ -104,6 +104,26 @@ def spawn_team(task: dict) -> dict:
     if task_cl < min_cl:
         complexity = template.get("min_complexity", "simple")
 
+    # Synthesize a human-readable summary from the cognitive packet
+    packet_summary = ""
+    if cognitive_packet:
+        parts = []
+        epi = cognitive_packet.get("episodic") or []
+        if epi:
+            parts.append("PAST EXPERIENCES: " + "; ".join(
+                f"[{e.get('outcome')}] {e.get('task')} -> {e.get('action')}" for e in epi[:3]
+            ))
+        sem = cognitive_packet.get("semantic") or []
+        if sem:
+            parts.append("KNOWN FACTS: " + "; ".join(
+                f"{f.get('s')} {f.get('p')} {f.get('o')}" for f in sem[:3]
+            ))
+        pro = cognitive_packet.get("procedural") or []
+        if pro:
+            parts.append("RELEVANT SKILLS: " + ", ".join(pro))
+        packet_summary = "\n".join(parts)
+
+
     members = []
     for i, role in enumerate(template["roles"]):
         members.append({
@@ -111,6 +131,7 @@ def spawn_team(task: dict) -> dict:
             "role": role,
             "status": "pending",
             "prompt_template": f"Execute role '{role}' for task: {task.get('description', '')}",
+            "cognitive_hint": packet_summary,
         })
 
     team_data = {
@@ -119,6 +140,8 @@ def spawn_team(task: dict) -> dict:
         "updated_at": datetime.utcnow().isoformat() + "Z",
         "status": "active",
         "task": task,
+        "cognitive_packet": cognitive_packet,
+        "packet_summary": packet_summary,
         "template": template_name or "auto",
         "complexity": complexity,
         "members": members,
@@ -229,10 +252,15 @@ def spawn_subagent(member_info: dict, task_context: str) -> dict:
     """
     role = member_info.get("role", "general")
     prompt = member_info.get("prompt_template", "")
+    cognitive_hint = member_info.get("cognitive_hint") or ""
+
+    cognitive_block = ""
+    if cognitive_hint:
+        cognitive_block = "\n\nCOGNITIVE CONTEXT (Project Aether HCM):\n" + cognitive_hint + "\n"
 
     return {
         "subagent_type": role,
-        "prompt": f"""You are part of a multi-agent team (team context below).
+        "prompt": f"""You are part of a multi-agent team (team context below).{cognitive_block}
 Your role: {role}
 
 Task Context:

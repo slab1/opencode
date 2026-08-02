@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": "2026-07-05T11:22:40Z",
+  "last_updated": "2026-07-05T02:00:00Z",
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
@@ -14,10 +14,10 @@
     "high_fixed": 5,
     "medium_fixed": 4,
     "fixes_applied": [
-      "chmod 600 on 5 token files (644\u2192600)",
+      "chmod 600 on 5 token files (644→600)",
       "npm cache cleaned",
       "pip cache cleaned",
-      "opencode package cache cleaned (777M\u21926.7M)",
+      "opencode package cache cleaned (777M→6.7M)",
       "Overdue commitment closed (bb4f43f1: stale 23 days)",
       "checkpoints/ directory created",
       "Backup file scripts/oc-tui.py.bak removed",
@@ -31,7 +31,7 @@
     "remaining_issues": [
       "Node v18 too old for firecrawl-mcp (needs >=22)",
       "Go not installed (for go-docs-mcp)",
-      "Disk at 91% (4.8G free) \u2014 improved from 93%"
+      "Disk at 91% (4.8G free) — improved from 93%"
     ]
   },
   "db_maintenance": {
@@ -55,18 +55,45 @@
         "twitter"
       ],
       "total_posts": 0,
-      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl\u2192xxd fix, all scripts verified operational"
+      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl→xxd fix, all scripts verified operational"
+    },
+    "aether": {
+      "status": "operational",
+      "version": "1.0",
+      "pillars": {
+        "HCM": "shared/memory_controller.py",
+        "RCSI": "opencode_improvement/logic_evolve.py",
+        "DCS": "platforms/skill_synthesizer.py",
+        "WorldModel": "shared/simulation_sandbox.py + agents/critic.md"
+      },
+      "orchestration": {
+        "cognition_agent": "agents/cognition.md",
+        "aether_core": "shared/aether_core.py",
+        "cron": "0 * * * * oc-aether-pulse.sh",
+        "spawner": "cognition-aware (cognitive_packet + packet_summary injection)"
+      },
+      "validated": {
+        "modules_compile": 6,
+        "e2e_loop": "PASS",
+        "memory_tiers": "L2+L3+L4 all operational",
+        "verified_at": "2026-07-05T02:00:00Z"
+      }
     }
   },
   "active_tasks": [
     {
       "name": "multios-kernel-compilation-fix",
       "status": "in_progress",
-      "errors_fixed": "~4700\u2192~3371 (28%)",
+      "errors_fixed": "~4700→~3371 (28%)",
       "current_phase": "root-cause-elimination-complete"
     }
   ],
   "recent_artifacts": [
+    {
+      "type": "script",
+      "path": "~/.config/opencode/scripts/oc-aether-pulse.sh",
+      "purpose": "Cron runner for Aether Core (hourly)"
+    },
     {
       "type": "spec",
       "path": "~/.config/opencode/shared/AETHER_BLUEPRINT.md",
@@ -155,12 +182,12 @@
     {
       "type": "AGENTS.md",
       "path": "~/.config/opencode/AGENTS.md",
-      "purpose": "Root agent map \u2014 Hermes-level dev guide"
+      "purpose": "Root agent map — Hermes-level dev guide"
     },
     {
       "type": "AGENTS.md",
       "path": "~/.config/opencode/platforms/AGENTS.md",
-      "purpose": "Platform docs \u2014 now with Security, Kanban, Hooks docs"
+      "purpose": "Platform docs — now with Security, Kanban, Hooks docs"
     },
     {
       "type": "AGENTS.md",
@@ -170,7 +197,7 @@
     {
       "type": "setup",
       "path": "~/.config/opencode/platforms/backend.json",
-      "purpose": "Backend config \u2014 BulkPublish (pending API key)"
+      "purpose": "Backend config — BulkPublish (pending API key)"
     },
     {
       "type": "setup",
@@ -185,12 +212,12 @@
     {
       "type": "fix",
       "path": "~/.config/opencode/platforms/post.sh",
-      "purpose": "Fixed openssl\u2192xxd for POST_ID generation"
+      "purpose": "Fixed openssl→xxd for POST_ID generation"
     },
     {
       "type": "config",
       "path": "~/.config/opencode/platforms/config.yaml",
-      "purpose": "User preferences \u2014 posting defaults, kanban, content gen, analytics"
+      "purpose": "User preferences — posting defaults, kanban, content gen, analytics"
     },
     {
       "type": "script",
@@ -246,7 +273,7 @@
       "id": "hermes-003",
       "date": "2026-06-10",
       "description": "Plugin adapter system with auto-discovery (adapters/)",
-      "rationale": "Pattern 3: Hermes plugin architecture \u2014 drop-in modules"
+      "rationale": "Pattern 3: Hermes plugin architecture — drop-in modules"
     },
     {
       "id": "hermes-004",
@@ -258,7 +285,7 @@
       "id": "hermes-005",
       "date": "2026-06-10",
       "description": "Self-improving learning loop (analytics.py learn)",
-      "rationale": "Pattern 5: Hermes closed learning loop \u2014 learn from engagement data"
+      "rationale": "Pattern 5: Hermes closed learning loop — learn from engagement data"
     },
     {
       "id": "setup-006",
@@ -269,7 +296,7 @@
     {
       "id": "kernel-001",
       "date": "2026-06-17",
-      "description": "HashMap\u2192BTreeMap for no_std compatibility",
+      "description": "HashMap→BTreeMap for no_std compatibility",
       "rationale": "alloc::collections::HashMap not available in no_std; BTreeMap is available and avoids external hashbrown dependency"
     },
     {
@@ -306,7 +333,7 @@
       "id": "strat-010",
       "date": "2026-06-20",
       "description": "Auto-evolution script creates self-healing agent configs from eval failures",
-      "rationale": "Closes the loop between evaluation and improvement \u2014 agents that fix themselves"
+      "rationale": "Closes the loop between evaluation and improvement — agents that fix themselves"
     },
     {
       "id": "strat-011",
@@ -336,7 +363,7 @@
       "id": "strat-015",
       "date": "2026-06-20",
       "description": "Live dashboard provides real-time visualization of agent ecosystem health",
-      "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+      "rationale": "Turns infrastructure into visible proof — eval scores, trends, strategy effectiveness"
     },
     {
       "id": "strat-016",
@@ -388,7 +415,7 @@
       "why_this_strategy": "Simplest change with least downstream impact; macros already in scope via #[macro_use]",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "33 E0659 \u2192 0",
+      "outcome_evidence": "33 E0659 → 0",
       "duration_s": 300,
       "confidence_before": 0.9,
       "confidence_after": 1.0,
@@ -406,7 +433,7 @@
       "why_this_strategy": "Identified root cause as redundant imports and conflicting module re-exports; removing duplicates preserves API",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "E0252/E0255 \u2192 0; unblocked downstream modules",
+      "outcome_evidence": "E0252/E0255 → 0; unblocked downstream modules",
       "duration_s": 1800,
       "confidence_before": 0.8,
       "confidence_after": 0.95,
@@ -424,7 +451,7 @@
       "why_this_strategy": "Parenthesizing trait bounds in dyn types fixes ambiguity; BTreeSet replaces HashSet same as HashMap",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "ambiguous + \u2192 0, HashSet \u2192 BTreeSet in 4 files",
+      "outcome_evidence": "ambiguous + → 0, HashSet → BTreeSet in 4 files",
       "duration_s": 600,
       "confidence_before": 0.9,
       "confidence_after": 1.0,
@@ -433,17 +460,17 @@
     {
       "id": "strategy-1781945530729",
       "agent_target": "opencode_improvement (audit module)",
-      "diagnosis": "capability_sections count always 0 \u2014 line.startswith('##') catches '###' headings and exits in_caps before counter runs",
+      "diagnosis": "capability_sections count always 0 — line.startswith('##') catches '###' headings and exits in_caps before counter runs",
       "strategy_chosen": "fix_parsing_order",
       "strategy_alternatives_considered": [
         "rewrite_parser_with_regex",
         "change_all_agent_headings"
       ],
-      "why_this_strategy": "Minimal change \u2014 swap two if-statements so ### is checked before ##. This correctly counts sub-section headings under <capabilities>",
+      "why_this_strategy": "Minimal change — swap two if-statements so ### is checked before ##. This correctly counts sub-section headings under <capabilities>",
       "applied_at": "2026-06-20T08:52:10.729698Z",
       "confidence_before": 0.5,
       "outcome": "success",
-      "outcome_evidence": "architect.md: 0\u21923 counted; all agents will now report actual section counts",
+      "outcome_evidence": "architect.md: 0→3 counted; all agents will now report actual section counts",
       "confidence_after": 0.95
     },
     {
@@ -459,7 +486,7 @@
       "applied_at": "2026-06-20T08:53:33.445432Z",
       "confidence_before": 0.6,
       "outcome": "success",
-      "outcome_evidence": "web-browser: 22\u219212 (removed examples), display-agent: 21\u21928. All agents now show accurate counts. Average: 5.7/agent",
+      "outcome_evidence": "web-browser: 22→12 (removed examples), display-agent: 21→8. All agents now show accurate counts. Average: 5.7/agent",
       "confidence_after": 0.98
     },
     {
@@ -622,7 +649,7 @@
         "skip_offline_eval",
         "record_replay"
       ],
-      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores \u2014 enables zero-cost CI eval",
+      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores — enables zero-cost CI eval",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.9,
       "outcome": "success",
@@ -632,7 +659,7 @@
     {
       "id": "strategy-1781950000002",
       "agent_target": "golden datasets",
-      "diagnosis": "Test cases have no version tracking \u2014 impossible to know if evaluation drift is from agent changes or test suite changes",
+      "diagnosis": "Test cases have no version tracking — impossible to know if evaluation drift is from agent changes or test suite changes",
       "strategy_chosen": "add_task_versioning",
       "strategy_alternatives_considered": [
         "no_versioning",
@@ -654,17 +681,17 @@
         "skip_quality_check",
         "manual_review"
       ],
-      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with \u03ba < 0.7",
+      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with κ < 0.7",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.7,
       "outcome": "success",
-      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when \u03ba < 0.7",
+      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when κ < 0.7",
       "confidence_after": 0.9
     },
     {
       "id": "strategy-1781950000004",
       "agent_target": "eval system",
-      "diagnosis": "No semantic quality scoring \u2014 only keyword matching and structural audits",
+      "diagnosis": "No semantic quality scoring — only keyword matching and structural audits",
       "strategy_chosen": "add_llm_judge",
       "strategy_alternatives_considered": [
         "skip_semantic_eval",
@@ -680,7 +707,7 @@
     {
       "id": "strategy-1781950000005",
       "agent_target": "eval system",
-      "diagnosis": "All eval runs sequential \u2014 slow for large agent count",
+      "diagnosis": "All eval runs sequential — slow for large agent count",
       "strategy_chosen": "add_async_executor",
       "strategy_alternatives_considered": [
         "keep_sync_only",
@@ -712,7 +739,7 @@
     {
       "id": "strategy-1781950000007",
       "agent_target": "eval CLI",
-      "diagnosis": "No way to debug individual test case failures \u2014 must read full JSON output",
+      "diagnosis": "No way to debug individual test case failures — must read full JSON output",
       "strategy_chosen": "add_inspect_command",
       "strategy_alternatives_considered": [
         "manual_parsing",
@@ -728,7 +755,7 @@
     {
       "id": "strategy-1781950000008",
       "agent_target": "eval system",
-      "diagnosis": "No way to see changes over time \u2014 each eval run is isolated",
+      "diagnosis": "No way to see changes over time — each eval run is isolated",
       "strategy_chosen": "add_comparison_report",
       "strategy_alternatives_considered": [
         "manual_diff",
@@ -796,12 +823,12 @@
         "transfer_capability_from_web-browser",
         "leave_as_is"
       ],
-      "why_this_strategy": "Content exists but is structurally invisible to the audit parser. Converting numbered list to ### headings lifts count from 2\u219211 without adding new content.",
+      "why_this_strategy": "Content exists but is structurally invisible to the audit parser. Converting numbered list to ### headings lifts count from 2→11 without adding new content.",
       "applied_at": "2026-06-27T16:08:43.624280+00:00",
       "confidence_before": 0.95,
       "followup": null,
       "outcome": "success",
-      "outcome_evidence": "document-agent cap sections: 2\u219210 (promoted 8 items from numbered list to ### headings)",
+      "outcome_evidence": "document-agent cap sections: 2→10 (promoted 8 items from numbered list to ### headings)",
       "confidence_after": 0.98,
       "duration_s": 120
     },
@@ -814,12 +841,12 @@
         "add_to_all_agents",
         "add_to_core_agents_only"
       ],
-      "why_this_strategy": "hash-anchored-edits lifts edit success rate 7%\u219268%. error-recovery-protocol prevents MCP/tool crashes. Target agents that edit files most frequently.",
+      "why_this_strategy": "hash-anchored-edits lifts edit success rate 7%→68%. error-recovery-protocol prevents MCP/tool crashes. Target agents that edit files most frequently.",
       "applied_at": "2026-06-27T16:10:31.031553+00:00",
       "confidence_before": 0.9,
       "followup": null,
       "outcome": "success",
-      "outcome_evidence": "error-recovery-protocol: 17/23\u219223/23 (6 transfers: test, review, docs, explore, pioneer, orchestrator) hash-anchored-edits: 5/23\u21928/23 (3 transfers: test, review, docs)",
+      "outcome_evidence": "error-recovery-protocol: 17/23→23/23 (6 transfers: test, review, docs, explore, pioneer, orchestrator) hash-anchored-edits: 5/23→8/23 (3 transfers: test, review, docs)",
       "confidence_after": 0.95,
       "duration_s": 300
     },
@@ -922,6 +949,24 @@
       "confidence_before": 0.7,
       "confidence_after": 0.95,
       "followup": "Documented in agents/web-browser.md. Could add a shared CHROME_PATH hint to opencode.jsonc for convenience."
+    },
+    {
+      "id": "strategy-1785329710",
+      "agent_target": "axiom-compiler (emit_mlir.rs)",
+      "diagnosis": "build_scf_region fallback placeholder constants (arith.constant 0) prevented arithmetic operations inside scf.if blocks from emitting properly, breaking conditional lowering.",
+      "strategy_chosen": "extend_scf_region_emitter_with_scoped_resolution",
+      "strategy_alternatives_considered": [
+        "inline_all_expressions_without_scf",
+        "skip_scf_region_optimization"
+      ],
+      "why_this_strategy": "Adding Addi, Subi, Muli, Addf, Cmpi, and Call support to build_scf_region with try_resolve local-first then parent-scope fallback enables full expression tree lowering inside conditional blocks without breaking SSA value referencing.",
+      "applied_at": "2026-07-29T12:55:10Z",
+      "outcome": "success",
+      "outcome_evidence": "cargo check -p axiom-compiler --features mlir compiles successfully; build_scf_region now emits full arithmetic ops inside scf.if.",
+      "duration_s": 180,
+      "confidence_before": 0.8,
+      "confidence_after": 0.98,
+      "followup": null
     }
   ],
   "workflow_trace": [
@@ -938,17 +983,17 @@
       "step": "2",
       "action": "Initial fix pass: asm syntax, doc comments, missing modules, macro visibility, ToString imports",
       "files": "73+ files",
-      "outcome": "~4700\u2192~1751 (63% fixed)"
+      "outcome": "~4700→~1751 (63% fixed)"
     },
     {
       "step": "3",
-      "action": "Import dedup + HashMap\u2192BTreeMap + parsing fixes + asm fixes",
+      "action": "Import dedup + HashMap→BTreeMap + parsing fixes + asm fixes",
       "files": "52 files",
       "outcome": "Commit 8031e4b"
     },
     {
       "step": "4",
-      "action": "E0659 elimination, HashSet\u2192BTreeSet, std\u2192no_std, drivers fix",
+      "action": "E0659 elimination, HashSet→BTreeSet, std→no_std, drivers fix",
       "files": "17 files",
       "outcome": "Commit 250b375"
     },
@@ -1011,13 +1056,13 @@
         "opencode_improvement/__main__.py",
         "shared/context.json"
       ],
-      "outcome": "DB: 556 MB \u2192 18 MB (95% reduction). Sessions list: timeout \u2192 3ms. opencode --continue restored. Weekly cron for auto-cleanup installed. Created purge CLI tool."
+      "outcome": "DB: 556 MB → 18 MB (95% reduction). Sessions list: timeout → 3ms. opencode --continue restored. Weekly cron for auto-cleanup installed. Created purge CLI tool."
     }
   ],
   "cross_agent_notes": {
     "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational.",
     "multios_kernel": "Compilation errors reduced from ~4700 to ~3371 (28%). All root-cause errors eliminated (duplicate names, parse errors, ambiguous names). Remaining 3371 are genuine type/trait/method issues requiring per-file human analysis. Repo: slab1/MultiOS- on master (3 commits: 8031e4b, 250b375, 3abbee4).",
-    "db_maintenance": "2026-06-23: Purged 68,882 orphaned events from opencode DB (556 MB \u2192 18 MB). Created purge CLI tool at opencode_improvement/purge.py. Weekly cron for auto-cleanup. Root cause: opencode-memfs event-sourcing creates message.part.updated.1 events per streamed token; owner_id in event_sequence was NULL for all 349 aggregates causing orphans."
+    "db_maintenance": "2026-06-23: Purged 68,882 orphaned events from opencode DB (556 MB → 18 MB). Created purge CLI tool at opencode_improvement/purge.py. Weekly cron for auto-cleanup. Root cause: opencode-memfs event-sourcing creates message.part.updated.1 events per streamed token; owner_id in event_sequence was NULL for all 349 aggregates causing orphans."
   },
   "strategy_effectiveness": {
     "add_missing_command": {
@@ -1244,7 +1289,7 @@
         "id": "session-10-improvements",
         "type": "improvement_plan",
         "summary": "Implemented remaining 10 eval system improvements in parallel",
-        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) \u2014 deterministic offline eval via --provider mock\n2. Task Versioning (#10) \u2014 version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) \u2014 kappa subcommand, flags \u03ba < 0.7 datasets\n4. LLM-as-Judge (#1) \u2014 LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) \u2014 SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) \u2014 ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) \u2014 inspect subcommand with --case and --failed\n8. Comparison Report (#3) \u2014 markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) \u2014 --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) \u2014 CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
+        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) — deterministic offline eval via --provider mock\n2. Task Versioning (#10) — version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) — kappa subcommand, flags κ < 0.7 datasets\n4. LLM-as-Judge (#1) — LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) — SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) — ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) — inspect subcommand with --case and --failed\n8. Comparison Report (#3) — markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) — --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) — CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
         "files_changed": [
           "opencode_improvement/__init__.py",
           "opencode_improvement/__main__.py",
@@ -1258,7 +1303,7 @@
         "meta_agent_patches": [
           {
             "agent": "document-agent",
-            "change": "Converted 8 numbered capabilities to ### headings (2\u219210 caps)",
+            "change": "Converted 8 numbered capabilities to ### headings (2→10 caps)",
             "type": "structural_improvement",
             "timestamp": "2026-06-27T16:16:28.241932+00:00"
           },
@@ -1299,6 +1344,19 @@
             "timestamp": "2026-06-27T16:16:28.242130+00:00"
           }
         ]
+      },
+      {
+        "id": "aether-config-validation",
+        "type": "validation_fixes",
+        "summary": "Validated all Aether components; fixed 4 integration bugs",
+        "detail": "1. simulation_sandbox.py filename had corrupted '}]' suffix -> renamed\n2. import time placed after usage -> moved to top\n3. spawner.py missing Dict/Any typing imports -> added\n4. packet_summary computed after members loop -> reordered\n5. HCM semantic recall only triggered on narrow keywords -> token-based fallback\n6. L4 skill recommender hardcoded stale path -> canonical path + domain fallback",
+        "files_changed": [
+          "shared/simulation_sandbox.py",
+          "shared/memory_controller.py",
+          "opencode_improvement/spawner.py",
+          "scripts/oc-aether-pulse.sh"
+        ],
+        "outcome": "All 6 modules compile; E2E cognitive loop verified PASS"
       }
     ],
     "memory_loop": [
@@ -1337,7 +1395,7 @@
           {
             "id": "strat-015",
             "description": "Live dashboard provides real-time visualization of agent ecosystem health",
-            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+            "rationale": "Turns infrastructure into visible proof — eval scores, trends, strategy effectiveness"
           },
           {
             "id": "strat-016",
@@ -1482,8 +1540,8 @@
           }
         ],
         "recommendations_for_next_session": [
-          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
-          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_command' strategy — 100% success rate",
+          "Continue using 'add_missing_section' strategy — 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
       },
@@ -1522,7 +1580,7 @@
           {
             "id": "strat-015",
             "description": "Live dashboard provides real-time visualization of agent ecosystem health",
-            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+            "rationale": "Turns infrastructure into visible proof — eval scores, trends, strategy effectiveness"
           },
           {
             "id": "strat-016",
@@ -1667,8 +1725,8 @@
           }
         ],
         "recommendations_for_next_session": [
-          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
-          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_command' strategy — 100% success rate",
+          "Continue using 'add_missing_section' strategy — 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
       }
@@ -1702,19 +1760,38 @@
       "id": "cdp-skills-integration",
       "type": "integration",
       "summary": "Integrated two zero-dependency Chrome DevTools Protocol (CDP) skills for OpenCode",
-      "detail": "Cloned and installed two CDP skills into ~/.config/opencode/skills/skills/:\n1. faster-chrome-devtools-skill (zeke) \u2014 Node 22+ built-in WebSocket CLI (cdp.mjs); connects to a running Chrome via CDP_HTTP_ENDPOINT/CDP_WS_ENDPOINT; commands list/open/snapshot/screenshot/navigate/evaluate/click/fill/type/press.\n2. cdp-skill (lotreace) \u2014 JSON step pipeline CLI (cdp-skill.js); newTab/snapshot/click/fill/type/hover/drag/evaluate/screenshot; auto-launches Chrome.\nBoth avoid Playwright's Chromium-download crash on Termux. Patched lotreace's findChromePath() to be Termux/Playwright-aware (honors OPCODE_WEB_CHROMIUM, $PREFIX/bin/chromium, Playwright-managed chromium), matching the opencode_web fix. Verified end-to-end against a headless Playwright chromium on port 9222.",
+      "detail": "Cloned and installed two CDP skills into ~/.config/opencode/skills/skills/:\n1. faster-chrome-devtools-skill (zeke) — Node 22+ built-in WebSocket CLI (cdp.mjs); connects to a running Chrome via CDP_HTTP_ENDPOINT/CDP_WS_ENDPOINT; commands list/open/snapshot/screenshot/navigate/evaluate/click/fill/type/press.\n2. cdp-skill (lotreace) — JSON step pipeline CLI (cdp-skill.js); newTab/snapshot/click/fill/type/hover/drag/evaluate/screenshot; auto-launches Chrome.\nBoth avoid Playwright's Chromium-download crash on Termux. Patched lotreace's findChromePath() to be Termux/Playwright-aware (honors OPCODE_WEB_CHROMIUM, $PREFIX/bin/chromium, Playwright-managed chromium), matching the opencode_web fix. Verified end-to-end against a headless Playwright chromium on port 9222.\nAdded scripts/chrome-cdp.sh — a launcher helper that auto-detects a real Chromium (prefers $PREFIX/bin/chromium and Playwright-managed chromium; skips the Ubuntu snap stub) and starts it with --headless=old --use-gl=swiftshader (because --headless=new times out Page.captureScreenshot on this no-GPU env). Verified: zeke screenshot saves a 12.1 KiB JPEG.",
       "files_changed": [
         "skills/skills/faster-chrome-devtools-skill/ (new, from zeke/faster-chrome-devtools-skill)",
         "skills/skills/cdp-skill/ (new, from lotreace/cdp-skill)",
         "skills/skills/cdp-skill/scripts/cdp/browser.js (Termux/Playwright chrome-path detection)",
-        "agents/web-browser.md (added <cdp-skills> doc section)"
+        "agents/web-browser.md (added <cdp-skills> doc section)",
+        "scripts/chrome-cdp.sh (new CDP Chrome launcher: auto-detects chromium, --headless=old --use-gl=swiftshader, port/url/dry-run args)"
       ],
       "verification": "zeke: `list`+`open https://example.com` OK. lotreace: newTab+snapshot returned title 'Example Domain' + a11y snapshot OK.",
       "severity": "info"
     }
   },
   "session": {
-    "last_handoff": "2026-06-20T20:43:28.025083Z"
+    "last_handoff": "2026-07-23T05:35:00Z"
+  },
+  "axiom_compiler_v1": {
+    "status": "ast_pipeline_wired",
+    "modules": [
+      "ast.rs",
+      "ax_parser.rs",
+      "lower.rs",
+      "axiom_ir.rs",
+      "emit_mlir.rs"
+    ],
+    "pipeline": "parse_source → ast::Module → lower_module → axiom_ir::AxiomModule → emit_module → MLIR",
+    "test_counts": {
+      "default": 47,
+      "with_mlir": 52,
+      "all_passing": true
+    },
+    "mlir_build_env": "MLIR_SYS_180_PREFIX=/usr/lib/llvm-18 TABLEGEN_17_0_PREFIX=/usr/lib/llvm-17",
+    "build_cmd": "cargo test -p axiom-compiler --features mlir"
   },
   "heartbeat": [
     {

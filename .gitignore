@@ -24,3 +24,10 @@ platforms/tokens/
 # NOTE: build binaries (pipeline, dashboard) ARE committed on purpose so the
 # system runs out-of-the-box on other machines. See .gitignore.keep for the
 # patterns that would normally exclude them.
+
+# Project Aether — runtime state (not portable, generated on demand)
+shared/aether_heartbeat.jsonl
+shared/spawned/
+simulations/
+memory/aether/
+skills/skills/synthesized/

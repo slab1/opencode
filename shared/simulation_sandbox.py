@@ -1,4 +1,5 @@
 import json
+import time
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
@@ -52,7 +53,7 @@ class SimulationSandbox:
             return 0.7
         return 0.3
 
-import time
+
 if __name__ == "__main__":
     sandbox = SimulationSandbox()
     res = sandbox.simulate_change("shared/context.json", "version: 1.1", "version: 1.2")

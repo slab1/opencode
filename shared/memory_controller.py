@@ -70,9 +70,18 @@ class MemoryController:
         self._save_semantic(data)
 
     def query_semantic(self, entity: str) -> List[Dict[str, Any]]:
-        """Find all facts related to a specific entity."""
+        """Find all facts related to a specific entity (exact or token match)."""
         data = self._load_semantic()
-        return [r for r in data["relations"] if r["s"] == entity or r["o"] == entity]
+        entity_l = entity.lower()
+        hits = [r for r in data["relations"] if r["s"] == entity or r["o"] == entity]
+        if hits:
+            return hits
+        # Fallback: token match across subject/object for fuzzy recall
+        tokens = [t for t in entity_l.split() if len(t) > 3]
+        if tokens:
+            return [r for r in data["relations"]
+                    if any(t in r["s"].lower() or t in r["o"].lower() for t in tokens)]
+        return []
 
     def _load_semantic(self) -> Dict[str, Any]:
         return json.loads(SEMANTIC_DB.read_text())
@@ -86,19 +95,52 @@ class MemoryController:
         """Interface with oc-recommend-skills to get L4 procedural memory."""
         import subprocess
         try:
-            # Using the path discovered earlier
-            cmd = ["python3", "/tmp/slab1-opencode/scripts/oc-recommend-skills.py", task_query, "--json"]
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            # Use canonical script location with fallback to temp path
+            script = Path.home() / ".config" / "opencode" / "scripts" / "oc-recommend-skills.py"
+            if not script.exists():
+                script = Path("/tmp/slab1-opencode/scripts/oc-recommend-skills.py")
+            cmd = ["python3", str(script), task_query, "--json"]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
             data = json.loads(result.stdout)
             
             skills = []
             if data.get("recommendations"):
                 for rec in data["recommendations"]:
                     skills.extend(rec.get("skills", []))
-            return list(set(skills))
+            if skills:
+                return list(set(skills))
         except Exception as e:
             print(f"L4 Retrieval Error: {e}")
-            return []
+
+        # Fallback: domain-based skill heuristics when recommender returns nothing
+        q = task_query.lower()
+        domain_skills = {
+            ("error", "bug", "fix", "fail", "crash", "compile", "e0", "e1"): [
+                "debug-systematic-investigation", "error-recovery-protocol",
+            ],
+            ("refactor", "rename", "migrat", "simplif", "clean"): [
+                "refactor-safe", "simplify-code",
+            ],
+            ("test", "spec", "assert", "coverage"): [
+                "tdd-workflow", "test-driven-development",
+            ],
+            ("security", "vuln", "audit", "threat", "secret"): [
+                "security-audit", "security-threat-model",
+            ],
+            ("search", "find", "explore", "locate"): [
+                "codebase-inspection", "explore",
+            ],
+            ("document", "doc", "readme", "changelog"): [
+                "documentation-skeleton",
+            ],
+            ("review", "pull request", "pr"): [
+                "github-code-review", "requesting-code-review",
+            ],
+        }
+        for keywords, skills in domain_skills.items():
+            if any(k in q for k in keywords):
+                return skills
+        return []
 
     # --- L1: Working Memory Controller ---
 
@@ -109,7 +151,7 @@ class MemoryController:
         """
         return {
             "episodic": self.retrieve_similar_experiences(task_query),
-            "semantic": self.query_semantic(task_query) if any(word in task_query for word in ["code", "api", "struct"]) else [],
+            "semantic": self.query_semantic(task_query),
             "procedural": self.get_relevant_skills(task_query),
             "timestamp": time.time()
         }
