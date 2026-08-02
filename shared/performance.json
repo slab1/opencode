@@ -383,5 +383,170 @@
     "context": {},
     "timestamp": 1783776897.544883,
     "timestamp_iso": "2026-07-11T13:34:57Z"
+  },
+  {
+    "agent": "human",
+    "task": "Extended build_scf_region in emit_mlir.rs to support arithmetic operations (Addi, Subi, Muli, Addf, Cmpi) inside scf.if blocks with scoped local/parent resolution.",
+    "outcome": "success",
+    "duration_s": 180,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785329710.928771,
+    "timestamp_iso": "2026-07-29T12:55:10Z"
+  },
+  {
+    "agent": "human",
+    "task": "Added Subf and Mulf float arithmetic operations across axiom_ir, lower, and emit_mlir (including build_scf_region support).",
+    "outcome": "success",
+    "duration_s": 300,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785331962.591147,
+    "timestamp_iso": "2026-07-29T13:32:42Z"
+  },
+  {
+    "agent": "human",
+    "task": "Created end-to-end integration test suite (compiler/tests/integration.rs) covering parser, lowerer, and MLIR backend emission pipelines.",
+    "outcome": "success",
+    "duration_s": 120,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785333578.01475,
+    "timestamp_iso": "2026-07-29T13:59:38Z"
+  },
+  {
+    "agent": "human",
+    "task": "Implemented structured scf.for loop support in axiom_ir and emit_mlir (including scoped block argument and yield handling).",
+    "outcome": "success",
+    "duration_s": 240,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785335710.269505,
+    "timestamp_iso": "2026-07-29T14:35:10Z"
+  },
+  {
+    "agent": "human",
+    "task": "Successfully committed and pushed all new compiler features and integration tests to public GitHub repository slab1/axiom.",
+    "outcome": "success",
+    "duration_s": 60,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785339189.801951,
+    "timestamp_iso": "2026-07-29T15:33:09Z"
+  },
+  {
+    "agent": "human",
+    "task": "Implemented JIT execution integration tests, effect handler lowering, N-body benchmark example, and pushed all to GitHub.",
+    "outcome": "success",
+    "duration_s": 180,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785340204.006696,
+    "timestamp_iso": "2026-07-29T15:50:04Z"
+  },
+  {
+    "agent": "human",
+    "task": "Implemented FFI extern function declaration parsing in ax_parser and ast for polyglot interoperability, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 180,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785341055.692029,
+    "timestamp_iso": "2026-07-29T16:04:15Z"
+  },
+  {
+    "agent": "human",
+    "task": "Implemented FFI extern function lowering and MLIR external declaration emission, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 180,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785344939.066725,
+    "timestamp_iso": "2026-07-29T17:08:59Z"
+  },
+  {
+    "agent": "human",
+    "task": "Integrated Phase 2 parallelism and purity analysis into IR lowering with integration tests, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 120,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785345882.205909,
+    "timestamp_iso": "2026-07-29T17:24:42Z"
+  },
+  {
+    "agent": "human",
+    "task": "Added agent_optimizer integration test and refined parallelism analysis for calls, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 120,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785347082.890133,
+    "timestamp_iso": "2026-07-29T17:44:42Z"
+  },
+  {
+    "agent": "human",
+    "task": "Achieved zero-warning compilation across the entire axiom-compiler crate, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 60,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785347922.056363,
+    "timestamp_iso": "2026-07-29T17:58:42Z"
+  },
+  {
+    "agent": "human",
+    "task": "Removed all dead code fields and methods from LowerCtx, achieving pristine 0-warning compilation, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 60,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785348562.766152,
+    "timestamp_iso": "2026-07-29T18:09:22Z"
+  },
+  {
+    "agent": "human",
+    "task": "Implemented user-defined structs, enums, match expressions, and axiom build CLI manifest epoch verification, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 180,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785352674.407715,
+    "timestamp_iso": "2026-07-29T19:17:54Z"
+  },
+  {
+    "agent": "human",
+    "task": "Implemented Phase 6 type-checking and effect inference module (typecheck.rs), verified with unit tests, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 180,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785354231.224891,
+    "timestamp_iso": "2026-07-29T19:43:51Z"
+  },
+  {
+    "agent": "human",
+    "task": "Enhanced parallelize.rs pass with lower_to_hvm_net interaction net lowering stub, and pushed to GitHub.",
+    "outcome": "success",
+    "duration_s": 120,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1785354642.268258,
+    "timestamp_iso": "2026-07-29T19:50:42Z"
   }
 ]
