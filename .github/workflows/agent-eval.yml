@@ -7,6 +7,12 @@
 # Fails CI if pass rate drops below threshold.
 # Auto-commits trend data to reports/trends/ (Improvement #4).
 #
+# Verification badge (Bet 8 — trust as product):
+#   ANY change to agent-behavior files (agents/, AGENTS.md, skills/,
+#   shared/, opencode_improvement/, .github/workflows/) MUST pass the golden
+#   eval suite. --fail-under makes a violation CI red, so every commit that
+#   touches behavior carries a P/Eval badge: "63/63 passed".
+#
 # Schedule design (Bet 1 - eval harness as product):
 #   - Nightly 02:00 UTC  -> REAL-LLM eval (--provider real). This is the
 #     behavioral_exec layer: the real scoring path over the golden dataset.
@@ -27,16 +33,18 @@ on:
     branches: [main, master]
     paths:
       - 'agents/*.md'
-      - 'shared/golden/**'
-      - 'shared/eval/**'
+      - 'AGENTS.md'
+      - 'skills/**'
+      - 'shared/**'
       - 'opencode_improvement/**'
       - '.github/workflows/**'
   pull_request:
     branches: [main, master]
     paths:
       - 'agents/*.md'
-      - 'shared/golden/**'
-      - 'shared/eval/**'
+      - 'AGENTS.md'
+      - 'skills/**'
+      - 'shared/**'
       - 'opencode_improvement/**'
       - '.github/workflows/**'
   workflow_dispatch:
@@ -127,6 +135,28 @@ jobs:
               print(r['scorecard'])
           " >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Verification badge (mandatory gate, Bet 8)
+        run: |
+          python3 -c "
+          import json
+          r = json.load(open('eval_results.json'))
+          s = r['summary']
+          gate = float('${{ github.event.inputs.fail_under || '0.8' }}')
+          rate = float(s.get('pass_rate') or 0)
+          verdict = 'PASS' if rate >= gate else 'FAIL'
+          delta = (r.get('regression') or {}).get('delta')
+          out = '| Verification badge | %s | %s/%s (%.0f%%) | gate %.0f%%' % (
+              verdict, s.get('passed'), s.get('total_tests'), rate * 100, gate * 100)
+          if delta is not None:
+              out += ' | regression vs baseline %+.1f%%' % (delta * 100)
+          out += ' |'
+          print(out)
+          print()
+          print('Rule: any change to agents/, AGENTS.md, skills/, shared/, opencode_improvement/,')
+          print('or .github/workflows/ must pass the golden eval suite.')
+          print('--fail-under enforcement: a pass rate below the gate fails CI (red badge).')
+          " >> $GITHUB_STEP_SUMMARY
 
       - name: Check strategy effectiveness
         run: |

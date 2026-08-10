@@ -3445,6 +3445,13 @@
         "confidence": 0.95,
         "severity": "info",
         "location": "shared/audit_log.py, opencode_improvement/__main__.py, scripts/test-audit-log.py"
+      },
+      "bet8_verification_badge": {
+        "summary": "Bet 8 DONE 2026-08-10: mandatory verification badge \u2014 agent-behavior file changes must pass golden eval or CI is red",
+        "detail": "agent-eval.yml path filters broadened to agents/*.md, AGENTS.md, skills/**, shared/**, opencode_improvement/**, .github/workflows/** (previously skills/, AGENTS.md, and shared/ state changes shipped with zero eval). Added 'Verification badge (mandatory gate, Bet 8)' step printing PASS/FAIL verdict + count + gate + regression delta to the run summary. Enforcement unchanged: --fail-under 0.8 exits non-zero -> CI red. Snippet validated locally: '| Verification badge | PASS | 63/63 (100%) | gate 80% |'.",
+        "confidence": 0.95,
+        "severity": "info",
+        "location": ".github/workflows/agent-eval.yml"
       }
     }
   },
