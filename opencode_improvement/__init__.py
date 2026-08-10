@@ -14,7 +14,14 @@ from opencode_improvement.cost_tracker import CostTracker, BudgetExceededError, 
 from opencode_improvement.risk_scoring import score_eval_risk, RiskScoreResult
 
 # Paths
-BASE_DIR = Path.home() / ".config" / "opencode"
+# Resolve the repo root from the package location so the same code works when
+# the checkout IS ~/.config/opencode (local, Termux) and when it's a fresh CI
+# workspace (e.g. /home/runner/work/opencode/opencode). Fall back to the old
+# HOME-relative default only if the package is installed outside a checkout
+# (e.g. pip site-packages).
+_CONFIG_HOME = Path.home() / ".config" / "opencode"
+_PKG_ROOT = Path(__file__).resolve().parent.parent
+BASE_DIR = _PKG_ROOT if (_PKG_ROOT / "shared").exists() else _CONFIG_HOME
 AGENTS_DIR = BASE_DIR / "agents"
 EVAL_DIR = BASE_DIR / "shared" / "eval"
 REPORTS_DIR = BASE_DIR / "reports"
