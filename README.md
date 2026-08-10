@@ -237,7 +237,7 @@ shared/
 │   ├── baseline.json          # Baseline snapshot (Victor-David-Medina)
 │   └── {23}_eval.yaml         # Per-agent configs
 ├── golden/
-│   └── agent_tasks.json       # 53 test cases (53 total, 46 behavioral + 7 property)
+│   └── agent_tasks.json       # 63 test cases (56 behavioral + 7 property)
 └── context.json               # Strategy log for metacognitive tracking
 ```
 
@@ -286,8 +286,8 @@ python3 -m opencode_improvement strategies
 
 ### Key Metrics
 
-- **53 test cases**: 46 behavioral (per-agent, 7 categories) + 7 property-based (universal invariants)
-- **24 strategies** in the strategy library with effectiveness tracking
+- **63 test cases**: 56 behavioral (per-agent, 7 categories) + 7 property-based (universal invariants)
+- **52 strategies** in the strategy library with effectiveness tracking
 - **23 agents** evaluated against structural, behavioral, and property-based tests
 - **CI integration**: Weekly cron + push/PR triggers auto-commit trend data to `reports/trends/`
 - **Baseline comparison**: Detect regressions before they ship
@@ -303,6 +303,32 @@ The system now manages **23 agents** (up from 18), including:
 | **content-creator** | `agents/content-creator.md` | AI image/video/text content generation |
 | **human** | `agents/human.md` | Human analysis — reads code like a senior engineer |
 | **heartbeat** | `agents/heartbeat.md` | Periodic health monitoring and proactive insights |
+
+## Verification Ledger (Receipts, Bets 8–10)
+
+Distrust is the market default (66% of users don't trust AI output). Instead of
+claiming quality, this platform ships **receipts** — machine-verifiable artifacts
+that CI produces on every run, readable by anyone:
+
+| Receipt | Artifact | Read it with |
+|---|---|---|
+| Eval badge | CI run summary `\| Verification badge \| PASS \| 63/63 (100%) \|` | `gh run view` |
+| Eval paper trail | `reports/trends/trend_*.json` (one per run, committed weekly) | `python3 -m opencode_improvement trends` |
+| Skills manifest | `reports/skills-verified.json` (173/173 verified) | `python3 -m opencode_improvement skills-verify` |
+| Audit trail | `memory/aether/audit_log.jsonl` (append-only, fsync'd) | `python3 -m opencode_improvement audit-log --tail` |
+| Strategy ledger | 52 strategies: success rates + calibration deltas | `python3 -m opencode_improvement strategies` |
+| Memory portability | export/import/backup round-trip (verbatim restore, idempotent) | `python3 -m opencode_improvement memory --export` |
+
+Rules (all enforced by CI, all fail-closed):
+- Any change to `agents/`, `skills/`, `shared/`, `opencode_improvement/`, or
+  `AGENTS.md` must pass the golden eval suite (`--fail-under 0.8`) — a drop
+  below the gate is a red run (Bet 8).
+- A skill is listed only after verification — structural completeness plus
+  zero unverified-stub markers (`UNVERIFIED-DO-NOT-USE`, `NotImplementedError`),
+  enforced by the Skills quality gate (Bet 9). An empty result can never pass
+  "vacuously": a missing root or zero skills is a red run, not a green one.
+- The audit log is append-only and never breaks tracking (Bet 7); memory can
+  be exported, imported, and backed up verbatim (Bet 6).
 
 ## Configuration
 

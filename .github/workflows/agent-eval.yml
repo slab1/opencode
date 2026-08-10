@@ -216,6 +216,14 @@ jobs:
               print('Saved trend data: reports/trends/trend_$DATE.json')
           "
 
+      - name: Paper trail (eval trend, Bet 10)
+        run: |
+          # Purely informational: renders the accumulating CI receipts.
+          # --no-fail so an empty history (fresh repo) never blocks.
+          echo "## Eval Paper Trail (receipts, Bet 10)" >> $GITHUB_STEP_SUMMARY
+          python3 -m opencode_improvement trends --no-fail >> $GITHUB_STEP_SUMMARY || \
+            echo "no trend receipts yet — paper trail fills as runs complete" >> $GITHUB_STEP_SUMMARY
+
       - name: Upload evaluation results
         uses: actions/upload-artifact@v4
         with:

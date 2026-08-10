@@ -192,6 +192,13 @@ def main():
     sv.add_argument("--manifest", metavar="PATH", default=None, help="Write verified-manifest JSON to PATH")
     sv.add_argument("--no-fail", action="store_true", help="Exit 0 even when skills fail (report-only)")
 
+    # --- trends (self-improvement paper trail, Bet 10) ---
+    tr = subparsers.add_parser("trends", help="Show CI eval paper trail (receipts from reports/trends/)")
+    tr.add_argument("--path", default=None, help="Trends dir (default: repo 'reports/trends/')")
+    tr.add_argument("--limit", type=int, default=20, help="Show only the N most recent receipts")
+    tr.add_argument("--json", action="store_true", help="Print parsed receipts as JSON")
+    tr.add_argument("--no-fail", action="store_true", help="Exit 0 even with no receipts")
+
     # --- benchmark ---
     bp = subparsers.add_parser("benchmark", help="Competitive benchmarking against other code agents")
     bp.add_argument("--export-template", action="store_true", help="Generate JSON template for manual results entry")
@@ -386,6 +393,20 @@ def main():
         if args.no_fail:
             sub_argv.append("--no-fail")
         rc = skills_verify_main(sub_argv)
+        sys.exit(rc)
+
+    elif args.command == "trends":
+        from shared.trends import main as trends_main
+        sub_argv = []
+        if args.path:
+            sub_argv += ["--path", args.path]
+        if args.limit:
+            sub_argv += ["--limit", str(args.limit)]
+        if args.json:
+            sub_argv.append("--json")
+        if args.no_fail:
+            sub_argv.append("--no-fail")
+        rc = trends_main(sub_argv)
         sys.exit(rc)
 
     elif args.command == "benchmark":
