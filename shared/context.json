@@ -3452,6 +3452,35 @@
         "confidence": 0.95,
         "severity": "info",
         "location": ".github/workflows/agent-eval.yml"
+      },
+      "bet9_skills_verify": {
+        "agent": "fixer-lane",
+        "timestamp": "2026-08-10T10:18:46.009707Z",
+        "task": "Bet 9 quality-gated skills hub: listed = eval-passed",
+        "summary": "shared/skills_verifier.py + skills-verify CLI + CI gate step; structural + stub-marker verification -> aether-skills-verified v1 manifest; 173/173 baseline after curation (frontmatter added to 2 real skills, gitignored UNVERIFIED stub removed); vacuous-pass guard (missing/empty root rc=1) added after CI self-check caught 0/0 pass",
+        "verification": "scripts/test-skills-verifier.py 8 checks exit 0; CI 31377553474+31378230237 eval 63/63 pass_rate 1.0, skills gate 173/173, builds green",
+        "files": [
+          "shared/skills_verifier.py",
+          "scripts/test-skills-verifier.py",
+          "opencode_improvement/__main__.py",
+          ".github/workflows/agent-eval.yml",
+          "skills/skills/openmontage/synthetic-screen-recording/SKILL.md",
+          "skills/skills/understand-anything/SKILL.md"
+        ]
+      },
+      "bet10_trends_ledger": {
+        "agent": "fixer-lane",
+        "timestamp": "2026-08-10T10:46:27.245788+00:00",
+        "task": "Bet 10 self-improvement paper trail",
+        "summary": "shared/trends.py + trends CLI reads CI reports/trends/trend_*.json receipts -> run table with gate classification (PASS >= 0.8); vacuous guard empty trail rc=1; CI Paper trail step renders receipts per run; README Verification Ledger section (6 receipt types, fail-closed rules); stale README counts fixed (63 cases/52 strategies)",
+        "verification": "scripts/test-trends-cli.py 6 checks exit 0; CI 31379973503 eval 63/63 pass_rate 1.0, skills gate 173/173, paper-trail step executed, build green",
+        "files": [
+          "shared/trends.py",
+          "scripts/test-trends-cli.py",
+          "opencode_improvement/__main__.py",
+          ".github/workflows/agent-eval.yml",
+          "README.md"
+        ]
       }
     }
   },

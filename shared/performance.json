@@ -647,5 +647,49 @@
     "context": {},
     "timestamp": 1786351377.193873,
     "timestamp_iso": "2026-08-10T08:42:57Z"
+  },
+  {
+    "agent": "human",
+    "task": "Bet 7 audit trail: append-only control-plane log auto-wired into track(), audit-log CLI with tail/agent/since/stats/export, 7-check harness green",
+    "outcome": "success",
+    "duration_s": 600,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786351675.519489,
+    "timestamp_iso": "2026-08-10T08:47:55Z"
+  },
+  {
+    "agent": "human",
+    "task": "Bet 8 mandatory verification badge: eval gate now covers skills/, AGENTS.md, shared/ + explicit PASS/FAIL badge step in CI run summary; verified live 63/63",
+    "outcome": "success",
+    "duration_s": 600,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786353636.294205,
+    "timestamp_iso": "2026-08-10T09:20:36Z"
+  },
+  {
+    "agent": "human",
+    "task": "Bet 9 quality-gated skills hub - skills-verify CLI + no-stub CI gate, 173/173 verified, vacuous-pass guard, committed f04aede+f727a2d pushed, CI green",
+    "outcome": "success",
+    "duration_s": 2100,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786357166.61108,
+    "timestamp_iso": "2026-08-10T10:19:26Z"
+  },
+  {
+    "agent": "human",
+    "task": "Bet 10 self-improvement paper trail - trends CLI reading CI receipts, README verification ledger, committed c548e87 pushed, CI green 63/63 + 173/173 skills",
+    "outcome": "success",
+    "duration_s": 900,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786358840.162107,
+    "timestamp_iso": "2026-08-10T10:47:20Z"
   }
 ]
