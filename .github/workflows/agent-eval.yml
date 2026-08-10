@@ -158,6 +158,27 @@ jobs:
           print('--fail-under enforcement: a pass rate below the gate fails CI (red badge).')
           " >> $GITHUB_STEP_SUMMARY
 
+      - name: Skills quality gate (mandatory, Bet 9)
+        run: |
+          # "Listed = eval-passed": every SKILL.md in the hub must be
+          # structurally complete and free of unverified-stub markers.
+          # A violation (rc=1) fails CI, so a red run = a broken listing.
+          echo "## Skills Quality Gate" >> $GITHUB_STEP_SUMMARY
+          python3 -m opencode_improvement skills-verify \
+            --manifest reports/skills-verified.json
+          python3 -c "
+          import json
+          import pathlib
+          p = pathlib.Path('reports/skills-verified.json')
+          if not p.exists():
+              print('FAIL: manifest not generated'); raise SystemExit(1)
+          m = json.loads(p.read_text())
+          print(f'| Skills gate | PASS | {m[\"passed\"]}/{m[\"total\"]} (100%) | listed = verified |')
+          print()
+          print('Rule: a skill is listed only after structural verification;')
+          print('UNVERIFIED-DO-NOT-USE / NotImplementedError stubs fail the gate.')
+          " >> $GITHUB_STEP_SUMMARY
+
       - name: Check strategy effectiveness
         run: |
           echo "## Strategy Effectiveness" >> $GITHUB_STEP_SUMMARY
@@ -204,6 +225,7 @@ jobs:
             eval_results.json
             strategies.json
             reports/trends/*.json
+            reports/skills-verified.json
           retention-days: 30
 
       - name: Commit trend data (scheduled runs only)

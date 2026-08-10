@@ -185,6 +185,13 @@ def main():
     al.add_argument("--stats", action="store_true", help="Show summary counts (by agent/outcome/action)")
     al.add_argument("--export", metavar="PATH", help="Export full audit log to PATH (portable JSON)")
 
+    # --- skills-verify (quality-gated skills hub, Bet 9) ---
+    sv = subparsers.add_parser("skills-verify", help="Verify all skills (structural + no-stub); 'listed = eval-passed'")
+    sv.add_argument("--path", default=None, help="Root dir to scan (default: skills/)")
+    sv.add_argument("--json", action="store_true", help="Print manifest JSON to stdout")
+    sv.add_argument("--manifest", metavar="PATH", default=None, help="Write verified-manifest JSON to PATH")
+    sv.add_argument("--no-fail", action="store_true", help="Exit 0 even when skills fail (report-only)")
+
     # --- benchmark ---
     bp = subparsers.add_parser("benchmark", help="Competitive benchmarking against other code agents")
     bp.add_argument("--export-template", action="store_true", help="Generate JSON template for manual results entry")
@@ -366,6 +373,20 @@ def main():
                 alog.tail(limit=args.tail, agent=args.agent, since=args.since),
                 indent=2,
             ))
+
+    elif args.command == "skills-verify":
+        from shared.skills_verifier import main as skills_verify_main
+        sub_argv = []
+        if args.path:
+            sub_argv += ["--path", args.path]
+        if args.json:
+            sub_argv.append("--json")
+        if args.manifest:
+            sub_argv += ["--manifest", args.manifest]
+        if args.no_fail:
+            sub_argv.append("--no-fail")
+        rc = skills_verify_main(sub_argv)
+        sys.exit(rc)
 
     elif args.command == "benchmark":
         from opencode_improvement.benchmark import BenchmarkRunner, render_comparison_table, report_to_markdown, generate_comparison

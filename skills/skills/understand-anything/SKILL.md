@@ -1,3 +1,8 @@
+---
+name: understand-anything
+description: Rapidly comprehend large unfamiliar codebases by building an interactive Tree-sitter + LLM knowledge graph (Understand Anything, 64K+ stars).
+---
+
 # Skill: Understand Anything — Codebase Knowledge Graph Integration
 
 Integrates [Understand Anything](https://github.com/Egonex-AI/Understand-Anything) (64K+ GitHub stars) into the OpenCode agent ecosystem. Use this skill when you need to rapidly comprehend a large, unfamiliar codebase by building an interactive knowledge graph.

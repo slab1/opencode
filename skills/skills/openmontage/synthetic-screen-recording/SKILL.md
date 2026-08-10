@@ -1,3 +1,8 @@
+---
+name: synthetic-screen-recording
+description: Author terminal/CLI demo lookalikes in Remotion with TerminalScene instead of capturing the real desktop; decide when to synthesize vs record live.
+---
+
 # Synthetic Screen Recording (Remotion TerminalScene)
 
 **Decision this skill answers:** When the user wants a screen-recording-looking demo of a terminal, CLI tool, or coding workflow — do I **capture the real desktop** (OS screen recording via `screen_recorder`, Windows-MCP, Cap, or Playwright), or do I **synthesize it in Remotion** with the `TerminalScene` component?
