@@ -548,5 +548,82 @@
     "context": {},
     "timestamp": 1785354642.268258,
     "timestamp_iso": "2026-07-29T19:50:42Z"
+  },
+  {
+    "agent": "fixer",
+    "task": "C1 special-event deposit end-to-end: migration + edge fn + webhook + payment wiring + 11 booking tests; 13 suites/61 green; CI green",
+    "outcome": "success",
+    "duration_s": 5400,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786231085.849804,
+    "timestamp_iso": "2026-08-08T23:18:05Z"
+  },
+  {
+    "agent": "meta-agent",
+    "task": "explorer/librarian/councillor built-in overrides",
+    "outcome": "success",
+    "duration_s": 300,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786271604.682452,
+    "timestamp_iso": "2026-08-09T10:33:24Z"
+  },
+  {
+    "agent": "meta-agent",
+    "task": "full fleet sweep: 35/35 agents parity + examples + completeness 1.0",
+    "outcome": "success",
+    "duration_s": 900,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786274964.983273,
+    "timestamp_iso": "2026-08-09T11:29:24Z"
+  },
+  {
+    "agent": "fixer",
+    "task": "Bet 2 verification: TF-IDF episodic retrieval + auto-log wiring",
+    "outcome": "success",
+    "duration_s": 42,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786311383.44263,
+    "timestamp_iso": "2026-08-09T21:36:23Z"
+  },
+  {
+    "agent": "logic_evolve",
+    "task": "smoke test",
+    "outcome": "success",
+    "duration_s": 0,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786311667.179582,
+    "timestamp_iso": "2026-08-09T21:41:07Z"
+  },
+  {
+    "agent": "debug",
+    "task": "reproduce flaky jest suite",
+    "outcome": "failure",
+    "duration_s": 15,
+    "error": "timeout in jsdom",
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786311926.481498,
+    "timestamp_iso": "2026-08-09T21:45:26Z"
+  },
+  {
+    "agent": "fixer",
+    "task": "Bet 2: HCM episodic TF-IDF retrieval + track auto-log + seed script",
+    "outcome": "success",
+    "duration_s": 2400,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786313846.40497,
+    "timestamp_iso": "2026-08-09T22:17:26Z"
   }
 ]

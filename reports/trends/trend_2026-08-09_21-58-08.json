@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-08-09T21:58:08.311302Z",
+  "summary": {
+    "total_agents_in_system": 28,
+    "total_tests": 63,
+    "passed": 63,
+    "failed": 0,
+    "fails_at_severity": 0,
+    "pass_rate": 1.0
+  },
+  "regression": {
+    "baseline_pass_rate": 1.0,
+    "current_pass_rate": 1.0,
+    "delta": 0.0,
+    "regression_detected": false
+  },
+  "agents_tested": {
+    "build": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4
+    },
+    "orchestrator": {
+      "pass_rate": 1.0,
+      "total": 3,
+      "passed": 3
+    },
+    "meta-agent": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "architect": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "security": {
+      "pass_rate": 1.0,
+      "total": 3,
+      "passed": 3
+    },
+    "debug": {
+      "pass_rate": 1.0,
+      "total": 3,
+      "passed": 3
+    },
+    "platform-manager": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "content-creator": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "explore": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "test": {
+      "pass_rate": 1.0,
+      "total": 3,
+      "passed": 3
+    },
+    "docs": {
+      "pass_rate": 1.0,
+      "total": 3,
+      "passed": 3
+    },
+    "human": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "web-browser": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "display-agent": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1
+    },
+    "video-creator": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "document-agent": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "media-agent": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "refactor": {
+      "pass_rate": 1.0,
+      "total": 3,
+      "passed": 3
+    },
+    "general": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "pioneer": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "plan": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "review": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2
+    },
+    "heartbeat": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1
+    },
+    "fixer": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1
+    },
+    "explorer": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1
+    },
+    "oracle": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1
+    },
+    "librarian": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1
+    },
+    "all": {
+      "pass_rate": 1.0,
+      "total": 7,
+      "passed": 7
+    }
+  }
+}

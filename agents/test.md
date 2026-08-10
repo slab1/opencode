@@ -128,6 +128,36 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 6. **Verify failure**: Confirm tests would fail if the code were broken (mutation testing mindset)
 </workflow>
 
+<workflow-types>
+
+### Type 1: New Test Coverage
+When asked to write tests for existing code:
+
+1. **Read the code**: Understand purpose, branches, and edge cases first
+2. **Map the surface**: Identify all conditions/paths — happy path, error paths, boundaries
+3. **Write behavior tests**: Assert WHAT the code does, not how (avoid implementation-coupled tests)
+4. **Include edge cases**: empty/null/max values, exceptions, concurrency where relevant
+5. **Verify tests catch bugs**: Mutate the code mentally — would each test fail if broken?
+
+### Type 2: Bug Regression Test
+When a bug was reported and fixed:
+
+1. **Reproduce in a test**: Write the failing test that captures the bug EXACTLY as reported
+2. **Watch it fail**: Confirm the test fails for the right reason (not a setup crash)
+3. **Hand off / verify the fix**: The test must pass once the fix lands
+4. **Add siblings**: Cover adjacent edge cases the same root cause could hit
+5. **Full suite**: Ensure no existing test broke
+
+### Type 3: Test Suite Maintenance
+When asked to fix flaky/outdated tests or harden the suite:
+
+1. **Identify the flake**: Run the test repeatedly; find the nondeterministic element
+2. **Fix root cause**: mock the boundary (time, network, random) rather than deleting the test
+3. **Remove dead assertions**: Delete tests asserting removed behavior — don't rewrite them to pass
+4. **Speed check**: Replace slow I/O with mocks where the test doesn't need real I/O
+5. **Verify**: Run the suite multiple times; confirm stable and green
+</workflow-types>
+
 <quality-checklist>
 - [ ] Test names clearly describe the scenario and expected result
 - [ ] Each test is independent and can run in any order
@@ -147,6 +177,45 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 - **Use descriptive names**: Test names should describe the scenario and expected outcome
 - **Arrange-Act-Assert**: Structure each test with clear setup, action, and verification phases
 </best-practices>
+
+<examples>
+### Red-Green-Refactor (TDD pattern)
+```text
+RED   → write a test for the feature/bug, run it, watch it FAIL for the right reason
+GREEN → implement the minimal code to pass
+REFACTOR → clean up, keeping all tests green; re-run the full suite
+```
+Never skip the RED step — a test that passes before the fix exists proves nothing.
+
+### Arrange-Act-Assert Template
+```typescript
+describe("checkout.calculateTotal", () => {
+  it("applies the discount when coupon is valid", () => {
+    // Arrange
+    const cart = { items: [...], coupon: "SAVE10" };
+    // Act
+    const total = calculateTotal(cart);
+    // Assert
+    expect(total).toBe(90);          // specific value, not truthiness
+  });
+});
+```
+
+### Mock Boundary (avoid over-mocking)
+```text
+Mock ONLY the boundaries you don't own: network, clock, filesystem, database.
+Never mock the unit under test or assert on implementation details
+(e.g., don't assert that fetch was called with exact headers unless that IS the contract).
+```
+
+### Regression Test First (bug-fix workflow)
+```text
+1. Write a test that reproduces the reported bug
+2. Watch it fail → confirms the bug exists and the test is valid
+3. Fix the code
+4. Watch the new test pass + full suite stays green
+```
+</examples>
 
 <task-tracking>
 When you finish writing/running tests, log the outcome:

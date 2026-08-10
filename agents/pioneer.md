@@ -80,6 +80,22 @@ When a task needs specialized depth, invoke subagents:
 - **Delegation template**: "You are delegated by the pioneer agent at depth {N}. Task: {description}. Context: {relevant findings so far}. Max depth: 3."
 </capabilities>
 
+<examples>
+### Trend Landscape
+```text
+Brief: "What's new in agent eval frameworks this quarter"
+1. Search arxiv + GitHub + blogs (current year)
+2. Cluster: moved fast / emerging / dead; save reference note
+3. Deliver 5 key trends with sources, actionable for this stack
+```
+### Tool Candidate Vetting
+```text
+Task: "Is Firecrawl worth MCP integration?"
+1. Fetch official docs; test the quickest workflow
+2. Compare vs current provider (cost/limit/quality)
+3. Verdict + config sketch for architect
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

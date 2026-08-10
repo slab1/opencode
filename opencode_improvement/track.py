@@ -21,7 +21,13 @@ class PerformanceTracker:
         self.storage_path = Path(storage_path) if storage_path else PERFORMANCE_FILE
 
     def log(self, agent, task, outcome, duration_s=0, error=None, context=None):
-        """Record a task outcome."""
+        """Record a task outcome.
+
+        If ``context`` carries a ``"strategy"`` name, the outcome is also
+        folded into ``strategy_effectiveness`` in ``shared/context.json``
+        (failures included), so the RCSI loop in ``logic_evolve.py`` can
+        detect failing strategies instead of only ever seeing successes.
+        """
         entry = {
             "agent": agent,
             "task": task,
@@ -36,7 +42,38 @@ class PerformanceTracker:
         data = self._load()
         data.append(entry)
         self._save(data)
+        ctx = context or {}
+        strategy = ctx.get("strategy")
+        if strategy:
+            self._record_strategy_outcome(strategy, outcome)
         return entry
+
+    def _record_strategy_outcome(self, strategy, outcome):
+        """Update ``strategy_effectiveness`` in shared/context.json (failures included).
+
+        ``promoted`` counts as a success and ``rejected`` as a failure, so the
+        evolution loop's own verdicts feed back into the effectiveness data.
+        """
+        if not CONTEXT_FILE.exists():
+            return
+        try:
+            ctx = json.loads(CONTEXT_FILE.read_text())
+        except (json.JSONDecodeError, OSError):
+            return
+        se = ctx.setdefault("strategy_effectiveness", {})
+        stats = se.setdefault(strategy, {"count": 0, "completed": 0, "success_rate": 1.0})
+        stats["count"] = stats.get("count", 0) + 1
+        if outcome in ("success", "failure", "partial", "promoted", "rejected"):
+            prev_completed = stats.get("completed", 0)
+            prev_successes = stats.get("successes")
+            if prev_successes is None:
+                prev_successes = round(stats.get("success_rate", 1.0) * prev_completed)
+            stats["completed"] = prev_completed + 1
+            succeeded = outcome in ("success", "promoted")
+            stats["successes"] = prev_successes + (1 if succeeded else 0)
+            stats["success_rate"] = round(stats["successes"] / stats["completed"], 2)
+        ctx["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        CONTEXT_FILE.write_text(json.dumps(ctx, indent=2))
 
     def _load(self):
         if self.storage_path.exists():

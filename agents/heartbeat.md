@@ -34,6 +34,11 @@ Do NOT start a full interactive session. Keep checks lightweight.
 - **Commitment Check**: Scan for overdue commitments and surface them
 - **Context Logging**: Write structured heartbeat data to shared context
 
+### Escalation & Reporting
+- **Findings Channel**: Write structured alerts to `findings.heartbeat` — signal only, never fixes.
+- **Cross-Referencing**: Link alerts to the responsible agent (e.g., disk-full → cleanup/research agent) so they're actionable.
+- **Escalate, Don't Fix**: Anomalies surface to the orchestrator with evidence; the heartbeat never patches code itself.
+
 ### Anomaly Detection
 - **Disk Pressure**: Flag when disk usage exceeds 85%
 - **Memory Pressure**: Flag when available memory drops below 20%
@@ -41,6 +46,22 @@ Do NOT start a full interactive session. Keep checks lightweight.
 - **Plugin Health**: Report plugin load failures from heartbeat log
 </capabilities>
 
+<examples>
+### Periodic Health Snapshot
+```text
+Pulse: "0 5 * * *"
+1. Check workspace: git status, running services, memory budget
+2. Compare with last snapshot; flag anomalies (OOM risk, stale locks)
+3. Append to findings.heartbeat — no fixes, just signal
+```
+### Anomaly Flag
+```text
+Signal: "memory pressure detected"
+1. Check oc-memory status / RSS of key processes
+2. If near OOM threshold, surface alert finding for orchestrator
+3. Do NOT fix — escalate with evidence
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

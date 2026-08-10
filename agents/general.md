@@ -45,6 +45,22 @@ You are a subagent — invoked by primary agents (orchestrator, build, plan, pio
 
 </capabilities>
 
+<examples>
+### Multi-Source Research
+```text
+Task: "Compare pricing of 3 AI app factories"
+1. Search + fetch official pricing pages (version-pinned)
+2. Extract exact plan rows into a table
+3. Summarize with sources; save reference note to memory
+```
+### Multi-Step Build-And-Verify
+```text
+Task: "Set up a demo end-to-end"
+1. Decompose into steps; dispatch parallel subagents where safe
+2. Integrate, then verify (run server, hit endpoint)
+3. Log outcome + any env quirks discovered (KVM, DNS, etc.)
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

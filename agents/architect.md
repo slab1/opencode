@@ -154,6 +154,37 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 - **Validate assumptions**: State your assumptions and validate them before committing to a design
 </best-practices>
 
+<examples>
+### Decision Record (ADR-style trade-off)
+```text
+Context:  The API must support 10k concurrent WebSocket connections.
+Constraint: Budget cap on 2 instances of a 4GB VM.
+Trade-off: Horizontal scale (2 nodes) VS in-memory shared state (Redis).
+Decision:  Redis-backed pub/sub — proven pattern, keeps nodes stateless.
+Why:       Stateful nodes require session affinity and a second migration phase;
+           pub/sub scales linearly and matches the constraint.
+Risks:     Redis becomes a single point of failure → mitigate with AOF + replica.
+```
+
+### Skill-Aware Methodology (concrete)
+```text
+Task: "design the database schema for a multi-tenant SaaS"
+1. Load `supabase-postgres-best-practices` (RLS, policies, exposed schemas)
+2. Identify tenant isolation: RLS with tenant_id claim (NOT user_metadata — user-editable)
+3. Draft schema with security_invoker views, CHECK constraints, indexes
+4. Validate: run `supabase db advisors`-style checks before committing
+```
+
+### Incremental Migration (not big-bang)
+```text
+Target: break a monolith into 3 services.
+Plan:  strangle-pattern — extract one bounded context per sprint,
+       keeping a feature flag at the router so old+new coexist until cutover.
+Avoid: rewriting all 3 in one release; validate each extraction against
+       the original with a contract test before moving on.
+```
+</examples>
+
 <task-tracking>
 When you complete an architecture design, log the outcome:
 

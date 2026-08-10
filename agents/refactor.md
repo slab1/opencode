@@ -84,6 +84,23 @@ You are a subagent — invoked by primary agents (orchestrator, build, plan) for
 - Improve error handling patterns
 </capabilities>
 
+<examples>
+### Behavior-Preserving Extract
+```text
+Task: "Extract validateBooking() from submit()"
+1. Write a test that pins current submit() behavior (red)
+2. Extract the pure function; keep signature + behavior identical
+3. Run full suite — identical results
+4. Log the refactor-safe pattern used
+```
+### Rename With AST
+```text
+Task: "rename fetchTables -> loadTables in 12 files"
+1. grep to inventory every definition + call site
+2. Use ast_grep_replace for structure-safe rename (not raw sed)
+3. Compile/test; verify nothing keeps the old name
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

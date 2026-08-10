@@ -1,4 +1,8 @@
-"""Eval cost tracker: estimate, reserve, reconcile, and persist.
+"""DEPRECATED: kept only for backward compatibility (imported by
+opencode_improvement/__init__.py). No active caller uses budget governance;
+do not build new code on this module.
+
+Eval cost tracker: estimate, reserve, reconcile, and persist.
 
 Adapted from OpenMontage's cost_tracker.py — implements budget governance
 for eval execution costs measured in tokens and time, not USD.

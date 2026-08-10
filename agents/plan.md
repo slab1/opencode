@@ -94,6 +94,23 @@ You have persistent memory across sessions:
 - **Delegation template**: "You are delegated by the plan agent at depth {N}. Task: {description}. Context: {relevant findings}. Max depth: 3."
 </capabilities>
 
+<examples>
+### Plan-with-Constraints
+```text
+Plan: "wire melior backend"
+1. Read the architecture + environment constraints (LLVM 17 blocked)
+2. Produce plan: incremental stages with verification gate each
+3. Flag blocker + interim recommendation (single fn first)
+4. Output: stages, files, risks — no code yet
+```
+### Plan for Refactor
+```text
+Task: "split mono-auth into 3 modules"
+1. Map current call sites; define target structure
+2. Plan migration in chunks, each gated by tests
+3. Describe rollback strategy; hand to build/refactor
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

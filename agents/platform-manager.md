@@ -159,6 +159,22 @@ The agent works as an MCP server, allowing Claude Desktop, Cursor, and other AI 
 - Publish to all platforms
 </capabilities>
 
+<examples>
+### Scaffold New Platform
+```text
+Task: "Wire a new social platform"
+1. Check opencode.jsonc MCP/provider entries + credentials in .env
+2. Scaffold the wrapper script under platforms/<name>/
+3. Test with one real call; log the API key pattern
+```
+### Unblock Blocked MCP
+```text
+Task: "Fix bulkpublish MCP"
+1. Read launcher: missing key or network? check env
+2. If key absent, ask user; if network, verify DNS/proxy
+3. Wire the key, then restart opencode to load
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

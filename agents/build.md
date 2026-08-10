@@ -120,6 +120,36 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 6. **Use appropriate abstractions**: Apply design patterns where they add clarity, not complexity
 </workflow>
 
+<workflow-types>
+
+### Type 1: New Feature Implementation
+When asked to implement a new feature:
+
+1. **Read the existing codebase**: Understand conventions, architecture, and where the feature fits
+2. **Scope the change**: Identify files to create/modify; check for existing similar implementations
+3. **Write tests first when possible**: TDD adds regression safety for new behavior
+4. **Implement**: Follow existing patterns exactly; keep the change reviewable
+5. **Verify**: Run the relevant test suite + build; confirm no unrelated breakage
+
+### Type 2: Bug Fix
+When asked to fix a bug or error:
+
+1. **Reproduce first**: Confirm the failure and capture the exact error
+2. **Root-cause**: Trace the data flow to the actual defect (use `debug-systematic-investigation`)
+3. **Write a regression test**: Prove the bug exists in a failing test, then fix
+4. **Fix minimally**: Smallest change that resolves the root cause
+5. **Verify**: Regression test passes + full suite stays green
+
+### Type 3: Refactor / Optimization
+When asked to refactor or optimize existing code:
+
+1. **Baseline tests**: Confirm tests exist and pass BEFORE touching code (use `refactor-safe`)
+2. **Change one behavior at a time**: Refactor preserves behavior — no bundled feature changes
+3. **Keep identical behavior**: Verify with tests after each step, not at the end
+4. **Clean up**: Remove dead code, align naming, but never mix with feature work
+5. **Verify**: Full suite green; diff is behavior-neutral
+</workflow-types>
+
 <best-practices>
 - Follow language-specific best practices and idioms
 - Use meaningful variable and function names
@@ -129,6 +159,33 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 - Comment complex logic, but prefer self-documenting code
 - When unsure about requirements, ask clarifying questions before proceeding
 </best-practices>
+
+<examples>
+### Hash-Anchored Edit (the pattern that kills stale-line failures)
+```text
+1. Read the file, note LINE#ID anchors:  "src/auth.ts:45 → const user = await getUser(id)"
+2. Before editing, re-read the file and confirm line 45 still contains that exact content
+3. Apply the edit with the confirmed anchor — never guess at line numbers
+4. If the edit fails, re-read and re-locate; do NOT retry blindly
+```
+This is the exact pattern from `hash-anchored-edits` that raised edit success from ~7% to ~68%.
+
+### Test-First Bug Fix
+```text
+1. Write a failing test that reproduces the bug (red)
+2. Confirm it fails for the RIGHT reason (assertion, not a crash in setup)
+3. Implement the minimal fix
+4. Run the test → green
+5. Run the full suite → no regressions (never skip step 5)
+```
+
+### Subagent Delegation with Context
+```text
+"You are delegated by the build agent at depth 2. Your task: implement the auth middleware.
+Context: Express app, token format is JWT HS256, existing route uses verifyToken()
+from src/middleware/auth.js. You may invoke subagents if needed. Max depth: 3."
+```
+</examples>
 
 <task-tracking>
 When you complete a task (success, failure, or partial), log the outcome:

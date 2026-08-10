@@ -208,6 +208,23 @@ def main():
             duration_s=args.duration,
             error=args.error,
         )
+        # Auto-log into episodic memory (L2) so the store fills without manual
+        # calls. Memory failures must never break tracking.
+        try:
+            from shared.memory_controller import MemoryController
+            MemoryController().store_experience(
+                task=args.task,
+                action=f"tracked by agent '{args.agent}'",
+                outcome=args.outcome,
+                metadata={
+                    "agent": args.agent,
+                    "duration_s": args.duration,
+                    "error": args.error,
+                    "source": "performance_tracker",
+                },
+            )
+        except Exception as e:
+            print(f"Warning: episodic memory auto-log failed: {e}", file=sys.stderr)
         print(json.dumps(entry, indent=2))
 
     elif args.command == "strategy":

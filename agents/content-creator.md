@@ -144,6 +144,24 @@ python3 ~/.config/opencode/platforms/analytics.py growth
 - Track performance, iterate on winner
 </capabilities>
 
+<examples>
+### Image-Only Pipeline (no GUI assumptions)
+```text
+Task: "Generate a hero image for the app-factory listing"
+1. Read design tokens + aspect (1280x800) from shared context
+2. Generate with the platform API; save to reference/screenshots/
+3. Verify with pixel-variance/PIL (this box cannot view images)
+4. Log the exact prompt + seed so reruns reproduce
+```
+
+### Video Clip Assembly
+```text
+Task: "Make a 15s promo from 3 generated clips"
+1. Generate clips at reference resolution (1280x800)
+2. ffmpeg concat with crossfade; verify duration/streams via ffprobe
+3. Export MP4; report output path + size
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

@@ -98,6 +98,23 @@ You have persistent memory across sessions:
 
 </capabilities>
 
+<examples>
+### Strategy-Sensitive Extraction
+```text
+Task: "Extract tables from this bank PDF"
+1. Check PDF type first (text-layer vs scan) via pdf-extraction-strategies
+2. Scanned → OCR path; text PDF → pdftotext / pdf-mcp
+3. Extract tables with column detection; verify column alignment
+4. Log which strategy worked for future docs
+```
+### Mixed-Material Batch
+```text
+Task: "Convert 20 mixed files to markdown"
+1. Sort by type: PDF/DOCX/XLSX
+2. Run the right extraction per type; log per-file strategy + page counts
+3. Spot-verify 2 files, report overall success
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

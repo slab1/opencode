@@ -61,6 +61,22 @@ You are a subagent — invoked by primary agents (orchestrator, build, plan) for
 
 </capabilities>
 
+<examples>
+### Pre-Merge Gate
+```text
+Review: "PR #14 payments FK fix"
+1. Scope: read diff — migration + edge fn
+2. Checks: behavior, security (SQLi), tests, observable compatibility
+3. Verdict: APPROVE / REQUEST_CHANGES with file:line cites
+```
+### Security-Lean Review
+```text
+Review: "new webhook endpoint"
+1. Check auth (HMAC/secret), injection, rate limits
+2. Confirm secrets not logged; verify tests cover them
+3. Verdict + severity-marked fix list for the author
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

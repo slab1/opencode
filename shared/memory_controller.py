@@ -1,4 +1,5 @@
 import json
+import re
 import time
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
@@ -41,16 +42,117 @@ class MemoryController:
             f.write(json.dumps(entry) + "\n")
 
     def retrieve_similar_experiences(self, task_query: str, limit: int = 3) -> List[Dict[str, Any]]:
-        """Retrieve past experiences similar to the current task query."""
-        # Simple keyword match for now; will be replaced by embedding search in Phase 2
+        """Retrieve past experiences similar to the current task query.
+
+        Uses TF-IDF vectorization + cosine similarity (numpy) over the
+        task+action+outcome text of every stored experience. Falls back to
+        keyword matching if numpy is unavailable. Returns [] when the store
+        is empty. Each returned dict gains a ``score`` field (0.0-1.0).
+        """
+        experiences = self._load_experiences()
+        if not experiences:
+            return []
+
+        try:
+            import numpy as np
+        except ImportError:
+            return self._keyword_match(task_query, experiences, limit)
+
+        def tokenize(text: str) -> List[str]:
+            return re.findall(r"[a-z0-9]+", text.lower())
+
+        query_tokens = tokenize(task_query)
+        if not query_tokens:
+            return []
+
+        # Corpus: one document per experience (task + action + outcome)
+        corpus = [
+            tokenize(" ".join([
+                str(exp.get("task", "")),
+                str(exp.get("action", "")),
+                str(exp.get("outcome", "")),
+            ]))
+            for exp in experiences
+        ]
+
+        # Vocabulary
+        vocab = {}
+        for doc in corpus:
+            for tok in doc:
+                if tok not in vocab:
+                    vocab[tok] = len(vocab)
+        if not vocab:
+            return []
+
+        # Document frequency + smoothed IDF
+        df = np.zeros(len(vocab))
+        for doc in corpus:
+            for tok in set(doc):
+                df[vocab[tok]] += 1
+        idf = np.log((1.0 + len(corpus)) / (1.0 + df)) + 1.0
+
+        def tfidf_vector(tokens: List[str]) -> np.ndarray:
+            vec = np.zeros(len(vocab))
+            counts = {}
+            for tok in tokens:
+                if tok in vocab:
+                    counts[tok] = counts.get(tok, 0) + 1
+            for tok, count in counts.items():
+                vec[vocab[tok]] = (count / len(tokens)) * idf[vocab[tok]]
+            return vec
+
+        query_vec = tfidf_vector(query_tokens)
+        query_norm = np.linalg.norm(query_vec)
+        if query_norm == 0:
+            return []
+
+        scored = []
+        for exp, doc_tokens in zip(experiences, corpus):
+            doc_vec = tfidf_vector(doc_tokens)
+            doc_norm = np.linalg.norm(doc_vec)
+            score = float(np.dot(query_vec, doc_vec) / (query_norm * doc_norm)) if doc_norm > 0 else 0.0
+            result = dict(exp)
+            result["score"] = round(score, 4)
+            scored.append(result)
+
+        scored.sort(key=lambda x: x["score"], reverse=True)
+        return scored[:limit]
+
+    def _load_experiences(self) -> List[Dict[str, Any]]:
+        """Read all episodic entries, skipping malformed lines."""
         experiences = []
-        with open(EPISODIC_DB, "r") as f:
-            for line in f:
-                exp = json.loads(line)
-                if any(word in exp["task"].lower() for word in task_query.lower().split()):
-                    experiences.append(exp)
-        
-        return sorted(experiences, key=lambda x: x["timestamp"], reverse=True)[:limit]
+        try:
+            with open(EPISODIC_DB, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        experiences.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        continue
+        except OSError:
+            return []
+        return experiences
+
+    def _keyword_match(self, task_query: str, experiences: List[Dict[str, Any]], limit: int = 3) -> List[Dict[str, Any]]:
+        """Fallback retrieval: naive keyword match (used if numpy is unavailable)."""
+        query_words = [w for w in task_query.lower().split() if w]
+        if not query_words:
+            return []
+        matches = []
+        for exp in experiences:
+            text = " ".join([
+                str(exp.get("task", "")),
+                str(exp.get("action", "")),
+                str(exp.get("outcome", "")),
+            ]).lower()
+            if any(w in text for w in query_words):
+                result = dict(exp)
+                result["score"] = round(sum(1 for w in query_words if w in text) / len(query_words), 4)
+                matches.append(result)
+        matches.sort(key=lambda x: (x["score"], x["timestamp"]), reverse=True)
+        return matches[:limit]
 
     # --- L3: Semantic Memory (Knowledge Graph) ---
 
@@ -76,11 +178,20 @@ class MemoryController:
         hits = [r for r in data["relations"] if r["s"] == entity or r["o"] == entity]
         if hits:
             return hits
-        # Fallback: token match across subject/object for fuzzy recall
+        # Fallback: token match across subject/object for fuzzy recall,
+        # ranked by token-overlap score (most relevant facts first).
         tokens = [t for t in entity_l.split() if len(t) > 3]
         if tokens:
-            return [r for r in data["relations"]
-                    if any(t in r["s"].lower() or t in r["o"].lower() for t in tokens)]
+            scored = []
+            for r in data["relations"]:
+                text = f"{r['s']} {r['o']}".lower()
+                overlap = sum(1 for t in tokens if t in text)
+                if overlap:
+                    result = dict(r)
+                    result["score"] = round(overlap / len(tokens), 4)
+                    scored.append(result)
+            scored.sort(key=lambda x: x["score"], reverse=True)
+            return scored
         return []
 
     def _load_semantic(self) -> Dict[str, Any]:

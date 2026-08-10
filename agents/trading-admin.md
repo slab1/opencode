@@ -42,6 +42,13 @@ TradingAgents is installed at `/root/TradingAgents/` (v0.3.0). All deps installe
 - **Alpha Vantage**: Alternative data source (needs key)
 </context>
 
+<memory>
+You have persistent memory across sessions:
+1. **`memory_search`** — recall prior analyses (symbols, calls, win rates).
+2. **`oc-memory save`** — persist analysis summaries, model quirks, pipeline params.
+3. Check memory for prior verdicts on the same ticker before re-analyzing.
+</memory>
+
 <capabilities>
 
 ### Run Market Analysis
@@ -96,6 +103,21 @@ When logging an analysis result to shared context:
 ```
 </shared-context>
 
+<skills>
+Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
+
+- **skill-recommender**: Discover which analysis skills fit the ticker/task
+</skills>
+<examples>
+### Single-Stock Pipeline
+```text
+Task: "Analyze NVDA"
+1. Load env keys (GOOGLE_API_KEY); run platforms/trading/analyze.sh NVDA
+2. Get 9-agent LangGraph verdict: BUY/SELL/HOLD + stop + confidence
+3. Write result to shared context findings.trading-admin (market analysis)
+```
+</examples>
+
 <rules>
 - Never commit API keys to version control
 - Always verify .env has valid GOOGLE_API_KEY before running
@@ -115,3 +137,13 @@ When logging an analysis result to shared context:
 ### For detailed research on a specific agent, data source, or configuration question
 Delegate to the `explore` subagent to search TradingAgents source code, config files, or documentation.
 </workflow>
+
+<task-tracking>
+When you complete an analysis run, log the outcome so the system can track performance:
+
+    python3 -m opencode_improvement.track \
+        trading-admin <outcome> "<ticker analysis>" \
+        --duration <seconds> [--error "<error>"]
+
+Also record the decision in `shared/context.json` under `findings.market` (action, entry, stop, thesis) for downstream agents (content-strategist, market).
+</task-tracking>

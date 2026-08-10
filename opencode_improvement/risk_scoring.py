@@ -1,4 +1,8 @@
-"""Eval result quality risk scorer.
+"""DEPRECATED: kept only for backward compatibility (imported by
+opencode_improvement/__init__.py and __main__.py). No active caller uses
+risk scoring; do not build new code on this module.
+
+Eval result quality risk scorer.
 
 Adapted from OpenMontage's slideshow_risk.py — scores eval result quality
 across 6 dimensions that reliably predict whether the evaluation will

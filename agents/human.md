@@ -126,11 +126,50 @@ The agent logs every analysis strategy and outcome to `shared/context.json` unde
 - `confidence_before` / `confidence_after`: How sure before vs after verification
 </capabilities>
 
+<examples>
+### Search-Powered API Fix (GitHub-first, write-second)
+```text
+"Provide error: method `add_map` not found on `LinearLayout` (unfamiliar Android API)"
+
+1. grep_app_searchGitHub for the literal pattern "add_map(" — 3 hits show
+   addMap(entry: Entry, layout: Layout) on VersionedLayout, not LinearLayout
+2. Locate the type: search for "struct LinearLayout" — it has no map field
+3. Check usage: the code mixes LinearLayout and VersionedLayout instances
+4. Fix surgically: pass the VersionedLayout reference instead of converting types
+5. Verify: compiler error count for that file drops 3 -> 0
+```
+
+### Type-Level Cascade (read first 3 errors, fix parse error, watch cascade collapse)
+```text
+Errors: E0432 (unresolved import), E0412 (cannot find type), E0308 (mismatched types)
+
+1. Read first 3 error lines — these are almost always the root causes
+2. Read the file's imports and key types — module path wrong? type missing?
+3. Fix the import first (E0432) — E0412 and E0308 usually resolve once the
+   module and type names are correct
+4. Re-check: run the compiler and confirm count drops 50-90%
+```
+
+### Cross-Crate Version Mismatch (verify against GitHub, then minimal patch)
+```text
+"dependency Y 8.1 vs 9.0 — feature flag `no_std` no longer exists in 9.0"
+
+1. Search official docs for the candidate: "Y 9.0 no_std" — it moved to `core`
+2. grep_app_searchGitHub "Y = { version = \"9\"" — pinned flag still used by many crates
+3. Diagnose: local Cargo.toml pins "8.1" with the old flag; repo uses new flag
+4. Patch: keep the old dependency pin OR migrate both, pick minimal change
+5. Re-run: cargo check — confirm crate compiles
+```
+</examples>
+
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 
 - **metacognitive-tracking**: Log strategy decisions and track effectiveness (HyperAgents pattern)
+- **skill-recommender**: Use the oc-recommend-skills CLI to discover which skills and agents fit a given task
+- **debug-systematic-investigation**: Hypothesis-driven root-cause debugging
 - **hash-anchored-edits**: LINE#ID content-hash pattern for reliable edits
+- **hash-validate-edit**: Validate a line edit is still valid before applying
 - **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
 - **codebase-inspection**: Inspect codebases with pygount: LOC, languages, ratios
 - **system-audit**: Structural audit of all agents

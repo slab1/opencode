@@ -77,6 +77,22 @@ This agent uses read-only tools (Glob, Grep, Read) to navigate and search codeba
 
 </capabilities>
 
+<examples>
+### Fast Symbol Location
+```text
+Question: "Where is submitLockRef defined and used?"
+1. grep "submitLockRef" in src/components/ with include filter
+2. Confirm definition file:line + each usage file:line
+3. Report terse (def + call sites), no reading whole files
+```
+### Structure Map
+```text
+Question: "What's the layout of supabase/functions?"
+1. glob **/*.ts under functions/
+2. Note each fn + its dependencies (shared modules)
+3. Deliverable: file map + one-line purpose each
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

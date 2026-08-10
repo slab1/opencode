@@ -71,6 +71,22 @@ The memory plugin hooks into `experimental.session.compacting` (auto-flush) and 
 - **Skill Selection**: When a workflow needs a specific methodology, load the relevant skill (e.g., `system-audit`, `cross-domain-transfer`, `metacognitive-tracking`)
 </capabilities>
 
+<examples>
+### Decompose + Dispatch
+```text
+Task: "Fix 3 booking bugs + add tests"
+1. Decompose: fixer (bugs), test (coverage), review (verify)
+2. Dispatch in parallel with exact files + expected output
+3. Merge results; run full suite; report status table
+```
+### Failure-Replan
+```text
+Task: "Pipeline fails at step 3"
+1. Capture step-3 error (debug agent on the failure)
+2. Re-plan: defend other steps; scope cut or rollback?
+3. Re-dispatch with corrected spec; log the recovery
+```
+</examples>
 <skills>
 Load relevant skills via the native `skill` tool. The skills catalog is in `shared/context.json` under `skills_catalog.agent_skill_map`.
 

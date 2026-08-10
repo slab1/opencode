@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": "2026-07-05T02:00:00Z",
+  "last_updated": "2026-08-09T22:03:45.721318Z",
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
@@ -14,10 +14,10 @@
     "high_fixed": 5,
     "medium_fixed": 4,
     "fixes_applied": [
-      "chmod 600 on 5 token files (644→600)",
+      "chmod 600 on 5 token files (644\u2192600)",
       "npm cache cleaned",
       "pip cache cleaned",
-      "opencode package cache cleaned (777M→6.7M)",
+      "opencode package cache cleaned (777M\u21926.7M)",
       "Overdue commitment closed (bb4f43f1: stale 23 days)",
       "checkpoints/ directory created",
       "Backup file scripts/oc-tui.py.bak removed",
@@ -31,7 +31,7 @@
     "remaining_issues": [
       "Node v18 too old for firecrawl-mcp (needs >=22)",
       "Go not installed (for go-docs-mcp)",
-      "Disk at 91% (4.8G free) — improved from 93%"
+      "Disk at 91% (4.8G free) \u2014 improved from 93%"
     ]
   },
   "db_maintenance": {
@@ -55,7 +55,7 @@
         "twitter"
       ],
       "total_posts": 0,
-      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl→xxd fix, all scripts verified operational"
+      "last_action": "Full environment setup: backend.json created (BulkPublish pending), accounts.json expanded to all 11 platforms, SETUP_CHECKLIST.md created, post.sh openssl\u2192xxd fix, all scripts verified operational"
     },
     "aether": {
       "status": "operational",
@@ -74,8 +74,8 @@
       },
       "validated": {
         "modules_compile": 6,
-        "e2e_loop": "PASS",
-        "memory_tiers": "L2+L3+L4 all operational",
+        "e2e_loop": "modules_compile + pulse_runs (no end-to-end loop verified)",
+        "memory_tiers": "wired; store being backfilled",
         "verified_at": "2026-07-05T02:00:00Z"
       }
     }
@@ -84,7 +84,7 @@
     {
       "name": "multios-kernel-compilation-fix",
       "status": "in_progress",
-      "errors_fixed": "~4700→~3371 (28%)",
+      "errors_fixed": "~4700\u2192~3371 (28%)",
       "current_phase": "root-cause-elimination-complete"
     }
   ],
@@ -182,12 +182,12 @@
     {
       "type": "AGENTS.md",
       "path": "~/.config/opencode/AGENTS.md",
-      "purpose": "Root agent map — Hermes-level dev guide"
+      "purpose": "Root agent map \u2014 Hermes-level dev guide"
     },
     {
       "type": "AGENTS.md",
       "path": "~/.config/opencode/platforms/AGENTS.md",
-      "purpose": "Platform docs — now with Security, Kanban, Hooks docs"
+      "purpose": "Platform docs \u2014 now with Security, Kanban, Hooks docs"
     },
     {
       "type": "AGENTS.md",
@@ -197,7 +197,7 @@
     {
       "type": "setup",
       "path": "~/.config/opencode/platforms/backend.json",
-      "purpose": "Backend config — BulkPublish (pending API key)"
+      "purpose": "Backend config \u2014 BulkPublish (pending API key)"
     },
     {
       "type": "setup",
@@ -212,12 +212,12 @@
     {
       "type": "fix",
       "path": "~/.config/opencode/platforms/post.sh",
-      "purpose": "Fixed openssl→xxd for POST_ID generation"
+      "purpose": "Fixed openssl\u2192xxd for POST_ID generation"
     },
     {
       "type": "config",
       "path": "~/.config/opencode/platforms/config.yaml",
-      "purpose": "User preferences — posting defaults, kanban, content gen, analytics"
+      "purpose": "User preferences \u2014 posting defaults, kanban, content gen, analytics"
     },
     {
       "type": "script",
@@ -273,7 +273,7 @@
       "id": "hermes-003",
       "date": "2026-06-10",
       "description": "Plugin adapter system with auto-discovery (adapters/)",
-      "rationale": "Pattern 3: Hermes plugin architecture — drop-in modules"
+      "rationale": "Pattern 3: Hermes plugin architecture \u2014 drop-in modules"
     },
     {
       "id": "hermes-004",
@@ -285,7 +285,7 @@
       "id": "hermes-005",
       "date": "2026-06-10",
       "description": "Self-improving learning loop (analytics.py learn)",
-      "rationale": "Pattern 5: Hermes closed learning loop — learn from engagement data"
+      "rationale": "Pattern 5: Hermes closed learning loop \u2014 learn from engagement data"
     },
     {
       "id": "setup-006",
@@ -296,7 +296,7 @@
     {
       "id": "kernel-001",
       "date": "2026-06-17",
-      "description": "HashMap→BTreeMap for no_std compatibility",
+      "description": "HashMap\u2192BTreeMap for no_std compatibility",
       "rationale": "alloc::collections::HashMap not available in no_std; BTreeMap is available and avoids external hashbrown dependency"
     },
     {
@@ -333,7 +333,7 @@
       "id": "strat-010",
       "date": "2026-06-20",
       "description": "Auto-evolution script creates self-healing agent configs from eval failures",
-      "rationale": "Closes the loop between evaluation and improvement — agents that fix themselves"
+      "rationale": "Closes the loop between evaluation and improvement \u2014 agents that fix themselves"
     },
     {
       "id": "strat-011",
@@ -363,7 +363,7 @@
       "id": "strat-015",
       "date": "2026-06-20",
       "description": "Live dashboard provides real-time visualization of agent ecosystem health",
-      "rationale": "Turns infrastructure into visible proof — eval scores, trends, strategy effectiveness"
+      "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
     },
     {
       "id": "strat-016",
@@ -415,7 +415,7 @@
       "why_this_strategy": "Simplest change with least downstream impact; macros already in scope via #[macro_use]",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "33 E0659 → 0",
+      "outcome_evidence": "33 E0659 \u2192 0",
       "duration_s": 300,
       "confidence_before": 0.9,
       "confidence_after": 1.0,
@@ -433,7 +433,7 @@
       "why_this_strategy": "Identified root cause as redundant imports and conflicting module re-exports; removing duplicates preserves API",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "E0252/E0255 → 0; unblocked downstream modules",
+      "outcome_evidence": "E0252/E0255 \u2192 0; unblocked downstream modules",
       "duration_s": 1800,
       "confidence_before": 0.8,
       "confidence_after": 0.95,
@@ -451,7 +451,7 @@
       "why_this_strategy": "Parenthesizing trait bounds in dyn types fixes ambiguity; BTreeSet replaces HashSet same as HashMap",
       "applied_at": "2026-06-17T00:00:00Z",
       "outcome": "success",
-      "outcome_evidence": "ambiguous + → 0, HashSet → BTreeSet in 4 files",
+      "outcome_evidence": "ambiguous + \u2192 0, HashSet \u2192 BTreeSet in 4 files",
       "duration_s": 600,
       "confidence_before": 0.9,
       "confidence_after": 1.0,
@@ -460,17 +460,17 @@
     {
       "id": "strategy-1781945530729",
       "agent_target": "opencode_improvement (audit module)",
-      "diagnosis": "capability_sections count always 0 — line.startswith('##') catches '###' headings and exits in_caps before counter runs",
+      "diagnosis": "capability_sections count always 0 \u2014 line.startswith('##') catches '###' headings and exits in_caps before counter runs",
       "strategy_chosen": "fix_parsing_order",
       "strategy_alternatives_considered": [
         "rewrite_parser_with_regex",
         "change_all_agent_headings"
       ],
-      "why_this_strategy": "Minimal change — swap two if-statements so ### is checked before ##. This correctly counts sub-section headings under <capabilities>",
+      "why_this_strategy": "Minimal change \u2014 swap two if-statements so ### is checked before ##. This correctly counts sub-section headings under <capabilities>",
       "applied_at": "2026-06-20T08:52:10.729698Z",
       "confidence_before": 0.5,
       "outcome": "success",
-      "outcome_evidence": "architect.md: 0→3 counted; all agents will now report actual section counts",
+      "outcome_evidence": "architect.md: 0\u21923 counted; all agents will now report actual section counts",
       "confidence_after": 0.95
     },
     {
@@ -486,7 +486,7 @@
       "applied_at": "2026-06-20T08:53:33.445432Z",
       "confidence_before": 0.6,
       "outcome": "success",
-      "outcome_evidence": "web-browser: 22→12 (removed examples), display-agent: 21→8. All agents now show accurate counts. Average: 5.7/agent",
+      "outcome_evidence": "web-browser: 22\u219212 (removed examples), display-agent: 21\u21928. All agents now show accurate counts. Average: 5.7/agent",
       "confidence_after": 0.98
     },
     {
@@ -649,7 +649,7 @@
         "skip_offline_eval",
         "record_replay"
       ],
-      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores — enables zero-cost CI eval",
+      "why_this_strategy": "MockProvider deterministically reads golden dataset and returns perfect scores \u2014 enables zero-cost CI eval",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.9,
       "outcome": "success",
@@ -659,7 +659,7 @@
     {
       "id": "strategy-1781950000002",
       "agent_target": "golden datasets",
-      "diagnosis": "Test cases have no version tracking — impossible to know if evaluation drift is from agent changes or test suite changes",
+      "diagnosis": "Test cases have no version tracking \u2014 impossible to know if evaluation drift is from agent changes or test suite changes",
       "strategy_chosen": "add_task_versioning",
       "strategy_alternatives_considered": [
         "no_versioning",
@@ -681,17 +681,17 @@
         "skip_quality_check",
         "manual_review"
       ],
-      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with κ < 0.7",
+      "why_this_strategy": "Cohen's Kappa provides statistical measure of agreement; flags unreliable datasets with \u03ba < 0.7",
       "applied_at": "2026-06-20T10:00:00Z",
       "confidence_before": 0.7,
       "outcome": "success",
-      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when κ < 0.7",
+      "outcome_evidence": "_cohens_kappa() and compute_cohens_kappa() in __init__.py; kappa subcommand; non-zero exit when \u03ba < 0.7",
       "confidence_after": 0.9
     },
     {
       "id": "strategy-1781950000004",
       "agent_target": "eval system",
-      "diagnosis": "No semantic quality scoring — only keyword matching and structural audits",
+      "diagnosis": "No semantic quality scoring \u2014 only keyword matching and structural audits",
       "strategy_chosen": "add_llm_judge",
       "strategy_alternatives_considered": [
         "skip_semantic_eval",
@@ -707,7 +707,7 @@
     {
       "id": "strategy-1781950000005",
       "agent_target": "eval system",
-      "diagnosis": "All eval runs sequential — slow for large agent count",
+      "diagnosis": "All eval runs sequential \u2014 slow for large agent count",
       "strategy_chosen": "add_async_executor",
       "strategy_alternatives_considered": [
         "keep_sync_only",
@@ -739,7 +739,7 @@
     {
       "id": "strategy-1781950000007",
       "agent_target": "eval CLI",
-      "diagnosis": "No way to debug individual test case failures — must read full JSON output",
+      "diagnosis": "No way to debug individual test case failures \u2014 must read full JSON output",
       "strategy_chosen": "add_inspect_command",
       "strategy_alternatives_considered": [
         "manual_parsing",
@@ -755,7 +755,7 @@
     {
       "id": "strategy-1781950000008",
       "agent_target": "eval system",
-      "diagnosis": "No way to see changes over time — each eval run is isolated",
+      "diagnosis": "No way to see changes over time \u2014 each eval run is isolated",
       "strategy_chosen": "add_comparison_report",
       "strategy_alternatives_considered": [
         "manual_diff",
@@ -823,12 +823,12 @@
         "transfer_capability_from_web-browser",
         "leave_as_is"
       ],
-      "why_this_strategy": "Content exists but is structurally invisible to the audit parser. Converting numbered list to ### headings lifts count from 2→11 without adding new content.",
+      "why_this_strategy": "Content exists but is structurally invisible to the audit parser. Converting numbered list to ### headings lifts count from 2\u219211 without adding new content.",
       "applied_at": "2026-06-27T16:08:43.624280+00:00",
       "confidence_before": 0.95,
       "followup": null,
       "outcome": "success",
-      "outcome_evidence": "document-agent cap sections: 2→10 (promoted 8 items from numbered list to ### headings)",
+      "outcome_evidence": "document-agent cap sections: 2\u219210 (promoted 8 items from numbered list to ### headings)",
       "confidence_after": 0.98,
       "duration_s": 120
     },
@@ -841,12 +841,12 @@
         "add_to_all_agents",
         "add_to_core_agents_only"
       ],
-      "why_this_strategy": "hash-anchored-edits lifts edit success rate 7%→68%. error-recovery-protocol prevents MCP/tool crashes. Target agents that edit files most frequently.",
+      "why_this_strategy": "hash-anchored-edits lifts edit success rate 7%\u219268%. error-recovery-protocol prevents MCP/tool crashes. Target agents that edit files most frequently.",
       "applied_at": "2026-06-27T16:10:31.031553+00:00",
       "confidence_before": 0.9,
       "followup": null,
       "outcome": "success",
-      "outcome_evidence": "error-recovery-protocol: 17/23→23/23 (6 transfers: test, review, docs, explore, pioneer, orchestrator) hash-anchored-edits: 5/23→8/23 (3 transfers: test, review, docs)",
+      "outcome_evidence": "error-recovery-protocol: 17/23\u219223/23 (6 transfers: test, review, docs, explore, pioneer, orchestrator) hash-anchored-edits: 5/23\u21928/23 (3 transfers: test, review, docs)",
       "confidence_after": 0.95,
       "duration_s": 300
     },
@@ -967,6 +967,499 @@
       "confidence_before": 0.8,
       "confidence_after": 0.98,
       "followup": null
+    },
+    {
+      "id": "strategy-1785992443710",
+      "agent_target": "human",
+      "diagnosis": "M2 head-ref gate (if: startsWith(github.head_ref, \"appfactory/fix-\")) applied to the shared build job, which also serves the workflow_dispatch baseline. On dispatch, head_ref is empty so the gate is false: the baseline build job is skipped, the run concludes \"skipped\" with an empty log, and isSuccess(\"\")==true makes the fix loop short-circuit before any LLM call \u2014 \"no non-.github changes; no PR\". Root cause was a fix (fbbaf62 M2) that regressed an earlier fix (M1 baseline).",
+      "strategy_chosen": "event-aware gate: exempt workflow_dispatch from the head-ref guard (github.event_name == \"workflow_dispatch\" || startsWith(...)); add test asserting the exemption",
+      "strategy_alternatives_considered": [
+        "split into two jobs (baseline + PR-head) with separate triggers",
+        "use github.actor/ref conditionals",
+        "revert M2 gate entirely"
+      ],
+      "why_this_strategy": "Minimal change preserving both behaviors (baseline always builds, only fix-PR heads build); single job keeps concurrency/CI simple; test locks the regression",
+      "applied_at": "2026-08-06T05:41:00Z",
+      "outcome": "success",
+      "outcome_evidence": "run 31058262819 skipped (empty log, llm_calls=0, no PR) \u2192 run 31072289513 Build step failed with real log, LLM called once, PR #2 opened (main.go only, M2 check-run success); all tests green",
+      "duration_s": 2400,
+      "confidence_before": 0.85,
+      "confidence_after": 0.99,
+      "followup": "None for this bug; remaining: marketplace install-permissions screenshot (auth), launch gates"
+    },
+    {
+      "id": "strategy-1786011649148",
+      "agent_target": "human",
+      "diagnosis": "App Factory GitHub Marketplace listing required a marketplace_event webhook handler and paid-plan tiering (Pro/Team), which were entirely missing \u2014 webhook.go only routed ping/installation/installation_repositories/workflow_run.",
+      "strategy_chosen": "Minimum-surface feature slice: extend InstallStore tier model first (constants + tierBuildCap + marketplacePlanTier), then ApplyMarketplacePurchase on both backends, then wire the webhook route + handler, then admin/dashboard surfaces, then tests per backend.",
+      "strategy_alternatives_considered": [
+        "Single big rewrite of webhook routing",
+        "Dropping SQLite backend (memory-only) to save time",
+        "Deferring plan-tier enforcement to a future ticket"
+      ],
+      "why_this_strategy": "Backend-first ordering meant every tier change was testable at store level before any HTTP surface existed; both backends kept parity so sqlite stays the production store; enforcement already flowed through the existing tierBuildCap gate so no new gating logic was needed.",
+      "applied_at": "2026-08-06T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "15 new tests pass on memory+sqlite (tier caps, plan mapping, purchase-before-registration, webhook purchased/changed/cancelled/pending/unknown/missing-install, admin setTier pro/team/reject-invalid); go build/vet/test ./... all green; commit d3aeaa6 pushed to slab1/app-factory master.",
+      "duration_s": 4200,
+      "confidence_before": 0.6,
+      "confidence_after": 0.95,
+      "followup": "Remaining listing prep: logo, feature card, uniform 1280x800 screenshot re-crop, human screenshot review, wire listing webhook, org transfer + verified publisher gates."
+    },
+    {
+      "id": "strategy-1786012300876",
+      "agent_target": "human",
+      "diagnosis": "Listing screenshots varied in height (800/920/900) failing GitHub's uniform-aspect-ratio requirement; sqlite ApplyMarketplacePurchase swallowed Exec errors, so a failed upsert would silently skip paid-tier application (billing integrity) and leave caps fail-open.",
+      "strategy_chosen": "Normalize screenshots in place with ImageOps.fit center-crop to 1280x800, verify kept-content via PIL std, preserve originals as -orig-tall.png, update 3 docs; harden only the new SQL path with error logging (no interface change).",
+      "strategy_alternatives_considered": [
+        "Re-capture all screenshots at 1280x800",
+        "Leave tall captures and hope GitHub accepts varied ratios",
+        "Refactor all 25 store methods to return errors"
+      ],
+      "why_this_strategy": "Center-crop is lossless enough (full width kept) and reversible (originals preserved); the minimal store hardening addresses the real security concern (silent fail-open on billing/caps) without a broad interface refactor.",
+      "applied_at": "2026-08-06T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "All 5 listing shots verified 1280x800 (std 27.3/13.2 PASS); go build/vet/test green; commits 71b03eb + d9c7be7 pushed.",
+      "duration_s": 2400,
+      "confidence_before": 0.7,
+      "confidence_after": 0.95,
+      "followup": "Logo + feature card still TODO; org transfer + verified publisher gates."
+    },
+    {
+      "id": "strategy-1786012896995",
+      "agent_target": "human",
+      "diagnosis": "Logo + feature card were the last two listing assets; both were un-maded and the docs only had specs.",
+      "strategy_chosen": "Generate brand-consistent assets programmatically with PIL (supersampled 4x/3x + LANCZOS), verify structurally (alpha, key-pixel colors, badge-circle clip), produce a review preview, and document badge-bg + text-color choices.",
+      "strategy_alternatives_considered": [
+        "Hand-draw SVG logo",
+        "Reuse landing-page AF mark export",
+        "Leave as TODO for human designer"
+      ],
+      "why_this_strategy": "The landing-page AF mark is text-based (violates no-text rule) and unexportable as-is; a geometric lime-check mark is trivially renderable, on-brand, and satisfies GitHub's guidelines; a human can regenerate if the style isn't liked.",
+      "applied_at": "2026-08-06T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "logo-512.png (512x512 RGBA, transparent corners, lime check verified at 3 arm points), feature-card-965x482.png (exact spec size), preview-on-dark.png; commit 2258947 pushed.",
+      "duration_s": 1500,
+      "confidence_before": 0.8,
+      "confidence_after": 0.9,
+      "followup": "Human visual review of the 3 branding assets + 5 screenshots; then submit Free-only listing; org transfer + verified publisher for paid."
+    },
+    {
+      "id": "strategy-1786013933706",
+      "agent_target": "human",
+      "diagnosis": "Paste-ready submission bundle needed; verifying app facts via live GitHub API surfaced a critical identity error that would have broken the listing.",
+      "strategy_chosen": "Verify identity facts live (App JWT + /apps/{slug} API) BEFORE writing the bundle, then draft field-order copy-paste doc with an explicit \u00a70 VERIFY block and fix the wrong identity in the source doc.",
+      "strategy_alternatives_considered": [
+        "Copy the doc's existing (assumed) identity into the bundle verbatim",
+        "Skip the API check as over-engineering"
+      ],
+      "why_this_strategy": "The doc claimed slug app-factory/id 4497786 but the live API showed id 4497786 is the e2e scratch app and slug app-factory belongs to another org \u2014 piping the wrong identity into a submission would create a listing that installs a third party's app.",
+      "applied_at": "2026-08-06T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "listing-copy-paste.md written (202 lines); corrected marketplace-submission.md \u00a71/\u00a79; commit e82074f pushed.",
+      "duration_s": 1200,
+      "confidence_before": 0.85,
+      "confidence_after": 0.95,
+      "followup": "Human: resolve production app identity (new app or repurpose e2e), visual review of assets, then submit Free-only listing."
+    },
+    {
+      "id": "strategy-1786016499734",
+      "agent_target": "human",
+      "diagnosis": "User chose 'both path' \u2014 wanted both production-app identity options (new app vs repurpose e2e) fully actionable so whichever is picked is plug-and-play.",
+      "strategy_chosen": "Write one dual-path setup guide (production-app-setup.md) covering both paths with shared prerequisites, permissions table, event subscriptions, webhook secret gen, env vars (incl. mandatory SANDBOX=firecracker), and shared verification; cross-link from the copy-paste bundle + submission doc.",
+      "strategy_alternatives_considered": [
+        "Advocate only the recommended new-app path",
+        "Split into two separate docs"
+      ],
+      "why_this_strategy": "A single guide keeps the shared bits DRY and lets the human decide at submission time; cross-linking prevents the earlier identity error from recurring.",
+      "applied_at": "2026-08-06T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "production-app-setup.md written (169 LOC diff), listing-copy-paste.md + marketplace-submission.md linked; commit e2b87d1 pushed.",
+      "duration_s": 900,
+      "confidence_before": 0.9,
+      "confidence_after": 0.95,
+      "followup": "Human picks path (a)/(b), runs the guide, visually reviews assets, submits Free-only listing."
+    },
+    {
+      "id": "strategy-1786021387902",
+      "agent_target": "human-analysis",
+      "diagnosis": "FirecrackerSandbox.Run was a stub returning \"requires KVM\" \u2014 production deployment with SANDBOX=firecracker would never run a fix. KVM absence on host was only half the blocker; the microVM boot path was unimplemented.",
+      "strategy_chosen": "substitute_isolated_backend (DockerSandbox)",
+      "strategy_alternatives_considered": [
+        "finish Firecracker microVM boot (kernel+rootfs+vsock, only testable on KVM host)",
+        "defer sandbox work until KVM host exists"
+      ],
+      "why_this_strategy": "Docker containers satisfy the C2 isolation goal (distinct type, real isolation) without KVM, work on any VPS, are far simpler to implement+test, and unblock the listing path today. Firecracker remains the documented stronger end-state.",
+      "applied_at": "2026-08-06T13:03:07Z",
+      "outcome": "success",
+      "outcome_evidence": "go build/vet/test ./... all green (9 packages ok); 5 new DockerSandbox tests pass; integration test skips gracefully without docker; committed d9c6b85 + pushed",
+      "duration_s": 1500,
+      "confidence_before": 0.6,
+      "confidence_after": 0.9,
+      "followup": "Human: create prod app (path a), provision host (VPS+compose or Fly/Railway), run deploy kit, submit Free-only listing"
+    },
+    {
+      "id": "strategy-1786224172841",
+      "agent_target": "human",
+      "diagnosis": "CI red on 2 workflows: security-audit failed on 3 unique npm advisories (esbuild low ours, js-yaml high via swagger-ui =4.3.0 pin, hono moderate via MCP SDK 1.28.0 pin); System Health monitoring job ran node -e require(.ts) which Node 20 cannot parse, and utils need Vite import.meta.env at class-field init plus one module starts an interval at import (hang).",
+      "strategy_chosen": "cascade-fix: root-cause each red job, verify dependency override compatibility via lockfile-only install + local build/tsc/lint/jest before commit",
+      "strategy_alternatives_considered": [
+        "npm audit fix --force (rejected: breaks swagger-ui-react major downgrade)",
+        "change audit-level gate (rejected: masks real high+moderate vulns)",
+        "tsx -e inline (rejected: misses import.meta.env vars)",
+        "SDK override risk accepted after verifying 4 subpaths exist in 1.30.0"
+      ],
+      "why_this_strategy": "minimal footprint: 3 package.json overrides fix 3 vulns at fixed lines without forcing majors; one new smoke script fixes the workflow bug; all verified locally (build/tsc/lint/jest 50-50/audit exit 0) before pushing",
+      "applied_at": "2026-08-08T21:50:00Z",
+      "outcome": "success",
+      "outcome_evidence": "3/3 workflows green on d1e58e6 (CI, Code Quality, System Health) vs 2/3 red on cbcc15c",
+      "duration_s": 7200,
+      "confidence_before": 0.6,
+      "confidence_after": 0.98,
+      "followup": "Commit 16 uncommitted booking/payment files separately; C1 backend gap (create-payment-intent validates reservations only) remains"
+    },
+    {
+      "id": "strategy-1786224745018",
+      "agent_target": "human",
+      "diagnosis": "16 oracle-verified booking/payment files sat uncommitted on top of the CI-fix commit d1e58e6; risk of mixing concerns or the auto-generated supabase/functions/mcp/index.ts sneaking into the changeset",
+      "strategy_chosen": "verify-then-commit: confirm exact file set (16 src-only files), scan diff for stray console.log/TODO, run tsc+eslint gates, commit separately from CI fix, push, confirm CI green",
+      "strategy_alternatives_considered": [
+        "bundle booking commit with CI fix (rejected: mixed concerns, harder review)",
+        "commit without re-gating (rejected: package.json changed between verification and commit)"
+      ],
+      "why_this_strategy": "clean history demands separate commits; tsc/eslint re-gate is cheap insurance since deps changed in d1e58e6; confirmed 0 console.logs/0 TODOs in diff before committing",
+      "applied_at": "2026-08-08T21:30:00Z",
+      "outcome": "success",
+      "outcome_evidence": "committed 66a0400 (+437/\u2212154), pushed d1e58e6..66a0400, all 3 workflows green (CI 2m27s, Code Quality 58s, System Health 42s)",
+      "duration_s": 900,
+      "confidence_before": 0.9,
+      "confidence_after": 0.99,
+      "followup": "C1 backend gap (create-payment-intent special-event 404) + first booking tests still open"
+    },
+    {
+      "id": "strategy-1786230694475",
+      "agent_target": "fixer/human",
+      "diagnosis": "C1 not end-to-end: SpecialEventBooking passed a special_events UUID into create-payment-intent's reservation_id; edge fn 404'd and payments.reservation_id FK could never reference an event. Frontend also had a PaymentModal keydown TypeError (index param undefined -> NaN) and no duplicate-submit guards. No booking tests existed.",
+      "strategy_chosen": "entity-agnostic payments subject + server-side amount + ref-lock guards + TDD booked tests",
+      "strategy_alternatives_considered": [
+        "separate payments_special_events table (rejected: duplicate payment machinery, webhook would fork twice)",
+        "polymorphic entity_type column on payments (rejected: FK constraints need explicit columns)",
+        "trust client amount for events (rejected: oracle + existing reservation path both compute server-side)"
+      ],
+      "why_this_strategy": "Small change on an existing table (nullable special_event_id + CHECK at-most-one) keeps one write path for the webhook and client recordPayment; server-side deposit_amount is the single source of truth; ref-lock is the smallest guard against duplicate records/charges; tests exercised the real component state machine instead of hand-rolled harnesses.",
+      "applied_at": "2026-08-08T23:11:34Z",
+      "outcome": "success",
+      "outcome_evidence": "Full jest suite 11->13 suites / 50->61 tests green; tsc exit 0; eslint 0 errors; vite build 3m51s OK; 3 GitHub workflows GREEN on c2886ba (CI 2m30s, Code Quality 54s, System Health 46s)",
+      "duration_s": 5400,
+      "confidence_before": 0.6,
+      "confidence_after": 0.95,
+      "followup": "Apply migration to live Supabase project (supabase db push / migration UI) before events can be paid in prod; add edge-fn unit tests if deno test infra exists; C2-C5 from oracle review doc still open."
+    },
+    {
+      "id": "strategy-1786256070-1",
+      "agent_target": "content-strategist",
+      "diagnosis": "missing <task-tracking> section only (structure_complete: false)",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_from_similar",
+        "skip"
+      ],
+      "why_this_strategy": "agent is otherwise complete; single small addition, lowest risk",
+      "applied_at": "2026-08-09T06:14:30.295936+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit re-run: all 29 agents structure_complete (0 failures, was 6)",
+      "confidence_before": 0.98,
+      "confidence_after": 1.0,
+      "followup": "verify next agent task performance delta"
+    },
+    {
+      "id": "strategy-1786256070-2",
+      "agent_target": "trading-admin",
+      "diagnosis": "missing <task-tracking> section only",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "add_from_template",
+        "skip"
+      ],
+      "why_this_strategy": "single missing optional section; module convention requires it for full audit pass",
+      "applied_at": "2026-08-09T06:14:30.295936+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit re-run: all 29 agents structure_complete (0 failures, was 6)",
+      "confidence_before": 0.97,
+      "confidence_after": 0.99,
+      "followup": "verify next agent task performance delta"
+    },
+    {
+      "id": "strategy-1786256070-3",
+      "agent_target": "cognition",
+      "diagnosis": "has capabilities/workflow/rules/shared-context/memory but no <role> tag, <task-tracking>, or frontmatter",
+      "strategy_chosen": "add_missing_section + fix_frontmatter",
+      "strategy_alternatives_considered": [
+        "convert_layout",
+        "skip_manual_only"
+      ],
+      "why_this_strategy": "content exists, only wrapper tags + frontmatter missing; manual-only subagent but should still pass audit",
+      "applied_at": "2026-08-09T06:14:30.295936+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit re-run: all 29 agents structure_complete (0 failures, was 6)",
+      "confidence_before": 0.92,
+      "confidence_after": 0.9400000000000001,
+      "followup": "verify next agent task performance delta"
+    },
+    {
+      "id": "strategy-1786256070-4",
+      "agent_target": "critic",
+      "diagnosis": "same as cognition: <role>, <task-tracking>, frontmatter missing",
+      "strategy_chosen": "add_missing_section + fix_frontmatter",
+      "strategy_alternatives_considered": [
+        "convert_layout",
+        "skip"
+      ],
+      "why_this_strategy": "add wrapper around existing content; no content change needed",
+      "applied_at": "2026-08-09T06:14:30.295936+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit re-run: all 29 agents structure_complete (0 failures, was 6)",
+      "confidence_before": 0.92,
+      "confidence_after": 0.9400000000000001,
+      "followup": "verify next agent task performance delta"
+    },
+    {
+      "id": "strategy-1786256070-5",
+      "agent_target": "knowledge-compiler",
+      "diagnosis": "legacy markdown layout, zero XML tags, zero frontmatter (all has_* false)",
+      "strategy_chosen": "convert_to_tagged_format",
+      "strategy_alternatives_considered": [
+        "rewrite_from_scratch",
+        "add_minimal_tags_only"
+      ],
+      "why_this_strategy": "content is good; wrap existing sections in tags + add frontmatter to preserve content while passing audit",
+      "applied_at": "2026-08-09T06:14:30.295936+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit re-run: all 29 agents structure_complete (0 failures, was 6)",
+      "confidence_before": 0.85,
+      "confidence_after": 0.87,
+      "followup": "verify next agent task performance delta"
+    },
+    {
+      "id": "strategy-1786256070-6",
+      "agent_target": "skill-optimizer",
+      "diagnosis": "legacy markdown format, zero tags, zero frontmatter",
+      "strategy_chosen": "convert_to_tagged_format",
+      "strategy_alternatives_considered": [
+        "rewrite",
+        "minimal_tags"
+      ],
+      "why_this_strategy": "preserve authored content; wrap into sections",
+      "confidence_before": 0.85,
+      "confidence_after": 0.87,
+      "followup": "verify next agent task performance delta",
+      "applied_at": "2026-08-09T06:14:30.295936+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit re-run: all 29 agents structure_complete (0 failures, was 6)"
+    },
+    {
+      "id": "strategy-1786261622-7",
+      "agent_target": "build",
+      "diagnosis": "capabilities/workflow/rules rich but no <examples> section (top agents web-browser/video-creator have it)",
+      "strategy_chosen": "add_example",
+      "strategy_alternatives_considered": [
+        "transfer_verbatim_from_web_browser",
+        "improve_section_content",
+        "skip"
+      ],
+      "why_this_strategy": "examples convert abstract capability into executable pattern; domain-appropriate examples written fresh, not copied",
+      "applied_at": "2026-08-09T07:47:02.771411+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit green (0/29 fails); <examples> section added with domain-appropriate content; structure now matches web-browser/video-creator tier",
+      "confidence_before": 0.9,
+      "confidence_after": 0.93,
+      "followup": "re-run audit + check example usage"
+    },
+    {
+      "id": "strategy-1786261622-8",
+      "agent_target": "test",
+      "diagnosis": "no <examples> section; test patterns described abstractly",
+      "strategy_chosen": "add_example",
+      "strategy_alternatives_considered": [
+        "add_rule",
+        "skip"
+      ],
+      "why_this_strategy": "test agent benefits most from concrete red-green-refactor and mock examples",
+      "applied_at": "2026-08-09T07:47:02.771411+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit green (0/29 fails); <examples> section added with domain-appropriate content; structure now matches web-browser/video-creator tier",
+      "confidence_before": 0.9,
+      "confidence_after": 0.93,
+      "followup": "re-run audit"
+    },
+    {
+      "id": "strategy-1786261622-9",
+      "agent_target": "architect",
+      "diagnosis": "strong framework but abstract; no <examples> anchoring decisions",
+      "strategy_chosen": "add_example",
+      "strategy_alternatives_considered": [
+        "improve_section_content",
+        "skip"
+      ],
+      "why_this_strategy": "decision framework needs worked examples to transfer reliably",
+      "applied_at": "2026-08-09T07:47:02.771411+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit green (0/29 fails); <examples> section added with domain-appropriate content; structure now matches web-browser/video-creator tier",
+      "confidence_before": 0.88,
+      "confidence_after": 0.91,
+      "followup": "re-run audit"
+    },
+    {
+      "id": "strategy-1786263161-10",
+      "agent_target": "build",
+      "diagnosis": "linear <workflow> handles all task types identically; only 4/29 agents use <workflow-types> routing; general (high performer) has it",
+      "strategy_chosen": "transfer_workflow_types",
+      "strategy_alternatives_considered": [
+        "improve_section_content",
+        "skip"
+      ],
+      "why_this_strategy": "build dispatches features/bugfixes/refactors differently; type routing maps situation to procedure (HyperAgents meta-pattern)",
+      "applied_at": "2026-08-09T08:12:41.505518+00:00",
+      "outcome": "pending",
+      "outcome_evidence": null,
+      "confidence_before": 0.87,
+      "confidence_after": null,
+      "followup": "audit + usage check"
+    },
+    {
+      "id": "strategy-1786263161-11",
+      "agent_target": "test",
+      "diagnosis": "single generic workflow; test runs feature tests vs regression vs suite differently",
+      "strategy_chosen": "transfer_workflow_types",
+      "strategy_alternatives_considered": [
+        "add_rule",
+        "skip"
+      ],
+      "why_this_strategy": "test task types (new coverage, bug regression, suite maintenance) need different loops",
+      "applied_at": "2026-08-09T08:12:41.505518+00:00",
+      "outcome": "pending",
+      "outcome_evidence": null,
+      "confidence_before": 0.85,
+      "confidence_after": null,
+      "followup": "audit"
+    },
+    {
+      "id": "strategy-1786263785-12",
+      "agent_target": "human",
+      "diagnosis": "structurally complete (325 lines, all sections) but lacks <examples> and its <skills> list omits 4 skills it references elsewhere",
+      "strategy_chosen": "add_example + improve_section_content",
+      "strategy_alternatives_considered": [
+        "transfer_verbatim",
+        "skip"
+      ],
+      "why_this_strategy": "top performers (web-browser/video-creator) have examples; referenced-but-unlisted skills break skill auto-loading",
+      "applied_at": "2026-08-09T08:23:05.167231+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit all-pass incl human (5 caps); added <examples> x3 + 3 skills (skill-recommender, debug-systematic-investigation, hash-validate-edit) now resolvable",
+      "confidence_before": 0.9,
+      "confidence_after": 0.93,
+      "followup": "confirm skills resolvable via catalog (done in this run)"
+    },
+    {
+      "id": "strategy-1786266033-fixer",
+      "agent_target": "fixer",
+      "diagnosis": "built-in subagent has NO local override; fleet relies on built-in generic prompt losing hash-anchored-edit + tdd + commit-hygiene practices",
+      "strategy_chosen": "create_override_file",
+      "strategy_alternatives_considered": [
+        "transfer_full_template",
+        "leave_builtin"
+      ],
+      "why_this_strategy": "local agents/<name>.md overrides built-in (proven: build/test/architect); enables fleet skills + context schema",
+      "applied_at": "2026-08-09T09:00:33.007321+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit 32/32 ALL PASS; fixer caps=4, oracle caps=4, designer caps=5, all completeness 1.0; 12 referenced skills verified on disk",
+      "confidence_before": 0.88,
+      "confidence_after": 0.94,
+      "followup": "restart opencode to load new agent files (config loaded at startup)"
+    },
+    {
+      "id": "strategy-1786266033-oracle",
+      "agent_target": "oracle",
+      "diagnosis": "built-in has no override; sessions show oracle producing top-5 gap reviews (reservatoo) but prompt doesn't codify verdict/prioritization protocol",
+      "strategy_chosen": "create_override",
+      "strategy_alternatives_considered": [
+        "transfer_to_review",
+        "leave_builtin"
+      ],
+      "why_this_strategy": "capture realized oracle role: advisory verdicts APPROVE/REJECT/REVISE + prioritized findings + evidence",
+      "applied_at": "2026-08-09T09:00:33.007321+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit 32/32 ALL PASS; fixer caps=4, oracle caps=4, designer caps=5, all completeness 1.0; 12 referenced skills verified on disk",
+      "confidence_before": 0.88,
+      "confidence_after": 0.94,
+      "followup": "restart opencode to load new agent files (config loaded at startup)"
+    },
+    {
+      "id": "strategy-1786266033-designer",
+      "agent_target": "designer",
+      "diagnosis": "built-in has no override; sessions show designer finds visual dead-ends + a11y issues but prompt lacks those specific patterns",
+      "strategy_chosen": "create_override",
+      "strategy_alternatives_considered": [
+        "transfer_to_review",
+        "leave_builtin"
+      ],
+      "why_this_strategy": "encode empty-state/dead-end/a11y htmlFor-aria/token patterns proven in reservatoo pass",
+      "applied_at": "2026-08-09T09:00:33.007321+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit 32/32 ALL PASS; fixer caps=4, oracle caps=4, designer caps=5, all completeness 1.0; 12 referenced skills verified on disk",
+      "confidence_before": 0.88,
+      "confidence_after": 0.94,
+      "followup": "restart opencode to load new agent files (config loaded at startup)"
+    },
+    {
+      "id": "strategy-1786271220-explorer",
+      "agent_target": "explorer",
+      "diagnosis": "built-in subagent has no local override; explore.md exists as a separate type but explorer (codebase search) unversioned",
+      "strategy_chosen": "create_override_file",
+      "strategy_alternatives_considered": [
+        "merge_into_explore",
+        "leave_builtin"
+      ],
+      "why_this_strategy": "local file overrides compiled-in default (proven: fixer/oracle/designer); encode fast-search discipline + hash-anchored usage",
+      "applied_at": "2026-08-09T10:27:00.918310+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit 35/35 ALL PASS; explorer/librarian/councillor all caps=4, completeness full; referenced skills on disk",
+      "confidence_before": 0.85,
+      "confidence_after": 0.93,
+      "followup": "restart opencode to load new agent files"
+    },
+    {
+      "id": "strategy-1786271220-librarian",
+      "agent_target": "librarian",
+      "diagnosis": "built-in docs/research subagent unversioned; meta-agent delegation table references it for official docs",
+      "strategy_chosen": "create_override",
+      "strategy_alternatives_considered": [
+        "transfer_to_docs",
+        "leave_builtin"
+      ],
+      "why_this_strategy": "capture librarian as external-research specialist distinct from internal docs agent",
+      "applied_at": "2026-08-09T10:27:00.918310+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit 35/35 ALL PASS; explorer/librarian/councillor all caps=4, completeness full; referenced skills on disk",
+      "confidence_before": 0.85,
+      "confidence_after": 0.93,
+      "followup": "restart opencode to load new agent files"
+    },
+    {
+      "id": "strategy-1786271220-councillor",
+      "agent_target": "councillor",
+      "diagnosis": "built-in read-only council advisor; internal use by council system; lowest priority but cheap to version",
+      "strategy_chosen": "create_override",
+      "strategy_alternatives_considered": [
+        "leave_builtin"
+      ],
+      "why_this_strategy": "read-only advisor deserves explicit APPROVE/REJECT verdict rules like critic/oracle",
+      "applied_at": "2026-08-09T10:27:00.918310+00:00",
+      "outcome": "success",
+      "outcome_evidence": "audit 35/35 ALL PASS; explorer/librarian/councillor all caps=4, completeness full; referenced skills on disk",
+      "confidence_before": 0.85,
+      "confidence_after": 0.93,
+      "followup": "restart opencode to load new agent files"
     }
   ],
   "workflow_trace": [
@@ -983,17 +1476,17 @@
       "step": "2",
       "action": "Initial fix pass: asm syntax, doc comments, missing modules, macro visibility, ToString imports",
       "files": "73+ files",
-      "outcome": "~4700→~1751 (63% fixed)"
+      "outcome": "~4700\u2192~1751 (63% fixed)"
     },
     {
       "step": "3",
-      "action": "Import dedup + HashMap→BTreeMap + parsing fixes + asm fixes",
+      "action": "Import dedup + HashMap\u2192BTreeMap + parsing fixes + asm fixes",
       "files": "52 files",
       "outcome": "Commit 8031e4b"
     },
     {
       "step": "4",
-      "action": "E0659 elimination, HashSet→BTreeSet, std→no_std, drivers fix",
+      "action": "E0659 elimination, HashSet\u2192BTreeSet, std\u2192no_std, drivers fix",
       "files": "17 files",
       "outcome": "Commit 250b375"
     },
@@ -1056,13 +1549,45 @@
         "opencode_improvement/__main__.py",
         "shared/context.json"
       ],
-      "outcome": "DB: 556 MB → 18 MB (95% reduction). Sessions list: timeout → 3ms. opencode --continue restored. Weekly cron for auto-cleanup installed. Created purge CLI tool."
+      "outcome": "DB: 556 MB \u2192 18 MB (95% reduction). Sessions list: timeout \u2192 3ms. opencode --continue restored. Weekly cron for auto-cleanup installed. Created purge CLI tool."
+    },
+    {
+      "agent": "orchestrator",
+      "step": "ecosystem-differentiation-strategy",
+      "status": "completed",
+      "agents_used": [
+        "oracle",
+        "librarian"
+      ],
+      "artifacts": [
+        "reference/ecosystem-differentiation-strategy.md",
+        "reference/ai-coding-competitors-mid-2026.md"
+      ],
+      "timestamp": "2026-08-09T20:55:17.369662"
+    },
+    {
+      "agent": "orchestrator",
+      "step": "execute-all-bets",
+      "status": "completed",
+      "lanes": [
+        "bet1-eval-harness",
+        "bet2-memory",
+        "bet3-rcsi-dcs",
+        "bet4-cuts"
+      ],
+      "results": {
+        "bet1": "63 golden cases (10 behavioral_exec), nightly real-LLM CI cron, full suite 63/63 mock",
+        "bet2": "TF-IDF+cosine retrieval, track auto-log, 64 episodic entries seeded",
+        "bet3": "real shadow-test verify_patch, scaffold mode UNVERIFIED, print-stub skill deleted",
+        "bet4": "aether_core stubs implemented, context.json validated reframed, dead artifacts removed"
+      },
+      "timestamp": "2026-08-09T23:38:29.785059+00:00"
     }
   ],
   "cross_agent_notes": {
     "platform_manager": "Full environment setup completed 2026-06-15. Twitter configured and dry-run tested. 10 platforms pending credentials (see SETUP_CHECKLIST.md). Backend: BulkPublish (needs API key). All 6 scripts verified operational.",
     "multios_kernel": "Compilation errors reduced from ~4700 to ~3371 (28%). All root-cause errors eliminated (duplicate names, parse errors, ambiguous names). Remaining 3371 are genuine type/trait/method issues requiring per-file human analysis. Repo: slab1/MultiOS- on master (3 commits: 8031e4b, 250b375, 3abbee4).",
-    "db_maintenance": "2026-06-23: Purged 68,882 orphaned events from opencode DB (556 MB → 18 MB). Created purge CLI tool at opencode_improvement/purge.py. Weekly cron for auto-cleanup. Root cause: opencode-memfs event-sourcing creates message.part.updated.1 events per streamed token; owner_id in event_sequence was NULL for all 349 aggregates causing orphans."
+    "db_maintenance": "2026-06-23: Purged 68,882 orphaned events from opencode DB (556 MB \u2192 18 MB). Created purge CLI tool at opencode_improvement/purge.py. Weekly cron for auto-cleanup. Root cause: opencode-memfs event-sourcing creates message.part.updated.1 events per streamed token; owner_id in event_sequence was NULL for all 349 aggregates causing orphans."
   },
   "strategy_effectiveness": {
     "add_missing_command": {
@@ -1289,7 +1814,7 @@
         "id": "session-10-improvements",
         "type": "improvement_plan",
         "summary": "Implemented remaining 10 eval system improvements in parallel",
-        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) — deterministic offline eval via --provider mock\n2. Task Versioning (#10) — version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) — kappa subcommand, flags κ < 0.7 datasets\n4. LLM-as-Judge (#1) — LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) — SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) — ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) — inspect subcommand with --case and --failed\n8. Comparison Report (#3) — markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) — --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) — CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
+        "detail": "All 10 improvements from the harness analysis are now implemented:\n\n1. MockProvider (#2) \u2014 deterministic offline eval via --provider mock\n2. Task Versioning (#10) \u2014 version: '1.0' on all 53 test cases, --version CLI\n3. Cohen's Kappa (#6) \u2014 kappa subcommand, flags \u03ba < 0.7 datasets\n4. LLM-as-Judge (#1) \u2014 LLMJudge class with 3 metrics, heuristic fallback\n5. Multi-Executor (#9) \u2014 SyncExecutor/AsyncExecutor, --executor sync|async\n6. Tiered Scorecard (#7) \u2014 ASCII bar charts with color thresholds, --scorecard\n7. Per-Case Inspect (#8) \u2014 inspect subcommand with --case and --failed\n8. Comparison Report (#3) \u2014 markdown diff against baseline, --compare\n9. A/B Config Comparison (#5) \u2014 --ab flag for side-by-side config comparison\n10. Auto-Commit Trends (#4) \u2014 CI commit of trend data on weekly schedule\n\nAll 10 were written directly from the plan without needing meta-agent dispatch.",
         "files_changed": [
           "opencode_improvement/__init__.py",
           "opencode_improvement/__main__.py",
@@ -1303,7 +1828,7 @@
         "meta_agent_patches": [
           {
             "agent": "document-agent",
-            "change": "Converted 8 numbered capabilities to ### headings (2→10 caps)",
+            "change": "Converted 8 numbered capabilities to ### headings (2\u219210 caps)",
             "type": "structural_improvement",
             "timestamp": "2026-06-27T16:16:28.241932+00:00"
           },
@@ -1357,6 +1882,163 @@
           "scripts/oc-aether-pulse.sh"
         ],
         "outcome": "All 6 modules compile; E2E cognitive loop verified PASS"
+      },
+      {
+        "id": "audit-2026-08-09-structure-fix",
+        "type": "patches_applied",
+        "applied_at": "2026-08-09T06:29:46.192757+00:00",
+        "summary": "Fixed 6 agent configs failing structural audit; all 29 now pass",
+        "changes": {
+          "content-strategist": [
+            "<task-tracking>"
+          ],
+          "trading-admin": [
+            "<task-tracking>"
+          ],
+          "cognition": [
+            "<role>",
+            "<context>",
+            "<task-tracking>",
+            "frontmatter"
+          ],
+          "critic": [
+            "<role>",
+            "<context>",
+            "<task-tracking>",
+            "frontmatter"
+          ],
+          "knowledge-compiler": [
+            "full conversion: frontmatter, <role>, <context>, <capabilities>, <workflow>, <rules>, <shared-context>, <memory>, <task-tracking>"
+          ],
+          "skill-optimizer": [
+            "full conversion: frontmatter, <role>, <context>, <capabilities>, <workflow>, <rules>, <shared-context>, <memory>, <task-tracking>"
+          ]
+        },
+        "verification": "python3 -m opencode_improvement audit -> 0 structure fails (was 6)",
+        "strategy_ref": [
+          "strategy-1786256070-1",
+          "strategy-1786256070-2",
+          "strategy-1786256070-3",
+          "strategy-1786256070-4",
+          "strategy-1786256070-5",
+          "strategy-1786256070-6"
+        ]
+      },
+      {
+        "id": "transfer-2026-08-09-examples",
+        "type": "transfer_attempts",
+        "applied_at": "2026-08-09T07:51:30.747764+00:00",
+        "summary": "Cross-domain transfer: added <examples> sections to build/test/architect (pattern from web-browser + video-creator)",
+        "transfers": [
+          {
+            "from": "web-browser",
+            "to": "build",
+            "capability": "Example-rich capability anchoring",
+            "expected": "build now has concrete hash-edit, TDD, delegation examples",
+            "status": "applied"
+          },
+          {
+            "from": "video-creator",
+            "to": "test",
+            "capability": "Example sections",
+            "expected": "test has red-green-refactor, AAA template, mock boundary examples",
+            "status": "applied"
+          },
+          {
+            "from": "web-browser",
+            "to": "architect",
+            "capability": "Worked examples",
+            "expected": "architect has ADR trade-off, skill-aware, incremental migration examples",
+            "status": "applied"
+          }
+        ],
+        "verification": "audit 29/29 pass; content domain-validated (not copied verbatim)"
+      },
+      {
+        "id": "transfer-2026-08-09-workflow-types",
+        "type": "transfer_attempts",
+        "applied_at": "2026-08-09T08:20:11.851494+00:00",
+        "summary": "Cross-domain transfer: <workflow-types> routing added to build + test (pattern from general/meta-agent) + knowledge-compiler capability re-split",
+        "transfers": [
+          {
+            "from": "general",
+            "to": "build",
+            "capability": "workflow-types task routing (feature/bugfix/refactor)",
+            "expected": "situation->procedure mapping for the 3 build task types",
+            "status": "applied"
+          },
+          {
+            "from": "general",
+            "to": "test",
+            "capability": "workflow-types task routing (coverage/regression/maintenance)",
+            "expected": "distinct loops for test task types",
+            "status": "applied"
+          },
+          {
+            "from": "self",
+            "to": "knowledge-compiler",
+            "capability": "capability section split (1->3 ###)",
+            "expected": "completeness 0.8 -> 1.0",
+            "status": "applied",
+            "actual_result": "score 1.0, caps 3"
+          }
+        ],
+        "verification": "audit 29/29; report shows build/test/architect/knowledge-compiler all 1.0"
+      },
+      {
+        "id": "patch-2026-08-09-human",
+        "type": "patches_applied",
+        "applied_at": "2026-08-09T08:30:38.150241+00:00",
+        "agent": "human",
+        "changes": [
+          "added <examples> with 3 illustrative sessions (search-powered API fix, type cascade, cross-crate version mismatch)",
+          "skills list: +skill-recommender, +debug-systematic-investigation, +hash-validate-edit (all previously referenced in config but unlisted)"
+        ],
+        "rationale": "match top-tier pattern (web-browser/video-creator have examples); close auto-load protocol gap",
+        "validation": "audit 29/29; human score 1.0 caps 5"
+      },
+      {
+        "id": "patch-2026-08-09-builtin-overrides",
+        "type": "patches_applied",
+        "applied_at": "2026-08-09T09:07:07.482232+00:00",
+        "agent": "fixer,oracle,designer",
+        "changes": [
+          "created agents/fixer.md \u2014 override of built-in: spec-safe implementation, hash-anchored edits discipline, verification-first fixing, tdd, git hygiene, 3 examples (regression-first fix, migration fix, entity-id fix)",
+          "created agents/oracle.md \u2014 override: verdict-driven (APPROVE/REJECT/REVISE), prioritized P0-P2 findings, advisory-not-implementation, root-cause/cross-cutting risk, 3 examples (top-5 review, arch decision, diagnose-don't-patch)",
+          "created agents/designer.md \u2014 override: state-completeness matrix, a11y (htmlFor/aria/keyboard/contrast), design-token discipline, responsive, visual QA loop, 3 examples (empty-state, a11y reset, misleading copy) + pattern bank from reservatoo fixes"
+        ],
+        "rationale": "built-in subagent prompts lacked fleet structure (shared-context/memory/task-tracking) and proven patterns from real use (reservatoo fixer+designer+oracle sessions)",
+        "mode": "subagent",
+        "validation": "audit 32/32 ALL PASS; completeness 1.0 x3; 12 skills resolved on disk"
+      },
+      {
+        "id": "patch-2026-08-09-builtin-overrides-2",
+        "type": "patches_applied",
+        "applied_at": "2026-08-09T10:33:24.127004+00:00",
+        "agent": "explorer,librarian,councillor",
+        "changes": [
+          "created agents/explorer.md \u2014 read-only code-search specialist: grep-first discipline, code-map/dependency reporting, freshness discipline, terse reporting",
+          "created agents/librarian.md \u2014 read-only external research: authoritative-source hierarchy, version pinning, GitHub real-code verification, cited deliverables",
+          "created agents/councillor.md \u2014 read-only council advisor: SUPPORT/OPPOSE/REJECT/ABSTAIN verdicts, steelman-before-dissent, flip conditions, risk-registry eye"
+        ],
+        "rationale": "three remaining compiled-in built-ins now versioned with fleet standard + distinct role discipline (all read-only)",
+        "mode": "subagent",
+        "validation": "audit 35/35 ALL PASS; 4 caps each; shared-context/memory/task-tracking present; typo pass clean"
+      },
+      {
+        "id": "patch-2026-08-09-full-fleet-sweep",
+        "type": "patches_applied",
+        "applied_at": "2026-08-09T11:29:24.425614+00:00",
+        "agent": "ALL 35 (final state)",
+        "changes": [
+          "13 agents gained <examples>: content-creator, debug, document-agent, explore, general, heartbeat, orchestrator, pioneer, plan, platform-manager, refactor, review, security",
+          "cognition/critic/heartbeat capability splits (3 caps each) -> completeness 1.0",
+          "content-strategist, cognition, critic, knowledge-compiler, skill-optimizer, trading-admin gained <skills> + <examples> (+<memory> where missing)",
+          "meta-agent gained <examples> (self-improvement applied to self)",
+          "earlier in session: human/fixer/oracle/designer/explorer/librarian/councillor overrides"
+        ],
+        "rationale": "full fleet standardization: every agent has role/context/shared-context/capabilities/skills/examples/workflow/rules/task-tracking",
+        "validation": "audit 35/35 ALL PASS; report 35/35 at 1.0; parity scan 0 gaps"
       }
     ],
     "memory_loop": [
@@ -1395,7 +2077,7 @@
           {
             "id": "strat-015",
             "description": "Live dashboard provides real-time visualization of agent ecosystem health",
-            "rationale": "Turns infrastructure into visible proof — eval scores, trends, strategy effectiveness"
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
           },
           {
             "id": "strat-016",
@@ -1540,8 +2222,8 @@
           }
         ],
         "recommendations_for_next_session": [
-          "Continue using 'add_missing_command' strategy — 100% success rate",
-          "Continue using 'add_missing_section' strategy — 100% success rate",
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
       },
@@ -1580,7 +2262,7 @@
           {
             "id": "strat-015",
             "description": "Live dashboard provides real-time visualization of agent ecosystem health",
-            "rationale": "Turns infrastructure into visible proof — eval scores, trends, strategy effectiveness"
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
           },
           {
             "id": "strat-016",
@@ -1725,8 +2407,768 @@
           }
         ],
         "recommendations_for_next_session": [
-          "Continue using 'add_missing_command' strategy — 100% success rate",
-          "Continue using 'add_missing_section' strategy — 100% success rate",
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      },
+      {
+        "generated_at": "2026-08-09T21:38:12.768249Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 22,
+          "total_strategies_logged": 64,
+          "total_workflow_steps": 10,
+          "recent_artifacts": 32
+        },
+        "performance_summary": {
+          "total_tasks": 54,
+          "success_count": 54,
+          "success_rate": 1.0
+        },
+        "key_decisions": [
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      },
+      {
+        "generated_at": "2026-08-10T02:24:16.251987Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 22,
+          "total_strategies_logged": 64,
+          "total_workflow_steps": 11,
+          "recent_artifacts": 32
+        },
+        "performance_summary": {
+          "total_tasks": 57,
+          "success_count": 56,
+          "success_rate": 0.98
+        },
+        "key_decisions": [
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      },
+      {
+        "generated_at": "2026-08-10T02:25:32.055841Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 22,
+          "total_strategies_logged": 64,
+          "total_workflow_steps": 11,
+          "recent_artifacts": 32
+        },
+        "performance_summary": {
+          "total_tasks": 57,
+          "success_count": 56,
+          "success_rate": 0.98
+        },
+        "key_decisions": [
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      },
+      {
+        "generated_at": "2026-08-10T02:25:55.639890Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 22,
+          "total_strategies_logged": 64,
+          "total_workflow_steps": 11,
+          "recent_artifacts": 32
+        },
+        "performance_summary": {
+          "total_tasks": 57,
+          "success_count": 56,
+          "success_rate": 0.98
+        },
+        "key_decisions": [
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
       }
@@ -1760,7 +3202,7 @@
       "id": "cdp-skills-integration",
       "type": "integration",
       "summary": "Integrated two zero-dependency Chrome DevTools Protocol (CDP) skills for OpenCode",
-      "detail": "Cloned and installed two CDP skills into ~/.config/opencode/skills/skills/:\n1. faster-chrome-devtools-skill (zeke) — Node 22+ built-in WebSocket CLI (cdp.mjs); connects to a running Chrome via CDP_HTTP_ENDPOINT/CDP_WS_ENDPOINT; commands list/open/snapshot/screenshot/navigate/evaluate/click/fill/type/press.\n2. cdp-skill (lotreace) — JSON step pipeline CLI (cdp-skill.js); newTab/snapshot/click/fill/type/hover/drag/evaluate/screenshot; auto-launches Chrome.\nBoth avoid Playwright's Chromium-download crash on Termux. Patched lotreace's findChromePath() to be Termux/Playwright-aware (honors OPCODE_WEB_CHROMIUM, $PREFIX/bin/chromium, Playwright-managed chromium), matching the opencode_web fix. Verified end-to-end against a headless Playwright chromium on port 9222.\nAdded scripts/chrome-cdp.sh — a launcher helper that auto-detects a real Chromium (prefers $PREFIX/bin/chromium and Playwright-managed chromium; skips the Ubuntu snap stub) and starts it with --headless=old --use-gl=swiftshader (because --headless=new times out Page.captureScreenshot on this no-GPU env). Verified: zeke screenshot saves a 12.1 KiB JPEG.",
+      "detail": "Cloned and installed two CDP skills into ~/.config/opencode/skills/skills/:\n1. faster-chrome-devtools-skill (zeke) \u2014 Node 22+ built-in WebSocket CLI (cdp.mjs); connects to a running Chrome via CDP_HTTP_ENDPOINT/CDP_WS_ENDPOINT; commands list/open/snapshot/screenshot/navigate/evaluate/click/fill/type/press.\n2. cdp-skill (lotreace) \u2014 JSON step pipeline CLI (cdp-skill.js); newTab/snapshot/click/fill/type/hover/drag/evaluate/screenshot; auto-launches Chrome.\nBoth avoid Playwright's Chromium-download crash on Termux. Patched lotreace's findChromePath() to be Termux/Playwright-aware (honors OPCODE_WEB_CHROMIUM, $PREFIX/bin/chromium, Playwright-managed chromium), matching the opencode_web fix. Verified end-to-end against a headless Playwright chromium on port 9222.\nAdded scripts/chrome-cdp.sh \u2014 a launcher helper that auto-detects a real Chromium (prefers $PREFIX/bin/chromium and Playwright-managed chromium; skips the Ubuntu snap stub) and starts it with --headless=old --use-gl=swiftshader (because --headless=new times out Page.captureScreenshot on this no-GPU env). Verified: zeke screenshot saves a 12.1 KiB JPEG.",
       "files_changed": [
         "skills/skills/faster-chrome-devtools-skill/ (new, from zeke/faster-chrome-devtools-skill)",
         "skills/skills/cdp-skill/ (new, from lotreace/cdp-skill)",
@@ -1770,10 +3212,21 @@
       ],
       "verification": "zeke: `list`+`open https://example.com` OK. lotreace: newTab+snapshot returned title 'Example Domain' + a11y snapshot OK.",
       "severity": "info"
+    },
+    "fixer": {
+      "agent": "fixer",
+      "timestamp": "2026-08-09T22:03:45.721026Z",
+      "task": "Bet 1: behavioral_exec golden cases + nightly real-LLM CI schedule",
+      "summary": "Added 10 behavioral_exec cases to shared/golden/agent_tasks.json (53->63, version 2.1): build-exec-001, fixer-exec-001, explorer-exec-001, oracle-exec-001, librarian-exec-001, test-exec-001, security-exec-001, docs-exec-001, debug-exec-001, refactor-exec-001. Each has expected.check + metrics.pass_on/fail_on describing the OBSERVABLE outcome. Runner untouched: eval_agents only reads test_cases, so cases live in test_cases with expected.type=behavioral_exec (a separate top-level section would be dead data). agent-eval.yml: nightly cron 0 2 * * * runs --provider real (github.event.schedule check), weekly 0 6 * * 1 + push/PR stay mock; workflow_dispatch provider input (default mock); trend data records provider. Also fixed pre-existing invalid YAML (python blocks at column 1 in run: | scalars) - behavior-neutral indent.",
+      "verification": "mock 63/63 rate 1.0; real 62/63 (only pre-existing review-001 fails); all 10 exec cases pass under both providers; kappa behavioral_exec=1.0; CI path (compare+baseline+scorecard) exit 0; exact task cmd build/mock 4/4",
+      "files": [
+        "shared/golden/agent_tasks.json",
+        ".github/workflows/agent-eval.yml"
+      ]
     }
   },
   "session": {
-    "last_handoff": "2026-07-23T05:35:00Z"
+    "last_handoff": "2026-08-10T02:25:55.639890Z"
   },
   "axiom_compiler_v1": {
     "status": "ast_pipeline_wired",
@@ -1784,7 +3237,7 @@
       "axiom_ir.rs",
       "emit_mlir.rs"
     ],
-    "pipeline": "parse_source → ast::Module → lower_module → axiom_ir::AxiomModule → emit_module → MLIR",
+    "pipeline": "parse_source \u2192 ast::Module \u2192 lower_module \u2192 axiom_ir::AxiomModule \u2192 emit_module \u2192 MLIR",
     "test_counts": {
       "default": 47,
       "with_mlir": 52,
@@ -1833,5 +3286,22 @@
       ],
       "entry_point": "platforms/trading/campaign.sh"
     }
+  },
+  "state": {
+    "last_updated_by": "orchestrator",
+    "last_updated_at": "2026-08-09T23:38:29.785189+00:00"
+  },
+  "artifacts": {
+    "files_modified": [
+      "opencode_improvement/logic_evolve.py",
+      "platforms/skill_synthesizer.py",
+      "opencode_improvement/track.py",
+      "shared/context.json (strategy_effectiveness updates only)",
+      "shared/golden/agent_tasks.json",
+      ".github/workflows/agent-eval.yml"
+    ],
+    "files_deleted": [
+      "skills/skills/synthesized/parse-custom-log-format/ (print-stub artifact)"
+    ]
   }
 }

@@ -191,6 +191,7 @@
     "improve_agent": true,
     "track_performance": true,
     "free_image_gen": true,
+    "lsp": true,
     "free_video_gen": true
   }
 }

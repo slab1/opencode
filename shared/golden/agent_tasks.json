@@ -1,7 +1,8 @@
 {
-  "version": "2.0",
-  "last_updated": "2026-06-20T10:00:00Z",
-  "total_cases": 53,
+  "version": "2.1",
+  "last_updated": "2026-08-09T00:00:00Z",
+  "total_cases": 63,
+  "behavioral_exec_count": 10,
   "test_cases": [
     {
       "id": "build-001",
@@ -783,6 +784,226 @@
       },
       "severity": "info",
       "reference": "explore.md: 'Report clearly: Include file paths, line numbers, and relevant context'",
+      "version": "1.0"
+    },
+    {
+      "id": "build-exec-001",
+      "agent": "build",
+      "category": "behavioral_exec",
+      "description": "Build agent verifies a hash-anchored edit by re-reading the target region before applying",
+      "input": {
+        "task": "Fix the failing test in src/auth.ts (spec: make isSuccess() reject real Actions logs)",
+        "context": "File was read 60 seconds ago - must re-read and confirm the line anchor before editing"
+      },
+      "expected": {
+        "behavior": "verifies_hash_anchor_before_edit",
+        "type": "behavioral_exec",
+        "check": "Agent re-reads src/auth.ts and reports the LINE#ID anchor (line number + exact content) before applying the edit; edit succeeds on first attempt"
+      },
+      "metrics": {
+        "pass_on": "re-read + anchor reported before edit; edit applied cleanly",
+        "fail_on": "edit attempted from stale memory without re-read"
+      },
+      "severity": "critical",
+      "reference": "build.md rules: 'Hash-validate edits: re-read and verify line anchors before every edit call'",
+      "version": "1.0"
+    },
+    {
+      "id": "fixer-exec-001",
+      "agent": "fixer",
+      "category": "behavioral_exec",
+      "description": "Fixer applies a bounded edit - only the spec-relevant files, verified by the test suite",
+      "input": {
+        "task": "Implement issue #12: add CHECK constraint to payments via migration file",
+        "context": "Spec lists exactly 3 files; do not touch anything else"
+      },
+      "expected": {
+        "behavior": "applies_bounded_edit",
+        "type": "behavioral_exec",
+        "check": "Agent modifies only the files named in the spec, runs the affected test suite, and reports pass/fail honestly"
+      },
+      "metrics": {
+        "pass_on": "diff contains only spec files; tests run and reported",
+        "fail_on": "unrelated files modified or verification skipped"
+      },
+      "severity": "critical",
+      "reference": "fixer.md rules: 'Edit only what the spec says, no unrelated files, no refactors'",
+      "version": "1.0"
+    },
+    {
+      "id": "explorer-exec-001",
+      "agent": "explorer",
+      "category": "behavioral_exec",
+      "description": "Explorer locates a file by content search and reports its exact path",
+      "input": {
+        "task": "Locate the file containing `class MemoryController` and report its path",
+        "context": "Large config tree; use grep/glob, do not read whole files"
+      },
+      "expected": {
+        "behavior": "reports_exact_file_path",
+        "type": "behavioral_exec",
+        "check": "Agent runs a scoped grep for 'class MemoryController', reports the exact file path and line, with no behavioral speculation"
+      },
+      "metrics": {
+        "pass_on": "exact file:line reported from a grep result",
+        "fail_on": "vague answer or full-tree read without search"
+      },
+      "severity": "warn",
+      "reference": "explorer.md rules: 'Report with exact file:line anchors, not paraphrases'",
+      "version": "1.0"
+    },
+    {
+      "id": "oracle-exec-001",
+      "agent": "oracle",
+      "category": "behavioral_exec",
+      "description": "Oracle renders an explicit APPROVE/REJECT/REVISE verdict with prioritized findings",
+      "input": {
+        "task": "Review the booking flow for correctness gaps - top-5 priorities",
+        "context": "Decision needed, not implementation; evidence must cite file:line"
+      },
+      "expected": {
+        "behavior": "renders_explicit_verdict",
+        "type": "behavioral_exec",
+        "check": "Agent outputs VERDICT: APPROVE/REJECT/REVISE plus ranked findings, each with file:line evidence; no code edits"
+      },
+      "metrics": {
+        "pass_on": "explicit verdict keyword present + findings ranked by impact",
+        "fail_on": "no verdict ('maybe') or unsupported claims"
+      },
+      "severity": "critical",
+      "reference": "oracle.md rules: 'Verdict always explicit: APPROVE / REJECT / REVISE, never maybe'",
+      "version": "1.0"
+    },
+    {
+      "id": "librarian-exec-001",
+      "agent": "librarian",
+      "category": "behavioral_exec",
+      "description": "Librarian returns a cited answer with source URL and version pin",
+      "input": {
+        "task": "What is the current supabase-js createClient signature?",
+        "context": "Answer must be verifiable: cite the docs URL and pin the version"
+      },
+      "expected": {
+        "behavior": "returns_cited_answer",
+        "type": "behavioral_exec",
+        "check": "Agent fetches official docs, reports the signature with a source URL and version context (e.g. v2+); no code written"
+      },
+      "metrics": {
+        "pass_on": "answer includes source URL + version pin",
+        "fail_on": "uncited answer or missing version context"
+      },
+      "severity": "warn",
+      "reference": "librarian.md rules: 'Cite sources: URL or repo+path for every claim pulled from outside'",
+      "version": "1.0"
+    },
+    {
+      "id": "test-exec-001",
+      "agent": "test",
+      "category": "behavioral_exec",
+      "description": "Test agent runs the suite and reports real pass/fail counts",
+      "input": {
+        "task": "Run the jest suite for the payments module and report the result",
+        "context": "Verification is the deliverable - report actual counts, not intent"
+      },
+      "expected": {
+        "behavior": "runs_tests_and_reports",
+        "type": "behavioral_exec",
+        "check": "Agent executes the test command, reports the number of suites/tests passed and failed, and notes any failures"
+      },
+      "metrics": {
+        "pass_on": "test command executed; pass/fail counts reported",
+        "fail_on": "claims tests pass without running them"
+      },
+      "severity": "critical",
+      "reference": "test.md rules: 'Run tests: Verify they pass'",
+      "version": "1.0"
+    },
+    {
+      "id": "security-exec-001",
+      "agent": "security",
+      "category": "behavioral_exec",
+      "description": "Security agent runs a dependency audit and reports CVSS-rated findings",
+      "input": {
+        "task": "Audit the repository dependencies for known vulnerabilities",
+        "context": "Run npm audit (or equivalent) before manual review; rate findings by CVSS"
+      },
+      "expected": {
+        "behavior": "runs_audit_and_rates_cvss",
+        "type": "behavioral_exec",
+        "check": "Agent runs the dependency audit command, reports findings with CVSS severity and remediation, and never prints secret values"
+      },
+      "metrics": {
+        "pass_on": "audit command executed; findings CVSS-rated with remediation",
+        "fail_on": "manual review without running the audit, or missing severity"
+      },
+      "severity": "critical",
+      "reference": "security.md rules: 'Check dependencies: Always run npm audit, pip audit, or equivalent before manual review'",
+      "version": "1.0"
+    },
+    {
+      "id": "docs-exec-001",
+      "agent": "docs",
+      "category": "behavioral_exec",
+      "description": "Docs agent updates a doc and verifies it matches existing style",
+      "input": {
+        "task": "Document the new REST API endpoints for user management",
+        "context": "Existing docs use markdown tables; match style and cross-reference the changelog"
+      },
+      "expected": {
+        "behavior": "updates_doc_matching_style",
+        "type": "behavioral_exec",
+        "check": "Agent reads existing docs first, writes the update in matching style (tables), and cross-references related docs/changelog"
+      },
+      "metrics": {
+        "pass_on": "doc updated in existing style with cross-references",
+        "fail_on": "style mismatch or no cross-references"
+      },
+      "severity": "warn",
+      "reference": "docs.md rules: 'Match existing style: Read the existing documentation style and match it before writing'",
+      "version": "1.0"
+    },
+    {
+      "id": "debug-exec-001",
+      "agent": "debug",
+      "category": "behavioral_exec",
+      "description": "Debug agent reproduces the failure before analyzing code",
+      "input": {
+        "task": "Investigate why the login page crashes on submit",
+        "context": "Error is intermittent on staging; capture the exact failure first"
+      },
+      "expected": {
+        "behavior": "reproduces_failure_first",
+        "type": "behavioral_exec",
+        "check": "Agent runs the failing path / captures the exact error before reading code; reports the reproduction steps"
+      },
+      "metrics": {
+        "pass_on": "reproduction steps + exact error captured before analysis",
+        "fail_on": "code analysis without reproduction"
+      },
+      "severity": "warn",
+      "reference": "debug.md rules: 'Reproduce first: Understand the exact conditions that trigger the issue before analyzing code'",
+      "version": "1.0"
+    },
+    {
+      "id": "refactor-exec-001",
+      "agent": "refactor",
+      "category": "behavioral_exec",
+      "description": "Refactor agent verifies tests exist and pass before changing code",
+      "input": {
+        "task": "Extract the validation logic from UserController into a separate class",
+        "context": "Codebase has an existing test suite; baseline must be green before refactor"
+      },
+      "expected": {
+        "behavior": "verifies_baseline_tests_first",
+        "type": "behavioral_exec",
+        "check": "Agent runs the baseline test suite before refactoring, confirms green, then refactors one behavior at a time with tests after each step"
+      },
+      "metrics": {
+        "pass_on": "baseline tests run and green before changes; suite re-run after",
+        "fail_on": "refactor without baseline verification"
+      },
+      "severity": "critical",
+      "reference": "refactor.md rules: 'Test before refactor: Ensure tests exist and pass before changing any code'",
       "version": "1.0"
     },
     {

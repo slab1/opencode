@@ -6,12 +6,22 @@
 # Runs agent golden test evaluations on schedule and on push.
 # Fails CI if pass rate drops below threshold.
 # Auto-commits trend data to reports/trends/ (Improvement #4).
+#
+# Schedule design (Bet 1 - eval harness as product):
+#   - Nightly 02:00 UTC  -> REAL-LLM eval (--provider real). This is the
+#     behavioral_exec layer: the real scoring path over the golden dataset.
+#     (Enable LLM-as-judge later via --judge-model once an endpoint is set.)
+#   - Weekly Mon 06:00 UTC -> MOCK config-lint layer (--provider mock, zero cost).
+#   - push/PR runs stay on mock (zero cost).
+#   - workflow_dispatch input `provider` (default mock) overrides everything.
 
 name: Agent Eval
 
 on:
   schedule:
-    # Weekly eval: Monday 6am UTC (linny006 cron pattern)
+    # Nightly real-LLM eval: 02:00 UTC every day
+    - cron: '0 2 * * *'
+    # Weekly mock config-lint eval: Monday 6am UTC (linny006 cron pattern)
     - cron: '0 6 * * 1'
   push:
     branches: [main]
@@ -29,6 +39,10 @@ on:
       - 'opencode_improvement/**'
   workflow_dispatch:
     inputs:
+      provider:
+        description: 'Eval provider: mock (offline, zero cost) or real (real scoring path)'
+        required: false
+        default: 'mock'
       fail_under:
         description: 'Minimum pass rate (0.0-1.0)'
         required: false
@@ -43,6 +57,10 @@ permissions:
 jobs:
   evaluate:
     runs-on: ubuntu-latest
+    env:
+      # Nightly (02:00 UTC) = real-LLM eval; weekly + push/PR = mock (zero cost).
+      # workflow_dispatch `provider` input overrides everything.
+      PROVIDER: "${{ github.event.inputs.provider || (github.event_name == 'schedule' && github.event.schedule == '0 2 * * *' && 'real') || 'mock' }}"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -74,6 +92,7 @@ jobs:
           if [ -n "$AGENT_FLAG" ]; then
             python3 -m opencode_improvement eval \
               --agent "$AGENT_FLAG" \
+              --provider "$PROVIDER" \
               --fail-under "$FAIL_UNDER" \
               --compare \
               --baseline shared/eval/baseline.json \
@@ -81,6 +100,7 @@ jobs:
               --output eval_results.json
           else
             python3 -m opencode_improvement eval \
+              --provider "$PROVIDER" \
               --fail-under "$FAIL_UNDER" \
               --compare \
               --baseline shared/eval/baseline.json \
@@ -90,20 +110,20 @@ jobs:
 
           echo '```json' >> $GITHUB_STEP_SUMMARY
           python3 -c "
-import json
-r = json.load(open('eval_results.json'))
-s = r['summary']
-print(f'Total tests: {s[\"total_tests\"]}')
-print(f'Passed: {s[\"passed\"]}')
-print(f'Failed: {s[\"failed\"]}')
-print(f'Pass rate: {s[\"pass_rate\"]}')
-if r.get('regression'):
-    print(f\"Regression vs baseline: {r['regression']['delta']:+.1%}\")
-print()
-# Print scorecard if available
-if r.get('scorecard'):
-    print(r['scorecard'])
-" >> $GITHUB_STEP_SUMMARY
+          import json
+          r = json.load(open('eval_results.json'))
+          s = r['summary']
+          print(f'Total tests: {s[\"total_tests\"]}')
+          print(f'Passed: {s[\"passed\"]}')
+          print(f'Failed: {s[\"failed\"]}')
+          print(f'Pass rate: {s[\"pass_rate\"]}')
+          if r.get('regression'):
+              print(f\"Regression vs baseline: {r['regression']['delta']:+.1%}\")
+          print()
+          # Print scorecard if available
+          if r.get('scorecard'):
+              print(r['scorecard'])
+          " >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Check strategy effectiveness
@@ -112,12 +132,12 @@ if r.get('scorecard'):
           python3 -m opencode_improvement strategies >> strategies.json
           echo '```json' >> $GITHUB_STEP_SUMMARY
           python3 -c "
-import json
-r = json.load(open('strategies.json'))
-print(f'Total strategies: {r[\"total_strategies\"]}')
-print(f'Total applications: {r[\"total_applications\"]}')
-print(f'Best strategy: {r[\"best_strategy\"]}')
-" >> $GITHUB_STEP_SUMMARY
+          import json
+          r = json.load(open('strategies.json'))
+          print(f'Total strategies: {r[\"total_strategies\"]}')
+          print(f'Total applications: {r[\"total_applications\"]}')
+          print(f'Best strategy: {r[\"best_strategy\"]}')
+          " >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Save trend data
@@ -126,20 +146,21 @@ print(f'Best strategy: {r[\"best_strategy\"]}')
           DATE=$(date -u +"%Y-%m-%d_%H-%M-%S")
           if [ -f eval_results.json ]; then
             python3 -c "
-import json
-r = json.load(open('eval_results.json'))
-trend = {
-    'timestamp': r.get('eval_timestamp', ''),
-    'summary': r.get('summary', {}),
-    'regression': r.get('regression'),
-    'pass_rate': r.get('pass_rate', 0),
-    'ci_run': True,
-    'workflow': '${{ github.run_id }}',
-}
-with open(f'reports/trends/trend_{DATE}.json', 'w') as f:
-    json.dump(trend, f, indent=2)
-print(f'Saved trend data: reports/trends/trend_{DATE}.json')
-"
+            import json
+            r = json.load(open('eval_results.json'))
+            trend = {
+                'timestamp': r.get('eval_timestamp', ''),
+                'summary': r.get('summary', {}),
+                'regression': r.get('regression'),
+                'pass_rate': r.get('pass_rate', 0),
+                'provider': '${{ env.PROVIDER }}',
+                'ci_run': True,
+                'workflow': '${{ github.run_id }}',
+            }
+            with open(f'reports/trends/trend_{DATE}.json', 'w') as f:
+                json.dump(trend, f, indent=2)
+            print(f'Saved trend data: reports/trends/trend_{DATE}.json')
+            "
           fi
 
       - name: Upload evaluation results
@@ -153,7 +174,7 @@ print(f'Saved trend data: reports/trends/trend_{DATE}.json')
             reports/trends/*.json
           retention-days: 30
 
-      - name: Commit trend data (weekly only)
+      - name: Commit trend data (scheduled runs only)
         if: github.event_name == 'schedule'
         run: |
           git config user.name "opencode-bot"

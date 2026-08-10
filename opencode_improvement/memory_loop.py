@@ -234,6 +234,23 @@ def write_handoff() -> dict:
         except OSError:
             pass
 
+    # Store a session-level episodic entry so the memory loop's work lands in L2
+    try:
+        from shared.memory_controller import MemoryController
+        MemoryController().store_experience(
+            task="Cross-session memory loop handoff",
+            action="Generated feedback record from session state",
+            outcome="success",
+            metadata={
+                "feedback_id": feedback["generated_at"],
+                "total_tasks": feedback["performance_summary"]["total_tasks"],
+                "success_rate": feedback["performance_summary"]["success_rate"],
+                "source": "memory_loop",
+            },
+        )
+    except Exception:
+        pass
+
     return {"status": "ok", "feedback_id": feedback["generated_at"]}
 
 
