@@ -154,13 +154,23 @@ def write_manifest(manifest: Dict[str, Any], path: Path) -> Path:
 def main(argv: List[str] = None) -> int:
     import argparse
     p = argparse.ArgumentParser(prog="skills-verify", description=__doc__.splitlines()[0])
-    p.add_argument("--path", default=str(SKILLS_DIR), help=f"Root dir to scan (default {SKILLS_DIR})")
+    p.add_argument("--path", default=None, help="Root dir to scan (default: repo 'skills/' or user config skills/)")
     p.add_argument("--json", action="store_true", help="Print manifest JSON to stdout")
     p.add_argument("--manifest", metavar="PATH", default=None, help="Write verified-manifest JSON to PATH")
     p.add_argument("--no-fail", action="store_true", help="Exit 0 even when skills fail (report-only)")
     args = p.parse_args(argv)
 
-    manifest = verify_all(Path(args.path))
+    # Resolve the scan root: explicit --path wins; otherwise prefer the
+    # repo-root "skills/" convention (CI cwd == repo root), falling back to
+    # the user config dir for a bare install.
+    if args.path:
+        root = Path(args.path)
+    else:
+        cwd_skills = Path.cwd() / "skills"
+        root = cwd_skills if cwd_skills.exists() else SKILLS_DIR
+
+    manifest = verify_all(root)
+
     if args.manifest:
         write_manifest(manifest, args.manifest)
         print(f"Verified manifest -> {args.manifest} ({manifest['passed']}/{manifest['total']} passed)")
@@ -174,6 +184,11 @@ def main(argv: List[str] = None) -> int:
                 print(f"        - {e}")
         print(f"Summary: {manifest['passed']} passed, {manifest['failed']} failed, {manifest['total']} total")
 
+    # Gate integrity: a missing or empty root must NEVER pass vacuously —
+    # "0/0 verified" is a red run, not a green one.
+    if manifest["total"] == 0:
+        print(f"ERROR: no skills found at {root} — gate FAILS (never passes vacuously)", file=sys.stderr)
+        return 1 if not args.no_fail else 0
     if manifest["failed"] > 0 and not args.no_fail:
         return 1
     return 0

@@ -107,6 +107,30 @@ def main():
             capture_output=True, text=True, timeout=60)
         assert r2.returncode == 0, "expected rc=0 with --no-fail"
 
+        # Vacuous-pass guard: missing root (0/0 must FAIL, never silently pass)
+        r3 = subprocess.run(
+            [sys.executable, "-m", "opencode_improvement", "skills-verify",
+             "--path", str(tmp / "does-not-exist"), "--json"],
+            capture_output=True, text=True, timeout=60)
+        assert r3.returncode == 1, "expected rc=1 on missing root (vacuous pass guard)"
+        assert "never passes vacuously" in r3.stderr
+        r4 = subprocess.run(
+            [sys.executable, "-m", "opencode_improvement", "skills-verify",
+             "--path", str(tmp / "does-not-exist"), "--json", "--no-fail"],
+            capture_output=True, text=True, timeout=60)
+        assert r4.returncode == 0, "expected rc=0 with --no-fail even on missing root"
+
+        # Repo-root convention: running from the opencode config dir with no
+        # --path must resolve to the real skills/ tree (CI parity).
+        r5 = subprocess.run(
+            [sys.executable, "-m", "opencode_improvement", "skills-verify",
+             "--manifest", str(tmp / "ci-manifest.json")],
+            cwd=str(Path.home() / ".config" / "opencode"),
+            capture_output=True, text=True, timeout=120)
+        assert r5.returncode == 0, r5.stderr
+        ci_m = json.loads((tmp / "ci-manifest.json").read_text())
+        assert ci_m["total"] > 100 and ci_m["failed"] == 0, (ci_m["total"], ci_m["failed"])
+
         # live inventory sanity (read-only)
         real = verify_all(Path.home() / ".config" / "opencode" / "skills")
         n_files = len(list((Path.home() / ".config" / "opencode" / "skills").rglob("SKILL.md")))
