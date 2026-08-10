@@ -3190,6 +3190,196 @@
           "Continue using 'add_missing_section' strategy \u2014 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
+      },
+      {
+        "generated_at": "2026-08-10T08:07:40.291307Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 22,
+          "total_strategies_logged": 65,
+          "total_workflow_steps": 11,
+          "recent_artifacts": 32
+        },
+        "performance_summary": {
+          "total_tasks": 57,
+          "success_count": 56,
+          "success_rate": 0.98
+        },
+        "key_decisions": [
+          {
+            "id": "strat-014",
+            "description": "Cross-session memory loop closes the gap between having memory and improving from it",
+            "rationale": "Each session generates structured handoff so the next session picks up context"
+          },
+          {
+            "id": "strat-015",
+            "description": "Live dashboard provides real-time visualization of agent ecosystem health",
+            "rationale": "Turns infrastructure into visible proof \u2014 eval scores, trends, strategy effectiveness"
+          },
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
       }
     ],
     "market": {
@@ -3245,7 +3435,7 @@
     }
   },
   "session": {
-    "last_handoff": "2026-08-10T02:25:55.639890Z"
+    "last_handoff": "2026-08-10T08:07:40.291307Z"
   },
   "axiom_compiler_v1": {
     "status": "ast_pipeline_wired",

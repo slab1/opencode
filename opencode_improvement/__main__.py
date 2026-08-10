@@ -173,6 +173,9 @@ def main():
     mp.add_argument("--status", "-s", action="store_true", help="Show session summary from shared context")
     mp.add_argument("--handoff", "-H", action="store_true", help="Write handoff record for next session")
     mp.add_argument("--feedback", "-f", action="store_true", help="Read past cross-session feedback")
+    mp.add_argument("--export", metavar="PATH", help="Export memory bundle to PATH (portable, self-describing JSON)")
+    mp.add_argument("--import", dest="import_path", metavar="PATH", help="Import memory bundle from PATH (idempotent, no duplicates)")
+    mp.add_argument("--backup", action="store_true", help="Snapshot raw store to memory/aether/backups/ (timestamped)")
 
     # --- benchmark ---
     bp = subparsers.add_parser("benchmark", help="Competitive benchmarking against other code agents")

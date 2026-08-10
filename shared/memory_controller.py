@@ -1,8 +1,15 @@
 import json
+import os
 import re
+import shutil
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
+
+# Portability bundle identifiers (Bet 6)
+EXPORT_FORMAT = "aether-memory"
+EXPORT_VERSION = 1
 
 # Paths
 BASE_DIR = Path.home() / ".config" / "opencode"
@@ -40,6 +47,8 @@ class MemoryController:
         }
         with open(EPISODIC_DB, "a") as f:
             f.write(json.dumps(entry) + "\n")
+            f.flush()
+            os.fsync(f.fileno())  # anti-data-loss: never lose a session write
 
     def retrieve_similar_experiences(self, task_query: str, limit: int = 3) -> List[Dict[str, Any]]:
         """Retrieve past experiences similar to the current task query.
@@ -195,7 +204,10 @@ class MemoryController:
         return []
 
     def _load_semantic(self) -> Dict[str, Any]:
-        return json.loads(SEMANTIC_DB.read_text())
+        try:
+            return json.loads(SEMANTIC_DB.read_text())
+        except OSError:
+            return {"entities": {}, "relations": []}
 
     def _save_semantic(self, data: Dict[str, Any]):
         SEMANTIC_DB.write_text(json.dumps(data, indent=2))
@@ -265,6 +277,138 @@ class MemoryController:
             "semantic": self.query_semantic(task_query),
             "procedural": self.get_relevant_skills(task_query),
             "timestamp": time.time()
+        }
+
+    # --- Portability (Bet 6): export / import / backup ---
+    #
+    # The anti-data-loss + portability guarantee: episodic memory is written
+    # append-only with fsync (never lose a write), and the whole store can be
+    # exported to a self-describing bundle, carried to another machine, and
+    # restored idempotently (no duplicates when re-imported).
+
+    @staticmethod
+    def _entry_key(entry: Dict[str, Any]) -> Tuple[str, float]:
+        """Dedupe key: normalized task + timestamp rounded to 3 decimals
+        (matches scripts/seed-episodic-memory.py)."""
+        task = str(entry.get("task", "")).lower().strip()
+        try:
+            ts = round(float(entry.get("timestamp", 0.0)), 3)
+        except (TypeError, ValueError):
+            ts = 0.0
+        return (task, ts)
+
+    def export_memory(self, path: Optional[Path] = None) -> Dict[str, Any]:
+        """Export episodic + semantic memory to a portable, self-describing JSON bundle."""
+        episodes = self._load_experiences()
+        semantic = self._load_semantic()
+        bundle = {
+            "format": EXPORT_FORMAT,
+            "version": EXPORT_VERSION,
+            "exported_at": datetime.utcnow().isoformat() + "Z",
+            "stats": {
+                "episodic": len(episodes),
+                "semantic_relations": len(semantic.get("relations", [])),
+            },
+            "episodic": episodes,
+            "semantic": semantic,
+        }
+        out = Path(path) if path else MEMORY_DIR / "memory_export.json"
+        out.write_text(json.dumps(bundle, indent=2))
+        return bundle
+
+    def import_memory(self, path: Path) -> Dict[str, Any]:
+        """Restore a bundle produced by export_memory into this store.
+
+        Idempotent: entries already present (same task + rounded timestamp)
+        are skipped, so re-importing or importing over a store that already
+        has the data adds zero duplicates. Semantic facts deduped by (s, p, o).
+        """
+        data = json.loads(Path(path).read_text())
+        if data.get("format") != EXPORT_FORMAT:
+            raise ValueError(
+                f"Not an aether-memory export (format={data.get('format')!r})"
+            )
+        if data.get("version", 0) > EXPORT_VERSION:
+            raise ValueError(
+                f"Export version {data['version']} is newer than supported {EXPORT_VERSION}"
+            )
+
+        existing = self._load_experiences()
+        existing_keys = {self._entry_key(e) for e in existing}
+
+        added = 0
+        skipped = 0
+        seen_in_bundle = set()
+        for entry in data.get("episodic", []):
+            key = self._entry_key(entry)
+            if key in existing_keys or key in seen_in_bundle:
+                skipped += 1
+                continue
+            seen_in_bundle.add(key)
+            # Write verbatim (preserve the ORIGINAL timestamp) so a restored
+            # store is a faithful copy and re-import dedupes on the same keys.
+            with open(EPISODIC_DB, "a") as f:
+                f.write(json.dumps(entry) + "\n")
+                f.flush()
+                os.fsync(f.fileno())
+            added += 1
+            existing_keys.add(key)
+
+        semantic = self._load_semantic()
+        existing_facts = {
+            (r.get("s"), r.get("p"), r.get("o"))
+            for r in semantic.get("relations", [])
+        }
+        sem_added = 0
+        for rel in data.get("semantic", {}).get("relations", []):
+            fact = (rel.get("s"), rel.get("p"), rel.get("o"))
+            if fact in existing_facts:
+                continue
+            existing_facts.add(fact)
+            self.store_fact(rel["s"], rel["p"], rel["o"])
+            sem_added += 1
+
+        return {
+            "status": "ok",
+            "episodic_added": added,
+            "episodic_skipped_duplicates": skipped,
+            "semantic_relations_added": sem_added,
+            "episodic_total": len(existing) + added,
+        }
+
+    def backup(self) -> Dict[str, Any]:
+        """Timestamped, restorable snapshot of the raw store (anti-data-loss)."""
+        backups_dir = MEMORY_DIR / "backups"
+        backups_dir.mkdir(parents=True, exist_ok=True)
+        stamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        dest_ep = backups_dir / f"episodic_memory.{stamp}.jsonl"
+        dest_sem = backups_dir / f"semantic_memory.{stamp}.json"
+        if EPISODIC_DB.exists():
+            shutil.copy2(EPISODIC_DB, dest_ep)
+        if SEMANTIC_DB.exists():
+            shutil.copy2(SEMANTIC_DB, dest_sem)
+        n_entries = 0
+        if EPISODIC_DB.exists():
+            try:
+                n_entries = sum(1 for l in EPISODIC_DB.open() if l.strip())
+            except OSError:
+                n_entries = 0
+        manifest = {
+            "format": EXPORT_FORMAT,
+            "type": "backup",
+            "version": EXPORT_VERSION,
+            "created_at": datetime.utcnow().isoformat() + "Z",
+            "episodic": dest_ep.name,
+            "semantic": dest_sem.name,
+            "episodic_entries": n_entries,
+        }
+        (backups_dir / f"manifest.{stamp}.json").write_text(
+            json.dumps(manifest, indent=2)
+        )
+        return {
+            "status": "ok",
+            "backup_dir": str(backups_dir),
+            "manifest": manifest,
         }
 
 if __name__ == "__main__":

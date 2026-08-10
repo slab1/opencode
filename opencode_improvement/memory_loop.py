@@ -274,9 +274,23 @@ def run_cli(argv: list = None):
     p.add_argument("--status", "-s", action="store_true", help="Show session summary")
     p.add_argument("--handoff", action="store_true", help="Write handoff record")
     p.add_argument("--feedback", "-f", action="store_true", help="Read past feedback")
+    p.add_argument("--export", metavar="PATH", help="Export memory bundle to PATH (portable, self-describing JSON)")
+    p.add_argument("--import", dest="import_path", metavar="PATH", help="Import memory bundle from PATH (idempotent, no duplicates)")
+    p.add_argument("--backup", action="store_true", help="Snapshot raw store to memory/aether/backups/ (timestamped)")
     args = p.parse_args(argv if argv else [])
 
-    if args.status:
+    if args.export:
+        from shared.memory_controller import MemoryController
+        bundle = MemoryController().export_memory(args.export)
+        print(f"Exported {bundle['stats']['episodic']} episodic + "
+              f"{bundle['stats']['semantic_relations']} semantic relations -> {args.export}")
+    elif args.import_path:
+        from shared.memory_controller import MemoryController
+        print(json.dumps(MemoryController().import_memory(args.import_path), indent=2))
+    elif args.backup:
+        from shared.memory_controller import MemoryController
+        print(json.dumps(MemoryController().backup(), indent=2))
+    elif args.status:
         print(json.dumps(get_session_summary(), indent=2))
     elif args.handoff:
         result = write_handoff()
