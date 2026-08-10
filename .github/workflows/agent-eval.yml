@@ -160,9 +160,9 @@ jobs:
                   'ci_run': True,
                   'workflow': '${{ github.run_id }}',
               }
-              with open(f'reports/trends/trend_{DATE}.json', 'w') as f:
+              with open('reports/trends/trend_$DATE.json', 'w') as f:
                   json.dump(trend, f, indent=2)
-              print(f'Saved trend data: reports/trends/trend_{DATE}.json')
+              print('Saved trend data: reports/trends/trend_$DATE.json')
           "
 
       - name: Upload evaluation results
