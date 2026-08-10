@@ -625,5 +625,27 @@
     "context": {},
     "timestamp": 1786313846.40497,
     "timestamp_iso": "2026-08-09T22:17:26Z"
+  },
+  {
+    "agent": "human",
+    "task": "Bet 6 memory portability: export/import/backup bundled JSON, verbatim restore + fsync (anti-data-loss), idempotent dedupe, CLI flags, 5-test harness green",
+    "outcome": "success",
+    "duration_s": 1200,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786350520.715705,
+    "timestamp_iso": "2026-08-10T08:28:40Z"
+  },
+  {
+    "agent": "human",
+    "task": "Bet 7 smoke \u2014 audit trail wired into track()",
+    "outcome": "success",
+    "duration_s": 5,
+    "error": null,
+    "config_snapshot": null,
+    "context": {},
+    "timestamp": 1786351377.193873,
+    "timestamp_iso": "2026-08-10T08:42:57Z"
   }
 ]

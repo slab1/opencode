@@ -177,6 +177,14 @@ def main():
     mp.add_argument("--import", dest="import_path", metavar="PATH", help="Import memory bundle from PATH (idempotent, no duplicates)")
     mp.add_argument("--backup", action="store_true", help="Snapshot raw store to memory/aether/backups/ (timestamped)")
 
+    # --- audit-log (control-plane audit trail, Bet 7) ---
+    al = subparsers.add_parser("audit-log", help="Control-plane audit trail — read what agents did (append-only, never lost)")
+    al.add_argument("--tail", type=int, default=20, help="Show last N records (default 20)")
+    al.add_argument("--agent", help="Filter by agent name")
+    al.add_argument("--since", type=float, default=None, help="Only records after epoch seconds")
+    al.add_argument("--stats", action="store_true", help="Show summary counts (by agent/outcome/action)")
+    al.add_argument("--export", metavar="PATH", help="Export full audit log to PATH (portable JSON)")
+
     # --- benchmark ---
     bp = subparsers.add_parser("benchmark", help="Competitive benchmarking against other code agents")
     bp.add_argument("--export-template", action="store_true", help="Generate JSON template for manual results entry")
@@ -228,6 +236,18 @@ def main():
             )
         except Exception as e:
             print(f"Warning: episodic memory auto-log failed: {e}", file=sys.stderr)
+        # Audit trail (Bet 7, control plane). Append-only; never breaks tracking.
+        try:
+            from shared.audit_log import AuditLog
+            AuditLog().log(
+                agent=args.agent,
+                action="track",
+                outcome=args.outcome,
+                detail=args.task,
+                metadata={"duration_s": args.duration, "error": args.error},
+            )
+        except Exception as e:
+            print(f"Warning: audit log failed: {e}", file=sys.stderr)
         print(json.dumps(entry, indent=2))
 
     elif args.command == "strategy":
@@ -332,6 +352,20 @@ def main():
     elif args.command == "memory":
         from opencode_improvement.memory_loop import run_cli as memory_cli
         memory_cli(sys.argv[2:] if len(sys.argv) > 2 else ["--status"])
+
+    elif args.command == "audit-log":
+        from shared.audit_log import AuditLog
+        alog = AuditLog()
+        if args.stats:
+            print(json.dumps(alog.stats(), indent=2))
+        elif args.export:
+            alog.export(args.export)
+            print(f"Audit log exported -> {args.export}")
+        else:
+            print(json.dumps(
+                alog.tail(limit=args.tail, agent=args.agent, since=args.since),
+                indent=2,
+            ))
 
     elif args.command == "benchmark":
         from opencode_improvement.benchmark import BenchmarkRunner, render_comparison_table, report_to_markdown, generate_comparison

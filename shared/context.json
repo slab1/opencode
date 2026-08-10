@@ -3431,7 +3431,21 @@
       "files": [
         "shared/golden/agent_tasks.json",
         ".github/workflows/agent-eval.yml"
-      ]
+      ],
+      "bet6_memory_portability": {
+        "summary": "Bet 6 DONE 2026-08-10 (commit 4e09823, CI green 31369845766 63/63 + 31369845673 build): memory export/import/backup",
+        "detail": "MemoryController.export_memory/import_memory/backup; import writes entries VERBATIM (preserves original timestamps) so restore is faithful and re-import dedupes by (task, rounded ts) \u2014 live re-import of own export added 0/68. store_experience now flush+fsync (never lose a write). CLI: memory --export PATH, --import PATH, --backup. Tests: scripts/test-memory-portability.py (round-trip, idempotency, backup+manifest, non-bundle rejection, live sanity) exit 0.",
+        "confidence": 0.95,
+        "severity": "info",
+        "location": "shared/memory_controller.py, opencode_improvement/memory_loop.py, opencode_improvement/__main__.py, scripts/test-memory-portability.py"
+      },
+      "bet7_audit_trail": {
+        "summary": "Bet 7 DONE 2026-08-10: append-only audit trail (control-plane lite) wired into track()",
+        "detail": "shared/audit_log.py AuditLog: log() fsync-append to memory/aether/audit_log.jsonl, tail() newest-first with agent/since filters, stats() by agent/outcome/action, export() portable bundle. track() auto-logs (try/except, never breaks tracking). CLI: audit-log --tail/--agent/--since/--stats/--export. Tests: scripts/test-audit-log.py (7 checks incl. reads-never-write invariant) exit 0. Replaces deprecated cost_tracker promise with file-verifiable reality.",
+        "confidence": 0.95,
+        "severity": "info",
+        "location": "shared/audit_log.py, opencode_improvement/__main__.py, scripts/test-audit-log.py"
+      }
     }
   },
   "session": {
