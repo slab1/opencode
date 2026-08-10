@@ -379,6 +379,15 @@ Multimodal File Processing:
 
 ## Development
 
+### Cross-Session Continuity Demo
+
+Proves the memory stack gives a fresh session real continuity with a past one
+(episodic retrieval + semantic facts + handoff feedback). Exits 0 on pass:
+
+```bash
+python3 scripts/demo-multi-session-continuity.py
+```
+
 ### Python Modules
 
 ```bash
