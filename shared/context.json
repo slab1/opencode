@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": "2026-08-09T22:03:45.721318Z",
+  "last_updated": 1786330079.3192184,
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
@@ -1460,6 +1460,25 @@
       "confidence_before": 0.85,
       "confidence_after": 0.93,
       "followup": "restart opencode to load new agent files"
+    },
+    {
+      "id": "strategy-1786330079319",
+      "agent_target": "system",
+      "diagnosis": "handoff memory over 16000-char limit (17218 chars) after 4-bet execution notes; Bet 5 + packaging docs were the remaining differentiation bets",
+      "strategy_chosen": "condense_oldest_section",
+      "strategy_alternatives_considered": [
+        "delete oldest section entirely",
+        "raise limit",
+        "split into multiple files"
+      ],
+      "why_this_strategy": "App Factory section was oldest + most verbose; facts still needed (DockerSandbox no-KVM, deploy kit, identity blocker) so full delete lost value; raising limit hides the real problem",
+      "applied_at": "2026-08-10T00:00:00Z",
+      "outcome": "success",
+      "outcome_evidence": "handoff 17218 -> 14723 chars (under 16000), all 7 session sections + frontmatter intact",
+      "duration_s": 300,
+      "confidence_before": 0.6,
+      "confidence_after": 0.95,
+      "followup": "Bet 5 demo + POSITIONING.md committed (ff38220) and pushed with full repo state (c1e597b)"
     }
   ],
   "workflow_trace": [
