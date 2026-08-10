@@ -146,24 +146,24 @@ jobs:
         run: |
           mkdir -p reports/trends
           DATE=$(date -u +"%Y-%m-%d_%H-%M-%S")
-          if [ -f eval_results.json ]; then
-            python3 -c "
-            import json
-            r = json.load(open('eval_results.json'))
-            trend = {
-                'timestamp': r.get('eval_timestamp', ''),
-                'summary': r.get('summary', {}),
-                'regression': r.get('regression'),
-                'pass_rate': r.get('pass_rate', 0),
-                'provider': '${{ env.PROVIDER }}',
-                'ci_run': True,
-                'workflow': '${{ github.run_id }}',
-            }
-            with open(f'reports/trends/trend_{DATE}.json', 'w') as f:
-                json.dump(trend, f, indent=2)
-            print(f'Saved trend data: reports/trends/trend_{DATE}.json')
-            "
-          fi
+          python3 -c "
+          import json
+          from pathlib import Path
+          if Path('eval_results.json').exists():
+              r = json.load(open('eval_results.json'))
+              trend = {
+                  'timestamp': r.get('eval_timestamp', ''),
+                  'summary': r.get('summary', {}),
+                  'regression': r.get('regression'),
+                  'pass_rate': r.get('pass_rate', 0),
+                  'provider': '${{ env.PROVIDER }}',
+                  'ci_run': True,
+                  'workflow': '${{ github.run_id }}',
+              }
+              with open(f'reports/trends/trend_{DATE}.json', 'w') as f:
+                  json.dump(trend, f, indent=2)
+              print(f'Saved trend data: reports/trends/trend_{DATE}.json')
+          "
 
       - name: Upload evaluation results
         uses: actions/upload-artifact@v4
