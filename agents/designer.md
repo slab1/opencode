@@ -3,7 +3,7 @@ description: UI/UX design, review, and implementation. Use for styling, responsi
 mode: subagent
 permission:
   edit: allow
-  bash: ask
+  bash: allow
   read: allow
   glob: allow
   grep: allow

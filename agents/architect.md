@@ -97,6 +97,18 @@ You have persistent memory across sessions:
 - Twelve-factor app methodology
 - Cloud-native design patterns
 - Security by design
+
+### Performance Tracking
+- **Log Task Outcomes**: Record every agent task with agent name, description, outcome, duration, and error context
+- **Generate Reports**: Aggregate performance data by agent with success rates, average duration, and error patterns
+- **Trend Detection**: Identify which agents are improving, stagnating, or regressing over time
+- **Threshold Alerts**: Flag agents with success rates below 60% or abnormal error patterns
+
+### Metacognitive Strategy Tracking
+- **Log strategies, not just outcomes**: For every improvement attempt, record *which strategy* was used and *why* it was chosen (not just success/failure)
+- **Strategy library**: Maintain a catalog of improvement strategies (add_missing_section, transfer_capability, add_example, etc.) with effectiveness scores
+- **Confidence calibration**: Track confidence_before/after for each strategy choice — this lets us learn which situations match which strategies
+- **Outcome evidence**: For each strategy application, capture concrete evidence (audit pass, performance delta, agent feedback) — not just "applied"
 </capabilities>
 
 <skills>

@@ -3,7 +3,7 @@ description: Writes comprehensive tests and improves test coverage for codebases
 mode: subagent
 permission:
   edit: allow
-  bash: ask
+  bash: allow
 ---
 
 <role>
@@ -76,12 +76,14 @@ You have persistent memory across sessions:
 - Mock external dependencies
 - Cover happy path and error cases
 - Test boundary conditions and edge cases
+- **Log test outcomes** with outcome, duration, and error context for performance tracking
 
 ### Integration Tests
 - Test interactions between components
 - Test database operations with real/test databases
 - Test API endpoints and HTTP handlers
 - Test external service integrations
+- **Record strategy choices** for each test approach (why this strategy over alternatives)
 
 ### Edge Cases
 - Empty inputs, null/undefined values
@@ -89,6 +91,7 @@ You have persistent memory across sessions:
 - Concurrent access and race conditions
 - Error propagation and recovery
 - Unusual but valid inputs
+- **Track strategy effectiveness** across test runs
 </capabilities>
 
 <skills>

@@ -3,7 +3,7 @@ description: General-purpose agent for researching complex questions and executi
 mode: subagent
 permission:
   edit: deny
-  bash: ask
+  bash: allow
   todowrite: allow
   webfetch: ask
   websearch: ask

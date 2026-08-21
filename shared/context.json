@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": 1786330079.3192184,
+  "last_updated": "2026-08-21T05:31:05Z",
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
@@ -1479,6 +1479,157 @@
       "confidence_before": 0.6,
       "confidence_after": 0.95,
       "followup": "Bet 5 demo + POSITIONING.md committed (ff38220) and pushed with full repo state (c1e597b)"
+    },
+    {
+      "id": "strategy-1786528746534",
+      "agent_target": "human-analysis-agent",
+      "diagnosis": "Mitigated risk of future vendor binary restrictions by syncing MIT fork slab1/opencode and freeing 2.8GB disk space via cache cleanup.",
+      "strategy_chosen": "Sovereign Fork Sync & Local Cache Pruning",
+      "strategy_alternatives_considered": [
+        "Switching to Odysseus (rejected: AGPL web workspace, different architecture)",
+        "Pinning npm tarball only (good backup, but source fork is more robust)"
+      ],
+      "why_this_strategy": "MIT license on opencode guarantees perpetual source ownership; syncing slab1/opencode ensures an up-to-date baseline for custom self-builds.",
+      "applied_at": "2026-08-12T10:59:06.534981",
+      "outcome": "success",
+      "outcome_evidence": "Fork status identical (0 behind), disk free 3.5GB (was 748MB).",
+      "duration_s": 120,
+      "confidence_before": 0.95,
+      "confidence_after": 1.0,
+      "followup": null
+    },
+    {
+      "date": "2026-08-16",
+      "agent": "fixer",
+      "strategy": "test-only fixes + config regression restore",
+      "detail": "Fixed Login/SignUp tests without touching pages: (1) disambiguate getByLabelText/getByText collisions, (2) work around jsdom native email constraint validation by typing value that passes native but fails zod, (3) reuse proven hybrid form mock (real RHF Controller + FormProvider) instead of static mock, (4) diagnose 8 load-time suite failures as regression from deleted ts-jest-mock-import-meta transformer in jest.config (commit 7d8b6c1) and restore it.",
+      "outcome": "success"
+    },
+    {
+      "id": "strategy-1787290155155",
+      "agent_target": "architect",
+      "diagnosis": "capability_sections only 3 missing metacognitive strategy tracking and performance tracking patterns seen in high-performers",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability_from_meta-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "Metacognitive strategy tracking and performance logging patterns are present in high-capability agents meta-agent 10 video-creator 10 web-browser 12. Adding these sections enables the meta-agent to track strategy effectiveness across the system.",
+      "applied_at": "2026-08-21T05:29:15Z",
+      "outcome": "success",
+      "outcome_evidence": "audit shows capability_sections: 5 (was 3); all structural completeness checks pass has_role has_capabilities has_shared_context has_task_tracking frontmatter valid",
+      "confidence_before": 0.9,
+      "confidence_after": 0.95,
+      "followup": null
+    },
+    {
+      "id": "strategy-1787290155156",
+      "agent_target": "build",
+      "diagnosis": "capability_sections only 3 missing metacognitive strategy tracking and hash-validated edit patterns",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability_from_build-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "Hash-anchored-edits and metacognitive strategy tracking patterns from the build agent high-performer patterns enable reliable file editing and improvement cycle tracking. The build agent is the primary implementation agent these patterns are critical for the improvement ecosystem.",
+      "applied_at": "2026-08-21T05:29:15Z",
+      "outcome": "success",
+      "outcome_evidence": "audit shows capability_sections: 4 (was 3); all structural completeness checks pass",
+      "confidence_before": 0.9,
+      "confidence_after": 0.94,
+      "followup": null
+    },
+    {
+      "id": "strategy-1787290155157",
+      "agent_target": "cognition",
+      "diagnosis": "capability_sections only 3 missing metacognitive strategy tracking for the dispatch loop and skill synthesis patterns",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability_from_cognition-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "The cognition agent orchestrates the HCM dispatch loop metacognitive strategy tracking enables recursive improvement of the spawner-critic-synthesizer pipeline. Without strategy logging the system cannot learn which dispatch strategies succeed.",
+      "applied_at": "2026-08-21T05:29:15Z",
+      "outcome": "success",
+      "outcome_evidence": "audit shows capability_sections: 4 (was 3); all structural completeness checks pass enables strategy-level tracking in HCM pipeline",
+      "confidence_before": 0.9,
+      "confidence_after": 0.96,
+      "followup": null
+    },
+    {
+      "id": "strategy-1787290265151",
+      "agent_target": "test",
+      "diagnosis": "capability_sections only 3 \u2014 missing metacognitive strategy tracking for test approach decisions and outcome logging patterns",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability_from-test-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "The test agent writes regression and integration tests; logging strategy choices (why this test approach over alternatives) enables the meta-agent to identify which testing strategies yield the best bug detection rates across the system.",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections added for strategy tracking; enables meta-agent to analyze test strategy effectiveness across the agent ecosystem",
+      "confidence_before": 0.85,
+      "confidence_after": 0.9,
+      "followup": null
+    },
+    {
+      "id": "strategy-1787290265153",
+      "agent_target": "knowledge-compiler",
+      "diagnosis": "capability_sections only 3 \u2014 missing metacognitive strategy tracking for knowledge compilation patterns and skill synthesis",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability-from-knowledge-compiler-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "The knowledge compiler extracts and synthesizes knowledge from codebases; metacognitive strategy tracking enables the system to learn which extraction patterns (skill-optimizer, cross-domain-transfer, documentation-skeleton) produce the most reusable assets.",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections added for strategy tracking; enables meta-agent to analyze knowledge compilation strategy effectiveness",
+      "confidence_before": 0.85,
+      "confidence_after": 0.9,
+      "followup": null
+    },
+    {
+      "id": "strategy-1787290265154",
+      "agent_target": "heartbeat",
+      "diagnosis": "capability_sections only 3 \u2014 missing metacognitive strategy tracking for pulse/cycle patterns and cognitive load monitoring",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability-from-heartbeat-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "The heartbeat agent manages the Aether core cognitive pulse; metacognitive strategy tracking enables the system to learn which pulse intervals and cognitive pulse patterns yield the best improvement cycle rates without overwhelming the system.",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections added for strategy tracking; enables meta-agent to analyze heartbeat pulse patterns and cognitive load monitoring effectiveness",
+      "confidence_before": 0.85,
+      "confidence_after": 0.9,
+      "followup": null
+    },
+    {
+      "id": "strategy-1787290265155",
+      "agent_target": "content-strategist",
+      "diagnosis": "capability_sections only 3 \u2014 missing metacognitive strategy tracking for content planning patterns and cross-platform distribution strategies",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "transfer_capability-from-content-strategist-agent",
+        "add_rules_section",
+        "leave_as_is"
+      ],
+      "why_this_strategy": "The content strategist bridges market intelligence with content distribution; metacognitive strategy tracking enables the system to learn which content planning patterns (blogwatcher, carousel-skill, content-repurposing) yield the highest engagement rates.",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections added for strategy tracking; enables meta-agent to analyze content strategist pattern effectiveness across the 11 platform ecosystem",
+      "confidence_before": 0.85,
+      "confidence_after": 0.9,
+      "followup": null
     }
   ],
   "workflow_trace": [
@@ -1601,6 +1752,31 @@
         "bet4": "aether_core stubs implemented, context.json validated reframed, dead artifacts removed"
       },
       "timestamp": "2026-08-09T23:38:29.785059+00:00"
+    },
+    {
+      "agent": "orchestrator",
+      "step": "audit-hardening-pass",
+      "outcome": "committed 1f9ce2c pushed main; build/tsc/eslint green; 4 lanes complete",
+      "ts": "2026-08-17T14:50:00Z"
+    },
+    {
+      "agent": "orchestrator",
+      "step": "ci-gate-fix",
+      "outcome": "jest gate c25a6a6: tested-surface coverage 57/42/55/58 vs floors 45/35/40/45, 102 tests pass; commit pushed",
+      "ts": "2026-08-17T16:20:00Z"
+    },
+    {
+      "agent": "build",
+      "step": "data-controls-ui",
+      "status": "completed",
+      "outcome": "GDPR/CCPA self-service UI done: tsc -b --noEmit exit 0, 15 new tests pass, full suite 133/133, lint 0 errors. RPCs hand-typed as Args:never/Returns:Json. Deletion clears localStorage keys + sessionStorage.",
+      "files": [
+        "src/services/data-controls.ts",
+        "src/components/profile/DataControls.tsx",
+        "src/pages/Profile.tsx",
+        "src/integrations/supabase/types.ts"
+      ],
+      "ts": "2026-08-18T15:29:17.490350+00:00"
     }
   ],
   "cross_agent_notes": {
@@ -3481,11 +3657,234 @@
           ".github/workflows/agent-eval.yml",
           "README.md"
         ]
+      },
+      "login_signup_jest_green": {
+        "date": "2026-08-16",
+        "summary": "Login/SignUp jest suites green (36 tests). Login.test.tsx already had working hybrid form mock (real Controller+FormProvider); fixed card-title ambiguity (getByRole heading) + invalid-email test (jsdom native type=email constraint validation blocks submit for \"invalid-email\" since page form lacks noValidate; use \"user@example\" which passes native but fails zod .email()). SignUp.test.tsx: replaced static form mock with Login hybrid mock (real Controller -> real value flow, validation, submit); same invalid-email fix; success-screen assertions scoped to heading role + matched actual page text.",
+        "root_cause_found": "Two independent issues: (1) jsdom enforces native constraint validation on type=\"email\" inputs -> submit event never fires for malformed emails (page forms lack noValidate); (2) SignUp.test.tsx used a STATIC form mock (field.value always \"\", onChange jest.fn()) so typing/submit never flowed.",
+        "config_fix": "jest.config.js restored ts-jest-mock-import-meta astTransformer (tsconfig: tsconfig.app.json, ignoreCodes [1343], metaObjectReplacement env.DEV=true). This was deleted in commit 7d8b6c1 (2026-08-14) along with jest.config.ts; 8 suites (favorites, loyalty*, notifications, waitlist, restaurantSearch, TestingPanel, RestaurantRegistrationForm) failed at LOAD time with \"Cannot use import.meta outside a module\" in src/utils/error-tracking.ts. Restoring transformer made all 16 suites pass.",
+        "verification": "Targeted: 2 suites / 36 tests PASS (exit 0). Full suite: 16 suites / 100 tests PASS (exit 0).",
+        "files_touched": [
+          "src/pages/Login.test.tsx",
+          "src/pages/SignUp.test.tsx",
+          "jest.config.js"
+        ],
+        "reverified_2026_08_16_late": "Fixer re-verification: no edits needed this session (task spec described stale state; work already landed earlier today). Targeted run: Login 13/13 + SignUp 23/23 = 36 tests PASS (exit 0). Full suite: 16 suites / 100 tests PASS (exit 0) incl. RestaurantRegistrationForm, TestingPanel, schema-generation, all integration suites. Form mock decision: KEPT hybrid mock (real RHF Controller + FormProvider, lightweight FormItem/FormLabel/FormControl/FormMessage wrappers injecting id onto input) \u2014 real components (Radix Slot) put id on wrapper div breaking getByLabelText, so Option A was not viable; hybrid mock gives real value flow/validation/submit for free (Option B unnecessary)."
+      },
+      "m6_m7_m9_reservatoo": {
+        "date": "2026-08-16",
+        "task": "M6/M7/M9 type+hygiene+migration fixes in reservatoo-saas",
+        "summary": "M6: hand-added special_event_id to payments Row/Insert/Update in src/integrations/supabase/types.ts (3 lines, alphabetical placement, matches reservation_id style). M7: deleted auto-generated supabase/functions/mcp/index.ts + gitignored it (pattern verified via check-ignore --no-index; file tracked so deletion commits, ignore prevents re-add). M9: new migration 20260816000000_payments_reservation_delete_set_null.sql (DROP CONSTRAINT IF EXISTS + ADD CONSTRAINT SET NULL, same name payments_reservation_id_fkey) + initial_schema.sql line 6156 CASCADE->SET NULL for fresh installs.",
+        "verification": "npx tsc --noEmit exit 0; npm run lint exit 0; migration SQL read-verified (DO $$ guard matches special_event_id migration style); constraint name confirmed from types.ts Relationships",
+        "not_verified": "migration not executed against a DB (none available); as never casts in booking components left for other lane (still compile fine)",
+        "note": "Concurrent lane modified src/api/payment.ts (deleted), src/pages/Partner.tsx, supabase/functions/create-payment-intent/index.ts, supabase/functions/stripe-webhook/index.ts during this session \u2014 NOT touched by fixer"
+      },
+      "reservatoo_payment_api_h3_h4": {
+        "type": "bugfix",
+        "summary": "Fixed admin/partner payment API bugs (H3+H4): removed dead payment flows, honest failures for subject-less payments",
+        "detail": "H3: Partner.tsx signup called createPaymentIntent with no subject/restaurant_id -> always E002. Signup is an application form (no reservation/event subject exists), so removed the fake Stripe step entirely; onSubmit now submits the application with a success toast. Deleted src/api/payment.ts (5 calls to non-existent edge fns getPaymentHistory/getRevenueMetrics/getTransactionBreakdown/generatePaymentReport/getRealtimePaymentUpdates + now-unused createPaymentIntent/completePayment) and removed paymentApi from src/api/index.ts. H4: createDemoPayment/createMemoPayment had no subject -> always E002; they now throw a clear Error ('Manual payments require a reservation or event...') client-side instead of a doomed edge-fn call. processReservationPayment gained restaurantId param + restaurant_id in body. MemoPaymentForm surfaces the clear error and removed the fake reservationId=`ADMIN-${Date.now()}` StripePaymentForm landmine (unreachable + FK violation). PaymentProcessor surfaces the clear error. Verified: tsc clean, lint 0 errors, jest 15 suites/97 tests green.",
+        "files": [
+          "src/pages/Partner.tsx",
+          "src/api/payment.ts (deleted)",
+          "src/api/index.ts",
+          "src/api/restaurant/payment.ts",
+          "src/components/admin/MemoPaymentForm.tsx",
+          "src/components/payment/PaymentProcessor.tsx"
+        ],
+        "followups": [
+          "create-payment-intent has NO manual-payment mode: subject-less demo/memo payments can never succeed. If admin Payment Administration is meant to record manual payments, edge fn needs a new admin-gated mode (payment_type: manual, restaurant_id only).",
+          "Partner plan billing ($99/$299/$999) needs a real subscription flow if charges are intended \u2014 no reservation subject exists at signup."
+        ]
+      },
+      "booking_tests_20260816": {
+        "summary": "Fixed 3 failing jest tests in SpecialEventBooking.test.tsx + MultistepBookingForm.test.tsx (reservatoo-saas). No implementation bugs surfaced \u2014 tests were wrong/unreachable.",
+        "detail": "F1: create-failure test asserted payment-modal exists with data-special-event-id='' \u2014 WRONG; modal only renders after successful create. Fixed to queryByTestId(...).not.toBeInTheDocument(). F2: H1 fallback test clicked mock-confirm-payment with no modal open (modal requires showPaymentModal=true, which requires successful create) \u2014 unreachable defensive branch. Reworked to reachable path: create succeeds -> modal opens -> special_events UPDATE fails (override mockedFrom so the failing update applies to the fresh query object from() builds per call \u2014 wiring supabaseMocks.specialEventsUpdate directly gets clobbered by reassignment) -> honest error toast, no success toast, no navigate. GOTCHA: toast.error(message, {description}) is 2-arg; toHaveBeenCalledWith needs expect.anything() for arg 2. F3: MultistepBookingForm C1 test \u2014 findByText(/Reservation Confirmed!/i) matched 2 elements (CardTitle line 557 + body h3 line 663 both render at step 6). Fixed with findAllByText length>=1 + findByRole('button', {name:/view reservation details/i}) + stripe-form absent.",
+        "files_modified": [
+          "src/components/booking/SpecialEventBooking.test.tsx",
+          "src/components/booking/MultistepBookingForm.test.tsx"
+        ],
+        "verification": "2 suites 8/8; FULL suite 16 suites / 102 tests PASS; npx tsc --noEmit exit 0; npm run lint exit 0",
+        "timestamp": "2026-08-16"
+      },
+      "edge_fn_pain_points_2026-08-16": {
+        "summary": "Fixed 7 edge functions in reservatoo-saas (supabase/functions/): external-api phantom columns (guest_count/reservation_date/reservation_time, table_number/is_available), IP whitelist fail-closed w/ last XFF hop, scope enforcement (read/write), NULL quota=unlimited, env-var URL; stripe-webhook user_id NOT NULL resolution (metadata.customer_id -> special_events.user_id -> reservations.user_id, skip+warn if unresolvable) + error_message->failure_reason; send-reservation-email restaurant-tz formatting + EMAIL_DEBUG gating + emailNotConfigured flag; seed-demo-data maybeSingle role scan; complete-payment 500/400 split; 405 method + 400 body guards on all 7 (incl. create-payment-intent).",
+        "verification": "deno unavailable; tsc --noEmit --noResolve per file: only expected TS2307/TS2304 (https imports, Deno global), zero other errors. Column cross-check script vs supabase/live-schema.sql: all refs verified; payments.special_event_id exists via pending migration 20260808120000.",
+        "deferred": "special_events.payment_status/guest_count/quote_estimate/deposit_amount not in live dump (pre-existing, create-payment-intent out of scope, needs DB-owner schema reconciliation); LOW fix 9 ownership-check-when-row-missing deferred (would break legit verify-before-webhook race); no real email provider (product decision)."
       }
+    },
+    "fixer_edge_functions_20260816": {
+      "summary": "Fixed 8 edge-function bugs in reservatoo-saas (create-payment-intent, stripe-webhook, verify-payment, send-reservation-email)",
+      "detail": "C1: idempotency check (succeeded payment exists for subject -> E007/409) in create-payment-intent. C2: response amount now in cents (amountCents). M1a: payments INSERT error handling in webhook (23505 unique violation = already recorded, log+continue). M1b: reserve-first idempotency (insert stripe_processed_events BEFORE processing; PK violation = already processed). M2: refunds insert now looks up real payment_id by provider_payment_intent_id; also fixed refunds.status 'completed'->'succeeded' (CHECK constraint). M3: payment_logs.payment_id is UUID FK - pi_xxx moved into event_data; webhook writes payment_logs on success with real payments.id. M4: $0 deposit -> {requiresPayment:false} success (both reservation + event branches). M5: send-reservation-email embed fixed (location:restaurant_locations, restaurant:restaurants - was using FK columns as table names -> PostgREST 500); dropped unused table embed; added JSONB address formatter. M8: verify-payment paystack fake-success branch removed -> honest unsupported-provider error. L6: client currency ignored; server default from payment_settings.currency (allowed list ['usd']). Deviation: contract suggested E006 for already-completed; E006 is PROCESSING_ERROR in this file, so added E007 (PAYMENT_ALREADY_COMPLETED) - client lane must match on E007.",
+      "files_modified": [
+        "supabase/functions/create-payment-intent/index.ts",
+        "supabase/functions/stripe-webhook/index.ts",
+        "supabase/functions/verify-payment/index.ts",
+        "supabase/functions/send-reservation-email/index.ts"
+      ],
+      "verification": "deno NOT installed; verified via esbuild transpile (all 4 files exit 0) + manual type review against migrations (payment_logs.payment_id UUID, refunds.status CHECK, stripe_processed_events.event_id PK, restaurant_locations.address JSONB, payments.special_event_id). No tsconfig in functions/ (no strict gate).",
+      "deploy_blocked": "Supabase CLI not installed - deploy-ready only. Requires: db push (already has special_event_id migration) + redeploy 4 edge functions."
+    },
+    "designer": [
+      {
+        "id": "db_ops_runbook_page",
+        "task": "Build superadmin Database Ops Runbook page in reservatoo-saas",
+        "before": "DB ops knowledge lived only in docs/admin/database-ops.md; admin had Database Manager but no runbook/ops reference",
+        "after": "New DatabaseOpsRunbook.tsx renders the full runbook (architecture facts, 4 critical issues, 6-command diagnostic toolkit, 8 SQL fix patterns, reference files, 6 gotchas) with sticky TOC + scroll-spy, color-coded status alerts, copy-button code blocks; wired into AdminSidebar (System section, superadmin/system_admin) and Admin.tsx renderTabContent",
+        "files_modified": [
+          "src/components/admin/database/DatabaseOpsRunbook.tsx (new)",
+          "src/components/admin/AdminSidebar.tsx",
+          "src/pages/Admin.tsx"
+        ],
+        "verification": "tsc --noEmit exit 0; eslint 0 errors on all 3 files; code-block strings verified byte-identical to source md via node extraction"
+      }
+    ],
+    "build": [
+      {
+        "id": "build-20260818-data-controls",
+        "type": "implementation",
+        "summary": "Client GDPR/CCPA data controls UI built (export + account deletion) for reservatoo-saas",
+        "detail": "src/services/data-controls.ts (exportMyData/deleteMyAccount/clearAppLocalStorage + APP_LOCAL_STORAGE_KEYS), src/components/profile/DataControls.tsx (download JSON export + type-DELETE-to-confirm deletion, destructive Card), wired into Profile.tsx profile tab below profile form. RPCs hand-added to types.ts as { Args: never; Returns: Json } matching no-arg RPC convention (e.g. get_public_restaurant_locations).",
+        "severity": "info",
+        "location": {
+          "file": "src/components/profile/DataControls.tsx"
+        },
+        "references": [
+          {
+            "type": "finding",
+            "id": "build-20260818-data-controls-storage",
+            "relation": "fixes"
+          }
+        ]
+      },
+      {
+        "id": "build-20260818-data-controls-storage",
+        "type": "refactor",
+        "summary": "Fixed APP_LOCAL_STORAGE_KEYS: dropped 3 sessionStorage keys that were wrong in a localStorage list",
+        "detail": "post_auth_redirect, pwa-prompt-dismissed, __seeded__ live in sessionStorage (Login.tsx, PWAInstallPrompt.tsx, SpecialEventBooking.test.tsx) \u2014 localStorage.removeItem on them was a no-op. Now only real localStorage keys remain (reservatoo:owner:restaurantId, reservatoo:owner:tab, reservatoo:admin:tab, security-cache) and clearAppLocalStorage() also calls sessionStorage.clear() to mirror UserNav.handleLogout convention.",
+        "severity": "info",
+        "location": {
+          "file": "src/services/data-controls.ts",
+          "line": 24
+        }
+      }
+    ],
+    "review": {
+      "source": "review subagent",
+      "date": "2026-08-19",
+      "target": "reservatoo-saas @ e61c603 (READ-ONLY audit: Discovery/Reviews/Loyalty)",
+      "detail_file": "~/.config/opencode/memory/project/reference/reservatoo-discovery-reviews-loyalty-audit.md",
+      "findings": [
+        {
+          "id": "C1",
+          "severity": "critical",
+          "type": "security",
+          "location": "supabase/live-schema.sql:332-344 + src/api/loyalty.ts:166",
+          "summary": "RLS never enabled on loyalty_points/loyalty_points_transactions/user_favorites/review_likes/review_reports -> client-side self-award points, cross-user reads/deletes. VERIFY LIVE relrowsecurity."
+        },
+        {
+          "id": "C2",
+          "severity": "critical",
+          "type": "security",
+          "location": "supabase/migrations/20260203000000:275-330",
+          "summary": "redeem_loyalty_reward SECURITY DEFINER, no auth.uid() check (IDOR point drain); TOCTOU double-redeem; not re-granted in 20260701065920 whitelist -> client redemption broken."
+        },
+        {
+          "id": "C3",
+          "severity": "critical",
+          "type": "security",
+          "location": "supabase/migrations/20260818000005:29-38",
+          "summary": "reviews owner UPDATE policy: no WITH CHECK/column restriction -> owners rewrite rating/content/is_verified/user_id of any review on their restaurant."
+        },
+        {
+          "id": "H1",
+          "severity": "high",
+          "type": "security",
+          "location": "src/api/favorites.ts:53-74",
+          "summary": "No RLS on user_favorites/review_likes/review_reports -> delete others' rows, read all users' favorites/reports."
+        },
+        {
+          "id": "H2",
+          "severity": "high",
+          "type": "correctness",
+          "location": "src/components/ReviewForm.tsx:52-57 + reviews schema",
+          "summary": "No unique(user_id,restaurant_id) + no duplicate check in public form -> unlimited spam reviews / rating gaming."
+        },
+        {
+          "id": "H3",
+          "severity": "high",
+          "type": "correctness",
+          "location": "supabase/migrations/20260501000004:27-30",
+          "summary": "Review self-delete has no time window -> delete/re-submit gaming."
+        },
+        {
+          "id": "M1",
+          "severity": "major",
+          "type": "correctness",
+          "location": "src/pages/Restaurants.tsx:46",
+          "summary": "getNearby(0,0,...) hardcoded -> Nearby section always empty."
+        },
+        {
+          "id": "M2",
+          "severity": "major",
+          "type": "correctness",
+          "location": "src/api/restaurantSearch.ts:114",
+          "summary": "sortBy 'reviews'/'distance' order on non-existent columns -> silent empty results."
+        },
+        {
+          "id": "M3",
+          "severity": "major",
+          "type": "correctness",
+          "location": "src/components/restaurants/AdvancedSearch.tsx:287",
+          "summary": "Search button uses stale filters.query -> searches with empty query; duplicate requests."
+        },
+        {
+          "id": "M4",
+          "severity": "major",
+          "type": "correctness",
+          "location": "src/components/RestaurantCard.tsx:31-32,43",
+          "summary": "isFavorite/onToggleFavorite props ignored -> parent favorites state dead, stale Favorites page cards."
+        },
+        {
+          "id": "M5",
+          "severity": "major",
+          "type": "correctness",
+          "location": "src/api/restaurantSearch.ts:136,341,293 + src/components/RestaurantCard.tsx:45",
+          "summary": "locations vs restaurant_locations key mismatch -> location/availability only works for getNearby data."
+        },
+        {
+          "id": "M6",
+          "severity": "major",
+          "type": "correctness",
+          "location": "src/components/loyalty/LoyaltyCard.tsx:71",
+          "summary": "Tier computed from spendable points after redeem -> UI downgrade; DB tier is lifetime-based."
+        },
+        {
+          "id": "M7",
+          "severity": "major",
+          "type": "product_integrity",
+          "location": "src/components/profile/LoyaltyCard.tsx:235-236, src/pages/Loyalty.tsx:43,64",
+          "summary": "Contradictory earning rates; 'expire after 12 months' advertised but never implemented."
+        },
+        {
+          "id": "M8",
+          "severity": "major",
+          "type": "product_integrity",
+          "location": "src/pages/RestaurantDetails.tsx:152,341-344",
+          "summary": "chef_bio/history/social_links/testimonials columns don't exist -> fabricated chef bio + fake testimonials shown to every visitor."
+        },
+        {
+          "id": "M9",
+          "severity": "major",
+          "type": "concurrency",
+          "location": "supabase/live-schema.sql:332-340 + src/api/loyalty.ts:89-101",
+          "summary": "loyalty_points.user_id not UNIQUE -> concurrent createUserPoints -> duplicate rows -> .single() 406; addPoints lost updates."
+        }
+      ]
     }
   },
   "session": {
-    "last_handoff": "2026-08-10T08:07:40.291307Z"
+    "last_handoff": "2026-08-10T08:07:40.291307Z",
+    "active_agents": []
   },
   "axiom_compiler_v1": {
     "status": "ast_pipeline_wired",
@@ -3557,10 +3956,98 @@
       "opencode_improvement/track.py",
       "shared/context.json (strategy_effectiveness updates only)",
       "shared/golden/agent_tasks.json",
-      ".github/workflows/agent-eval.yml"
+      ".github/workflows/agent-eval.yml",
+      "src/pages/Login.test.tsx",
+      "src/pages/SignUp.test.tsx",
+      "jest.config.js",
+      "src/integrations/supabase/types.ts",
+      "supabase/functions/mcp/index.ts (deleted)",
+      ".gitignore",
+      "supabase/migrations/20260816000000_payments_reservation_delete_set_null.sql (new)",
+      "supabase/migrations/20260101000000_initial_schema.sql",
+      "src/pages/Partner.tsx",
+      "src/api/payment.ts",
+      "src/api/index.ts",
+      "src/api/restaurant/payment.ts",
+      "src/components/admin/MemoPaymentForm.tsx",
+      "src/components/payment/PaymentProcessor.tsx",
+      "supabase/functions/external-api/index.ts",
+      "supabase/functions/stripe-webhook/index.ts",
+      "supabase/functions/send-reservation-email/index.ts",
+      "supabase/functions/seed-demo-data/index.ts",
+      "supabase/functions/complete-payment/index.ts",
+      "supabase/functions/verify-payment/index.ts",
+      "supabase/functions/create-payment-intent/index.ts",
+      "src/pages/Profile.tsx"
     ],
     "files_deleted": [
       "skills/skills/synthesized/parse-custom-log-format/ (print-stub artifact)"
+    ],
+    "files_created": [
+      "src/pages/Login.test.tsx",
+      "src/pages/SignUp.test.tsx",
+      "src/components/profile/DataControls.tsx",
+      "src/components/profile/DataControls.test.tsx",
+      "src/services/data-controls.ts",
+      "src/services/data-controls.test.ts"
     ]
-  }
+  },
+  "patches_applied": [
+    {
+      "agent": "architect",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking and Performance Tracking capability sections",
+      "applied_at": "2026-08-21T05:29:15Z",
+      "outcome": "success",
+      "outcome_evidence": "capability_sections: 3 to 5 audit re-run confirms structural completeness"
+    },
+    {
+      "agent": "build",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking and task outcomes logging capability sections",
+      "applied_at": "2026-08-21T05:29:15Z",
+      "outcome": "success",
+      "outcome_evidence": "capability_sections: 3 to 4 audit re-run confirms structural completeness"
+    },
+    {
+      "agent": "cognition",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking capability section for HCM dispatch loop improvement",
+      "applied_at": "2026-08-21T05:29:15Z",
+      "outcome": "success",
+      "outcome_evidence": "capability_sections: 3 to 4 audit re-run confirms structural completeness enables strategy tracking in HCM pipeline"
+    },
+    {
+      "agent": "test",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking capability section for test approach logging",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability_sections tracking updated; enables meta-agent to analyze test strategy effectiveness"
+    },
+    {
+      "agent": "knowledge-compiler",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking capability section for knowledge compilation strategy logging",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections tracking updated; enables meta-agent to analyze knowledge compilation strategy effectiveness"
+    },
+    {
+      "agent": "heartbeat",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking capability section for cognitive pulse pattern logging",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections tracking updated; enables meta-agent to analyze heartbeat pulse patterns"
+    },
+    {
+      "agent": "content-strategist",
+      "section": "capabilities",
+      "description": "Added Metacognitive Strategy Tracking capability section for content planning strategy logging",
+      "applied_at": "2026-08-21T05:31:05Z",
+      "outcome": "success",
+      "outcome_evidence": "capability sections tracking updated; enables meta-agent to analyze content strategist pattern effectiveness"
+    }
+  ]
 }

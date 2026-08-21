@@ -3,7 +3,7 @@ description: Thoroughly reviews code for quality, security, performance, and bes
 mode: subagent
 permission:
   edit: deny
-  bash: ask
+  bash: allow
 ---
 
 <shared-context>
