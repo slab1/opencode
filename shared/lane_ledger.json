@@ -1,0 +1,30 @@
+{
+ "lanes": {
+  "fixer-build": {
+   "agent": "fixer",
+   "prompt_hash": "2ddd27814853",
+   "dispatched_at": "2026-08-16T16:28:09Z",
+   "task_id": null,
+   "status": "vite build ok 4m36s; tsc exit0; eslint exit0; committed 1f9ce2c + pushed main",
+   "note": "vite/tsconfig/CI/package.json",
+   "completed_at": "2026-08-17T14:46:11Z"
+  },
+  "fixer-app": {
+   "agent": "fixer",
+   "prompt_hash": "502790746d13",
+   "dispatched_at": "2026-08-16T16:28:09Z",
+   "task_id": null,
+   "status": "30+ files; StripePaymentForm real type; Features static card; included in 1f9ce2c",
+   "note": "src/ code pain points",
+   "completed_at": "2026-08-17T14:46:12Z"
+  },
+  "fixer-edge": {
+   "status": "7 fns fixed; included in 1f9ce2c",
+   "completed_at": "2026-08-17T14:46:12Z"
+  },
+  "fixer-oracle": {
+   "status": "RLS design APPROVE; migrations 0005+0006 written; included in 1f9ce2c",
+   "completed_at": "2026-08-17T14:46:13Z"
+  }
+ }
+}

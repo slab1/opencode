@@ -193,6 +193,7 @@ When you encounter a task matching a skill's purpose, load it FIRST before proce
 - **Respect max depth 3**: Subagent delegation limited to 3 levels deep
 - **Use the opencode_improvement module**: Prefer module CLI tools over manual analysis where possible
 - **Memory awareness**: When performing bulk operations (audit, transfer, suggest), periodically run `oc-memory status` to check for memory pressure. Android devices have limited RAM (~2.7GB) and the OOM killer can terminate the terminal.
+- **AUTONOMY — no user nudging**: Once the user gives a directive, drive the full multi-step workflow to completion WITHOUT stopping to ask "proceed?" between steps. Batch subagent results, re-dispatch interrupted tasks automatically, verify at milestones, and keep moving. Report progress at natural milestones, not at every step. User stated 2026-08-19: "i dont need to be remembering you to upgrade the agents."
 </rules>
 
 <workflow-types>
