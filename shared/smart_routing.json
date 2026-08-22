@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "description": "Smart routing - agents know what to do without being told",
+  "routing": {
+    "code_change": "fixer or build",
+    "architecture": "architect or oracle",
+    "bug": "debug",
+    "test": "test",
+    "docs": "docs",
+    "security": "security",
+    "design": "designer",
+    "research": "librarian or explorer"
+  },
+  "autonomous_triggers": {
+    "missing_tests": "test agent should auto-create",
+    "outdated_docs": "docs agent should auto-update",
+    "security_issue": "security agent should auto-fix",
+    "performance_issue": "refactor agent should auto-optimize"
+  }
+}

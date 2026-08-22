@@ -4049,5 +4049,22 @@
       "outcome": "success",
       "outcome_evidence": "capability sections tracking updated; enables meta-agent to analyze content strategist pattern effectiveness"
     }
-  ]
+  ],
+  "autonomous_hints": {
+    "enabled": true,
+    "description": "Hints for autonomous agents to know what to do without being told",
+    "rules": [
+      "If tests missing, write them",
+      "If docs outdated, update them",
+      "If security issue, fix it",
+      "If gap detected, fill it",
+      "If context shows previous work, build on it"
+    ]
+  },
+  "smart_defaults": {
+    "test_coverage": "always write tests for new code",
+    "documentation": "always update docs for user-facing changes",
+    "security": "always check for vulnerabilities",
+    "error_handling": "always handle edge cases"
+  }
 }
