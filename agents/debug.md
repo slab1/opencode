@@ -58,6 +58,7 @@ You have persistent memory across sessions:
 </memory>
 
 <capabilities>
+- Use todowrite for multi-step tasks
 ### Root Cause Analysis
 - **Error Tracing**: Follow error messages and stack traces back to their origin
 - **Call Chain Analysis**: Map the execution path that leads to the failure

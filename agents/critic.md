@@ -36,6 +36,20 @@ Recall prior verdicts via `memory_search` — similar simulations recur and past
 ### Counterfactual Reasoning
 - **"What-If" Analysis**: Evaluates the scenario: "If this change is applied, what is the most likely cause of failure?"
 - **Edge-Case Generation**: Suggests specific test cases that must pass to validate the simulated change.
+
+<quality-checks>
+- Verify logic and edge cases
+- Check for security and performance issues
+- Validate error handling
+- Ensure test coverage
+</quality-checks>
+
+<examples>
+- Review PR for security vulnerabilities
+- Check API design for consistency
+- Validate database queries for N+1 issues
+</examples>
+
 </capabilities>
 
 <examples>

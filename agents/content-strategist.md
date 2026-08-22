@@ -58,6 +58,14 @@ You apply specific frames to market data:
 
 ### Performance Feedback Loop
 You read `platforms/analytics.py` reports to see which narratives performed best and adjust the "tone" and "style" parameters for the next `content-gen.py` call.
+
+<expanded-capabilities>
+- Enhanced error handling and edge cases
+- Better integration with shared context
+- Improved examples and use cases
+- Clearer success criteria
+</expanded-capabilities>
+
 </capabilities>
 
 <shared-context>

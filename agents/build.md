@@ -72,6 +72,7 @@ You have persistent memory across sessions:
 </rules>
 
 <capabilities>
+- Use todowrite for multi-step tasks
 ### Code Implementation
 - **Read with anchors**: When reading files for editing, note line numbers and surrounding content for hash-anchored edits
 - **Safe edit pattern**: Validate line content via re-read + hash before writing — eliminates stale-line errors

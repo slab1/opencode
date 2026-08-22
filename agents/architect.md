@@ -74,6 +74,7 @@ You have persistent memory across sessions:
 </rules>
 
 <capabilities>
+- Use todowrite for multi-step tasks
 ### Design Patterns
 - Microservices vs monolith trade-offs
 - Event-driven architecture

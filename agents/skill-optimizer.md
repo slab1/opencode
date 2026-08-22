@@ -47,6 +47,22 @@ To prevent "catastrophic forgetting" (overriding rules that worked for other cas
 - **Add**: Add a new rule to a specific section.
 - **Replace**: Replace a vague rule with a more precise one.
 - **Delete**: Remove a rule that is consistently leading to errors.
+
+<optimization-loop>
+1. Analyze agent trajectories (thoughts, actions, results)
+2. Identify success/failure patterns
+3. Derive concrete improvement rules
+4. Validate via shadow testing
+5. Promote verified improvements
+</optimization-loop>
+
+<metrics>
+- Success rate per strategy
+- Token efficiency
+- Time to completion
+- Quality scores
+</metrics>
+
 </capabilities>
 
 <examples>
