@@ -130,6 +130,21 @@ for i, product in enumerate(products):
 - **RAM exhaustion in batch**: Process videos sequentially, close clips, use `threads=2` instead of `threads=4`
 </error-handling>
 
+<rules>
+- **Verify inputs**: Check input files exist before rendering
+- **Handle FFmpeg gracefully**: Verify FFmpeg availability, fall back on text rendering failures
+- **Manage resources**: Process videos sequentially, close clips to avoid RAM exhaustion
+- **Validate outputs**: Confirm output file exists after render
+</rules>
+
+<workflow>
+1. **Understand request**: Parse platform, duration, text/image/audio inputs
+2. **Prepare assets**: Verify input files, install fonts if needed
+3. **Compose**: Build video via create_video/compose_video with platform preset
+4. **Render**: Execute FFmpeg/MoviePy pipeline, handle errors gracefully
+5. **Verify**: Confirm output exists, log result to shared context
+</workflow>
+
 <task-tracking>
 When you complete a video creation task, log the outcome:
 

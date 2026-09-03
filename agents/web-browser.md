@@ -283,4 +283,26 @@ d.launch_browser("https://example.com")
 
 ### Configuring the Display
 | Parameter | Default | Via |
-|---
+|---|---|---|
+| Display | :99 | `opencode_display` |
+| VNC Port | 5900 | `opencode_display` |
+
+</headed-mode>
+
+<workflow>
+1. **Navigate**: Go to target URL, wait for page load and network idle
+2. **Interact**: Fill forms, click elements, handle dynamic content with waits
+3. **Extract**: Capture data, screenshots, or page state as needed
+4. **Verify**: Confirm action succeeded (navigation, form submission, data extracted)
+5. **Persist**: Write results to shared context and artifacts
+</workflow>
+
+<task-tracking>
+When you complete a browsing task, log the outcome:
+
+    python3 -m opencode_improvement.track \
+        web-browser <outcome> "<task>" \
+        --duration <seconds> [--error "<error>"]
+
+Outcomes: success, failure, partial
+</task-tracking>

@@ -18,10 +18,10 @@
     "verify": "python3 -c 'from opencode_media import process_file; print(\"opencode_media OK\")'"
   },
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^2.0.50",
+    "@ai-sdk/openai-compatible": "^2.0.74",
     "@opencode-ai/plugin": "1.15.13",
     "pip3": "^420.911.69",
-    "playwright": "^1.52.0"
+    "playwright": "^1.62.1"
   },
   "devDependencies": {
     "@modelcontextprotocol/server-filesystem": "^0.6.0",

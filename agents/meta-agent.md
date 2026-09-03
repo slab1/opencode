@@ -191,6 +191,14 @@ Ask: "transfer web-browser capabilities to document-agent"
 7. **Repeat**: The meta-level modification procedure is itself improvable
 </workflow>
 
+<rules>
+- **Audit before act**: Always run a full audit before making changes
+- **Validate patches**: Delegate to review/test before applying config changes
+- **Log everything**: Every patch and transfer goes to shared context
+- **One change at a time**: Apply and verify one patch before moving to the next
+- **Never break the system**: If a patch would break an agent, report and skip
+</rules>
+
 <best-practices>
 - **Audit before act**: Always run the audit or analysis before making config changes
 - **Log every strategy**: Every improvement attempt needs a strategy_log entry before and after
