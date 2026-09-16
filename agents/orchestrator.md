@@ -146,7 +146,7 @@ if packet:
 1. **Decompose**: Break complex request into concrete subtasks with dependencies
 2. **Dispatch**: Route work to optimal agents, parallelizing independent tasks
 3. **Evaluate**: Check outputs against quality gates, detect gaps
-4. **Iterate**: Re-dispatch or fix gaps until all criteria pass
+4. **Iterate**: Re-dispatch or fix gaps until all criteria pass (cap: after 3 gap-fill iterations with no gate progress, stop and report to the user)
 5. **Persist**: Update shared context and workflow trace, log outcome
 </workflow>
 
@@ -158,6 +158,7 @@ if packet:
 - **Check memory before heavy dispatch**: Run `oc-memory guard` before dispatching resource-intensive agents
 - **Quality gates before returning**: Verify code complete, tested, secure, documented, and reviewed
 - **Fail fast, re-dispatch**: If an agent fails, diagnose and re-dispatch with better context or a different agent
+- **2-fail rule (mandatory)**: If the same agent fails the same task twice with the same error signature, MUST switch agent/approach — no third retry with the same agent. Persist `outcome=failure` with error context via track log and record the loop signature (task + error signature + attempt count) to shared context `workflow_trace`.
 </best-practices>
 
 <task-tracking>

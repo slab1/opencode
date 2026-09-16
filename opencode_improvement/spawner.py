@@ -5,6 +5,7 @@ When a task requires multiple specialized agents, the spawner creates an ephemer
 team with shared context, tracks progress, and handles cleanup.
 """
 
+import hashlib
 import json
 import time
 import uuid
@@ -64,7 +65,90 @@ def _team_path(team_id: str) -> Path:
     return SPAWNED_DIR / f"{team_id}.json"
 
 
-def spawn_team(task: dict, cognitive_packet: Optional[Dict[str, Any]] = None) -> dict:
+def _hash16(text: str) -> str:
+    """Short stable hash for loop-guard comparisons (stdlib only)."""
+    try:
+        return hashlib.sha256(str(text or "").encode("utf-8")).hexdigest()[:16]
+    except Exception:
+        return ""
+
+
+def _loop_ledger_path() -> Path:
+    return SPAWNED_DIR / "loop_ledger.json"
+
+
+def _load_loop_ledger() -> dict:
+    try:
+        p = _loop_ledger_path()
+        if p.exists():
+            data = json.loads(p.read_text())
+            if isinstance(data, dict):
+                return data
+    except Exception:
+        pass
+    return {}
+
+
+def _save_loop_ledger(ledger: dict) -> None:
+    try:
+        _ensure_spawned_dir()
+        _loop_ledger_path().write_text(json.dumps(ledger, indent=2))
+    except Exception:
+        pass
+
+
+def _count_repeats(items) -> int:
+    """Max repeat count of any single value in a list (0 for empty)."""
+    try:
+        counts: Dict[str, int] = {}
+        for it in items or []:
+            k = str(it or "")
+            if not k:
+                continue
+            counts[k] = counts.get(k, 0) + 1
+        return max(counts.values()) if counts else 0
+    except Exception:
+        return 0
+
+
+def _check_spawn_loop(task_hash: str, error_history, output_hashes) -> Optional[dict]:
+    """Pre-dispatch repeat check. Returns a blocked dict or None. Never throws."""
+    try:
+        ledger = _load_loop_ledger()
+        entry = ledger.get(task_hash, {}) if isinstance(ledger, dict) else {}
+        prompt_dispatches = entry.get("prompt_dispatches", 0)
+        err_repeats = _count_repeats(error_history)
+        out_repeats = _count_repeats(output_hashes)
+        if err_repeats >= 2:
+            return {"blocked": True, "reason": "loop_detected",
+                    "detail": "same error hash seen 2x", "task_hash": task_hash}
+        if out_repeats >= 2:
+            return {"blocked": True, "reason": "loop_detected",
+                    "detail": "same output hash seen 2x", "task_hash": task_hash}
+        if prompt_dispatches >= 3:
+            return {"blocked": True, "reason": "loop_detected",
+                    "detail": "identical prompt dispatched 3x", "task_hash": task_hash}
+    except Exception:
+        pass
+    return None
+
+
+def _record_prompt_dispatch(task_hash: str) -> None:
+    """Increment the dispatch counter for a task hash in the sidecar ledger. Never throws."""
+    try:
+        ledger = _load_loop_ledger()
+        entry = ledger.get(task_hash, {})
+        if not isinstance(entry, dict):
+            entry = {}
+        entry["prompt_dispatches"] = int(entry.get("prompt_dispatches", 0)) + 1
+        ledger[task_hash] = entry
+        _save_loop_ledger(ledger)
+    except Exception:
+        pass
+
+
+def spawn_team(task: dict, cognitive_packet: Optional[Dict[str, Any]] = None,
+             loop_context: Optional[Dict[str, Any]] = None) -> dict:
     """Create a transient agent team for a complex task.
 
     Args:
@@ -74,6 +158,10 @@ def spawn_team(task: dict, cognitive_packet: Optional[Dict[str, Any]] = None) ->
             - template: str — optional team template name (default: auto-pick)
             - roles: list — optional override of agent roles
         cognitive_packet: Optional dict containing L2, L3, L4 context from MemoryController
+        loop_context: Optional dict with doom-loop guard state
+            (attempt_count, error_history, output_hashes). Threaded through
+            team_data["findings"] ledger entries so spawn_subagent() can
+            detect repeat dispatches.
     Returns:
         dict with team_id, members, shared_context_path
     """
@@ -147,7 +235,19 @@ def spawn_team(task: dict, cognitive_packet: Optional[Dict[str, Any]] = None) ->
         "members": members,
         "findings": [],
         "summaries": {},
+        # Doom-loop guard: findings[] doubles as the loop ledger; seed it
+        # with any caller-supplied attempt/error/output context.
+        "loop_context": loop_context or {},
     }
+    if loop_context:
+        try:
+            team_data["findings"].append({
+                "member": "system",
+                "finding": {"loop_context": loop_context},
+                "timestamp": datetime.utcnow().isoformat() + "Z",
+            })
+        except Exception:
+            pass
 
     path = _team_path(team_id)
     path.write_text(json.dumps(team_data, indent=2))
@@ -244,12 +344,34 @@ class SpawnedTeam:
         return {"status": "ok", "team_id": self.team_id}
 
 
-def spawn_subagent(member_info: dict, task_context: str) -> dict:
+def spawn_subagent(member_info: dict, task_context: str, attempt_count: int = 0,
+                   error_history=None, output_hashes=None) -> dict:
     """Generate a subagent task call configuration.
 
     Creates the prompt template for dispatching to a specific agent role
     in the team. The orchestrator uses this to actually invoke the agent.
+
+    Doom-loop guard: when attempt_count>=3 and the same error hash / output
+    hash repeats 2x, or the identical prompt was already dispatched 3x
+    (sidecar ledger shared/spawned/loop_ledger.json keyed by task hash),
+    returns {blocked: True, reason: loop_detected, ...} instead of a spawn
+    prompt. Never throws — on any exception falls through to normal spawn.
     """
+    try:
+        if attempt_count is not None and int(attempt_count) >= 3:
+            task_hash = _hash16(
+                (member_info.get("prompt_template", "") or "") + "\n" + (task_context or ""))
+            blocked = _check_spawn_loop(task_hash, error_history, output_hashes)
+            if blocked:
+                blocked.update({
+                    "subagent_type": member_info.get("role", "general"),
+                    "attempt_count": attempt_count,
+                    "status": "blocked",
+                })
+                return blocked
+            _record_prompt_dispatch(task_hash)
+    except Exception:
+        pass
     role = member_info.get("role", "general")
     prompt = member_info.get("prompt_template", "")
     cognitive_hint = member_info.get("cognitive_hint") or ""

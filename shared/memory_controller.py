@@ -36,14 +36,27 @@ class MemoryController:
 
     # --- L2: Episodic Memory (Trajectories) ---
 
-    def store_experience(self, task: str, action: str, outcome: str, metadata: Dict[str, Any] = None):
-        """Store a specific experience (Trajectory) in Episodic Memory."""
+    def store_experience(self, task: str, action: str, outcome: str, metadata: Dict[str, Any] = None,
+                         loop_signature: Optional[str] = None, attempt: Optional[int] = None,
+                         error_hash: Optional[str] = None):
+        """Store a specific experience (Trajectory) in Episodic Memory.
+
+        Optional doom-loop guard fields (loop_signature, attempt, error_hash)
+        are stored as-is inside the jsonl record's metadata.
+        """
+        meta = dict(metadata or {})
+        if loop_signature is not None:
+            meta["loop_signature"] = loop_signature
+        if attempt is not None:
+            meta["attempt"] = attempt
+        if error_hash is not None:
+            meta["error_hash"] = error_hash
         entry = {
             "timestamp": time.time(),
             "task": task,
             "action": action,
             "outcome": outcome,
-            "metadata": metadata or {}
+            "metadata": meta
         }
         with open(EPISODIC_DB, "a") as f:
             f.write(json.dumps(entry) + "\n")
@@ -116,10 +129,23 @@ class MemoryController:
             return []
 
         scored = []
+        query_token_set = set(query_tokens)
         for exp, doc_tokens in zip(experiences, corpus):
             doc_vec = tfidf_vector(doc_tokens)
             doc_norm = np.linalg.norm(doc_vec)
             score = float(np.dot(query_vec, doc_vec) / (query_norm * doc_norm)) if doc_norm > 0 else 0.0
+            # Doom-loop guard: small bonus when a stored loop_signature /
+            # error_hash matches the query tokens (error/output text).
+            try:
+                meta = exp.get("metadata") or {}
+                sig = str(meta.get("loop_signature") or "")
+                eh = str(meta.get("error_hash") or "")
+                if sig or eh:
+                    sig_tokens = set(tokenize(sig + " " + eh))
+                    if sig_tokens & query_token_set:
+                        score = min(1.0, score + 0.15)
+            except Exception:
+                pass
             result = dict(exp)
             result["score"] = round(score, 4)
             scored.append(result)
@@ -159,6 +185,15 @@ class MemoryController:
             if any(w in text for w in query_words):
                 result = dict(exp)
                 result["score"] = round(sum(1 for w in query_words if w in text) / len(query_words), 4)
+                # Doom-loop guard bonus (keyword fallback path): stored
+                # loop_signature / error_hash matching the query earns +0.15.
+                try:
+                    meta = exp.get("metadata") or {}
+                    sig_text = f"{meta.get('loop_signature') or ''} {meta.get('error_hash') or ''}".lower()
+                    if sig_text.strip() and any(w in sig_text for w in query_words):
+                        result["score"] = round(min(1.0, result["score"] + 0.15), 4)
+                except Exception:
+                    pass
                 matches.append(result)
         matches.sort(key=lambda x: (x["score"], x["timestamp"]), reverse=True)
         return matches[:limit]

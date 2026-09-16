@@ -3,6 +3,7 @@ Performance tracking for OpenCode agents.
 Logs task outcomes to shared context for cross-agent analysis.
 """
 
+import hashlib
 import json
 import os
 from datetime import datetime, timezone
@@ -43,6 +44,26 @@ class PerformanceTracker:
         data.append(entry)
         self._save(data)
         ctx = context or {}
+        # Doom-loop guard (additive, stdlib only): on failure with error
+        # context, persist loop fields (attempt, error_hash, task hash) so
+        # the RCSI loop (success_rate<0.6, count>=3) can fire. Never throws.
+        try:
+            attempt = ctx.get("attempt")
+            error_text = error if error is not None else ctx.get("error")
+            task_text = task if isinstance(task, str) else json.dumps(task, sort_keys=True, default=str)
+            if outcome == "failure" and error_text:
+                entry["attempt"] = attempt
+                entry["error_hash"] = hashlib.sha256(
+                    str(error_text).encode("utf-8")).hexdigest()[:16]
+                entry["task_hash"] = hashlib.sha256(
+                    str(task_text).encode("utf-8")).hexdigest()[:16]
+                ctx = dict(ctx)
+                ctx.setdefault("attempt", attempt)
+                ctx.setdefault("error_hash", entry["error_hash"])
+                ctx.setdefault("task_hash", entry["task_hash"])
+                entry["context"] = ctx
+        except Exception:
+            pass
         strategy = ctx.get("strategy")
         if strategy:
             self._record_strategy_outcome(strategy, outcome)

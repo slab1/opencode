@@ -78,7 +78,7 @@ After recovering, record what happened in shared context:
 
 ### Step 4: Prevent recurrence
 
-If the same error happened 2+ times, update the relevant agent's `<rules>` to prevent it:
+If the same error happened 2+ times, update the relevant agent's `<rules>` to prevent it AND log the loop signature (task hash, error hash, attempt count) to shared context `workflow_trace` so the next dispatch can pre-check:
 - Add: "Always re-read file fully before edit operations"
 - Add: "Check `python3 -m opencode_improvement audit` before claiming health"
 - Add: "Verify X exists before calling Y"
