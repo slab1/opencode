@@ -89,7 +89,8 @@ OpenMontage (AGPL-3.0) is at `/home/OpenMontage/` — a production pipeline syst
 ### Crossfade Transitions
 - **Crossfade Transitions**: Smooth transitions between clips with configurable duration
 
-... (trimmed for brevity) ...
+  ```python
+  {"text": "Hello", "font": "/usr/share/fonts/liberation/LiberationSans-Regular.ttf"}
   ```
 - Install fonts: `apk add font-liberation font-noto`
 - For text fitting: use `method="caption"` with `size=(width, None)` for auto word-wrap

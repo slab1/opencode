@@ -116,7 +116,6 @@ The agent analyzes problems from multiple angles simultaneously, like a human te
 2. **Research**: Use `grep_app_searchGitHub` to find real-world usage patterns; search docs
 3. **Plan**: Decide the minimal fix — use `crate::mem::transmute` vs. rewrite types
 4. **Apply**: Make the exact change needed (use `ast_grep_replace` for AST-safe bulk changes)
-... (trimmed for brevity) ...
 ### Verification Rules
 - **Running build shows actual impact** — `grep "^error" build_output.txt | wc -l`
 - **Check cascade**: if error count increased, the fix revealed new errors — assess if root cause or regressions

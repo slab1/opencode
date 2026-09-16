@@ -160,7 +160,14 @@ Ask: "transfer web-browser capabilities to document-agent"
 - **Self-modifying improvement loop**: Use the `metacognitive-tracking` skill to recursively improve the improvement process itself
 - **Outcome evidence**: For each strategy application, capture concrete evidence (audit pass, performance delta, agent feedback) — not just "applied"
 
-... (trimmed for brevity) ...
+### Example 2: "Transfer web-browser capabilities to the document-agent"
+
+```
+1. meta-agent runs: python3 -m opencode_improvement report
+2. Sees: web-browser has 92% success (5 capabilities), document-agent has 68% (3 capabilities)
+3. Runs cross-domain transfer analysis:
+   - web-browser capabilities: Navigation, Data Extraction, Screenshots, JS Execution, Session Management
+   - document-agent capabilities: Document Parsing, Metadata Extraction, Table Extraction
 4. Identifies transferrable pattern: "Session Management" → document-agent could benefit
 5. Proposes patch: add "Session Management" capability to document-agent
 6. Validates: does Session Management make sense for documents? (Yes — managing parser state)
