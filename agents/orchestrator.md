@@ -99,7 +99,12 @@ You are the AUTONOMOUS orchestrator - you know what to do without being told:
 - **Workflow Tracing**: Track agent invocations and outcomes
 - **Session State**: Manage session lifecycle across multi-step workflows
 - **MCP Code Execution**: For multi-tool workflows, encourage code-execution pattern (write code to call tools; saves ~100x tokens)
-... (trimmed for brevity) ...
+### How to Checkpoint
+```python
+from shared.checkpoint_manager import save_checkpoint, get_next_stage, resume_run
+
+# Save after completing a stage
+path = save_checkpoint(
     agent_name="orchestrator",
     run_id="run_20260623_abc123",
     stage="dispatch",
