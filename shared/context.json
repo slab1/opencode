@@ -1,12 +1,58 @@
 {
   "version": "1.1",
-  "last_updated": "2026-08-31",
+  "last_updated": "2026-09-14T00:00:00Z",
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
-    "active_runs": {},
+    "active_runs": {
+      "run_20260909_b6f805": {
+        "agent": "fixer",
+        "task": "F4 Gate VITE_MIRA_TOKEN to dev only + document MIRA_NO_AUTOPROVISION",
+        "status": "completed",
+        "stages": [
+          "parse_context",
+          "apply_changes",
+          "verify_changes"
+        ]
+      },
+      "run_20260909_3a05b8": {
+        "agent": "fixer",
+        "task": "G6/G7 Workspace tree + SessionList grouping",
+        "status": "completed",
+        "stages": [
+          "parse_context",
+          "apply_changes",
+          "verify_changes"
+        ]
+      },
+      "run_20260909_113e2d": {
+        "agent": "fixer",
+        "task": "G8 CLI/TUI no project commands",
+        "status": "completed",
+        "stages": [
+          "parse_context",
+          "apply_changes",
+          "verify_changes"
+        ]
+      },
+      "run_20260913_4202e3": {
+        "agent": "fixer",
+        "task": "P1-3 MCP Marketplace search + discovery endpoint + UI",
+        "status": "completed",
+        "stages": [
+          "parse_context",
+          "apply_changes",
+          "verify_changes"
+        ]
+      }
+    },
     "default_retention_hours": 168,
-    "keep_completed_runs": 5
+    "keep_completed_runs": 5,
+    "helper": "~/.config/opencode/scripts/oc-checkpoint.sh",
+    "usage": "oc-checkpoint.sh save <agent> <run_id> <stage> <status> | oc-checkpoint.sh list <agent> | oc-checkpoint.sh resume <agent> <run_id>",
+    "directory_expanded": "/root/.config/opencode/shared/checkpoints/",
+    "last_cleanup": "2026-09-13T00:00:00Z",
+    "cleanup_policy": "day-by-day: keep 5 newest completed per agent + all in_progress, prune older completed daily"
   },
   "config_debug_2026_06_27": {
     "findings_count": 22,
@@ -1847,155 +1893,679 @@
   ],
   "workflow_trace": [
     {
-      "step": "1",
-      "action": "Install toolchain + target",
-      "files": [
-        "Cargo.toml",
-        ".github/workflows/ci.yml"
-      ],
-      "outcome": "nightly-2025-07-01 + x86_64-unknown-none ready"
-    },
-    {
-      "step": "2",
-      "action": "Initial fix pass: asm syntax, doc comments, missing modules, macro visibility, ToString imports",
-      "files": "73+ files",
-      "outcome": "~4700\u2192~1751 (63% fixed)"
-    },
-    {
-      "step": "3",
-      "action": "Import dedup + HashMap\u2192BTreeMap + parsing fixes + asm fixes",
-      "files": "52 files",
-      "outcome": "Commit 8031e4b"
-    },
-    {
-      "step": "4",
-      "action": "E0659 elimination, HashSet\u2192BTreeSet, std\u2192no_std, drivers fix",
-      "files": "17 files",
-      "outcome": "Commit 250b375"
-    },
-    {
-      "step": "5",
-      "action": "E0252/E0255 elimination, ambiguous +, syscall_numbers path fix, MemoryRegion dup",
-      "files": "12 files",
-      "outcome": "Commit 3abbee4; all root causes 0"
-    },
-    {
-      "step": "meta-improvement",
-      "action": "Implemented agent evaluation system (8 improvements from 7 harness patterns)",
-      "files": [
-        "opencode_improvement/__init__.py",
-        "opencode_improvement/__main__.py",
-        "shared/eval/ (26 files)",
-        "shared/golden/agent_tasks.json",
-        ".github/workflows/agent-eval.yml",
-        "AGENTS.md"
-      ],
-      "outcome": "53 test cases, 98.1% pass rate, 14 strategies tracked, CI-ready"
-    },
-    {
-      "step": "10-improvements",
-      "action": "Implemented 10 additional eval system improvements (all 10 from harness analysis)",
-      "files": [
-        "opencode_improvement/__init__.py",
-        "opencode_improvement/__main__.py",
-        "shared/eval/agent_eval.yaml",
-        ".github/workflows/agent-eval.yml",
-        "shared/context.json",
-        "shared/golden/agent_tasks.json"
-      ],
-      "outcome": "All 10 improvements implemented: MockProvider, Task Versioning, Cohen's Kappa, LLM Judge, Multi-Executor, Scorecard, Inspect, Comparison Report, A/B Comparison, Auto-Commit Trends"
-    },
-    {
-      "step": "9-differentiators",
-      "action": "Implemented 9 strategic differentiators (all from strategic analysis)",
-      "files": [
-        "agent-eval/ (standalone package)",
-        "agent-eval/auto_evolve.py",
-        "opencode_improvement/pattern_miner.py",
-        "opencode_improvement/spawner.py",
-        "opencode_improvement/benchmark.py",
-        "opencode_improvement/memory_loop.py",
-        "opencode_improvement/__main__.py",
-        "dashboard/main.py + templates/",
-        "AGENTS_SPEC.md",
-        "install.sh",
-        "AGENTS.md (updated)",
-        "shared/context.json (updated)"
-      ],
-      "outcome": "All 9 differentiators implemented: auto-evolution, agent spawning, delegation mining, live dashboard, competitive benchmarking, memory loop, single-command install, AGENTS.md spec, standalone eval toolkit"
-    },
-    {
-      "step": "db-event-cleanup",
-      "action": "Purged 68,882 orphaned event-sourcing events from opencode session DB",
-      "files": [
-        "opencode_improvement/purge.py",
-        "opencode_improvement/__main__.py",
-        "shared/context.json"
-      ],
-      "outcome": "DB: 556 MB \u2192 18 MB (95% reduction). Sessions list: timeout \u2192 3ms. opencode --continue restored. Weekly cron for auto-cleanup installed. Created purge CLI tool."
-    },
-    {
       "agent": "orchestrator",
-      "step": "ecosystem-differentiation-strategy",
+      "run_id": "run_20260904_h3b",
+      "stage": "H3-B replan-once complete",
       "status": "completed",
-      "agents_used": [
-        "oracle",
-        "librarian"
-      ],
-      "artifacts": [
-        "reference/ecosystem-differentiation-strategy.md",
-        "reference/ai-coding-competitors-mid-2026.md"
-      ],
-      "timestamp": "2026-08-09T20:55:17.369662"
-    },
-    {
-      "agent": "orchestrator",
-      "step": "execute-all-bets",
-      "status": "completed",
-      "lanes": [
-        "bet1-eval-harness",
-        "bet2-memory",
-        "bet3-rcsi-dcs",
-        "bet4-cuts"
-      ],
-      "results": {
-        "bet1": "63 golden cases (10 behavioral_exec), nightly real-LLM CI cron, full suite 63/63 mock",
-        "bet2": "TF-IDF+cosine retrieval, track auto-log, 64 episodic entries seeded",
-        "bet3": "real shadow-test verify_patch, scaffold mode UNVERIFIED, print-stub skill deleted",
-        "bet4": "aether_core stubs implemented, context.json validated reframed, dead artifacts removed"
+      "artifacts": {
+        "commit": "4d4897fb",
+        "verify": {
+          "tsc": "exit 0",
+          "tests": "22 pass / 0 fail / 77 expects"
+        }
       },
-      "timestamp": "2026-08-09T23:38:29.785059+00:00"
+      "timestamp": "2026-09-04T14:08:30.931273+00:00"
     },
     {
       "agent": "orchestrator",
-      "step": "audit-hardening-pass",
-      "outcome": "committed 1f9ce2c pushed main; build/tsc/eslint green; 4 lanes complete",
-      "ts": "2026-08-17T14:50:00Z"
-    },
-    {
-      "agent": "orchestrator",
-      "step": "ci-gate-fix",
-      "outcome": "jest gate c25a6a6: tested-surface coverage 57/42/55/58 vs floors 45/35/40/45, 102 tests pass; commit pushed",
-      "ts": "2026-08-17T16:20:00Z"
-    },
-    {
-      "agent": "build",
-      "step": "data-controls-ui",
+      "run_id": "run_20260904_h3c",
+      "stage": "H3-C pipeline hardening complete",
       "status": "completed",
-      "outcome": "GDPR/CCPA self-service UI done: tsc -b --noEmit exit 0, 15 new tests pass, full suite 133/133, lint 0 errors. RPCs hand-typed as Args:never/Returns:Json. Deletion clears localStorage keys + sessionStorage.",
-      "files": [
-        "src/services/data-controls.ts",
-        "src/components/profile/DataControls.tsx",
-        "src/pages/Profile.tsx",
-        "src/integrations/supabase/types.ts"
-      ],
-      "ts": "2026-08-18T15:29:17.490350+00:00"
+      "artifacts": {
+        "commit": "558839b7",
+        "verify": {
+          "yaml": "OK",
+          "helper": "syntax + flag matrix OK"
+        }
+      },
+      "timestamp": "2026-09-04T14:25:19.134800+00:00"
     },
     {
-      "step": "mira_code_review",
-      "action": "review_and_fix",
-      "time": "2026-08-29T00:00:00Z",
-      "result": "9 findings fixed and committed (259a02be); pre-existing config.ts TS2589 left for follow-up"
+      "agent": "fixer",
+      "run_id": "run_20260909_id8b0l",
+      "task": "P1 per-session cost + budget cap UI",
+      "status": "completed",
+      "timestamp": "2026-09-09T00:00:00Z",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/web/src/App.tsx",
+          "packages/web/src/components/SessionList.tsx",
+          "packages/web/src/stores/app.ts",
+          "packages/server/src/types/index.ts",
+          "packages/server/src/session/prompt.ts"
+        ],
+        "files_verified": [
+          "api/client.ts Session costUsd/tokensIn/tokensOut",
+          "storage/schema.ts cost_usd",
+          "routes/session.ts GET /session"
+        ],
+        "verify": {
+          "typecheck": "pass (turbo typecheck 6/6, 48s)",
+          "vite_build": "pass (299kB, 11.35s)",
+          "per_session_cost": "SessionList per-row $ + App header per-session cost + budget cap indicator wired from config.costCap"
+        }
+      },
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_id8b0l",
+      "outcome": "P1 fix complete: per-session costUsd/tokensIn/tokensOut exposed via GET /session, SessionList per-row cost pill with cap warning, App header per-session cost + budget cap progress bar/sparkline, costCap wired from config.costCap, typecheck and vite build green, minimal diff preserved design"
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_alpmup",
+      "task": "P2 time-travel scrubber / per-message rewind",
+      "status": "completed",
+      "timestamp": "2026-09-09T00:00:00Z",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "file_modified": "packages/web/src/components/ToolView.tsx",
+        "change": "History tab now groups snapshots by messageID with per-message \u21a9 rewind to here (api.revertSession) + per-file diff via api.getSnapshot (GET /session/:id/snapshots/:snapId)",
+        "api_client": "listSnapshots (630) and getSnapshot (632-638) verified present \u2014 no change needed",
+        "server_routes": "GET /session/:id/snapshots and GET /session/:id/snapshots/:snapshotId and POST /session/:id/revert already exist in session-extras.ts",
+        "verify": {
+          "typecheck": "turbo typecheck 6/6 pass (web cache miss, server hit)",
+          "vite_build": "vite build 31 modules, 299kB (gzip 80kB) \u2014 pass",
+          "server_typecheck": "tsc --noEmit exit 0"
+        },
+        "checkpoints": "fixer/run_20260909_alpmup/{parse_context,apply_changes,verify_changes}.json"
+      }
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_634677",
+      "task": "P0 slash palette + composer buttons",
+      "status": "completed",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_634677",
+      "timestamp": "2026-09-09T17:21:15Z",
+      "files": [
+        "stores/settings.ts",
+        "App.tsx",
+        "ChatView.tsx",
+        "CommandPalette.tsx",
+        "PromptInput.tsx",
+        "api/client.ts",
+        "stores/app.ts"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/web/src/components/CommandPalette.tsx",
+          "packages/web/src/components/PromptInput.tsx",
+          "packages/web/src/components/ChatView.tsx",
+          "packages/web/src/api/client.ts",
+          "packages/web/src/stores/app.ts",
+          "packages/server/src/routes/session-extras.ts",
+          "packages/server/src/types/index.ts"
+        ],
+        "verify": {
+          "typecheck": "pass (turbo typecheck 6/6)",
+          "vite_build": "pass (300kB)",
+          "server_build": "pass"
+        },
+        "fixes": [
+          "P0 slash palette: CommandPalette loading fallback, ChatView slashVisible + effect, App preload (already present), settings synthetic (already present)",
+          "P0 composer: PromptInput type=button, ChatView streaming guard + disabled, api abortPrompt, app stopStream abort, server abort endpoint"
+        ]
+      }
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_l45vab",
+      "task": "P1 MCP CI flake Legacy SSE listen failed (HTTP 200)",
+      "status": "completed",
+      "timestamp": "2026-09-09T18:05:26.226598+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/mcp/http-client.ts:186-197 split !res.ok vs !res.body with distinct messages",
+          "packages/server/src/mcp/mock-http-mcp-server.ts:168-189 non-legacy GET /mcp 404 + HEAD /mcp 200 + await Bun.sleep(10) before ready",
+          "packages/server/src/mcp/http-client.test.ts:1-80 startMock await Bun.sleep(50) + poll HEAD fallback GET 10x20ms"
+        ],
+        "verify": {
+          "isolated": "bun test packages/server/src/mcp/http-client.test.ts 11 pass 55.83s",
+          "under_load": "42 pass 1 skip with tools batch 53.79s, 197 pass gateway batch, 5 pass mcp manager/stdio",
+          "typecheck": "tsc --noEmit exit 0 (packages/server)",
+          "full_suite": "72 pass 1 fail (pre-existing OnlineLearner timeout) across learning/lsp/session"
+        },
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_l45vab"
+      },
+      "outcome": "P1 fix complete: split conflated !res.ok||!res.body into separate checks (HTTP status + body text vs empty body), mock non-legacy GET now 404 with HEAD 200 and sleep(10) to avoid Bun serve race, startMock polls HEAD/GET 10x20ms after sleep(50); 11 tests pass isolated and under load, typecheck green, minimal diff preserved design"
+    },
+    {
+      "run_id": "run_20260909_21664c",
+      "agent": "fixer",
+      "task": "Fix CI 34470959712 for 35986afb (P0-1 workspace sessions) \u2014 mcp http-client flake",
+      "commit": "4e8db222",
+      "previous_commit": "35986afb",
+      "ci_run": "34470959712",
+      "failure": "11 fail in http-client.test.ts: Legacy SSE listen failed empty body 200 (Bun fetch race under turbo parallel load)",
+      "fix": "http-client: retry streamable 3x + SSE 8x with backoff; test: 150ms+20 probes; mock: 100ms sleep",
+      "verified": "bun test http-client 11 pass, typecheck 6/6, gaps 7 pass",
+      "timestamp": "2026-09-10T15:09:00.180459+00:00",
+      "status": "completed"
+    },
+    {
+      "run_id": "run_20260909_d19e56",
+      "agent": "fixer",
+      "task": "P1-1 per-project config + Settings UI",
+      "status": "completed",
+      "timestamp": "2026-09-10T16:56:33.305715+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/routes/config.ts:43-122 resolveCwd sanitizePath+isPathAllowed with getConfig(cwd).guardrails.allowedRoots, GET /config?cwd= returns getConfigLayers(cwd) merged, PATCH /config?cwd= saveConfig(patch,layer,cwd), GET /permission?cwd= per-project",
+          "packages/web/src/api/client.ts:728-785 getConfig(cwd?) and getWorkspaceTree(cwd?) encodeURIComponent cwd, getPermission(cwd?)",
+          "packages/web/src/stores/settings.ts:232-377 loadAll(cwd) + loadConfig(cwd) + loadPermission(cwd) + loadWorkspaceTree(cwd) pass-through cwd",
+          "packages/web/src/components/SessionList.tsx:79-342 projectFilter signal + groupByProject memo + availableProjects + filtered + grouped + project badge + Group by project toggle",
+          "packages/tui/src/rpc/client.ts: getConfig/getWorkspaceTree/getPermission cwd param",
+          "packages/tui/src/stores/settings.ts: loadAll(cwd) parity"
+        ],
+        "verify": {
+          "typecheck": "turbo typecheck 6/6 pass (server, web, tui, shared, slack, cli)",
+          "tests": "config layered settings + PATCH persistence pass, 213+ pass overall, 1 LIVE fail (missing auth) + 4 mcp http-client flake pre-existing",
+          "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_d19e56"
+        }
+      },
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_d19e56",
+      "outcome": "P1-1 complete: per-project config via ?cwd= with sanitizePath+allowedRoots validation, Settings store cwd pass-through, SessionList project filter/grouping with badge, api client cwd encoding; typecheck green, config e2e pass, minimal diff preserved design"
+    },
+    {
+      "run_id": "run_20260909_9fc67f",
+      "agent": "fixer",
+      "task": "P1-2 harden isolation per-project (S)",
+      "status": "completed",
+      "timestamp": "2026-09-10T18:40:00.000000+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/guardrails/index.ts:33-41,105 isEnforceEnabled()+MIRA_STRICT_AUTH, parseWorkspaceRoots()+MIRA_WORKSPACE_ROOTS, getEffectiveAllowedRoots(cwd)+getEffectiveEnforce(cwd) per-project via getConfig(cwd), isPathAllowed fail-closed via isEnforceEnabled, GuardrailsManager.check(cwd) per-tool-call with effectiveRoots/enforce, bash blockedPaths+ /etc/passwd deny when enforce",
+          "packages/server/src/tools/registry.ts:217 guardrails.check with session cwd per tool call (fullCtx.cwd)",
+          "packages/server/src/index.ts:34-41 MIRA_WORKSPACE_ROOTS env parsing + WORKSPACE_ROOTS log, guardrails enforce/roots log per-project"
+        ],
+        "verify": {
+          "typecheck": "turbo typecheck 6/6 pass",
+          "tests": "tools 31 pass, guardrails manual: isEnforceEnabled/MIRA_STRICT_AUTH, parseWorkspaceRoots, isPathAllowed fail-closed, sanitizePath, getEffectiveAllowedRoots, GuardrailsManager bash cat /etc/passwd deny, registry per-project allowedRoots",
+          "workspace_tree": "GET /workspace/tree?cwd=/tmp/other uses getConfig(cwd).guardrails.allowedRoots per-project (P0-2), explicit cwd bypass intentional for project browsing",
+          "bash_block": "bash cat /etc/passwd blocked in prod (MIRA_STRICT_AUTH=1 or HOST=0.0.0.0 or NODE_ENV=production) via blockedPaths + explicit /etc/passwd check"
+        },
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_9fc67f",
+        "checkpoints": "fixer/run_20260909_9fc67f/{parse_context,apply_changes,verify_changes}.json"
+      },
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_9fc67f",
+      "outcome": "P1-2 complete: per-project isolation hardened via getConfig(cwd).guardrails.allowedRoots per tool call, MIRA_WORKSPACE_ROOTS env override, MIRA_STRICT_AUTH=1 enforce, isPathAllowed fail-closed, bash sensitive path blocking; typecheck green, manual guardrails/registry tests pass, minimal diff preserved design"
+    },
+    {
+      "run_id": "run_20260909_f3b0bc",
+      "agent": "oracle",
+      "task": "Strategic auth & token design review @ 09515f59",
+      "status": "completed",
+      "timestamp": "2026-09-10T20:52:47.000000+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "verdict": "REVISE",
+      "artifacts": {
+        "report": "/tmp/oracle_auth_review.md",
+        "p1": 3,
+        "p2": 5,
+        "files": [
+          "index.ts:86-186",
+          "middleware/index.ts:37-151",
+          "web/api/client.ts:387-470",
+          "cli/cli.ts:68-74",
+          "vscode/extension.ts:20-51",
+          "schema.ts:194",
+          "admin.ts:26-92"
+        ]
+      }
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_96b605",
+      "task": "P2-1 Workspace-aware symbols/LSP/memory",
+      "status": "completed",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "timestamp": "2026-09-10T20:45:00.000000+00:00",
+      "artifacts": {
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_96b605",
+        "files_modified": [
+          "packages/server/src/symbols/index.ts:261 walk fix baseRoot param for workspace-aware relative paths",
+          "packages/server/src/tools/edit-fallback.ts:21 import getSymbolIndex, 442 applyWorkspaceEdit cwdForLsp, 484-487 heuristic rename workspace-aware",
+          "packages/server/src/tools/edit.ts:24 pass cwd to applyEditWithFallback, 55 patch tool ctx.cwd fallback",
+          "packages/server/src/tools/other.ts:204 diagnose tool ctx.cwd fallback"
+        ],
+        "verify": {
+          "typecheck": "turbo typecheck 6 successful, server tsc --noEmit pass",
+          "lsp": "8 pass 1 skip (lsp/client.test.ts)",
+          "tools": "31 pass 1 skip (tools/*)",
+          "workspace": "manual test: getSymbolIndex per-cwd isolates symbols, glob/read respect session.cwd"
+        }
+      },
+      "outcome": "P2-1 fix complete: walk now respects session.cwd via baseRoot param, edit-fallback LSP/heuristic renames use session cwd via getSymbolIndex(cwdForLsp), edit patch/diagnose tools respect ctx.cwd, workspace-aware symbols/LSP/memory verified",
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_96b605"
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_7cf010",
+      "task": "P2-2 project lifecycle \u2014 create/switch/templates/recent",
+      "status": "completed",
+      "timestamp": "2026-09-11T00:30:04.692898+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/routes/workspace.ts",
+          "packages/cli/src/cli.ts",
+          "packages/web/src/api/client.ts",
+          "packages/web/src/components/SessionList.tsx",
+          "packages/web/src/stores/app.ts"
+        ],
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_7cf010"
+      },
+      "outcome": "P2-2 complete"
+    },
+    {
+      "run_id": "run_20260909_ca3a95",
+      "agent": "fixer",
+      "task": "P1 auth gaps \u2014 MIRA_ALLOW_LOCALHOST diverge + api_keys Drizzle + placeholder token",
+      "status": "completed",
+      "timestamp": "2026-09-11T01:35:38.000000+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [],
+        "files_verified": [
+          "packages/server/src/middleware/index.ts:73 === \"1\" strict",
+          "packages/server/src/index.ts:137-156 placeholder error+exit(1) in production else empty with error log",
+          "packages/server/src/index.ts:221-225 MIRA_ALLOW_LOCALHOST === \"1\" aligned with middleware",
+          "packages/server/src/storage/schema.ts:194-201 api_keys table + index",
+          "packages/server/src/storage/db.ts:176-182 migrate api_keys",
+          "packages/server/src/routes/admin.ts:33-42 ensureTable idempotent"
+        ],
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_ca3a95",
+        "verification": {
+          "typecheck": "bun --cwd packages/server tsc --noEmit exit 0",
+          "gaps_e2e": "7 pass 0 fail",
+          "storage_snapshots": "12 pass 0 fail",
+          "full_suite": "bun test exit 0 (all server tests pass)"
+        },
+        "note": "All 3 P1 gaps already fixed at d3ac5f06 \u2014 verified alignment, no code changes needed, checkpointed"
+      }
+    },
+    {
+      "agent": "oracle",
+      "run_id": "run_20260911_d29e76",
+      "task": "Mira auth/token recheck @ d3ac5f06 \u2014 token format conflict + remaining gaps",
+      "stage": "verify_changes",
+      "status": "completed",
+      "ts": "2026-09-11T01:40:00Z"
+    },
+    {
+      "run_id": "run_20260909_5faa9c",
+      "agent": "oracle",
+      "task": "Mira dev ends crosscheck @ d3ac5f06 READ-ONLY",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "status": "completed",
+      "timestamp": "2026-09-11T01:40:00Z",
+      "findings": "oracle dev ends map + workflow map + 5 crosscheck findings + 4 fixes"
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_aab991",
+      "task": "F3 Fix HMR WS proxy writeAfterFIN",
+      "stage": "verify_changes",
+      "status": "completed",
+      "timestamp": "2026-09-12T02:15:40.149807+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/web/vite.config.ts: hmr.port 24678 + proxy '/' configure writeAfterFIN guard",
+          "packages/tui/vite.config.ts: hmr.port 24679 + proxy '/' configure writeAfterFIN guard",
+          "packages/server/src/index.ts:723-765 srv.upgrade try/catch writeAfterFIN graceful"
+        ],
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_aab991",
+        "directory_expanded": "/root/.config/opencode/shared/checkpoints/fixer/run_20260909_aab991",
+        "helper": "~/.config/opencode/scripts/oc-checkpoint.sh",
+        "verification": {
+          "typecheck": "turbo typecheck 6 successful (1m36s)",
+          "vite_build_web": "vite v6.4.3 31 modules 309kB \u2014 success",
+          "vite_build_tui": "vite v6.4.3 39 modules 339kB \u2014 success",
+          "hmr_isolation": "web 24678, tui 24679 \u2014 HMR WS never proxies to Bun server",
+          "proxy_guard": "proxy '/' configure ignores writeAfterFIN/ECONNRESET",
+          "server_guard": "srv.upgrade try/catch writeAfterFIN returns gracefully without logging"
+        }
+      }
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_b6f805",
+      "task": "F4 Gate VITE_MIRA_TOKEN to dev only + document MIRA_NO_AUTOPROVISION",
+      "stage": "verify_changes",
+      "status": "completed",
+      "timestamp": "2026-09-12T03:52:25.278780+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "README.md: Security Defaults + Environment Reference document MIRA_NO_AUTOPROVISION=1, ~/.mira/mira.env dev-only 0o600, prod MIRA_TOKEN via env/secret, VITE_MIRA_TOKEN dev-only gated",
+          ".env.example: Auth comments document dev auto-provision 0o600, MIRA_NO_AUTOPROVISION=1, prod fail-closed, VITE_MIRA_TOKEN dev-only gated",
+          "packages/web/vite.config.ts:52-63 verified gated (3e0a08e) FIRST_RUN_TOKEN = NODE_ENV !== 'production' ? VITE_MIRA_TOKEN || miraEnvToken() : '' + define gated",
+          "packages/server/src/index.ts:86-133 verified provisionFirstRunToken respects MIRA_NO_AUTOPROVISION=1 + NODE_ENV=production fail-closed",
+          "scripts/serve-local.sh:8-15 verified sources ~/.mira/mira.env via set -a / . / set +a"
+        ],
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_b6f805",
+        "directory_expanded": "/root/.config/opencode/shared/checkpoints/fixer/run_20260909_b6f805",
+        "helper": "~/.config/opencode/scripts/oc-checkpoint.sh",
+        "verification": {
+          "typecheck": "turbo typecheck 6 successful",
+          "vite_build_prod": "NODE_ENV=production vite build 309kB \u2014 dist/assets/*.js no VITE_MIRA_TOKEN, no token value (deadbeef test 0 matches)",
+          "provision_gates": "MIRA_NO_AUTOPROVISION=1 returns early, NODE_ENV=production returns early \u2014 verified via temp MIRA_DIR",
+          "serve_local": "set -a; [ -f \"$MIRA_ENV\" ] && . \"$MIRA_ENV\"; set +a \u2014 correctly sources",
+          "commit": "c0a39ca0"
+        }
+      }
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_3a05b8",
+      "task": "G6/G7 Workspace tree + SessionList grouping",
+      "stage": "verify_changes",
+      "status": "completed",
+      "timestamp": "2026-09-12T06:30:00+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/routes/workspace.ts:17-32 loadIgnorePatterns handles ! negations + **/.gitignore recursion, dot:true, isDir/size/mtime, includeDirs, limit&cursor pagination",
+          "packages/server/src/routes/workspace.ts:35-58 isIgnored handles ! correctly (last match wins), matchesPattern helper",
+          "packages/web/src/components/SessionList.tsx:92-126 verified projectFilter/groupByProject/availableProjects/filtered/grouped + project badge + Group by project toggle + project filter select (already correct from P1-1)",
+          "packages/web/src/api/client.ts:22-33 Session type has projectId/cwd (already correct from P0-1)"
+        ],
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_3a05b8",
+        "directory_expanded": "/root/.config/opencode/shared/checkpoints/fixer/run_20260909_3a05b8",
+        "helper": "~/.config/opencode/scripts/oc-checkpoint.sh",
+        "verification": {
+          "typecheck": "turbo typecheck 6 successful",
+          "workspace_tree_dot": "dot:true includes .env.example",
+          "workspace_tree_dirs": "includeDirs=true returns dirs with isDir:true",
+          "workspace_tree_pagination": "limit=1 returns truncated:true + nextCursor",
+          "workspace_tree_negation": "!important.log correctly un-ignored (isIgnored false)",
+          "workspace_tree_nested_gitignore": "**/.gitignore recursion: subdir2/cache.tmp ignored via nested .gitignore",
+          "workspace_tree_metadata": "files:[{path,isDir,size,mtime}] with stat",
+          "session_list": "Group by project toggle + project badges + projectFilter select when >1 project verified",
+          "tests": "bun test server: 251 pass / 1 fail (LIVE auth only) / 0 regressions"
+        }
+      }
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260909_113e2d",
+      "task": "G8 CLI/TUI no project commands",
+      "stage": "verify_changes",
+      "status": "completed",
+      "timestamp": "2026-09-12T07:30:00+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/cli/src/cli.ts: added cmdProjectList + project list handling, updated printHelp",
+          "packages/tui/src/rpc/client.ts: Session cwd/projectId added",
+          "packages/tui/src/App.tsx: fetchWorkspaceFiles now cwd-aware via currentCwd() + cache per cwd + refetch on cwd change",
+          "packages/web/src/components/PromptInput.tsx: cwd prop + resolveCwd via props.cwd or localStorage selectedWorkspace + cache per cwd",
+          "packages/web/src/components/ChatView.tsx: currentCwd memo + pass cwd to PromptInput"
+        ],
+        "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_113e2d",
+        "directory_expanded": "/root/.config/opencode/shared/checkpoints/fixer/run_20260909_113e2d",
+        "helper": "~/.config/opencode/scripts/oc-checkpoint.sh",
+        "verification": {
+          "typecheck": "turbo typecheck 6 successful",
+          "cli_project_list": "mira project list \u2192 shows projects (offline via ~/.mira/workspaces.json)",
+          "cli_workspace": "mira workspace add/list/switch/remove work offline via ~/.mira/workspaces.json",
+          "cli_project_init": "mira project init --template ts --path /tmp/test creates mira.json + registers workspace",
+          "tui_workspace_tree": "TUI App.tsx getWorkspaceTree(cwd) via currentCwd() from session.cwd",
+          "web_prompt_input": "PromptInput @ shows correct project files via cwd prop from ChatView currentCwd()",
+          "tests": "bun test 251 pass / 1 LIVE fail only"
+        }
+      },
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260909_113e2d",
+      "directory_expanded": "/root/.config/opencode/shared/checkpoints/fixer/run_20260909_113e2d",
+      "helper": "~/.config/opencode/scripts/oc-checkpoint.sh",
+      "outcome": "G8 fix complete: CLI project list + workspace offline, TUI/web @ mention cwd-aware, typecheck green, minimal diff preserved design"
+    },
+    {
+      "run_id": "run_20260912_23e94c",
+      "agent": "fixer",
+      "task": "P0-3 guardrails audit rotation + patch/task/mcp coverage",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "status": "completed",
+      "verify": "typecheck clean; tools 31 pass; full 350 pass 11 fail (McpHttpClient network flake, unrelated)",
+      "updated": "2026-09-13T04:05:00Z"
+    },
+    {
+      "run_id": "run_20260913_4202e3",
+      "agent": "fixer",
+      "task": "P1-3 MCP Marketplace search + discovery endpoint + UI",
+      "base": "fca7caf3",
+      "status": "completed",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "files_modified": [
+        "packages/server/src/mcp/marketplace.ts (new)",
+        "packages/server/src/mcp/mcp-registry.json (new, 10 curated servers)",
+        "packages/server/src/routes/mcp.ts (GET /mcp/marketplace + POST /mcp/marketplace/:name)",
+        "packages/server/src/tools/mcp_marketplace.ts (shared registry)",
+        "packages/web/src/api/client.ts (listMcpMarketplace/addMcpFromMarketplace + MarketplaceServer)",
+        "packages/web/src/components/McpMarketplace.tsx (new)",
+        "packages/web/src/components/SettingsPanel.tsx (wired into connectors tab)",
+        "packages/tui/src/rpc/client.ts (marketplace rpc + type)"
+      ],
+      "deviation": "registry JSON at src/mcp/mcp-registry.json instead of packages/server/data/ (data/ is gitignored via **/data/)",
+      "verify": "tsc server+web+tui clean; bun test src/mcp+src/tools 47 pass/0 fail; live route test: q=postgres->200 postgres top hit w/ config snippet, traversal->400, bad limit->400, POST add->201, unknown->404, GET /mcp->200",
+      "checkpoints_dir": "/root/.config/opencode/shared/checkpoints/fixer/run_20260913_4202e3/"
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260913_0a272f",
+      "task": "Fix CI failure for merge 09894969: McpHttpClient flake under turbo parallel load (11x empty body HTTP 200)",
+      "status": "completed",
+      "timestamp": "2026-09-13T05:42:51.731901+00:00",
+      "stages": [
+        "parse_context",
+        "apply_changes",
+        "verify_changes"
+      ],
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/mcp/http-client.ts",
+          "packages/server/src/mcp/mock-http-mcp-server.ts",
+          "packages/server/src/mcp/http-client.test.ts"
+        ],
+        "verify": {
+          "isolated": "11 pass / 0 fail x3 runs (98s, 65s, 106s)",
+          "parallel_load": "11/11 pass in 53.7s alongside orchestrate (12/12) + manager (1/1) suites concurrently",
+          "typecheck": "packages/server tsc --noEmit exit 0"
+        }
+      },
+      "checkpoint_dir": "~/.config/opencode/shared/checkpoints/fixer/run_20260913_0a272f",
+      "outcome": "Combined A+B+C: describe.serial + spawn-mutex stagger (A), SSE retries 8->12 w/ transient-5xx retry + streamable 3->5 w/ 404/405 short-circuit (B), mock ready sleep 100->500ms + test probe 150ms/20x->300ms/30x (C). Worst-case SSE backoff ~10s fits 20s test timeout. Left uncommitted for orchestrator to commit/push."
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260914_9f3k7d",
+      "task": "P2-2 session export/import backend slice",
+      "status": "completed",
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/routes/session.ts"
+        ],
+        "files_created": [
+          "packages/server/src/routes/session-export.test.ts"
+        ],
+        "verify": {
+          "tsc": "exit 0",
+          "tests": "4 pass / 0 fail (session-export.test.ts); 13 pass / 0 fail with gateway/models.test.ts both orders; 27 pass / 0 fail session-area regression"
+        }
+      },
+      "timestamp": "2026-09-14T03:03:38.094726+00:00",
+      "notes": "session.ts handlers mount first and shadow session-extras.ts duplicates; legacy ?format=md + version-less/0.1.0 import bodies preserved for CLI/e2e. No fetch stubs used (Bun.serve + real fetch). Uncommitted in working tree."
+    },
+    {
+      "agent": "designer",
+      "run_id": "run_20260914_7h2m4p",
+      "task": "P2-2 frontend slice 1: session export/import UI + per-session jobs view",
+      "status": "completed",
+      "artifacts": {
+        "files_modified": [
+          "packages/web/src/api/client.ts (exportSession encodeURIComponent fix + importSession POST /session/import)",
+          "packages/web/src/components/SessionList.tsx (SessionExportMenu per-row .json/.md + import file picker)",
+          "packages/web/src/index.css (session-export-btn/menu/scrim styles, new rules only)",
+          "packages/web/src/App.tsx (SessionJobs wired after QueueRail)"
+        ],
+        "files_created": [
+          "packages/web/src/components/SessionJobs.tsx (polls listJobs, JobRow/job, cancel+open-child)"
+        ],
+        "verify": {
+          "tsc": "bunx tsc --noEmit -p packages/web/tsconfig.json exit 0",
+          "build": "bun run build (vite 6.4.3) exit 0, 34 modules, dist emitted"
+        }
+      },
+      "timestamp": "2026-09-14T00:00:00+00:00",
+      "notes": "No layout redesign; row hierarchy intact; hover-reveal export trigger mirrors pin/delete pattern; no server changes; no live tail (slice 2). Uncommitted in working tree."
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260914_4q8m2z",
+      "task": "Type-safety slice 1: remove as-unknown casts in prompt.ts + stream.ts",
+      "status": "completed",
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/session/prompt.ts",
+          "packages/server/src/gateway/stream.ts"
+        ],
+        "casts_fixed": 18,
+        "casts_left": 0,
+        "verify": {
+          "tsc": "exit 0",
+          "tests": "session 15/0, models+subgateway 22/0, export+sse+retry 43/0"
+        }
+      },
+      "timestamp": "2026-09-14T04:41:50.879400+00:00",
+      "notes": "All 18 as-unknown eliminated via structural guards, typed consts, interface fields, Object.assign, Awaited<ReturnType>. No any, no behavior change. Uncommitted in working tree."
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260914_6t5v8n",
+      "task": "Type-safety slice 2: 24 casts across 14 files",
+      "status": "completed",
+      "artifacts": {
+        "files_modified": [
+          "memory/memory_controller.ts",
+          "gateway/subgateway.ts",
+          "mcp/index.ts",
+          "gateway/summarize.ts",
+          "gateway/router.ts",
+          "tools/orchestrate-planner.ts",
+          "routes/workspace.ts",
+          "routes/session.ts",
+          "mcp/json-schema-to-zod.ts",
+          "mcp/http-client.ts",
+          "lsp/client.ts",
+          "gateway/index.ts",
+          "shared/utils/paths.ts"
+        ],
+        "casts_fixed": 23,
+        "casts_left": 1,
+        "left": [
+          "routes/symbol.ts:71 (private SymbolIndex.glob access; needs visibility change, out of scope)"
+        ],
+        "verify": {
+          "tsc_server": "exit 0",
+          "tsc_shared": "exit 0",
+          "tests": "gateway 179/0, memory+mcp 16/0; TokenBucket retryAfterMs flaked once under full-trio load, green in isolation + reruns on both trees"
+        }
+      },
+      "timestamp": "2026-09-14T05:53:19.855646+00:00",
+      "notes": "No any, no behavior change. Uncommitted in working tree."
+    },
+    {
+      "agent": "fixer",
+      "run_id": "run_20260914_d4e5f6",
+      "task": "P0-3 guardrails prod-default-on (exp-1 remainder)",
+      "status": "completed",
+      "artifacts": {
+        "files_modified": [
+          "packages/server/src/guardrails/index.ts",
+          "packages/server/src/index.ts",
+          "packages/server/src/guardrails/README.md",
+          "packages/server/src/guardrails/enforce.test.ts"
+        ],
+        "verify": {
+          "tsc": "exit 0",
+          "new_tests": "5 pass / 0 fail",
+          "existing": "tools+config+guardrails 54 pass / 0 fail / 1 skip (live)"
+        }
+      },
+      "timestamp": "2026-09-14T09:30:00+00:00",
+      "notes": "Precedence env>config>prod-default; explicit opt-out wins; boot console.warn when off in prod; dev fail-open unchanged. Uncommitted."
     }
   ],
   "cross_agent_notes": {
@@ -2206,6 +2776,22 @@
     }
   },
   "findings": {
+    "docs": [
+      {
+        "id": "mira-h2-3-orchestrator-v2-docs",
+        "type": "architecture_doc",
+        "summary": "Created docs/H2-3-ORCHESTRATOR-V2.md (220 lines): H2-3 f262fa68 E1-E3, input/output shapes, merge strategies, inferDAG usage, gaps, memory-graph wiring note, standout follow-ups checklist",
+        "detail": "2026-09-04 docs-only pass for Mira (/tmp/aether), validation owner orchestrator. Sources: orchestrate.ts, orchestrate-planner.ts, learning/knowledge.ts, learning/index.ts, web client.ts, MemoryGraph.tsx, UI-UX-AUDIT.md. No code touched, no commit (per task).",
+        "date": "2026-09-04"
+      },
+      {
+        "id": "mira-changelog-h2-2-h2-3-graph",
+        "type": "changelog",
+        "summary": "Created docs/CHANGELOG.md (24 lines): H2-3 f262fa68, H2-2 d69725d0, memory graph H2-1 48c4ea6d + canvas f7827968",
+        "detail": "Keep-a-Changelog Unreleased/Added entries with commit SHAs and pointer to H2-3 doc section 7 for the graph data contract.",
+        "date": "2026-09-04"
+      }
+    ],
     "meta_agent": [
       {
         "id": "session-eval-system-overhaul",
@@ -3817,46 +4403,26 @@
       "verification": "zeke: `list`+`open https://example.com` OK. lotreace: newTab+snapshot returned title 'Example Domain' + a11y snapshot OK.",
       "severity": "info"
     },
-    "fixer": [
-      "agent",
-      "timestamp",
-      "task",
-      "summary",
-      "verification",
-      "files",
-      "bet6_memory_portability",
-      "bet7_audit_trail",
-      "bet8_verification_badge",
-      "bet9_skills_verify",
-      "bet10_trends_ledger",
-      "login_signup_jest_green",
-      "m6_m7_m9_reservatoo",
-      "reservatoo_payment_api_h3_h4",
-      "booking_tests_20260816",
-      "edge_fn_pain_points_2026-08-16",
-      "rate_limit_middleware_2026-08-23",
-      "prometheus_metrics_2026-08-23",
-      "cd_workflow_validation_20260823",
-      {
-        "id": "aether-job-board",
-        "date": "2026-08-24",
-        "lane": "IMPLEMENTATION (/tmp/aether)",
-        "task": "task tool: fix broken agent mapping + 500-char truncation; add jobs table + lifecycle + getJob/listJobs/cancelJob",
+    "fixer": {
+      "task": "P1-S1 Browser Tool is Stub Only",
+      "files_modified": [
+        "/tmp/aether/packages/server/src/tools/browser.ts"
+      ],
+      "what": "Added Playwright requirement with clear error, URL guardrails via isBlockedFetchUrl, allowlist/blocklist env vars, updated description",
+      "how": "Imported isBlockedFetchUrl, added getBrowserUrlAllowlist/getBrowserUrlBlocklist/validateBrowserUrl, updated execute to validate URL before Playwright check, changed missing Playwright error message, updated tool description",
+      "verified": "bun test packages/server/src/tools/browser.test.ts passes; commit feat(server): browser tool Puppeteer requirement and guardrails",
+      "deviation": "None",
+      "p2_s1_session_export_import": {
+        "task": "P2-S1 Session Export/Import",
         "files_modified": [
-          "packages/server/src/tools/task.ts",
-          "packages/server/src/storage/schema.ts",
-          "packages/server/src/storage/db.ts"
+          "/tmp/aether/packages/server/src/routes/session.ts",
+          "/tmp/aether/packages/server/src/session/cross-device.ts"
         ],
-        "verified": "bunx turbo run typecheck --filter=@mira/server \u2192 only pre-existing prompt.ts(243,299) errors from concurrent session lane; zero errors in owned files. Runtime smoke test (bun script): FG/BG spawn\u2192jobID, untruncated 720-char result persisted, failed+error stored, cancelled-on-poll guard holds (completion does NOT overwrite cancelled), listJobs scoped/newest-first, double-migrate idempotent.",
-        "deviations": [
-          "Background spawn response cannot include childSessionID at spawn time \u2014 runSubagent creates the child session internally and only resolves with it at completion (prompt.ts not in this lane). childSessionID lands in the jobs row + bus message.updated payload on completion.",
-          "No FK on jobs.child_session_id (spec DDL had none): alternate runners may return ephemeral/unpersisted session IDs; FK caused SQLITE_CONSTRAINT on terminal update in smoke test. parent_session_id keeps FK\u2192sessions ON DELETE CASCADE matching todos pattern.",
-          "cancelJob is cancelled-on-poll only: neither subagentRunner nor forkRunner exposes an abort handle (no AbortController anywhere in session/*). Terminal updates guard WHERE status='running' so they never overwrite 'cancelled'.",
-          "Kept taskID alongside new jobID in responses/bus payloads for backward-compatible bus correlation."
-        ]
-      },
-      "2026-08-25 aether TS strictness: found work items 1-3 already applied by prior session (findings.ts schemas+satisfies, prompt.ts args Record<string,JsonValue>, all tool files converted); only remaining blocker was other.test.ts union-typed tool lookups -> anchored with as typeof documentTool/imageTool + out.analysis! after ok assertion. Verified: tsc exit 0, any/unknown grep clean, bun test 17 pass 0 fail."
-    ],
+        "verified": "session-export.test.ts 6 pass 0 fail",
+        "commit": "feat(server): session export/import",
+        "deviation": "None"
+      }
+    },
     "fixer_edge_functions_20260816": {
       "summary": "Fixed 8 edge-function bugs in reservatoo-saas (create-payment-intent, stripe-webhook, verify-payment, send-reservation-email)",
       "detail": "C1: idempotency check (succeeded payment exists for subject -> E007/409) in create-payment-intent. C2: response amount now in cents (amountCents). M1a: payments INSERT error handling in webhook (23505 unique violation = already recorded, log+continue). M1b: reserve-first idempotency (insert stripe_processed_events BEFORE processing; PK violation = already processed). M2: refunds insert now looks up real payment_id by provider_payment_intent_id; also fixed refunds.status 'completed'->'succeeded' (CHECK constraint). M3: payment_logs.payment_id is UUID FK - pi_xxx moved into event_data; webhook writes payment_logs on success with real payments.id. M4: $0 deposit -> {requiresPayment:false} success (both reservation + event branches). M5: send-reservation-email embed fixed (location:restaurant_locations, restaurant:restaurants - was using FK columns as table names -> PostgREST 500); dropped unused table embed; added JSONB address formatter. M8: verify-payment paystack fake-success branch removed -> honest unsupported-provider error. L6: client currency ignored; server default from payment_settings.currency (allowed list ['usd']). Deviation: contract suggested E006 for already-completed; E006 is PROCESSING_ERROR in this file, so added E007 (PAYMENT_ALREADY_COMPLETED) - client lane must match on E007.",
@@ -3898,6 +4464,40 @@
         ],
         "verification": "bunx tsc --noEmit exit 0; grep confirms zero hex literals outside index.css; store API usage audit: all actions/fields still consumed identically (reskin only)",
         "timestamp": "2026-08-24T08:58:29.432649Z"
+      },
+      {
+        "lane": "H3-A",
+        "date": "2026-09-04",
+        "where": [
+          "packages/web/src/components/TraceViewer.tsx",
+          "packages/web/src/api/client.ts"
+        ],
+        "what": "TraceViewer DAG/wave timeline: per-node rows reusing spans UI (status dot + pill + cancel), Cancel-all header, 3s listJobs poll that stops at terminal, empty state \"No DAG runs yet\"; token hygiene (#f85149->var(--danger), #fff->var(--on-accent); only pre-existing scrim rgba remains, no scrim token in scope)",
+        "before": "drawer showed score hero + OTel spans + tool-metrics only; no wave/DAG view, no cancel",
+        "after": "drawer shows DAG runs section (task id parsed from [goal :: id] prompt, agent, result/error preview, per-node cancel + cancel-all with aria-labels, dot-pulse on running)",
+        "verified": "tsc -b exit 0; vite build exit 0 (9.77s)"
+      },
+      {
+        "lane": "H3-E",
+        "date": "2026-09-04",
+        "where": [
+          "packages/web/src/components/MemoryGraph.tsx",
+          "packages/web/src/api/client.ts"
+        ],
+        "what": "MemoryGraph H3-E mutations: refetch() after resolve/touch/seed/promote (stale-graph fix); touch/promote detail-card actions; seed inline form (title+content+tier default semantic, 200/4000 guards) in empty state + collapsible toolbar bar with + seed toggle; client fns touchKnowledge/seedKnowledge/promoteFinding against parallel server contract",
+        "before": "resolve cleared selection without refetch (stale graph); no touch/promote/seed UI; empty state had fake-node chat button",
+        "after": "knowledge nodes get outline refresh btn; unresolved findings get solid promote btn beside resolve; empty state seeds directly; toolbar + seed toggles form bar on non-empty graphs; all mutations refetch; labelled inputs, aria-labels, existing btn/input/pill/alert classes, zero hex",
+        "verified": "tsc -b exit 0; vite build exit 0 (8.79s)"
+      },
+      {
+        "id": "tui-command-mode-p10",
+        "task": "Design TUI command mode for Mira TUI client P10",
+        "before": "No slash command palette, no number-key HITL selection, no ? help overlay",
+        "after": "Design spec for / commands palette parity (/cost /undo /queue /jobs /fork /export), number-key HITL selection, ? help overlay with file paths",
+        "files_modified": [
+          "/tmp/aether/packages/tui/COMMAND_MODE_SPEC.md"
+        ],
+        "verification": "Spec created, paths identified"
       }
     ],
     "build": [
@@ -4111,6 +4711,58 @@
       "severity": "low",
       "confidence": 0.99,
       "verification": "npx tsc --noEmit in packages/server: exit 0; grep -r mountExtrasRoutes packages/server/src --include=*.ts: exit 1 (0 hits); index.ts inline check: queue 3, snapshots 1, todo 2, requireId 11"
+    },
+    "fixer_h3c_pipeline_20260904": {
+      "agent": "fixer",
+      "date": "2026-09-04T14:20:26Z",
+      "task": "H3-C pipeline hardening in /tmp/aether (stay-Turborepo+Bun verdict remainder)",
+      "changed": [
+        "bunfig.toml: extended (not clobbered) \u2014 added [install] frozenLockfile=true (bun 1.3.14 supports --frozen-lockfile CLI; key mirrors it), kept backend=copy + exact + [install.cache]",
+        ".github/workflows/ci.yml: changes job (dorny/paths-filter@v3 code/server/web/slack outputs); build+test gated on changes.code for PRs (skipped, never green-on-empty); fetch-depth 0; PR affected filter ...[origin/base...HEAD] via --dry=json with task-count>0 check else FULL build/test fallback; bare --continue CLI flags on typecheck/build/test/eval (no turbo.json continue key per c49d8d2a); top-level TURBO_TOKEN/TURBO_TEAM env passthrough + guarded optional-login step (skips on forks); bun install --frozen-lockfile everywhere; tri-state check steps (if: always()) on build+test",
+        "scripts/ci/turbo-tri-state.js (NEW, dep-free node): CONTINUE_MODE per job (typecheck/test=dependencies-successful, build/eval=always), flagFor()=--continue, summary parse (.turbo/runs latest, status/state/result shapes) vs --require list; exits 1=never (blocking fail), 0=dependencies-successful (warning) / always (notice); missing/unparseable summary exits 0; --failed/--summary/--print-flag/--list modes"
+      ],
+      "deviation": "bunfig.toml already existed (fedd1138); extended per spec instruction instead of creating new. ci.yml had no --continue flags to keep, so added them (spec intent: CLI flags, not turbo.json key).",
+      "verification": [
+        "python3 yaml.safe_load(ci.yml): OK, jobs=[build,changes,eval,test,typecheck], top env TURBO_TOKEN/TURBO_TEAM present",
+        "node --check turbo-tri-state.js: OK",
+        "functional: --list/--print-flag OK; no-summary exit 0; blocking-fail exit 1 (::error::); non-blocking exit 0 (::warning::); clean exit 0; --failed override exit 0; bad --job exit 2",
+        "git status: only .github/workflows/ci.yml (M), bunfig.toml (M), scripts/ci/ (??) \u2014 turbo.json/packages/docs untouched",
+        "no tsc/build per spec (no code touched); NOT committed"
+      ]
+    },
+    "oracle-auth-20260910": {
+      "id": "oracle-auth-20260910",
+      "at": "2026-09-10T20:52:47.000000+00:00",
+      "target": "/tmp/aether @ 09515f59 auth & token design",
+      "verdict": "REVISE",
+      "summary": "Auth direction correct (opaque 64-hex + api_keys table), 3 P1 block prod: plaintext api_keys, admin open when no REQUIRED_TOKEN, VITE_MIRA_TOKEN baked into prod bundle. Do not add JWT. Unify MIRA_API_KEYS Map vs DB.",
+      "report": "/tmp/oracle_auth_review.md",
+      "p1": [
+        "R2 plaintext api_keys SHA256",
+        "R10 admin open",
+        "R6 VITE_MIRA_TOKEN prod leak"
+      ],
+      "p2": [
+        "R3 MIRA_ALLOW_LOCALHOST",
+        "R5 localStorage XSS",
+        "R11 CLI file read",
+        "R4 isPublicUiPath",
+        "R14 ?api= URL"
+      ],
+      "checkpoints": "oracle/run_20260909_f3b0bc"
+    },
+    "fixer_doom_loop_20260915": {
+      "task": "Enhance P1-S4 doom-loop detection",
+      "files_modified": [
+        "/tmp/aether/packages/server/src/session/doom-loop-detector.ts",
+        "/tmp/aether/packages/server/src/session/prompt.ts",
+        "/tmp/aether/packages/server/src/session/doom-loop-detector.test.ts"
+      ],
+      "what": "Added errorHistory/llmOutputHistory, configurable thresholds via env vars, repeated error and repeated LLM output detection, integrated abort into SessionPrompt.loop with BusEvent",
+      "how": "Edited doom-loop-detector.ts to add histories and checkError/checkLLMOutput, edited prompt.ts to check detection after execution and before finish-step, added tests for repeated errors/LLM outputs",
+      "verified": "bun test packages/server/src/session/doom-loop-detector.test.ts passes 9/9, session tests no regressions, commit feat(server): enhance doom-loop detection",
+      "deviation": "None",
+      "timestamp": "2026-09-15T19:19:50.879518"
     }
   },
   "session": {
@@ -4184,8 +4836,9 @@
   },
   "state": {
     "last_updated_by": "orchestrator",
-    "last_updated_at": "2026-08-23T20:29:24.460631+00:00",
-    "artifacts_count": 31
+    "last_updated_at": "2026-09-15T19:19:50.881068",
+    "artifacts_count": 99,
+    "findings_count": 118
   },
   "artifacts": {
     "files_modified": [
@@ -4230,7 +4883,64 @@
       "packages/web/src/components/ToolView.tsx",
       "packages/web/src/components/SkillSelector.tsx",
       "packages/web/src/components/QuestionPrompt.tsx",
-      "packages/server/src/routes/extras.ts (deleted, inlined into index.ts)"
+      "packages/server/src/routes/extras.ts (deleted, inlined into index.ts)",
+      "packages/web/src/components/TraceViewer.tsx",
+      "packages/web/src/api/client.ts",
+      "/tmp/aether/.github/workflows/ci.yml",
+      "/tmp/aether/bunfig.toml",
+      "/tmp/aether/scripts/ci/turbo-tri-state.js",
+      "packages/web/src/components/MemoryGraph.tsx",
+      "/tmp/aether/packages/web/src/components/ChatView.tsx",
+      {
+        "path": "/tmp/aether/packages/web/src/api/client.ts",
+        "date": "2026-09-05",
+        "agent": "fixer"
+      },
+      {
+        "path": "/tmp/aether/packages/web/src/components/AutopilotPanel.tsx",
+        "date": "2026-09-05",
+        "agent": "fixer"
+      },
+      {
+        "path": "/tmp/aether/packages/web/src/components/SettingsPanel.tsx",
+        "date": "2026-09-05",
+        "agent": "fixer"
+      },
+      "/tmp/aether/packages/tui/COMMAND_MODE_SPEC.md",
+      "packages/tui/src/rpc/client.ts",
+      "packages/tui/src/components/AuthGate.tsx",
+      "packages/server/src/util/logger.ts",
+      "packages/server/src/index.ts",
+      "packages/server/src/config/index.ts",
+      "packages/web/src/components/CommandPalette.tsx",
+      "packages/web/src/components/PromptInput.tsx",
+      "packages/web/src/stores/app.ts",
+      "packages/server/src/routes/session-extras.ts",
+      "packages/server/src/types/index.ts",
+      "packages/server/src/mcp/http-client.ts:186-197 split !res.ok vs !res.body with distinct messages",
+      "packages/server/src/mcp/mock-http-mcp-server.ts:168-189 non-legacy GET /mcp 404 + HEAD /mcp 200 + await Bun.sleep(10) before ready",
+      "packages/server/src/mcp/http-client.test.ts:1-80 startMock await Bun.sleep(50) + poll HEAD fallback GET 10x20ms",
+      "packages/server/src/routes/config.ts:43-122 resolveCwd sanitizePath+isPathAllowed with getConfig(cwd).guardrails.allowedRoots, GET /config?cwd= returns getConfigLayers(cwd) merged, PATCH /config?cwd= saveConfig(patch,layer,cwd), GET /permission?cwd= per-project",
+      "packages/web/src/api/client.ts:728-785 getConfig(cwd?) and getWorkspaceTree(cwd?) encodeURIComponent cwd, getPermission(cwd?)",
+      "packages/web/src/stores/settings.ts:232-377 loadAll(cwd) + loadConfig(cwd) + loadPermission(cwd) + loadWorkspaceTree(cwd) pass-through cwd",
+      "packages/web/src/components/SessionList.tsx:79-342 projectFilter signal + groupByProject memo + availableProjects + filtered + grouped + project badge + Group by project toggle",
+      "packages/tui/src/rpc/client.ts: getConfig/getWorkspaceTree/getPermission cwd param",
+      "packages/tui/src/stores/settings.ts: loadAll(cwd) parity",
+      "README.md",
+      ".env.example",
+      "packages/server/src/mcp/http-client.ts",
+      "packages/server/src/mcp/mock-http-mcp-server.ts",
+      "packages/server/src/mcp/http-client.test.ts",
+      "/tmp/aether/packages/server/src/session/compaction.ts",
+      "/tmp/aether/packages/server/src/session/prompt.ts",
+      "/tmp/aether/packages/server/src/tools/browser.ts",
+      "/tmp/aether/packages/server/src/session/doom-loop-detector.ts",
+      "/tmp/aether/packages/server/src/session/prompt.ts",
+      "/tmp/aether/packages/server/src/session/doom-loop-detector.test.ts",
+      "/tmp/aether/packages/server/src/routes/session.ts",
+      "/tmp/aether/packages/server/src/session/cross-device.ts",
+      "packages/server/src/gateway/subgateway.ts",
+      "packages/server/src/gateway/subgateway.test.ts"
     ],
     "files_deleted": [
       "skills/skills/synthesized/parse-custom-log-format/ (print-stub artifact)",
@@ -4242,7 +4952,17 @@
       "src/components/profile/DataControls.tsx",
       "src/components/profile/DataControls.test.tsx",
       "src/services/data-controls.ts",
-      "src/services/data-controls.test.ts"
+      "src/services/data-controls.test.ts",
+      "packages/server/src/util/logger.ts",
+      "packages/server/src/config/types.ts",
+      "packages/server/src/config/defaults.ts",
+      "packages/server/src/config/store.ts",
+      "packages/server/src/config/loop.ts",
+      "packages/server/src/config/prompt.ts"
+    ],
+    "documentation_updated": [
+      "/tmp/aether/docs/H2-3-ORCHESTRATOR-V2.md (new, 220 lines)",
+      "/tmp/aether/docs/CHANGELOG.md (new, 24 lines)"
     ]
   },
   "patches_applied": [
