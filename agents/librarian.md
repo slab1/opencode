@@ -88,6 +88,8 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 
 - **skill-recommender**: Discover which research skills fit the task
 - **error-recovery-protocol**: When lookups fail (fetch errors, timeouts)
+- **source-driven-development**: Ground framework/library decisions in cited official docs; emit UNVERIFIED blocks instead of guessing from recall
+
 </skills>
 
 <examples>

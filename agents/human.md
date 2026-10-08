@@ -181,3 +181,12 @@ python3 -m opencode_improvement track human <outcome> "<description>" --duration
 }
 ```
 </task-tracking>
+
+<skills>
+Load relevant skills via the native `skill` tool before acting on a request.
+
+- **find-skills**: locate an existing skill before improvising a workflow
+- **skill-recommender**: map an incoming task to the right skill workflow
+
+When a task matches a skill's purpose, load it FIRST with `skill: <name>`.
+</skills>

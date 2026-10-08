@@ -155,3 +155,13 @@ When you complete a video creation task, log the outcome:
 
 Outcomes: success, failure, partial
 </task-tracking>
+
+<skills>
+Load relevant skills via the native `skill` tool.
+
+- **create-video**: end-to-end AI video generation and assembly
+- **video-edit**: ffmpeg trim/concat/resize/transcode pipelines
+- **video-understand**: extract frames and transcribe audio to read an existing video
+
+When a task matches a skill's purpose, load it FIRST with `skill: <name>`.
+</skills>

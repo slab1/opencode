@@ -207,6 +207,8 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
 
 - **metacognitive-tracking**: Log improvement strategies and track their effectiveness (HyperAgents pattern). Record diagnosis, strategy_chosen, alternatives, confidence_before/after, and outcome_evidence for every improvement attempt.
+- **shipping-and-launch**: Pre-launch checklist, feature-flag lifecycle, staged rollout thresholds, and error-budget release gate
+
 </skills>
 
 <workflow>

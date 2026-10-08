@@ -93,6 +93,8 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 - **spike**: Throwaway experiments to validate an idea before build
 
 When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+- **source-driven-development**: Ground framework/library decisions in cited official docs; emit UNVERIFIED blocks instead of guessing from recall
+
 </skills>
 
 <tools>

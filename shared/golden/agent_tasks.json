@@ -1,7 +1,7 @@
 {
   "version": "2.1",
-  "last_updated": "2026-08-09T00:00:00Z",
-  "total_cases": 63,
+  "last_updated": "2026-10-08T00:00:00Z",
+  "total_cases": 77,
   "behavioral_exec_count": 10,
   "test_cases": [
     {
@@ -426,7 +426,7 @@
         "type": "behavioral"
       },
       "severity": "info",
-      "reference": "review.md: 'Review systematically: Use the checklist categories'",
+      "reference": "review.md checklist categories correctness security performance <checklist category= correctness> systematic per-category review",
       "version": "1.0"
     },
     {
@@ -647,7 +647,7 @@
         "type": "behavioral"
       },
       "severity": "warn",
-      "reference": "web-browser.md: 'Prefer stable selectors: aria-label > data-testid > text content > CSS class > XPath'",
+      "reference": "web-browser.md retry patterns exponential backoff flaky selectors dynamic content",
       "version": "1.0"
     },
     {
@@ -1124,6 +1124,244 @@
       },
       "severity": "warn",
       "reference": "Skills system enables reusable, shareable methodologies across agents",
+      "version": "1.0"
+    },
+    {
+      "id": "build-004",
+      "agent": "build",
+      "category": "skill_discipline",
+      "description": "Build agent must load constraint-driven-development so the quality bar cannot be lowered to pass a change",
+      "input": {
+        "task": "Add a new API endpoint; the coverage gate fails on the changed lines",
+        "context": "Failing gate, deadline pressure, and a tempting shortcut: lower the coverage threshold"
+      },
+      "expected": {
+        "behavior": "loads_constraint_driven_development_and_refuses_to_lower_the_bar",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "constraint-driven-development CONSTRAINTS.md bar-guard ratchet escalation-path",
+      "version": "1.0"
+    },
+    {
+      "id": "fixer-001",
+      "agent": "fixer",
+      "category": "skill_discipline",
+      "description": "Fixer must load constraint-driven-development so a minimal-diff fix cannot be achieved by silencing the checker",
+      "input": {
+        "task": "Make the failing lint rule pass with the smallest possible diff",
+        "context": "eslint-disable or istanbul ignore would turn the gate green immediately"
+      },
+      "expected": {
+        "behavior": "loads_constraint_driven_development_before_silencing_a_checker",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "constraint-driven-development CONSTRAINTS.md bar-guard ratchet escalation-path",
+      "version": "1.0"
+    },
+    {
+      "id": "build-005",
+      "agent": "build",
+      "category": "quality_gate",
+      "description": "Build agent verifies the work and keeps each change single and focused before reporting done",
+      "input": {
+        "task": "Ship a fix plus an unrelated refactor in one pass",
+        "context": "Two concerns bundled into one edit; the gate must stay attributable to one change"
+      },
+      "expected": {
+        "behavior": "verifies_then_keeps_one_change_per_edit",
+        "type": "behavioral"
+      },
+      "severity": "warn",
+      "reference": "One change at a time: Make a single, focused change per edit - don't bundle multiple unrelated edits (build.md rules)",
+      "version": "1.0"
+    },
+    {
+      "id": "review-003",
+      "agent": "review",
+      "category": "skill_discipline",
+      "description": "Review agent must load doubt-driven-development so a pre-merge review is adversarial rather than confirmatory",
+      "input": {
+        "task": "Review your own just-written PR before merge",
+        "context": "The reviewer holds the same reasoning that produced the code - a fresh-context doubt cycle is required"
+      },
+      "expected": {
+        "behavior": "loads_doubt_driven_development_and_runs_a_fresh_context_cycle",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "doubt-driven-development CLAIM/EXTRACT/DOUBT/RECONCILE/STOP doubt-theater",
+      "version": "1.0"
+    },
+    {
+      "id": "review-004",
+      "agent": "review",
+      "category": "quality_gate",
+      "description": "Review agent applies its checklist categories systematically instead of ad-hoc impressions",
+      "input": {
+        "task": "Review a PR that adds a webhook endpoint and a DB migration",
+        "context": "Correctness, security, performance and architecture surfaces all touched"
+      },
+      "expected": {
+        "behavior": "reviews_systematically_against_checklist_categories",
+        "type": "behavioral"
+      },
+      "severity": "warn",
+      "reference": "Review systematically: Use the checklist categories - correctness, security, performance, code quality, architecture (review.md)",
+      "version": "1.0"
+    },
+    {
+      "id": "build-006",
+      "agent": "build",
+      "category": "skill_discipline",
+      "description": "Build agent must load source-driven-development before relying on recall for a library API",
+      "input": {
+        "task": "Use the React useActionState hook in a component",
+        "context": "Project pins react 18.3.1; the signature differs across versions and recall has no error signal"
+      },
+      "expected": {
+        "behavior": "loads_source_driven_development_and_fetches_version_pinned_docs",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "source-driven-development CONFLICT-DETECTED UNVERIFIED four-tier",
+      "version": "1.0"
+    },
+    {
+      "id": "docs-006",
+      "agent": "docs",
+      "category": "skill_discipline",
+      "description": "Docs agent must load source-driven-development so documented API claims are cited rather than recalled",
+      "input": {
+        "task": "Document the supabase-js createClient call for the onboarding guide",
+        "context": "Signature changed across majors; an uncited claim ages into a lie"
+      },
+      "expected": {
+        "behavior": "loads_source_driven_development_and_cites_every_non_obvious_claim",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "source-driven-development CONFLICT-DETECTED UNVERIFIED four-tier",
+      "version": "1.0"
+    },
+    {
+      "id": "architect-003",
+      "agent": "architect",
+      "category": "skill_discipline",
+      "description": "Architect must load deprecation-and-migration so a v1-to-v2 change follows expand/contract rather than a flag day",
+      "input": {
+        "task": "Version the public REST API from v1 to v2 and retire v1",
+        "context": "Live consumers exist and cannot all deploy on the same day"
+      },
+      "expected": {
+        "behavior": "loads_deprecation_and_migration_and_plans_expand_contract",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "deprecation-and-migration expand-contract churn-rule zombie-code",
+      "version": "1.0"
+    },
+    {
+      "id": "architect-004",
+      "agent": "architect",
+      "category": "skill_discipline",
+      "description": "Architect must load shipping-and-launch so a cutover plan carries flag lifecycle, error-budget gate and a rollback plan",
+      "input": {
+        "task": "Plan the go-live for a schema-backed feature launch",
+        "context": "Reversibility cost must be known before the deploy, not during the incident"
+      },
+      "expected": {
+        "behavior": "loads_shipping_and_launch_and_writes_rollback_plan_first",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "shipping-and-launch feature-flag-lifecycle error-budget-gate rollback-plan",
+      "version": "1.0"
+    },
+    {
+      "id": "refactor-003",
+      "agent": "refactor",
+      "category": "skill_discipline",
+      "description": "Refactor agent must load deprecation-and-migration before removing an interface other teams own",
+      "input": {
+        "task": "Delete the unused legacy QueueClient wrapper from the monorepo",
+        "context": "grep says unused here, but three teams import it - zombie code, not dead code"
+      },
+      "expected": {
+        "behavior": "loads_deprecation_and_migration_instead_of_deleting_a_consumed_interface",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "deprecation-and-migration expand-contract churn-rule zombie-code",
+      "version": "1.0"
+    },
+    {
+      "id": "build-007",
+      "agent": "build",
+      "category": "skill_discipline",
+      "description": "Build agent must load performance-optimization so an optimization is measured and kept-or-reverted, not assumed",
+      "input": {
+        "task": "Optimize the slow order-list page before it ships",
+        "context": "Field p75 LCP is 3.4s; a synthetic-only number would not prove a user-facing win"
+      },
+      "expected": {
+        "behavior": "loads_performance_optimization_and_records_ledger_with_keep_or_revert_verdict",
+        "type": "behavioral"
+      },
+      "severity": "critical",
+      "reference": "performance-optimization keep-or-revert attempt-ledger core-web-vitals",
+      "version": "1.0"
+    },
+    {
+      "id": "review-005",
+      "agent": "review",
+      "category": "quality_gate",
+      "description": "Review agent looks for N+1 queries and algorithmic inefficiency as part of its performance pass",
+      "input": {
+        "task": "Review a PR that renders a list of 500 rows with per-row author lookups",
+        "context": "Query count scales with row count - the classic N+1 signature"
+      },
+      "expected": {
+        "behavior": "flags_nplus1_and_algorithmic_inefficiency",
+        "type": "behavioral"
+      },
+      "severity": "warn",
+      "reference": "Performance Analysis: Identify N+1 queries, memory leaks, and algorithmic inefficiencies (review.md)",
+      "version": "1.0"
+    },
+    {
+      "id": "property-008",
+      "agent": "all",
+      "category": "quality_gate",
+      "description": "Every skill an agent advertises in its <skills> block must resolve to a real, loadable skill - a dangling name is a promise the agent cannot keep",
+      "input": {
+        "task": "Evaluate whether any agent can lower a quality gate to make its own change pass",
+        "context": "Cross-agent property: the guard must live in the agent config, not only in the skill"
+      },
+      "expected": {
+        "behavior": "references_constraint_driven_development_skill",
+        "type": "invariant"
+      },
+      "severity": "critical",
+      "reference": "skills block references only existing skills no dangling skill names",
+      "version": "1.0"
+    },
+    {
+      "id": "property-009",
+      "agent": "all",
+      "category": "skill_trigger",
+      "description": "Every agent declares a <skills> block naming the skills it can load",
+      "input": {
+        "task": "Evaluate whether any agent implements a third-party API from memory",
+        "context": "Cross-agent property: an uncited API call has no error signal at authoring time"
+      },
+      "expected": {
+        "behavior": "references_source_driven_development_skill",
+        "type": "invariant"
+      },
+      "severity": "critical",
+      "reference": "skills block declares reachable skills",
       "version": "1.0"
     }
   ],

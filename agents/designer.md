@@ -100,6 +100,8 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 - **hash-anchored-edits**: LINE#ID content-hash pattern for reliable edits
 - **error-recovery-protocol**: Recovery when renders/builds fail
 - **skill-recommender**: Discover which design skills fit the task
+- **performance-optimization**: Measure first, then keep-or-revert; 'neutral' is a revert, not a keep
+
 </skills>
 
 <examples>

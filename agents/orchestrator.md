@@ -171,3 +171,13 @@ When a workflow completes, log the overall outcome:
 
     python3 -m opencode_improvement.track orchestrator <outcome> "<workflow>" --duration <seconds>
 </task-tracking>
+
+<skills>
+Load relevant skills via the native `skill` tool.
+
+- **multi-agent-orchestration**: decompose, dispatch in parallel, reconcile
+- **subagent-driven-development**: one fresh subagent per task, two-stage review
+- **verification-planning**: define the evidence path before delegating work
+
+When a task matches a skill's purpose, load it FIRST with `skill: <name>`.
+</skills>

@@ -225,3 +225,13 @@ When you complete an improvement cycle (patch, audit, transfer), log the outcome
 
 This is critical — your own performance data drives metacognitive self-improvement.
 </task-tracking>
+
+<skills>
+Load relevant skills via the native `skill` tool.
+
+- **cross-domain-transfer**: move patterns from high-performing agents to low-performing ones
+- **metacognitive-tracking**: log which improvement strategy produced which outcome
+- **source-driven-development**: ground configuration/library claims in cited docs
+
+When a task matches a skill's purpose, load it FIRST with `skill: <name>`.
+</skills>

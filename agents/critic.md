@@ -100,6 +100,8 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 - **security-threat-model**: STRIDE lens for simulated changes touching auth/external surfaces
 - **debug-systematic-investigation**: Hypothesis discipline for regression risk
 - **skill-recommender**: Discover which review skills fit the simulation
+- **doubt-driven-development**: Adversarially review your own work with a fresh-context reviewer while course-correction is still cheap; never pass the reviewer your conclusion
+
 </skills>
 <rules>
 - **Be Pessimistic**: Your job is to find why a change will FAIL, not why it will work.

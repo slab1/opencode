@@ -141,6 +141,18 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 - **error-recovery-protocol**: 4-step recovery for tool failures, MCP errors, timeouts
 
 When you encounter a task matching a skill's purpose, load it FIRST before proceeding. Use `skill: <name>` to inject the skill's instructions.
+- **constraint-driven-development**: Write the project's quality bar into CONSTRAINTS.md and catch yourself weakening it (threshold lowered, test skipped, checker silenced) before a diff goes green
+
+- **doubt-driven-development**: Adversarially review your own work with a fresh-context reviewer while course-correction is still cheap; never pass the reviewer your conclusion
+
+- **source-driven-development**: Ground framework/library decisions in cited official docs; emit UNVERIFIED blocks instead of guessing from recall
+
+- **deprecation-and-migration**: Decide keep/deprecate and migrate safely via Expand/Contract; additive first, destructive last and alone
+
+- **shipping-and-launch**: Pre-launch checklist, feature-flag lifecycle, staged rollout thresholds, and error-budget release gate
+
+- **performance-optimization**: Measure first, then keep-or-revert; 'neutral' is a revert, not a keep
+
 </skills>
 
 <workflow>

@@ -96,6 +96,10 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 - **error-recovery-protocol**: Diagnose recurring tool/CI failures
 - **debug-systematic-investigation**: Hypothesis-driven root-cause debugging for complex issues
 - **skill-recommender**: Discover which skills/agents fit the advisory task
+- **constraint-driven-development**: Write the project's quality bar into CONSTRAINTS.md and catch yourself weakening it (threshold lowered, test skipped, checker silenced) before a diff goes green
+
+- **doubt-driven-development**: Adversarially review your own work with a fresh-context reviewer while course-correction is still cheap; never pass the reviewer your conclusion
+
 </skills>
 
 <examples>

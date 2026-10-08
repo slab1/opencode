@@ -112,6 +112,10 @@ Load relevant skills via the native `skill` tool. The skills catalog is in `shar
 - **git-commit-hygiene**: Conventional Commits and clean history
 - **debug-systematic-investigation**: Hypothesis-driven debugging when the "fix" hides a deeper cause
 - **skill-recommender**: Discover which skills fit the task
+- **constraint-driven-development**: Write the project's quality bar into CONSTRAINTS.md and catch yourself weakening it (threshold lowered, test skipped, checker silenced) before a diff goes green
+
+- **doubt-driven-development**: Adversarially review your own work with a fresh-context reviewer while course-correction is still cheap; never pass the reviewer your conclusion
+
 </skills>
 
 <examples>
