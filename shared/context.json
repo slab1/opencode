@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": "2026-10-08T14:39:58.682401+00:00",
+  "last_updated": "2026-10-08T16:23:37.027166+00:00",
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
@@ -442,6 +442,14 @@
       "decision": "All provider apiKeys in opencode.jsonc use {env:VAR}; no plaintext secrets in git-tracked config",
       "rationale": "Firecrawl/TRYPOST/BULKPUBLISH/TWENTY_FIRST already followed this; NVIDIA was the outlier",
       "impact": "opencode.jsonc:41 changed; NVIDIA_API_KEY added to ~/.bashrc"
+    },
+    {
+      "id": "dec_20261008_skill_policy",
+      "date": "2026-10-08T15:47:56.535896+00:00",
+      "area": "system",
+      "decision": "Skills: import techniques, never bulk-vendor trees. skills-verify reports official-spec conformance by default and gates under --strict-spec.",
+      "rationale": "A skill is executable authority; aggregate registries are scale-inflated and self-admittedly unaudited. Vendored upstream conventions (hermes category-name dirs) stay accepted deviations rather than forcing 71 cosmetic renames that risk sync breakage.",
+      "impact": "scripts/audit_skills_spec.py; skills-verify --strict-spec"
     }
   ],
   "strategy_log": [
@@ -1929,6 +1937,30 @@
       "outcome": "success",
       "outcome_evidence": "opencode.jsonc now has {env:NVIDIA_API_KEY}; var exported in ~/.bashrc; key still present in 2 historical commits so rotation remains outstanding",
       "confidence_after": 0.93
+    },
+    {
+      "id": "strategy-1791474639720",
+      "agent_target": "skills-fleet",
+      "diagnosis": "182 skills skewed to media/video (66 openmontage); the engineering-process layer was missing entirely. No rule detected an agent weakening its own quality bar. Also 95 official-spec violations undetected (name!=dirname x71, over-500-line x23, illegal name char x1).",
+      "strategy_chosen": "transfer_capability",
+      "strategy_alternatives_considered": [
+        "bulk_vendor_aggregator_repo",
+        "patch_only",
+        "research_only_no_changes"
+      ],
+      "why_this_strategy": "Research produced transferable techniques, not files. Aggregators (8966 skills) are unaudited executable authority; copying them is a supply-chain risk, so techniques were re-authored into 6 spec-conformant skills instead. Bulk import would also have added zero value to the actual gap (process discipline).",
+      "applied_at": "2026-10-08T15:50:39.720850Z",
+      "confidence_before": 0.88,
+      "outcome": "partial",
+      "outcome_evidence": "182 skills scanned -> 95 violations/206 warnings measured; 6 skills authored; skills-verify reports spec conformance and --strict-spec exits 1; video_toolkit illegal name fixed; report at reports/skills-research-2026-10-08.md",
+      "confidence_after": 0.93
+    },
+    {
+      "ts": "2026-10-08T16:56:13",
+      "agent": "fixer",
+      "strategy": "hash-anchored-edits",
+      "outcome": "success",
+      "note": "Authored 3 spec-compliant SKILL.md + 6 references/. Did NOT trust the given relative cross-link list: wrote a 20-line relative-link resolver and found ../verification-planning/SKILL.md broken (skill lives one level up at skills/). Fixed to ../../. Repo has a pre-existing verification-planning/SKILL.md with name==dirname and 0 fails, i.e. the catalog listing is right but the path in the task spec was not."
     }
   ],
   "workflow_trace": [
@@ -3128,6 +3160,94 @@
         ],
         "verification": "audit 35/35 ok; skills-verify 182/182; commit f56c657",
         "severity": "medium"
+      },
+      {
+        "id": "skills_research_20261008",
+        "type": "config_evolution",
+        "at": "2026-10-08T15:47:56.535896+00:00",
+        "summary": "Deep GitHub/web research on agent skills -> 6 missing engineering skills authored, spec conformance enforced in skills-verify",
+        "detail": {
+          "report": "reports/skills-research-2026-10-08.md",
+          "sources": [
+            "agentskills.io/specification (normative)",
+            "anthropics/skills (180k*)",
+            "addyosmani/agent-skills (103k*, richest technique source)",
+            "microsoft/skills (3k*, Azure-only)",
+            "luokai0 aggregate (8966 skills), agent-skills-hub (790) - both link-lists, not implementations"
+          ],
+          "supply_chain_verdict": "Aggregator repos are scale-inflated and self-admittedly unaudited. Policy adopted: import techniques, never bulk-vendor a skill tree (a skill is executable authority).",
+          "spec_findings": {
+            "required_fields": "name + description only",
+            "name_rules": "1-64 chars, [a-z0-9-] only, must match parent directory",
+            "description_rules": "1-1024 chars, must say what AND when",
+            "metadata": "map of string->string",
+            "progressive_disclosure": "SKILL.md <500 lines / <5000 tokens; references/ load on demand"
+          },
+          "measured_debt": {
+            "skills_scanned": 182,
+            "spec_violations": 95,
+            "warnings": 206,
+            "name_neq_dirname": 71,
+            "over_500_lines": 23,
+            "illegal_name_char": 1,
+            "desc_without_use_when": 113,
+            "worst_overlength": "research-paper-writing 2377 lines"
+          },
+          "actions_taken": [
+            "added scripts/audit_skills_spec.py (standalone JSON spec auditor)",
+            "skills-verify now reports spec conformance; --strict-spec promotes violations to failures",
+            "fixed illegal name video_toolkit -> video-toolkit",
+            "authored 6 missing skills: constraint-driven-development, doubt-driven-development, source-driven-development, deprecation-and-migration, shipping-and-launch, performance-optimization"
+          ],
+          "accepted_deviations": [
+            {
+              "item": "name != parent directory (71 skills)",
+              "rationale": "vendored hermes convention (dir=category-name, name=bare); OpenCode routes on name so cosmetic; renaming 71 vendored files risks upstream sync breakage",
+              "enforcement": "advisory by default, fatal under --strict-spec for new work"
+            }
+          ]
+        },
+        "files_changed": [
+          "scripts/audit_skills_spec.py",
+          "shared/skills_verifier.py",
+          "opencode_improvement/__main__.py",
+          "skills/skills/openmontage/video_toolkit/SKILL.md",
+          "reports/skills-research-2026-10-08.md"
+        ],
+        "verification": "audit 182->185 skills; advisory 95 violations reported; --strict-spec exits 1",
+        "severity": "medium"
+      },
+      {
+        "id": "skills_pass_complete_20261008",
+        "type": "workflow_outcome",
+        "at": "2026-10-08T16:23:37.027166+00:00",
+        "summary": "All 3 lanes reconciled and verified: 6 new process skills authored, 4 oversized skills split, verifier bug fixed. 188/188 skills pass, 0 failures.",
+        "detail": {
+          "new_skills": {
+            "constraint-driven-development": 346,
+            "doubt-driven-development": 300,
+            "source-driven-development": 313,
+            "deprecation-and-migration": 330,
+            "shipping-and-launch": 327,
+            "performance-optimization": 442
+          },
+          "split_for_progressive_disclosure": {
+            "research-research-paper-writing": "2377->437 (12 refs)",
+            "d3-viz": "820->330 (3 refs)",
+            "tailwind-design-system": "866->240 (2 refs)",
+            "autonomous-ai-agents-claude-code": "745->247 (4 refs)"
+          },
+          "verifier_bug_fixed": "stub-marker substring check failed skills that legitimately document NotImplementedError as a red flag; added auditable metadata.teaches_stub_markers opt-in instead of a code-fence heuristic (a real stub is also fenced, so the heuristic would weaken the gate fleet-wide)",
+          "independent_verification": "verified against git HEAD: 0 headings lost, 0 original body lines missing, 44 links resolve, floor-guard.py exit codes 1/0/2 confirmed on real git diffs",
+          "final_state": "188 passed, 0 failed; 89 spec violations advisory (71 name!=dirname vendored, 18 remaining over-length)"
+        },
+        "commits": [
+          "416530f",
+          "4e1c602",
+          "2edcffd",
+          "42081b8"
+        ],
+        "severity": "low"
       }
     ],
     "memory_loop": [
@@ -4875,6 +4995,36 @@
         "usage.ts untouched \u2014 no backlog task required it (recordSession correlation already covered by bumpUtility)"
       ],
       "files": "packages/server/src/learning/{online,knowledge,scheduler,index}.ts, {online,knowledge}.test.ts, + new {utility,scheduler.cycle}.test.ts \u2014 nothing else; not committed"
+    },
+    "fixer_skills_3pack_20261008": {
+      "agent": "fixer",
+      "date": "2026-10-08T16:56:13",
+      "task": "Author 3 production agent skills: deprecation-and-migration, shipping-and-launch, performance-optimization",
+      "status": "complete",
+      "files_created": [
+        "skills/skills/deprecation-and-migration/SKILL.md",
+        "skills/skills/deprecation-and-migration/references/expand-contract.md",
+        "skills/skills/deprecation-and-migration/references/deprecation-notices.md",
+        "skills/skills/shipping-and-launch/SKILL.md",
+        "skills/skills/shipping-and-launch/references/launch-checklist.md",
+        "skills/skills/shipping-and-launch/references/rollout-playbook.md",
+        "skills/skills/performance-optimization/SKILL.md",
+        "skills/skills/performance-optimization/references/measurement.md",
+        "skills/skills/performance-optimization/references/technique-notes.md"
+      ],
+      "verification": {
+        "script": "scripts/audit_skills_spec.py",
+        "deprecation-and-migration": "name==dirname, 330 lines, 0 FAIL / 0 WARN",
+        "shipping-and-launch": "name==dirname, 327 lines, 0 FAIL / 0 WARN",
+        "performance-optimization": "name==dirname, 442 lines, 0 FAIL / 0 WARN",
+        "note": "All 3 absent from the audit's skills_with_issues list (only skills with fail/warn are listed). Pre-existing repo failures (90) are all in skills I do not own.",
+        "links": "programmatic relative-link resolver: 27 relative links across the 9 new files, 0 broken"
+      },
+      "deviations": [
+        "verification-planning lives at skills/verification-planning/, NOT skills/skills/verification-planning/, so the spec-suggested ../verification-planning/SKILL.md was a broken link. Used ../../verification-planning/SKILL.md instead (verified resolves).",
+        "web-design-guidelines lives under skills/skills/openmontage/, so ../web-design-guidelines/SKILL.md does not resolve -> mentioned in prose, no link (per spec instruction).",
+        "Added ../supabase-postgres-best-practices/SKILL.md as an extra cross-link; it exists and is topically load-bearing for expand/contract and index work."
+      ]
     }
   },
   "session": {
@@ -5070,6 +5220,17 @@
         ],
         "change_type": "config_hardening_and_repair",
         "files_count": 73
+      },
+      {
+        "ts": "2026-10-08T15:47:56.535896+00:00",
+        "commit": "pending",
+        "files": [
+          "scripts/audit_skills_spec.py",
+          "shared/skills_verifier.py",
+          "opencode_improvement/__main__.py",
+          "reports/skills-research-2026-10-08.md"
+        ],
+        "change_type": "skills_research_and_spec_enforcement"
       }
     ],
     "files_deleted": [
@@ -5090,7 +5251,16 @@
       "packages/server/src/config/loop.ts",
       "packages/server/src/config/prompt.ts",
       "packages/server/src/learning/utility.test.ts",
-      "packages/server/src/learning/scheduler.cycle.test.ts"
+      "packages/server/src/learning/scheduler.cycle.test.ts",
+      "skills/skills/deprecation-and-migration/SKILL.md",
+      "skills/skills/deprecation-and-migration/references/expand-contract.md",
+      "skills/skills/deprecation-and-migration/references/deprecation-notices.md",
+      "skills/skills/shipping-and-launch/SKILL.md",
+      "skills/skills/shipping-and-launch/references/launch-checklist.md",
+      "skills/skills/shipping-and-launch/references/rollout-playbook.md",
+      "skills/skills/performance-optimization/SKILL.md",
+      "skills/skills/performance-optimization/references/measurement.md",
+      "skills/skills/performance-optimization/references/technique-notes.md"
     ],
     "documentation_updated": [
       "/tmp/aether/docs/H2-3-ORCHESTRATOR-V2.md (new, 220 lines)",
