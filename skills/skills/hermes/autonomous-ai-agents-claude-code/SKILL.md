@@ -1,6 +1,6 @@
 ---
 name: autonomous-ai-agents-claude-code
-description: "Delegate coding to Claude Code CLI (features, PRs)."
+description: "Delegates coding work to the Claude Code CLI, choosing between one-shot print mode (`claude -p`, preferred, skips all interactive dialogs) and interactive multi-turn sessions driven through tmux PTY; covers auth status, doctor health checks, and updates. Use when a coding task should be handed to an autonomous coding agent rather than done inline — feature work, bug fixes, refactors, PR review, or CI automation. Triggers on: claude, Claude Code, claude -p, code review by Claude, autonomous coding agent, subagent, --allowedTools, max-turns."
 version: 2.2.0
 author: Hermes Agent + Teknium
 license: MIT

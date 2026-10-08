@@ -1,11 +1,19 @@
 ---
 name: manim-composer
 description: |
-  Trigger when: (1) User wants to create an educational/explainer video, (2) User has a vague concept they want visualized, (3) User mentions "3b1b style" or "explain like 3Blue1Brown", (4) User wants to plan a Manim video or animation sequence, (5) User asks to "compose" or "plan" a math/science visualization.
+  Transforms vague video ideas into detailed scene-by-scene plans (scenes.md).
+  Conducts research, asks clarifying questions about audience/scope/focus, and
+  outputs comprehensive scene specifications ready for implementation.
 
-  Transforms vague video ideas into detailed scene-by-scene plans (scenes.md). Conducts research, asks clarifying questions about audience/scope/focus, and outputs comprehensive scene specifications ready for implementation with ManimCE or ManimGL.
+  Use when (1) the user wants an educational/explainer video, (2) the user has a
+  vague concept they want visualized, (3) the user mentions "3b1b style" or
+  "explain like 3Blue1Brown", (4) the user wants to plan a Manim video or
+  animation sequence, or (5) the user asks to "compose" or "plan" a math/science
+  visualization. Use this BEFORE writing any Manim code; implement with
+  manimce-best-practices or manimgl-best-practices.
 
-  Use this BEFORE writing any Manim code. This skill plans the video; use manimce-best-practices or manimgl-best-practices for implementation.
+  Triggers on: manim, explainer video, 3b1b, 3blue1brown, educational animation,
+  scene plan, scenes.md, math visualization.
 ---
 
 ## Workflow

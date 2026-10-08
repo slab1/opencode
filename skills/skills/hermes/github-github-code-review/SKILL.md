@@ -1,6 +1,6 @@
 ---
 name: github-code-review
-description: "Review PRs: diffs, inline comments via gh or REST."
+description: "Reviews code on GitHub and locally: inspecting diffs, fetching the full PR file list, and leaving inline review comments via gh or the REST API, covering both pre-push review of local changes and review of open pull requests. Use when the user asks for a code review, wants feedback left on a PR, or wants their own diff checked before committing. Triggers on: review this PR, code review, inline comments on a diff, review my changes, pull request review, gh pr diff, leave review comments, approve or request changes."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

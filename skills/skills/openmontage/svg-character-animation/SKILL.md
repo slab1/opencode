@@ -1,6 +1,6 @@
 ---
 name: svg-character-animation
-description: Animate SVG character rigs with GSAP, CSS transforms, Remotion frame control, and HyperFrames-compatible browser previews.
+description: "Animates SVG character rigs with GSAP, CSS transforms, Remotion frame control, and HyperFrames-compatible browser previews. Use when animating SVG character parts, setting svgOrigin pivots, sequencing multi-part acting beats with GSAP timelines, or driving a paused timeline from a Remotion frame. Triggers on: svg animation, character rig, gsap timeline, svgorigin, transform origin, usecurrentframe, remotion frame control, hyperframes."
 license: MIT
 ---
 

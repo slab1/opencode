@@ -1,6 +1,6 @@
 ---
 name: apple-reminders
-description: "Apple Reminders via remindctl: add, list, complete."
+description: "Manages Apple Reminders from the terminal via `remindctl`: list reminders by date (today/tomorrow/week/overdue), create and complete items with due dates, and manage lists, with tasks syncing via iCloud to iPhone and iPad. Use when the user mentions reminders, Reminders.app, or 'remind me to' meaning a personal to-do that should sync to their Apple devices. Triggers on: Reminders, remindctl, Reminders.app, remind me to, to-do list, due date, complete reminder, iPhone reminders."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

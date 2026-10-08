@@ -1,6 +1,6 @@
 ---
 name: blogwatcher
-description: "Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool."
+description: "Tracks blog and RSS/Atom feed updates with blogwatcher-cli: automatic feed discovery from a site URL, HTML scraping fallback, OPML import, and read/unread article management. Use when the user wants new posts from sites they follow surfaced or marked unread rather than checked by hand. Triggers on: blog RSS, follow a feed, monitor blog updates, blogwatcher, RSS reader, Atom feed, new posts from, OPML import, unread articles."
 version: 2.0.0
 author: JulienTant (fork of Hyaxia/blogwatcher)
 license: MIT

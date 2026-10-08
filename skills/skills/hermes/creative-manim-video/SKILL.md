@@ -1,6 +1,6 @@
 ---
 name: manim-video
-description: "Manim CE animations: 3Blue1Brown math/algo videos."
+description: "Produces 3Blue1Brown-style explainer videos with Manim Community Edition: concept explainers with geometric intuition, step-by-step equation derivations, algorithm walkthroughs with data structures, animated data stories, and components assembling into architecture diagrams. Use when the subject is geometric, mathematical, or algorithmic and a programmatic animation will teach it better than prose or static slides. Triggers on: manim, 3Blue1Brown style, math animation, equation derivation, algorithm visualization, animated explanation, explainer video, LaTeX animation, data story."
 version: 1.0.0
 platforms: [linux, macos, windows]
 ---

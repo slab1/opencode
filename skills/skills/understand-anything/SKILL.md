@@ -1,6 +1,6 @@
 ---
 name: understand-anything
-description: Rapidly comprehend large unfamiliar codebases by building an interactive Tree-sitter + LLM knowledge graph (Understand Anything, 64K+ stars).
+description: "Rapidly comprehend large unfamiliar codebases by building an interactive Tree-sitter + LLM knowledge graph (Understand Anything, 64K+ stars) and bridging it into OpenCode shared context. Use when onboarding to an unknown or very large repository, or when structural facts about functions, classes, imports, and architectural layers are needed before coding. Triggers on: understand codebase, knowledge graph, tree-sitter, code comprehension, architecture map, graphify, onboarding to repo, unfamiliar codebase."
 ---
 
 # Skill: Understand Anything — Codebase Knowledge Graph Integration

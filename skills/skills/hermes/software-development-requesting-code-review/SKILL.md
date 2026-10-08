@@ -1,6 +1,6 @@
 ---
 name: requesting-code-review
-description: "Pre-commit review: security scan, quality gates, auto-fix."
+description: "Runs an automated verification pipeline before code lands: static security scans, baseline-aware quality gates, an independent reviewer subagent that does not share the implementer's context, and an auto-fix loop — on the principle that no agent should verify its own work. Use when code is about to be committed or pushed, when any change touches two or more files, after each subagent-driven task, or when the user says commit, ship, done, verify, or review. Triggers on: pre-commit review, verify before committing, security scan my changes, quality gate, run the review, review before merge, ship this, is this ready to commit."
 version: 2.0.0
 author: Hermes Agent (adapted from obra/superpowers + MorAlekss)
 license: MIT

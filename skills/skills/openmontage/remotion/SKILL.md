@@ -1,6 +1,6 @@
 ---
 name: remotion
-description: Toolkit-specific Remotion patterns — custom transitions, shared components, and project conventions. For core Remotion framework knowledge (hooks, animations, rendering, etc.), see the `remotion-official` skill.
+description: "Toolkit-specific Remotion patterns — reusable shared video components (AnimatedBackground, SlideTransition, Label, Vignette, Picture-in-Picture, LogoWatermark) and custom scene transitions, plus project conventions. Use when building OpenMontage video templates that import from lib/components, or when a scene transition beyond @remotion/transitions is needed. For core Remotion framework knowledge (hooks, animations, rendering, etc.), see the `remotion-official` skill. Triggers on: remotion toolkit, shared components, slide transition, animated background, picture in picture, vignette, watermark, split screen."
 ---
 
 # Remotion — Toolkit Extensions

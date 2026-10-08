@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: "TDD: enforce RED-GREEN-REFACTOR, tests before code."
+description: "Enforces strict TDD through the RED-GREEN-REFACTOR cycle: write a failing test and watch it fail for the right reason, write minimal code to pass and verify green, then refactor — plus the order rationale, common rationalizations, and red flags that mean starting over. Use when writing any new feature, fixing a bug, refactoring, or changing behavior and tests should drive the implementation. Triggers on: TDD, test-driven development, write the test first, red green refactor, tests before code, watch it fail, unit test for this feature, testing discipline."
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT

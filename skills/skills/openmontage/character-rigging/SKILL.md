@@ -1,6 +1,6 @@
 ---
 name: character-rigging
-description: Build data-driven 2D character rigs for local animation: parts, pivots, layers, constraints, views, and reusable rig packages.
+description: "Builds data-driven 2D character rigs for local animation: parts, pivots, layers, constraints, views, and reusable rig packages. Use when authoring OpenMontage rig_plan artifacts or renderer input, when splitting a character into independently transformable parts, or when defining pivots, joints, and explicit layer order. Triggers on: character rig, rig_plan, svg rig, pivots, joints, layer order, 2d character, character parts."
 license: MIT
 ---
 

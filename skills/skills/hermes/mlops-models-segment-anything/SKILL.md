@@ -1,6 +1,6 @@
 ---
 name: segment-anything-model
-description: "SAM: zero-shot image segmentation via points, boxes, masks."
+description: "Segments arbitrary objects in images with Meta's Segment Anything Model, zero-shot and without task-specific training, prompted by points, bounding boxes, or previous masks, or run in automatic mode to emit every object mask. Use when objects must be cut out of photos or when annotation data is needed to train another vision model, including medical, satellite, or other new image domains. Triggers on: SAM, segment anything, zero-shot segmentation, segment this image, object masks, annotation tool, generate segmentation labels, cut out an object, point or box prompt."
 version: 1.0.0
 author: Orchestra Research
 license: MIT

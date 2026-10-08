@@ -1,6 +1,6 @@
 ---
 name: metacognitive-tracking
-description: Track not just task outcomes but the improvement strategies that produced them. Enable recursive self-improvement of the meta-agent by logging which strategies worked, which failed, and why. Based on HyperAgents (Meta, 2026).
+description: "Track not just task outcomes but the improvement strategies that produced them. Enable recursive self-improvement of the meta-agent by logging which strategies worked, which failed, and why. Use when recording a fix's strategy and verification evidence, or when enabling meta-agent self-improvement cycles. Triggers on: metacognitive tracking, strategy log, outcome tracking, meta-agent, self-improvement, recursive improvement, strategy effectiveness."
 license: MIT
 compatibility: opencode>=1.16.0
 metadata:

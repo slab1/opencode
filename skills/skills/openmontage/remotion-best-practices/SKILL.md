@@ -1,6 +1,6 @@
 ---
 name: remotion-best-practices
-description: Best practices for Remotion - Video creation in React
+description: "Domain-specific best-practice rules for Remotion - video creation in React. Covers compositions, animations, assets, audio, fonts, 3D, charts, captions/subtitles, audio visualisation, sound effects, and FFmpeg usage. Use when dealing with Remotion code, defining a composition, or handling captions, audio visualisation, sound effects, fonts, or media assets. Triggers on: remotion, composition, useCurrentFrame, remotion animations, captions, subtitles, audio visualization, calculateMetadata, extract frames, sound effects."
 metadata:
   tags: remotion, video, react, animation, composition
 ---

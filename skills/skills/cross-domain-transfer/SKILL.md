@@ -1,6 +1,6 @@
 ---
 name: cross-domain-transfer
-description: Transfer capabilities from high-performing OpenCode agents to lower-performing ones. Compare success rates, extract structural patterns, validate before applying. Used by the meta-agent for Phase 3 self-improvement cycles.
+description: "Transfer capabilities from high-performing OpenCode agents to lower-performing ones. Compare success rates, extract structural patterns, validate before applying. Use when one agent type repeatedly underperforms another, or during Phase 3 self-improvement cycles of the meta-agent. Triggers on: cross-domain transfer, agent self-improvement, capability transfer, success rate comparison, meta-agent, phase 3, pattern extraction."
 license: MIT
 compatibility: opencode>=1.16.0
 metadata:

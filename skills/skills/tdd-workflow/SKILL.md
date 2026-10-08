@@ -1,6 +1,6 @@
 ---
 name: tdd-workflow
-description: Test-driven development pattern: red-green-refactor cycle for the test and build agents. Use when implementing new features, fixing bugs, or refactoring — every change starts with a failing test, then minimal code, then cleanup. Reduces regressions and clarifies intent.
+description: 'Test-driven development pattern: red-green-refactor cycle for the test and build agents. Use when implementing new features, fixing bugs, or refactoring — every change starts with a failing test, then minimal code, then cleanup. Reduces regressions and clarifies intent.'
 license: MIT
 compatibility: opencode>=1.16.0
 ---

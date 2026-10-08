@@ -1,6 +1,6 @@
 ---
 name: youtube-content
-description: "YouTube transcripts to summaries, threads, blogs."
+description: "Extracts YouTube transcripts with youtube-transcript-api (any URL form, shorts, embeds, live links, or a raw video ID, plain text or timestamped, with language fallback) and converts them into structured content: chapters, summaries, threads, and blog posts. Use when the user shares a YouTube link or asks to summarize a video, get its transcript, or repurpose it. Triggers on: YouTube URL, summarize this video, video transcript, youtube-transcript-api, turn this video into a blog post, thread from a video, chapter a video."
 platforms: [linux, macos, windows]
 ---
 

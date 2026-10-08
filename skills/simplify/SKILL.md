@@ -1,6 +1,6 @@
 ---
 name: simplify
-description: Simplifies code for clarity without changing behavior. Use for readability, maintainability, and complexity reduction after behavior is understood.
+description: "Simplifies code for clarity while preserving exact behavior. Use when code already works but is hard to read, hard to maintain, or over-complex, and the change must not alter observable behavior. Triggers on: simplify, refactor for readability, reduce complexity, YAGNI, dead abstraction, maintainability cleanup."
 ---
 
 # Code Simplification

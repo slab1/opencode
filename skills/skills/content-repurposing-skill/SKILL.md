@@ -1,6 +1,6 @@
 ---
 name: content-repurposing-skill
-description: "Transform one piece of source content into platform-optimized posts for 11 social networks with proper formatting, tone, and scheduling."
+description: "Transform one piece of source content into platform-optimized posts for 11 social networks with proper formatting, tone, and scheduling. Use when a blog post, article, or video must be redistributed across Twitter/X, LinkedIn, Instagram, Facebook, TikTok, YouTube, Threads, Bluesky, Mastodon, Pinterest, or GBP. Triggers on: repurpose content, social media posts, cross-platform content, content repurposing, multi-platform, linkedin post, twitter post, threads, bluesky, mastodon."
 version: 2.0.0
 author: OpenCode Platform Manager
 license: MIT

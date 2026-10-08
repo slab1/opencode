@@ -1,6 +1,6 @@
 ---
 name: hermes-agent
-description: "Configure, extend, or contribute to Hermes Agent."
+description: "Guides working with Hermes Agent, the open-source Nous Research agent framework: installing it, configuring providers, profiles, memory backends, plugins, MCP servers, cron and webhooks, spawning additional agent instances, running the multi-platform gateway (Telegram, Discord, Slack, WhatsApp, Signal, email), and contributing to the codebase. Use when the question is about Hermes itself — setup, config files, commands, troubleshooting, self-improving skills, or extension — rather than about another tool. Triggers on: Hermes Agent, hermes, hermes-agent CLI, gateway, profile, skills system, persistent memory, spawn agents, NousResearch, troubleshooting Hermes."
 version: 2.1.0
 author: Hermes Agent + Teknium
 license: MIT

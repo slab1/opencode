@@ -1,6 +1,6 @@
 ---
 name: refactor-safe
-description: Refactor code safely by following test-first refactoring patterns. Ensure tests exist before changing code, change one thing at a time, keep behavior identical. Use for any non-trivial refactor that risks breaking existing functionality.
+description: "Refactor code safely by following test-first refactoring patterns. Ensure tests exist before changing code, change one thing at a time, keep behavior identical. Use when a refactor risks breaking existing functionality, or when cleaning up code with no intended behavior change is requested. Triggers on: refactor, safe refactoring, behavior-preserving, test-first refactor, code cleanup, no behavior change."
 license: MIT
 compatibility: opencode>=1.16.0
 ---

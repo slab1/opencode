@@ -1,6 +1,6 @@
 ---
 name: synthetic-screen-recording
-description: Author terminal/CLI demo lookalikes in Remotion with TerminalScene instead of capturing the real desktop; decide when to synthesize vs record live.
+description: "Author terminal/CLI demo lookalikes in Remotion with the TerminalScene component instead of capturing the real desktop; decides when to synthesize versus record live. Use when a demo is a terminal, CLI, install-walkthrough, or coding session whose commands and output are predictable, or when a real screen capture would expose private windows. Use playwright-recording for browser demos instead. Triggers on: terminal demo, terminalscene, screen recording, cli demo, install walkthrough, synthesize vs record, fake terminal, pseudoterminal."
 ---
 
 # Synthetic Screen Recording (Remotion TerminalScene)

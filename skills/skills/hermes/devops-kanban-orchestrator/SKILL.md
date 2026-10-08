@@ -1,6 +1,6 @@
 ---
 name: kanban-orchestrator
-description: Decomposition playbook + anti-temptation rules for an orchestrator profile routing work through Kanban. The "don't do the work yourself" rule and the basic lifecycle are auto-injected into every kanban worker's system prompt; this skill is the deeper playbook when you're specifically playing the orchestrator role.
+description: "Decomposition playbook and anti-temptation rules for an orchestrator profile whose whole job is routing work onto the Hermes Kanban board: when to open cards versus just doing the work, how to discover which profiles actually exist before fanning out, and how to shape assignments. The core lifecycle and 'decompose, don't execute' rule are auto-injected into every worker's prompt; this is the deeper playbook for the orchestrator role itself. Use when multiple specialists, parallel fan-out, crash-survivable long work, or human-in-the-loop steps should become Kanban tasks. Triggers on: kanban orchestrator, decompose a task, fan out to profiles, route work to specialists, kanban board, dispatcher, assignee profiles, multi-agent routing."
 version: 3.0.0
 platforms: [linux, macos, windows]
 environments: [kanban]

@@ -1,6 +1,6 @@
 ---
 name: worktrees
-description: Manage Git worktrees as OMO safe isolated coding lanes for complex, risky, or parallel work.
+description: "Manages Git worktrees as safe isolated coding lanes so risky, exploratory, or parallel work can proceed without disturbing the main checkout. Use when a change is risky enough to want isolation, when parallel lanes for several agents or features are needed, or when a branch should be created and cleaned up with reviewable commits. Triggers on: worktree, git worktree, isolated lane, parallel branch, parallel agents, safe sandbox branch."
 ---
 
 # Worktrees Orchestration Protocol

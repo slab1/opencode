@@ -1,6 +1,6 @@
 ---
 name: sketch
-description: "Throwaway HTML mockups: 2-3 design variants to compare."
+description: "Explores a UI/UX direction before committing by producing 2-3 disposable interactive HTML mockup variants for side-by-side comparison, not shippable code. Use when the user wants to see what a screen could look like — 'sketch this screen', 'show me variants', 'compare layout A vs B' — and the design is still open. Triggers on: sketch this screen, show me options, 2-3 variants, mockup this before I build, compare designs, explore layouts, disposable UI mockups."
 version: 1.0.0
 author: Hermes Agent (adapted from gsd-build/get-shit-done)
 license: MIT

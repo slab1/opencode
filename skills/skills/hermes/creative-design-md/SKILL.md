@@ -1,6 +1,6 @@
 ---
 name: design-md
-description: Author/validate/export Google's DESIGN.md token spec files.
+description: "Authors, lints, diffs, and exports Google's DESIGN.md design-token spec files: YAML front matter for normative tokens plus a Markdown rationale body, validated for structure and WCAG contrast by `npx @google/design.md`, and exportable to Tailwind or W3C DTCG JSON. Use when the deliverable is a formal machine-readable design-system spec that lives in a repo and agents consume over time — not a one-off rendered artifact. Triggers on: DESIGN.md, design tokens, design system spec, token file, WCAG contrast check on palette, DTCG export, Tailwind theme export, port a style guide for agents."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

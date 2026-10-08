@@ -2,14 +2,17 @@
 name: faster-chrome-devtools-skill
 description: >
   Inspect, debug, and automate Chrome directly through the Chrome DevTools
-  Protocol (CDP). Use this skill whenever a task needs a real web browser: open
-  a URL, navigate pages, take a screenshot of a web page, read the DOM or
-  accessibility tree, click buttons, fill and submit forms, type text, wait for
-  elements, scrape page content, evaluate JavaScript on a page, or check console
-  errors and failed network requests. Works against the user's local Chrome or a
-  remote Cloudflare Browser Rendering endpoint over WebSocket. Relevant to
-  browser automation, web scraping, page screenshots, end-to-end UI checks, and
-  DevTools inspection. No Chrome DevTools MCP, Puppeteer, or Playwright required.
+  Protocol (CDP). Use when a task needs a real web browser: open a URL, navigate
+  pages, take a screenshot of a web page, read the DOM or accessibility tree,
+  click buttons, fill and submit forms, type text, wait for elements, scrape page
+  content, evaluate JavaScript on a page, or check console errors and failed
+  network requests. Works against the user's local Chrome or a remote Cloudflare
+  Browser Rendering endpoint over WebSocket. Relevant to browser automation, web
+  scraping, page screenshots, end-to-end UI checks, and DevTools inspection. No
+  Chrome DevTools MCP, Puppeteer, or Playwright required. Triggers on: chrome
+  devtools, cdp, browser automation, web scraping, page screenshot, dom
+  accessibility tree, fill form, evaluate javascript, network requests,
+  cloudflare browser rendering.
 compatibility: Requires Node.js 22+
 ---
 

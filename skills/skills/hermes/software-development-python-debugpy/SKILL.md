@@ -1,6 +1,6 @@
 ---
 name: python-debugpy
-description: "Debug Python: pdb REPL + debugpy remote (DAP)."
+description: "Debugs Python with three situational tools: breakpoint() plus the pdb REPL for local interactive stepping, `python -m pdb` to launch a script under the debugger without source edits, and debugpy over DAP for remote, headless, or attach-to-an-already-running-process work on long-lived gateways, daemons and PTY children. Use when a traceback does not explain why a value is wrong and the process must be paused. Triggers on: pdb, breakpoint(), python -m pdb, debugpy, debug a python script, post-mortem debugging, attach to a running python process, DAP."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

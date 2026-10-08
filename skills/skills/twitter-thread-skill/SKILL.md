@@ -1,6 +1,6 @@
 ---
 name: twitter-thread-skill
-description: "Create and post multi-part threads on X/Twitter: split long content, write hooks, structure parts, add CTAs."
+description: "Create and post multi-part threads on X/Twitter: split long content, write hooks, structure parts, add CTAs. Use when a long article, launch, or announcement must become an X thread, or when writing thread hooks and calls to action for Twitter/X. Triggers on: twitter thread, x thread, write a thread, thread hook, multi-part post, cta, twitter post."
 version: 2.0.0
 author: OpenCode Platform Manager
 license: MIT

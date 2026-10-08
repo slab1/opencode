@@ -1,6 +1,6 @@
 ---
 name: ui-ux-pro-max
-description: UI/UX design intelligence with searchable database
+description: "UI/UX design intelligence with a searchable database: 67 styles, 96 color palettes, 57 font pairings, 99 UX guidelines, and 25 chart types across 13 technology stacks. Use when the user requests UI/UX work — design, build, create, implement, review, fix, or improve a web or mobile interface — and a generated design system, palette, font pairing, or UX guideline is needed. Triggers on: ui/ux, design system, color palette, font pairing, ux guidelines, style recommendation, landing page, dashboard design, chart types."
 ---
 # ui-ux-pro-max
 

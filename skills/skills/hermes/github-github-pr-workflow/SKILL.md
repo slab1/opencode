@@ -1,6 +1,6 @@
 ---
 name: github-pr-workflow
-description: "GitHub PR lifecycle: branch, commit, open, CI, merge."
+description: "Walks the full GitHub pull request lifecycle: branching, committing with good messages, pushing, opening the PR with a body from the template, watching CI checks to green, and merging or updating the branch — each step shown as gh first, then a git plus curl fallback. Use when the user wants a change shipped as a PR or an existing PR driven to mergeable. Triggers on: open a PR, create pull request, push a branch, check CI status, merge the PR, update my branch, pr template, gh pr create, pr workflow."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

@@ -1,6 +1,6 @@
 ---
 name: github-auth
-description: "GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login."
+description: "Sets up GitHub authentication on a machine: detects whether git and the gh CLI are present and already logged in, then walks the git-only path (HTTPS personal access tokens stored via credential helper, or SSH keys) or the gh path (`gh auth login`). Use when GitHub access fails, when push or pull asks for credentials, or before any GitHub skill touches a repo. Triggers on: github auth, git push asks for credentials, personal access token, SSH key setup, gh auth login, gh auth status, not authenticated to GitHub, 403 from GitHub API."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

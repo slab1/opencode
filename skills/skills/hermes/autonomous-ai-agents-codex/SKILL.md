@@ -1,6 +1,6 @@
 ---
 name: codex
-description: "Delegate coding to OpenAI Codex CLI (features, PRs)."
+description: "Delegates coding tasks to OpenAI's Codex CLI from the Hermes terminal, using `codex exec` in one-shot, `--full-auto` background, or interactive PTY modes; requires the CLI to be installed, auth configured (API key or Codex OAuth), and a git repository in the working directory. Use when work should be handed to an autonomous coding agent — building features, refactoring, reviewing PRs, or batch-fixing issues. Triggers on: codex, Codex CLI, codex exec, full-auto, OpenAI coding agent, PR review with Codex, batch issue fixing."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

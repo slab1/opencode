@@ -1,6 +1,6 @@
 ---
 name: xurl
-description: "X/Twitter via xurl CLI: post, search, DM, media, v2 API."
+description: "Operates X (Twitter) through xurl, the X developer platform's official OAuth 2.0 PKCE CLI: posting, replying, quoting and deleting posts, searching and reading timelines or mentions, liking, reposting and bookmarking, follow and block actions, direct messages, image and video media uploads, raw access to any v2 endpoint, and multi-account workflows. Use when an action must actually happen on X, replacing the retired xitter third-party wrapper. Triggers on: tweet, post to X, X/Twitter API, xurl, reply to a tweet, quote post, DM on X, upload media to X, search X, twitter timeline, multi-account X."
 version: 1.1.1
 author: xdevplatform + openclaw + Hermes Agent
 license: MIT

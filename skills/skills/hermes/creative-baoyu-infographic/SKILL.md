@@ -1,6 +1,6 @@
 ---
 name: baoyu-infographic
-description: "Infographics: 21 layouts x 21 styles (信息图, 可视化)."
+description: "Generates infographics by pairing any of 21 information layouts (bento grid, timeline, comparison matrix, hub-spoke, iceberg, pyramid and more) with any of 21 visual styles, at selectable aspect ratio and language, from content the user supplies as text, a file, a URL, or a topic. Use when the user asks for an infographic, visual summary, or information graphic, including 高密度信息大图. Triggers on: infographic, visual summary, information graphic, 信息图, 可视化, bento grid, comparison infographic, timeline graphic, generate infographic image."
 version: 1.56.1
 author: 宝玉 (JimLiu)
 license: MIT

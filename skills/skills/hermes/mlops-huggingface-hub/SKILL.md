@@ -1,6 +1,6 @@
 ---
 name: huggingface-hub
-description: "HuggingFace hf CLI: search/download/upload models, datasets."
+description: "Reference for the modern Hugging Face `hf` CLI (which replaces the deprecated huggingface-cli): authenticating with HF_TOKEN, downloading and uploading files and folders including resumable large-folder uploads, syncing with cloud storage, managing model, dataset and Space repos, and inspecting environment and version details. Use when files must move to or from the Hugging Face Hub from the shell. Triggers on: hf CLI, huggingface-cli, hugging face hub, download a model, upload a model, push dataset to the hub, HF_TOKEN, hf download, hf upload, hf repo create."
 version: 1.0.0
 author: Hugging Face
 license: MIT

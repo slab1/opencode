@@ -1,6 +1,6 @@
 ---
 name: excalidraw
-description: "Hand-drawn Excalidraw JSON diagrams (arch, flow, seq)."
+description: "Creates hand-drawn-looking diagrams by writing standard Excalidraw element JSON and saving `.excalidraw` files that open and stay editable at excalidraw.com, with an optional upload script for shareable links. Use when the user wants an informal sketch-style architecture diagram, flowchart, sequence diagram, or concept map rather than a polished dark-theme SVG. Triggers on: excalidraw, .excalidraw file, hand-drawn diagram, whiteboard sketch, flowchart, sequence diagram, concept map, sketchy architecture diagram."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

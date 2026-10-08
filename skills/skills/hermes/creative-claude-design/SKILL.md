@@ -1,6 +1,6 @@
 ---
 name: claude-design
-description: Design one-off HTML artifacts (landing, deck, prototype).
+description: "Runs the Claude Design process and taste in a CLI/API environment for from-scratch designed HTML artifacts: scoping a brief, gathering context, producing variants, and verifying a local HTML file — for landing pages, decks, prototypes, component labs, and motion studies. Use when the deliverable is a designed artifact with no brand or token system dictated; for a known brand's look load popular-web-designs alongside it, and for a token spec file use design-md. Triggers on: design a landing page, HTML prototype, design artifact, deck in HTML, component lab, motion study, design taste, avoid AI design slop, from-scratch UI design."
 version: 1.0.0
 author: BadTechBandit
 license: MIT

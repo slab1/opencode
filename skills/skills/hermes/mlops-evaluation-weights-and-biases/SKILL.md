@@ -1,6 +1,6 @@
 ---
 name: weights-and-biases
-description: "W&B: log ML experiments, sweeps, model registry, dashboards."
+description: "Tracks ML experiments with Weights & Biases: automatic metric logging and real-time training dashboards, run comparison across configs, automated hyperparameter sweeps, model registry with versioning and lineage, artifact tracking for datasets and checkpoints, and team workspaces. Use when a training run needs logged and compared rather than watched in a terminal, or when hyperparameters should be swept automatically. Triggers on: wandb, W&B, experiment tracking, log metrics, compare runs, hyperparameter sweep, model registry, artifact lineage, training dashboard."
 version: 1.0.0
 author: Orchestra Research
 license: MIT

@@ -1,6 +1,6 @@
 ---
 name: kanban-worker
-description: Pitfalls, examples, and edge cases for Hermes Kanban workers. The lifecycle itself is auto-injected into every worker's system prompt as KANBAN_GUIDANCE (from agent/prompt_builder.py); this skill is what you load when you want deeper detail on specific scenarios.
+description: "Pitfalls, worked examples, and edge cases for a Hermes Kanban worker: how to handle scratch vs dir vs worktree workspaces, tenant-isolated memory, good kanban_complete summary and metadata shapes, and retry diagnostics when a task is blocked or resumed. The six-step lifecycle is auto-injected as KANBAN_GUIDANCE into every dispatched worker; this is the deeper detail for specific scenarios. Use when running as a Kanban worker and you need the concrete patterns rather than the lifecycle reminder. Triggers on: kanban worker, kanban_complete, workspace kind, worktree task, HERMES_TENANT, blocked task, retry a kanban task, handoff summary."
 version: 2.0.0
 platforms: [linux, macos, windows]
 environments: [kanban]

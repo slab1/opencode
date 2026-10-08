@@ -1,6 +1,6 @@
 ---
 name: debug-systematic-investigation
-description: Systematically investigate bugs and failures by following a hypothesis-driven approach. Trace data flow, test theories with minimal reproductions, isolate root cause before proposing fixes. Use for any non-trivial bug, performance issue, or unexpected behavior.
+description: "Systematically investigate bugs and failures by following a hypothesis-driven approach. Trace data flow, test theories with minimal reproductions, isolate root cause before proposing fixes. Use when a bug is non-trivial or unexplained, when a proposed fix keeps failing, or when diagnosing a performance issue or unexpected behavior. Triggers on: debug, root cause, hypothesis, minimal reproduction, data flow trace, investigate bug, flaky, unexpected behavior."
 license: MIT
 compatibility: opencode>=1.16.0
 ---

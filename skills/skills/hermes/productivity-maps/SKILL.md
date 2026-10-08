@@ -1,6 +1,6 @@
 ---
 name: maps
-description: "Geocode, POIs, routes, timezones via OpenStreetMap/OSRM."
+description: "Answers location questions from free open data with no API key — geocoding a place name to coordinates, reverse-geocoding coordinates to an address, finding nearby points of interest across 44 categories via the Overpass API, routing and distance/ETA via OSRM, and timezone lookup, driven by 8 commands. Use when an address must become coordinates, a pin must become a place, or somewhere to eat/stay/charge nearby is needed. Triggers on: geocode, lat, lng, coordinates, address lookup, POI, nearby places, restaurants near me, directions, route, distance, ETA, timezone, OpenStreetMap, Nominatim, Overpass, OSRM."
 version: 1.2.0
 author: Mibayy
 license: MIT

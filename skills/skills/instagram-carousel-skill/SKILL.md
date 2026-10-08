@@ -1,6 +1,6 @@
 ---
 name: instagram-carousel-skill
-description: "Design and publish multi-slide Instagram carousel posts with AI-generated visuals, platform-optimized captions, and proper resizing."
+description: "Design and publish multi-slide Instagram carousel posts with AI-generated visuals, platform-optimized captions, and proper resizing. Use when turning an article, product, or idea into an Instagram carousel, or when AI-generated slide imagery and caption copy are needed at square or 1080x1350 aspect. Triggers on: instagram carousel, carousel post, multi-slide, ai-generated visuals, caption, social post, 1080x1350, square post."
 version: 2.0.0
 author: OpenCode Platform Manager
 license: MIT

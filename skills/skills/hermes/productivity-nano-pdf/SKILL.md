@@ -1,6 +1,6 @@
 ---
 name: nano-pdf
-description: "Edit PDF text/typos/titles via nano-pdf CLI (NL prompts)."
+description: "Edits existing PDFs with natural-language instructions: point nano-pdf at a file and page number and describe the change, such as fixing typos, renaming a heading, or replacing a title, leaving the original document structure intact. Use when a PDF already exists and only text on a page needs changing — not for reading PDFs, which the ocr-and-documents skill covers. Triggers on: edit a PDF, fix typos in the PDF, change the title on page, nano-pdf, natural language PDF edit, patch a PDF page."
 version: 1.0.0
 author: community
 license: MIT

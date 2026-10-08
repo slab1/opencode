@@ -1,11 +1,19 @@
 ---
 name: manimgl-best-practices
 description: |
-  Trigger when: (1) User mentions "manimgl" or "ManimGL" or "3b1b manim", (2) Code contains `from manimlib import *`, (3) User runs `manimgl` CLI commands, (4) Working with InteractiveScene, self.frame, self.embed(), ShowCreation(), or ManimGL-specific patterns.
+  Best practices for ManimGL (Grant Sanderson's 3Blue1Brown version) - OpenGL-based
+  animation engine with interactive development. Covers InteractiveScene, Tex
+  with t2c, camera frame control, interactive mode (-se flag), 3D rendering, and
+  checkpoint_paste() workflow.
 
-  Best practices for ManimGL (Grant Sanderson's 3Blue1Brown version) - OpenGL-based animation engine with interactive development. Covers InteractiveScene, Tex with t2c, camera frame control, interactive mode (-se flag), 3D rendering, and checkpoint_paste() workflow.
+  Use when (1) the user mentions "manimgl", "ManimGL", or "3b1b manim", (2) code
+  contains `from manimlib import *`, (3) the user runs `manimgl` CLI commands, or
+  (4) working with InteractiveScene, self.frame, self.embed(), ShowCreation(),
+  or ManimGL-specific patterns. NOT for Manim Community Edition (which uses
+  `manim` imports and `manim` CLI).
 
-  NOT for Manim Community Edition (which uses `manim` imports and `manim` CLI).
+  Triggers on: manimgl, 3b1b, 3blue1brown, from manimlib import *, manimgl cli,
+  interactive scene, showcreation.
 ---
 
 ## How to use

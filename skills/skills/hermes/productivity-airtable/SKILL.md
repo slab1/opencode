@@ -1,6 +1,6 @@
 ---
 name: airtable
-description: Airtable REST API via curl. Records CRUD, filters, upserts.
+description: "Works with Airtable through its REST API using curl and a per-base personal access token — listing bases and tables, and creating, reading, filtering, updating, upserting and deleting records, with no MCP server or Python SDK. Use when the user's structured data lives in an Airtable base and records must be queried or changed. Triggers on: Airtable, AIRTABLE_API_KEY, airtable base, Airtable record, upsert records, filter Airtable rows, list my tables, personal access token pat."
 version: 1.1.0
 author: community
 license: MIT

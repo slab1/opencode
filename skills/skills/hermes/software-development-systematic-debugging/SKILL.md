@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "4-phase root cause debugging: understand bugs before fixing."
+description: "Applies a four-phase debugging discipline — Phase 1 root cause investigation, Phase 2 pattern analysis, Phase 3 hypothesis and testing, Phase 4 implementation — under the iron law that no fix is proposed before root cause is understood, because symptom fixes create new bugs. Use when a bug, test failure, or intermittent fault must be diagnosed from evidence instead of guessed at. Triggers on: debug this, why is this failing, root cause, intermittent bug, flaky test, figure out why it broke, hypothesis before fix, troubleshoot an error, mysterious behavior."
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT

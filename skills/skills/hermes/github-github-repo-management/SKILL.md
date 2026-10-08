@@ -1,6 +1,6 @@
 ---
 name: github-repo-management
-description: "Clone/create/fork repos; manage remotes, releases."
+description: "Creates, clones, forks, and configures GitHub repositories: remotes, default branch and protection settings, repository secrets and variables, releases and tags, transfer and archive, and deletion. Use when the user asks to start or copy a repo, adjust repo settings, add a secret, cut a release, or clean up a repository. Triggers on: create a repo, fork, clone repo, manage remotes, repo secrets, Actions secrets, cut a release, default branch, protect branch, delete or archive repo, rename repo."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

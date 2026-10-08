@@ -1,6 +1,6 @@
 ---
 name: grok-media
-description: xAI Grok image and video generation guide covering authentication, endpoints, prompt structure, image editing, reference-image video, and async polling.
+description: "xAI Grok image and video generation guide covering authentication, endpoints, prompt structure, image editing, reference-image video, and async polling. Use when calling xAI/Grok image or video APIs, when passing a reference image to Grok video, or when polling a Grok generation job for results. Triggers on: grok, xai, image generation, video generation, reference image, image editing, async polling, xai api."
 metadata:
   author: OpenMontage
   version: "1.0.0"

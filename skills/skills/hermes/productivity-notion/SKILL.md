@@ -1,6 +1,6 @@
 ---
 name: notion
-description: "Notion API + ntn CLI: pages, databases, markdown, Workers."
+description: "Works with Notion two ways using one integration token: the official `ntn` CLI (default when installed, with one-line file uploads, required for Workers) and plain HTTP with curl as the cross-platform fallback including Windows — covering pages, databases, blocks, and markdown conversion. Use when content must be read from or written to a Notion workspace. Triggers on: notion, ntn CLI, notion page, notion database, NOTION_API_KEY, append to a notion page, notion markdown import, notion workers, integration token."
 version: 2.0.0
 author: community
 license: MIT

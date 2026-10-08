@@ -1,11 +1,17 @@
 ---
 name: manimce-best-practices
 description: |
-  Trigger when: (1) User mentions "manim" or "Manim Community" or "ManimCE", (2) Code contains `from manim import *`, (3) User runs `manim` CLI commands, (4) Working with Scene, MathTex, Create(), or ManimCE-specific classes.
+  Best practices for Manim Community Edition - the community-maintained Python
+  animation engine. Covers Scene structure, animations, LaTeX/MathTex, 3D with
+  ThreeDScene, camera control, styling, and CLI usage.
 
-  Best practices for Manim Community Edition - the community-maintained Python animation engine. Covers Scene structure, animations, LaTeX/MathTex, 3D with ThreeDScene, camera control, styling, and CLI usage.
+  Use when (1) the user mentions "manim", "Manim Community", or "ManimCE", (2)
+  code contains `from manim import *`, (3) the user runs `manim` CLI commands, or
+  (4) working with Scene, MathTex, Create(), or ManimCE-specific classes. NOT for
+  ManimGL/3b1b version (which uses `manimlib` imports and `manimgl` CLI).
 
-  NOT for ManimGL/3b1b version (which uses `manimlib` imports and `manimgl` CLI).
+  Triggers on: manim, manimce, manim community, from manim import *, manim cli,
+  mathtex, threescene.
 ---
 
 ## How to use

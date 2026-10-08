@@ -1,6 +1,6 @@
 ---
 name: llm-wiki
-description: "Karpathy's LLM Wiki: build/query interlinked markdown KB."
+description: "Builds and maintains a compounding knowledge base as interlinked markdown files following Andrej Karpathy's LLM Wiki pattern, where synthesis compiles knowledge once, cross-references already exist and contradictions are already flagged, instead of re-retrieving per query as RAG does. Use when the user wants a persistent wiki or knowledge base created, a source ingested into it, or a question answered against an existing one. Triggers on: build a wiki, knowledge base, LLM wiki, ingest a source into my notes, query my wiki, persistent KB, interlinked markdown knowledge base, karpathy wiki."
 version: 2.1.0
 author: Hermes Agent
 license: MIT

@@ -1,7 +1,7 @@
 ---
 name: research-research-paper-writing
 title: Research Paper Writing Pipeline
-description: "Write ML papers for NeurIPS/ICML/ICLR: design→submit."
+description: "Runs the end-to-end ML/AI paper lifecycle as an iterative loop, not a straight line: experiment design and execution, monitoring, statistical analysis with significance testing and SciencePlots figures, literature review via arXiv and Semantic Scholar, LaTeX writing, review simulation, revision, and submission for NeurIPS, ICML, ICLR, ACL, AAAI, and COLM. Use when the user is writing a conference paper and needs results to drive new experiments or reviews to trigger new analysis. Triggers on: write a research paper, ML paper, NeurIPS submission, ICML, ICLR, ACL paper, experiment design for a paper, statistical significance, rebuttal, LaTeX paper, paper figures."
 version: 1.1.0
 author: Orchestra Research
 license: MIT

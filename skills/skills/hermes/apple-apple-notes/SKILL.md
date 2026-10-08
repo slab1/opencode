@@ -1,6 +1,6 @@
 ---
 name: apple-notes
-description: "Manage Apple Notes via memo CLI: create, search, edit."
+description: "Manages Apple Notes from the terminal via the `memo` CLI: list, search, create, edit, organize into folders, and export to Markdown/HTML, with notes syncing through iCloud across Apple devices. Use when the user asks to read, write, search, or organize anything in Notes.app, or wants content saved into Apple Notes for cross-device access. Triggers on: Apple Notes, Notes.app, memo, iCloud notes, add a note, search notes, note folder, export notes."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

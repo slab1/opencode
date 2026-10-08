@@ -1,6 +1,6 @@
 ---
 name: multi-agent-orchestration
-description: Coordinate multiple agents to complete complex tasks. Decompose work, dispatch in parallel where possible, evaluate outputs, detect gaps, iterate until quality. Used by the orchestrator agent and any task requiring multiple specialized agents.
+description: "Coordinate multiple agents to complete complex tasks. Decompose work, dispatch in parallel where possible, evaluate outputs, detect gaps, iterate until quality. Use when a task spans several specialized agents, or when the orchestrator needs a decomposition and fan-out/fan-in plan. Triggers on: multi-agent orchestration, decompose, dispatch parallel, subagent, fan-out, agent coordination, orchestrator."
 license: MIT
 compatibility: opencode>=1.16.0
 ---

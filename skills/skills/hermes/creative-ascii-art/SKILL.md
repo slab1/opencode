@@ -1,6 +1,6 @@
 ---
 name: ascii-art
-description: "ASCII art: pyfiglet, cowsay, boxes, image-to-ascii."
+description: "Produces text-based ASCII and Unicode art using local CLI tools and free APIs: pyfiglet banners in 571 fonts, cowsay-style speech, box drawing, and image-to-ASCII conversion, plus terminal animation. Use when the user wants decorative text art — a banner for a project name or title, a header or logo in text, a talking-animal message, or an image rendered as ASCII. Triggers on: ASCII art, text art, banner, pyfiglet, figlet, cowsay, boxes, image to ascii, terminal art, unicode banner, logo in text."
 version: 4.0.0
 author: 0xbyt4, Hermes Agent
 license: MIT

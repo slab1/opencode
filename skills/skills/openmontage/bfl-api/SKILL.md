@@ -1,6 +1,6 @@
 ---
 name: bfl-api
-description: BFL FLUX API integration guide covering endpoints, async polling patterns, rate limiting, error handling, webhooks, and regional endpoints with Python and TypeScript code examples.
+description: "BFL FLUX API integration guide covering endpoints, async polling patterns, rate limiting, error handling, webhooks, and regional endpoints with Python and TypeScript code examples. Use when calling the Black Forest Labs FLUX API directly, when polling for async generation results, or when handling BFL rate limits, errors, or webhooks. Triggers on: bfl, flux api, async polling, rate limit, webhook, regional endpoint, python sdk, typescript sdk."
 metadata:
   author: Black Forest Labs
   version: "1.0.0"

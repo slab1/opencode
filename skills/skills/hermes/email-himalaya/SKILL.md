@@ -1,6 +1,6 @@
 ---
 name: himalaya
-description: "Himalaya CLI: IMAP/SMTP email from terminal."
+description: "Manages email from the terminal with the Himalaya CLI over IMAP, SMTP, Notmuch, or Sendmail backends, including configuration and IMAP/SMTP authentication, listing and reading mail, and composing with MML syntax. This is separate from the Hermes Email gateway adapter, which is for emailing the agent. Use when the user wants the agent to read, search, reply to, or send mail in a mailbox directly. Triggers on: himalaya, email from terminal, IMAP, SMTP, read my inbox, send an email, reply to email, mailbox, compose mail MML."
 version: 1.1.0
 author: community
 license: MIT

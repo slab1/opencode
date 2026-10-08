@@ -1,6 +1,6 @@
 ---
 name: p5js
-description: "p5.js sketches: gen art, shaders, interactive, 3D."
+description: "Builds browser-based creative coding sketches with p5.js: generative art, interactive canvas visualizations, data viz, GLSL shaders, WebGL 3D scenes, particle systems, flow fields, audio-reactive visuals, and kinetic typography, exported to HTML, PNG, GIF, MP4, or SVG including headless high-res renders. Use when the user wants an interactive or generative visual that runs live in a canvas rather than a static image or video. Triggers on: p5.js, p5js, creative coding, generative art, canvas sketch, shader effect, particle system, WebGL scene, audio reactive visual, interactive visualization, data viz in canvas."
 version: 1.0.0
 platforms: [linux, macos, windows]
 metadata:

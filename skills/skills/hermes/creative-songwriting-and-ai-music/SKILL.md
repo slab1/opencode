@@ -1,6 +1,6 @@
 ---
 name: songwriting-and-ai-music
-description: "Songwriting craft and Suno AI music prompts."
+description: "Covers songwriting craft — structure skeletons, verse/chorus/bridge construction, rhyme and prosody, hooks — plus how to write prompts for Suno and other AI music generators, including parody and adaptation of existing songs. Use when the user asks for lyrics, wants a song written or rewritten, needs a Suno-ready prompt, or wants an existing song adapted or spoofed. Triggers on: write a song, song lyrics, chorus and verse, Suno prompt, AI music generation, parody song, adapt this song, songwriting, hook and melody."
 tags: [songwriting, music, suno, parody, lyrics, creative]
 platforms: [linux, macos, windows]
 triggers:

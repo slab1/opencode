@@ -1,6 +1,6 @@
 ---
 name: powerpoint
-description: "Create, read, edit .pptx decks, slides, notes, templates."
+description: "Handles .pptx files in any direction — creating decks and pitch presentations from scratch (pptxgenjs) or from an existing template, editing and updating existing presentations, reading and parsing slide text with markitdown, thumbnail overviews, and combining or splitting slide files, including speaker notes, layouts, and comments. Use whenever a .pptx is an input or an output, or the user says deck, slides, or presentation. Triggers on: pptx, powerpoint, slide deck, pitch deck, presentation, speaker notes, build slides, edit this deck, merge or split slides, markitdown pptx."
 license: Proprietary. LICENSE.txt has complete terms
 platforms: [linux, macos, windows]
 ---

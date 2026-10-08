@@ -1,6 +1,6 @@
 ---
 name: arxiv
-description: "Search arXiv papers by keyword, author, category, or ID."
+description: "Searches and retrieves academic papers from arXiv's free REST API with curl — no key, no dependencies — by keyword, author, or category, or by fetching a specific arXiv ID, then reads the abstract page or full PDF. Use when a question needs actual literature, a citation, or the content of a preprint. Triggers on: arxiv, arXiv paper, search papers, find research on X, preprint, paper abstract, arxiv id, academic literature, scholarly search."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

@@ -1,6 +1,6 @@
 ---
 name: simplify-code
-description: "Parallel 3-agent cleanup of recent code changes."
+description: "Reviews recent code changes with three narrow reviewers running in parallel — one each for reuse, quality, and efficiency — aggregates their findings, and applies the fixes worth applying; three focused searches beat one diluted review at the latency of one. Use when the user says simplify, clean up my changes, or review my recent changes, after a feature or refactor is in place but before committing. Triggers on: simplify, clean up my changes, review my recent changes, /simplify, remove duplication, dead code, refactor for clarity, efficiency pass."
 version: 1.0.0
 author: Hermes Agent (inspired by Claude Code /simplify)
 license: MIT

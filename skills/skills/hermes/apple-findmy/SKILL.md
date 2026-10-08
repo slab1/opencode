@@ -1,6 +1,6 @@
 ---
 name: findmy
-description: "Track Apple devices/AirTags via FindMy.app on macOS."
+description: "Locates Apple devices and AirTags on macOS by opening FindMy.app via AppleScript, screenshotting its window, and reading the locations off the image, plus switching between the Devices and Items tabs. Use when the user asks where a device or tagged item is — 'where is my keys/cat/bag', locating an iPhone/iPad/Mac/AirPods, or tracking how an AirTag has moved over time. Triggers on: FindMy, Find My, AirTag, where is my, locate device, lost iPhone, device location, tag location, iCloud tracking."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

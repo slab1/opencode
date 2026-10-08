@@ -1,6 +1,6 @@
 ---
 name: plan
-description: "Plan mode: write an actionable markdown plan to .hermes/plans/, no execution. Bite-sized tasks, exact paths, complete code."
+description: "Plan mode: produces a concrete, actionable markdown plan saved under .hermes/plans/ in the active workspace, with bite-sized tasks, exact file paths and complete code, and explicitly forbids implementing, editing project files, or running mutating commands in that turn. Use when the user wants a plan instead of execution, or asks to think through an approach before any code is written. Triggers on: make a plan, plan mode, write a plan first, don't code yet, break this down into steps, implementation plan, .hermes/plans."
 version: 2.0.0
 author: Hermes Agent (writing-craft adapted from obra/superpowers)
 license: MIT

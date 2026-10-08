@@ -1,6 +1,6 @@
 ---
 name: songsee
-description: "Audio spectrograms/features (mel, chroma, MFCC) via CLI."
+description: "Generates spectrograms and multi-panel audio feature visualizations from audio files with the Go-based songsee CLI, covering mel spectrograms, chroma, MFCC, and related feature panels saved as images. Use when a user wants to see what an audio file looks like spectrally — inspecting a track's spectrum, comparing mixes, or diagnosing frequencies and noise. Triggers on: spectrogram, audio spectrum, mel spectrogram, chroma, MFCC, audio visualization, visualize this song, songsee, frequency analysis of audio."
 version: 1.0.0
 author: community
 license: MIT

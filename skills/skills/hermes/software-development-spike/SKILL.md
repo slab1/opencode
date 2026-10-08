@@ -1,6 +1,6 @@
 ---
 name: spike
-description: "Throwaway experiments to validate an idea before build."
+description: "Runs disposable throwaway experiments to feel out an idea before committing to a real build — validating feasibility, comparing approaches, and surfacing unknowns that research alone cannot answer — then discards the spike once it has paid its debt. Use when the user says 'let me try this', 'I want to see if X works', 'spike this out', 'quick prototype', or 'compare A vs B'. Triggers on: spike, throwaway experiment, is this even possible, quick prototype, validate the idea, let me try this first, compare approaches, feasibility test, proof of concept."
 version: 1.0.0
 author: Hermes Agent (adapted from gsd-build/get-shit-done)
 license: MIT

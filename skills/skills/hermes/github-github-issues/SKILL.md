@@ -1,6 +1,6 @@
 ---
 name: github-issues
-description: "Create, triage, label, assign GitHub issues via gh or REST."
+description: "Manages GitHub issues via gh or the REST API: creating, searching, listing, reading, commenting on, closing and reopening issues, plus triage with labels, assignees, and milestones. Use when the user wants to file or track a bug or feature, triage a backlog, or organize work by label and owner. Triggers on: create a GitHub issue, file a bug, triage issues, label issues, assign an issue, list open issues, close an issue, milestone, gh issue, issue tracker."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

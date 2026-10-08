@@ -1,6 +1,6 @@
 ---
 name: hash-validate-edit
-description: Validate that a line edit is still valid by re-reading the file and computing a content hash. Use as a pre-flight check before applying any edit, especially when the file may have changed.
+description: "Validate that a line edit is still valid by re-reading the file and computing a content hash, as a pre-flight check before applying any edit. Use when a file may have changed since the plan was made, or before any edit to a possibly stale source file. Triggers on: hash validate, validate edit, pre-flight check, content hash, stale edit, re-read before edit, line edit."
 license: MIT
 compatibility: opencode>=1.16.0
 ---

@@ -1,6 +1,6 @@
 ---
 name: character-animation-qa
-description: Review local character animation with schema checks, Playwright browser previews, frame sampling, and FFmpeg/ffprobe final output checks.
+description: "Reviews local character animation via schema checks, Playwright browser previews, frame sampling, and FFmpeg/ffprobe final-output checks, returning a pass/revise/fail verdict. Use when validating a character preview or final MP4 before delivery, or when checking for detached limbs, bad layers, frozen frames, or console errors. Triggers on: character animation qa, preview review, frame sampling, ffprobe, playwright screenshot, render validation, pass/revise/fail."
 license: MIT
 ---
 

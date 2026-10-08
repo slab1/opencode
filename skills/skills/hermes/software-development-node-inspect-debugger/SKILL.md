@@ -1,6 +1,6 @@
 ---
 name: node-inspect-debugger
-description: "Debug Node.js via --inspect + Chrome DevTools Protocol CLI."
+description: "Drives Node's built-in V8 inspector from the terminal for real debugging: breakpoints, step in/over/out, call-stack walking, local and closure scope dumps, and expression evaluation in a paused frame, via the zero-install `node inspect` REPL or scriptable ndb/CDP with chrome-remote-interface. Use when console.log is not enough and a Node process must be paused so its runtime state can be inspected, including ui-tui/React-Ink state before render. Triggers on: --inspect, node inspect, ndb, CDP, breakpoints in Node, step through JS, inspect scope, node debugger, why is this test failing in node."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

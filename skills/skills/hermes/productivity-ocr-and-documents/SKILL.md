@@ -1,6 +1,6 @@
 ---
 name: ocr-and-documents
-description: "Extract text from PDFs/scans (pymupdf, marker-pdf)."
+description: "Extracts text and structure from PDFs and scanned documents — preferring web_extract when the file has a URL, then local pymupdf for digital PDFs, marker-pdf for scanned pages, and OCR for image-only input; routes DOCX to python-docx and PPTX to the powerpoint skill instead. Use when a document's contents must become searchable or quotable text, including arXiv papers and reports. Triggers on: extract text from PDF, OCR a scan, read this PDF, pymupdf, marker-pdf, scanned document, PDF to markdown, pull text out of a paper, document extraction."
 version: 2.3.0
 author: Hermes Agent
 license: MIT

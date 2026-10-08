@@ -1,6 +1,6 @@
 ---
 name: popular-web-designs
-description: 54 real design systems (Stripe, Linear, Vercel) as HTML/CSS.
+description: "Provides 54 real-world design systems ready to paste into generated HTML/CSS — Stripe, Linear, Vercel, Notion, Airbnb and more — each with the exact color palette, typography hierarchy, component styles, spacing, shadows, and responsive values of that product. Use when the user wants a page or UI styled after a known brand, or asks for a design starting point pulled from a shipped product rather than invented. Triggers on: make it look like Stripe, design like Linear, Vercel style, looks like Notion, 54 design systems, brand UI styles, design tokens from a real site."
 version: 1.0.0
 author: Hermes Agent + Teknium (design systems sourced from VoltAgent/awesome-design-md)
 license: MIT

@@ -1,6 +1,6 @@
 ---
 name: opencode
-description: "Delegate coding to OpenCode CLI (features, PR review)."
+description: "Runs OpenCode, the provider-agnostic open-source AI coding agent, as an autonomous worker driven from Hermes via terminal and process tools: binary resolution checks, `opencode run` one-shot tasks, interactive TUI sessions with pty, long-running background sessions, and parallel execution in isolated workdirs or worktrees. Use when the user explicitly asks for OpenCode or wants an external coding agent to implement, refactor, or review code, especially for long or parallel work. Triggers on: opencode, opencode CLI, opencode run, coding agent, PR review, refactor via OpenCode, background session, worktree, TUI."
 version: 1.2.0
 author: Hermes Agent
 license: MIT

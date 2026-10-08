@@ -1,6 +1,6 @@
 ---
 name: heartmula
-description: "HeartMuLa: Suno-like song generation from lyrics + tags."
+description: "Generates full songs locally with HeartMuLa, an open-source (Apache-2.0) music foundation model family conditioned on lyrics and style tags with multilingual support — the HeartMuLa 3B/7B models, HeartCodec audio codec, HeartTranscriptor lyrics transcription, and HeartCLAP audio-text alignment; needs roughly 8GB VRAM minimum with lazy loading. Use when the user wants an offline or local Suno alternative, or asks about heartlib. Triggers on: HeartMuLa, heartlib, open source Suno alternative, generate music locally, lyrics to song, local music generation, HeartCodec, HeartTranscriptor, offline song generation."
 version: 1.0.0
 platforms: [linux, macos, windows]
 metadata:

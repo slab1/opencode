@@ -1,7 +1,13 @@
 ---
 name: heygen
 description: |
-  [DEPRECATED] Use `create-video` for prompt-based video generation or `avatar-video` for precise avatar/scene control. This legacy skill combines both workflows — the newer focused skills provide clearer guidance.
+  [DEPRECATED] Legacy combined HeyGen skill covering both prompt-based video
+  generation and precise avatar/scene control. Use when a request mentions the
+  HeyGen Video Agent, an avatar video, or HeyGen avatar/scene control and no
+  newer skill covers it — prefer `create-video` for prompt-based generation and
+  `avatar-video` for precise avatar/scene control, which provide clearer
+  guidance. Triggers on: heygen, heygen video agent, avatar video, talking
+  avatar, heygen api, deprecated.
 homepage: https://docs.heygen.com/reference/generate-video-agent
 allowed-tools: mcp__heygen__*
 metadata:

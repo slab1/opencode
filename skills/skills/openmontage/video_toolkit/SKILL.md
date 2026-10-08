@@ -1,6 +1,6 @@
 ---
 name: video-toolkit
-description: Create professional videos autonomously using claude-code-video-toolkit — AI voiceovers, image generation, music, talking heads, and Remotion rendering.
+description: "Create professional videos autonomously using claude-code-video-toolkit — AI voiceovers, image generation, music, talking heads, and Remotion rendering from a text brief. Use when the user asks for an end-to-end generated explainer video with narration, or when running the toolkit's setup verification and cloud-GPU generation steps. Triggers on: video toolkit, explainer video, ai voiceover, talking head, generate video, claude-code-video-toolkit, remotion render."
 metadata:
   openclaw:
     emoji: "🎬"

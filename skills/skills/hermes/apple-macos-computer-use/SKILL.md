@@ -1,10 +1,13 @@
 ---
 name: macos-computer-use
 description: |
-  Drive the macOS desktop in the background — screenshots, mouse, keyboard,
-  scroll, drag — without stealing the user's cursor, keyboard focus, or
-  Space. Works with any tool-capable model. Load this skill whenever the
-  `computer_use` tool is available.
+  Drives the macOS desktop in the background — screenshots, mouse, keyboard,
+  scroll, drag — without stealing the user's cursor, keyboard focus, or Space.
+  Works with any tool-capable model. Use when the `computer_use` tool is
+  available and a native macOS GUI app must be clicked, typed into, or read
+  from screen; capture first, click by accessibility element index, then
+  re-capture to verify. Triggers on: computer_use, macOS GUI, native app,
+  click in an app, background automation without stealing focus.
 version: 1.0.0
 platforms: [macos]
 metadata:

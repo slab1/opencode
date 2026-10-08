@@ -1,6 +1,6 @@
 ---
 name: hermes-agent-skill-authoring
-description: "Author in-repo SKILL.md: frontmatter, validator, structure."
+description: "Authors SKILL.md files that ship inside the hermes-agent repository tree (skills/<category>/<name>/SKILL.md, committed with git) rather than user-local skills, covering the frontmatter fields enforced by _validate_frontmatter in tools/skill_manager_tool.py, the expected structure, and the patch-versus-write_file choice. Use when a reusable workflow must be committed to the repo, or an existing in-repo skill is being edited. Triggers on: add a skill to this repo, author a SKILL.md, skill frontmatter validator, skill_manage does not target in-repo, in-repo skill, write a hermes skill to commit."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

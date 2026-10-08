@@ -1,6 +1,6 @@
 ---
 name: polymarket
-description: "Query Polymarket: markets, prices, orderbooks, history."
+description: "Queries prediction-market data from Polymarket's public read-only REST APIs with zero authentication — listing events and binary Yes/No markets, reading current prices as implied probabilities, orderbook depth, and price history via conditionId. Use when the user asks what the odds are that something will happen or wants market-implied probabilities tracked over time. Triggers on: polymarket, prediction market, betting odds, what's the probability of X, implied probability, market odds, orderbook for a market, polymarket price history, will X happen."
 version: 1.0.0
 author: Hermes Agent + Teknium
 tags: [polymarket, prediction-markets, market-data, trading]

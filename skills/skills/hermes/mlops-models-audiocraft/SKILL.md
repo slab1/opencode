@@ -1,6 +1,6 @@
 ---
 name: audiocraft-audio-generation
-description: "AudioCraft: MusicGen text-to-music, AudioGen text-to-sound."
+description: "Generates audio with Meta's AudioCraft: MusicGen for text-to-music with optional melody conditioning, style control and stereo output, AudioGen for text-to-sound-effects and environmental audio, and EnCodec as the neural audio codec. Use when music or sound effects should be synthesized from a text description locally rather than sourced from a stock library. Triggers on: AudioCraft, MusicGen, AudioGen, EnCodec, text to music, text to sound effects, generate music from a prompt, melody-conditioned generation, local audio generation."
 version: 1.0.0
 author: Orchestra Research
 license: MIT

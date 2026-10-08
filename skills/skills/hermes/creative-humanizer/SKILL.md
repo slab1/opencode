@@ -1,6 +1,6 @@
 ---
 name: humanizer
-description: "Humanize text: strip AI-isms and add real voice."
+description: "Identifies and removes telltale LLM writing patterns — hedging, excessive lists, fake enthusiasm, em-dash overuse and other AI-isms — so prose sounds like a person wrote it, optionally calibrated against a sample of the user's own voice; based on Wikipedia's Signs of AI writing. Use when the user asks to humanize, de-AI, or de-slop a draft, wants a rewrite that matches their voice, or wants AI tells reviewed before publishing. Triggers on: humanize, de-AI, de-slop, un-ChatGPT, sounds like AI wrote this, match my voice, AI tells, edit my writing, PR description, release notes."
 version: 2.5.1
 author: Siqi Chen (@blader, https://github.com/blader/humanizer), ported by Hermes Agent
 license: MIT

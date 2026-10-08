@@ -1,6 +1,6 @@
 ---
 name: code-execution-mcp
-description: Reduce token usage ~100x by writing code to call MCPs/tools instead of direct tool calls. Tool definitions and intermediate results stay out of the context window. For any workflow with multiple tool calls, especially when using MCP servers.
+description: "Reduces token usage ~100x by writing code that calls MCPs/tools instead of making direct tool calls, so tool definitions and intermediate results stay out of the context window. Use when a workflow needs many sequential tool calls, especially across MCP servers, or when large tool outputs are filling the context window. Triggers on: code execution, mcp, token usage, context window, tool definitions, intermediate results, batch tool calls."
 license: MIT
 compatibility: opencode>=1.16.0
 metadata:

@@ -1,6 +1,6 @@
 ---
 name: google-workspace
-description: "Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python."
+description: "Operates Google Workspace through Hermes-managed OAuth and a thin CLI wrapper that prefers the `gws` CLI and falls back to bundled Python: Gmail search and send (including full search-operator syntax), Calendar events, Drive files, Contacts, Sheets, and Docs. Use when a task touches Google's mail, calendar, drive, contacts, or office documents. Triggers on: Gmail, Google Calendar, Google Drive, Google Docs, Google Sheets, Google Contacts, send an email, check my calendar, google OAuth, gws CLI, google_token.json."
 version: 1.1.0
 author: Nous Research
 license: MIT

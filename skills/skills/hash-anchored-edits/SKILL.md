@@ -1,6 +1,6 @@
 ---
 name: hash-anchored-edits
-description: Apply hash-anchored line edits to source files to eliminate stale-line errors. Each line is tagged with a LINE#ID content hash; every edit is validated against the hash before writing. Recommended for the build agent and any task involving file edits, raising edit success rate from ~7% to ~68%.
+description: "Apply hash-anchored line edits to source files to eliminate stale-line errors. Each line is tagged with a LINE#ID content hash; every edit is validated against the hash before writing. Use when an edit failed because line numbers shifted or went stale, or for any build/fixer task involving repeated edits to source files. Triggers on: hash-anchored edits, stale line, line edit, content hash, LINE#ID, edit validation, file edit failure."
 license: MIT
 compatibility: opencode>=1.16.0
 ---

@@ -1,6 +1,6 @@
 ---
 name: llama-cpp
-description: llama.cpp local GGUF inference + HF Hub model discovery.
+description: "Runs LLMs locally with llama.cpp: finding the right GGUF repo on the Hugging Face Hub, enumerating available .gguf files and sizes, choosing a Q4/Q5/Q6/IQ quantization to fit available RAM or VRAM, and assembling llama-server or llama-cli commands across CPU, Apple Silicon, CUDA, ROCm, and Intel GPUs. Use when inference must run on-device or at the edge with no hosted API. Triggers on: llama.cpp, GGUF, run a model locally, quantization choice, Q4_K_M vs Q5, llama-server, llama-cli, offline LLM on my hardware, Apple Silicon inference."
 version: 2.1.2
 author: Orchestra Research
 license: MIT

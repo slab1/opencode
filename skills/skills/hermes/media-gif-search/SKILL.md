@@ -1,6 +1,6 @@
 ---
 name: gif-search
-description: "Search/download GIFs from Tenor via curl + jq."
+description: "Searches and downloads GIFs from the Tenor API using curl and jq with a TENOR_API_KEY, covering trending and category queries plus fetching the original MP4 or webm asset. Use when the user needs a reaction GIF, wants to send one in chat, or needs clip art in GIF form for content. Triggers on: gif, reaction gif, search Tenor, download gif, trending gifs, send a gif, Tenor API, gif for a chat message."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

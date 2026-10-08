@@ -1,6 +1,6 @@
 ---
 name: effect
-description: Work with Effect v4 / effect-smol TypeScript code in this repo
+description: "Work with Effect v4 / effect-smol TypeScript code in this repo — Effect.gen workflows, Effect.fn named effects, Schema and TaggedErrorClass, explicit layer composition, and testEffect/it.live test patterns. Use when implementing or reviewing Effect services, schemas, layers, or tests, or when answering Effect API questions; verify against the .opencode/references/effect-smol source rather than memory. Triggers on: effect, effect-smol, effect v4, Effect.gen, Effect.fn, Schema, TaggedErrorClass, layers, testEffect, it.live."
 ---
 
 # Effect

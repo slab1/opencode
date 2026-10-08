@@ -1,6 +1,6 @@
 ---
 name: imessage
-description: Send and receive iMessages/SMS via the imsg CLI on macOS.
+description: "Sends and reads iMessage and SMS from macOS Messages.app via the `imsg` CLI: list chats, pull conversation history with attachments, and send to phone numbers or Apple IDs. Use when the user asks to text someone, read recent Messages.app chats, or check their iMessage history from the terminal. Triggers on: iMessage, imsg, send a text, text message, SMS, Messages.app, Apple ID chat, read my messages, reply to a chat."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

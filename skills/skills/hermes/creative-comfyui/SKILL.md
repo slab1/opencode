@@ -1,6 +1,6 @@
 ---
 name: comfyui
-description: "Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows with parameter injection. Uses the official comfy-cli for lifecycle and direct REST/WebSocket API for execution."
+description: "Generates images, video, audio, and 3D content with ComfyUI, using the official comfy-cli for install/launch/node and model management and the direct REST/WebSocket API for running API-format workflows with parameter injection. Use when the user wants node-based Stable Diffusion or Flux image generation, Wan or HunyuanVideo video generation, or local versus Comfy Cloud setup — run scripts/hardware_check.py first to choose the target. Triggers on: ComfyUI, comfy-cli, stable diffusion, SDXL, Flux, Wan video, Hunyuan video, comfy workflow JSON, image generation with nodes."
 version: 5.1.0
 author: [kshitijk4poor, alt-glitch, purzbeats]
 license: MIT

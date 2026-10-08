@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Perform structured security audits following OWASP methodology. Map attack surface, trace data flow, check trust boundaries, audit secrets, evaluate dependencies. Rate findings by CVSS severity with reproducible steps and remediation.
+description: "Perform structured security audits following OWASP methodology. Map attack surface, trace data flow, check trust boundaries, audit secrets, evaluate dependencies. Rate findings by CVSS severity with reproducible steps and remediation. Use when reviewing code or an application for vulnerabilities before release, or when triaging and prioritizing a security finding. Triggers on: security audit, owasp, vulnerability, attack surface, trust boundary, secrets, cvss, dependency audit, security review."
 license: MIT
 compatibility: opencode>=1.16.0
 ---

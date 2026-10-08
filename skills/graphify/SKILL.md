@@ -1,6 +1,6 @@
 ---
 name: graphify
-description: "Use for any question about a codebase, its architecture, file relationships, or project content — especially when graphify-out/ exists, where the question should be treated as a graphify query first. Turns any input (code, docs, papers, images, videos) into a persistent knowledge graph with god nodes, community detection, and query/path/explain tools."
+description: "Answers any question about a codebase, its architecture, file relationships, or project content — especially when graphify-out/ exists, where the question should be treated as a graphify query first. Turns any input (code, docs, papers, images, videos) into a persistent knowledge graph with god nodes, community detection, and query/path/explain tools. Use when asking where something lives, how components connect, what changed, or how a project is structured. Triggers on: graphify, knowledge graph, graphify-out, architecture of this repo, who calls what, explain this codebase."
 ---
 
 # /graphify

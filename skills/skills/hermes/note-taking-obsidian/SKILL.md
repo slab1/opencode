@@ -1,6 +1,6 @@
 ---
 name: obsidian
-description: Read, search, create, and edit notes in the Obsidian vault.
+description: "Does filesystem-first Obsidian vault work: resolving the vault path from OBSIDIAN_VAULT_PATH (falling back to ~/Documents/Obsidian Vault), then reading, listing, searching, creating and appending to notes and adding wikilinks using file tools rather than shell. Use when the user's notes live in Obsidian and a note must be found, written, or linked — not for agent-internal memory or Apple Notes. Triggers on: obsidian, my vault, Obsidian note, wikilink, note in my vault, daily note, append to a note, search my notes, OBSIDIAN_VAULT_PATH."
 platforms: [linux, macos, windows]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: jupyter-live-kernel
-description: "Iterative Python via live Jupyter kernel (hamelnb)."
+description: "Provides a stateful Python REPL backed by a live Jupyter kernel via the hamelnb script, so variables and imports persist across executions — better than execute_code when state must build up incrementally, APIs need exploring, or DataFrames need inspecting between steps. Use when the task is one you would reach for a Jupyter notebook for: iterative data science, ML exploration, plotting, and 'let me try this and check'. Triggers on: jupyter, live kernel, stateful python REPL, notebook REPL, incremental state, hamelnb, exploratory analysis, interactive dataframe."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
