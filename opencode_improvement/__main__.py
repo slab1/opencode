@@ -191,6 +191,9 @@ def main():
     sv.add_argument("--json", action="store_true", help="Print manifest JSON to stdout")
     sv.add_argument("--manifest", metavar="PATH", default=None, help="Write verified-manifest JSON to PATH")
     sv.add_argument("--no-fail", action="store_true", help="Exit 0 even when skills fail (report-only)")
+    sv.add_argument("--strict-spec", action="store_true",
+                    help="Gate on official Agent Skills spec conformance (name==dirname, "
+                         "<=500-line SKILL.md, legal name chars)")
 
     # --- trends (self-improvement paper trail, Bet 10) ---
     tr = subparsers.add_parser("trends", help="Show CI eval paper trail (receipts from reports/trends/)")
@@ -392,6 +395,8 @@ def main():
             sub_argv += ["--manifest", args.manifest]
         if args.no_fail:
             sub_argv.append("--no-fail")
+        if getattr(args, "strict_spec", False):
+            sub_argv.append("--strict-spec")
         rc = skills_verify_main(sub_argv)
         sys.exit(rc)
 
