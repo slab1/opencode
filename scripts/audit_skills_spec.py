@@ -28,6 +28,41 @@ MAX_COMPAT = 500
 
 ROOT = Path(sys.argv[1] if len(sys.argv) > 1 else "/root/.config/opencode/skills")
 
+try:  # optional: the real YAML parser is the ground truth for "does this load?"
+    import yaml as _yaml
+except ImportError:  # pragma: no cover - stdlib-only environments
+    _yaml = None
+
+
+def yaml_check(text: str):
+    """Authoritative frontmatter parse. Returns (ok, error_message).
+
+    The hand-rolled parser below is tolerant by design, which is exactly how a
+    malformed scalar slips through: an unquoted `description:` containing `: `
+    fails a real YAML parser, and a skill whose frontmatter cannot be parsed may
+    never have its description injected at all. So when PyYAML is present, it is
+    the ground truth and the lenient parse is only a fallback.
+    """
+    if not text.startswith("---"):
+        return False, "missing frontmatter: file does not start with '---'"
+    end = text.find("\n---", 3)
+    if end == -1:
+        return False, "unterminated frontmatter"
+    if _yaml is None:
+        return True, None
+    try:
+        data = _yaml.safe_load(text[3:end])
+    except Exception as exc:  # yaml.YAMLError and friends
+        mark = getattr(exc, "problem_mark", None)
+        where = f" at line {mark.line + 1}" if mark else ""
+        problem = getattr(exc, "problem", None) or str(exc).splitlines()[0]
+        return False, f"invalid YAML{where}: {problem}"
+    if data is None:
+        return False, "frontmatter parsed as empty"
+    if not isinstance(data, dict):
+        return False, f"frontmatter is {type(data).__name__}, not a mapping"
+    return True, None
+
 
 def parse_frontmatter(text):
     """Minimal YAML-subset frontmatter parser (no external deps).
@@ -119,6 +154,13 @@ def audit_skill(skill_md: Path):
     fields, errs = parse_frontmatter(text)
     if fields is None:
         return [{"check": "frontmatter", "detail": e} for e in errs], warns, info
+
+    # Ground-truth YAML parse (PyYAML when available). The lenient parse above can
+    # accept a malformed scalar that a real loader would reject.
+    yaml_ok, yaml_err = yaml_check(text)
+    if not yaml_ok:
+        fails.append({"check": "frontmatter-yaml", "detail": yaml_err})
+
     fails.extend({"check": "frontmatter", "detail": e} for e in errs)
 
     name = fields.get("name")
