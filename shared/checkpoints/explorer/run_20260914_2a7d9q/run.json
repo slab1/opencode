@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "run_id": "run_20260914_2a7d9q",
+  "agent_name": "explorer",
+  "started_at": "2026-09-14T08:12:48.345799+00:00",
+  "stages": {
+    "parse_context": {
+      "status": "completed",
+      "updated_at": "2026-09-14T08:12:48.345866+00:00"
+    }
+  },
+  "last_updated_at": "2026-09-14T08:12:48.345891+00:00",
+  "status": "completed"
+}

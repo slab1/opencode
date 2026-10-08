@@ -1,7 +1,7 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "opencode/deepseek-v4-flash-free",
-  "small_model": "opencode/mimo-v2.5-free",
+  "model": "opencode/ling-3.1-flash-free",
+  "small_model": "opencode/ling-3.1-flash-free",
   "permission": {
     "bash": "allow",
     "read": "allow",
@@ -38,7 +38,7 @@
       "name": "NVIDIA NIM",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
-        "apiKey": "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"
+        "apiKey": "{env:NVIDIA_API_KEY}"
       },
       "models": {
         "deepseek-ai/deepseek-v4-flash": {
@@ -61,6 +61,19 @@
           "name": "Llama 3.1 8B",
           "limit": { "context": 128000, "output": 4096 }
         }
+      }
+    },
+    "colibri": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Colibri Local (MoE streamed from disk) — https://github.com/slab1/colibri",
+      "options": {
+        "baseURL": "http://127.0.0.1:8000/v1",
+        "apiKey": "local"
+      },
+      "models": {
+        "qwen3.6": { "name": "Qwen3.6 35B-A3B (20GB, recommended)", "limit": { "context": 32768, "output": 4096 } },
+        "olmoe": { "name": "OLMoE 7B (8GB, fastest)", "limit": { "context": 4096, "output": 2048 } },
+        "glm-5.2": { "name": "GLM-5.2 744B MoE (372GB)", "limit": { "context": 131072, "output": 8192 } }
       }
     }
   },

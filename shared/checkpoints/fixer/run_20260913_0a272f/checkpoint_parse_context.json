@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "agent_name": "fixer",
+  "run_id": "run_20260913_0a272f",
+  "stage": "parse_context",
+  "status": "completed",
+  "timestamp": "2026-09-13T05:28:33.767152+00:00",
+  "artifacts": {}
+}

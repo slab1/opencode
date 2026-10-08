@@ -7,6 +7,12 @@ compatibility: opencode>=1.16.0
 
 # Background Subagent
 
+> ⚠️ **Subagent types (designer, fixer, explorer, …) cannot run via `oc-bg`.** The CLI
+> `opencode run --agent <subagent>` fails with *"agent … is a subagent, not a primary agent"*
+> followed by an API UnknownError, and writes **zero changes**. Dispatch subagent types only
+> via the native `task` tool (`subagent_type: <name>`, `background: true`). `oc-bg` is for
+> primary agents only (e.g. `default`). See `reference/oc-bg-subagent-constraint.md`.
+
 Run OpenCode agents in the background so you can continue with other work. Useful for:
 - **Long research tasks** that take minutes to hours
 - **Parallel work** — dispatch multiple agents, gather results
