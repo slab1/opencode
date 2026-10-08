@@ -121,10 +121,27 @@ def verify_skill(skill_dir: Path) -> Tuple[bool, List[str], Dict[str, Any]]:
         info["note"] = (info["note"] + " | " if info["note"] else "") + "no '# Title' heading (h2/h3 OK)"
 
     # Stub detection: honesty markers anywhere in the document.
+    #
+    # Opt-in escape hatch: a skill that *teaches* stub detection (e.g. one that
+    # documents NotImplementedError as a red flag it greps for) contains those
+    # markers legitimately and must not be failed for honesty. This is an
+    # explicit frontmatter declaration rather than a heuristic, because a
+    # genuine stub is ALSO written as a fenced `raise NotImplementedError` —
+    # so "is it inside a code fence" cannot distinguish the two cases without
+    # silently weakening the honesty gate across the whole collection.
+    # The suppression is recorded in the manifest so it stays auditable.
+    metadata = fields.get("metadata") or ""
+    teaches_markers = "teaches_stub_markers" in metadata and "true" in metadata.lower()
     doc = content.lower()
-    for marker in STUB_MARKERS:
-        if marker.lower() in doc:
-            errors.append(f"Unverified marker present: '{marker}' (skill must not be listed)")
+    if teaches_markers:
+        info["marker_check_suppressed"] = True
+        info.setdefault("note", "")
+        info["note"] = (info["note"] + " | " if info["note"] else "") + \
+            "stub-marker check suppressed via metadata.teaches_stub_markers (reviewed by hand)"
+    else:
+        for marker in STUB_MARKERS:
+            if marker.lower() in doc:
+                errors.append(f"Unverified marker present: '{marker}' (skill must not be listed)")
 
     info["spec"] = spec_conformance(skill_dir, fields, content)
     return len(errors) == 0, errors, info
