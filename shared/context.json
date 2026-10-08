@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": "2026-09-14T00:00:00Z",
+  "last_updated": "2026-10-08T14:39:58.682401+00:00",
   "checkpoints": {
     "enabled": true,
     "directory": "~/.config/opencode/shared/checkpoints/",
@@ -434,6 +434,14 @@
       "date": "2026-06-28",
       "description": "TradingAgents integrated into OpenCode ecosystem",
       "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+    },
+    {
+      "id": "dec_20261008_env_secrets",
+      "date": "2026-10-08T14:39:58.682401+00:00",
+      "area": "system",
+      "decision": "All provider apiKeys in opencode.jsonc use {env:VAR}; no plaintext secrets in git-tracked config",
+      "rationale": "Firecrawl/TRYPOST/BULKPUBLISH/TWENTY_FIRST already followed this; NVIDIA was the outlier",
+      "impact": "opencode.jsonc:41 changed; NVIDIA_API_KEY added to ~/.bashrc"
     }
   ],
   "strategy_log": [
@@ -1889,6 +1897,38 @@
       "confidence_before": 0.6,
       "confidence_after": 0.95,
       "followup": "None for tree. Second unverified flake seen once in a load-heavy local run (1 fail/1 error on first rerun of admin-UI commit) \u2014 monitor; root-cause if it recurs in CI."
+    },
+    {
+      "id": "strategy-1791470200481",
+      "agent_target": "web-captcha-handling",
+      "diagnosis": "skills-verify FAIL: SKILL.md had no YAML frontmatter (only failing skill of 182)",
+      "strategy_chosen": "add_missing_section",
+      "strategy_alternatives_considered": [
+        "rewrite_skill",
+        "delete_skill"
+      ],
+      "why_this_strategy": "frontmatter is the only failing check; content was already complete so rewriting would be wasted effort",
+      "applied_at": "2026-10-08T14:36:40.481586Z",
+      "confidence_before": 0.97,
+      "outcome": "success",
+      "outcome_evidence": "skills-verify re-run: 182 passed, 0 failed (was 181/1)",
+      "confidence_after": 0.99
+    },
+    {
+      "id": "strategy-1791470201000",
+      "agent_target": "opencode.jsonc",
+      "diagnosis": "SECURITY: NVIDIA apiKey hardcoded in plaintext in a git-tracked config, inconsistent with the {env:VAR} convention used by every other key",
+      "strategy_chosen": "harden_secrets",
+      "strategy_alternatives_considered": [
+        "leave_as_is",
+        "rotate_immediately"
+      ],
+      "why_this_strategy": "env-ification is reversible and matches convention; rotation requires external NVIDIA portal access so it must be flagged to the user",
+      "applied_at": "2026-10-08T14:36:41.000767Z",
+      "confidence_before": 0.95,
+      "outcome": "success",
+      "outcome_evidence": "opencode.jsonc now has {env:NVIDIA_API_KEY}; var exported in ~/.bashrc; key still present in 2 historical commits so rotation remains outstanding",
+      "confidence_after": 0.93
     }
   ],
   "workflow_trace": [
@@ -3039,6 +3079,55 @@
         ],
         "rationale": "full fleet standardization: every agent has role/context/shared-context/capabilities/skills/examples/workflow/rules/task-tracking",
         "validation": "audit 35/35 ALL PASS; report 35/35 at 1.0; parity scan 0 gaps"
+      },
+      {
+        "id": "meta_system_update_20261008",
+        "type": "audit_report",
+        "at": "2026-10-08T14:39:58.682401+00:00",
+        "summary": "Full system sweep: disk reclaim, secret hardening, skill/agent audit green, pending work committed (f56c657)",
+        "detail": {
+          "disk": {
+            "before": "100% full / 307M free",
+            "after": "1.7G free",
+            "actions": [
+              "rm /root/.npm/_cacache",
+              "apt archives",
+              "pip cache",
+              "go-build cache",
+              "bun install cache",
+              "__pycache__ sweep",
+              "truncate memfs.log (5.3M)",
+              "dropped stale backups"
+            ]
+          },
+          "security": {
+            "severity": "high",
+            "issue": "nvapi NVIDIA key plaintext in tracked opencode.jsonc",
+            "fix": "replaced with {env:NVIDIA_API_KEY}; exported in ~/.bashrc",
+            "outstanding": "key present in 2 historical commits -> ROTATE on NVIDIA portal"
+          },
+          "audit": {
+            "agents": "35/35 PASS, completeness 1.0",
+            "skills": "182/182 PASS (was 181/1)",
+            "eval_last": "63/63 PASS 2026-08-09",
+            "strategies": "67 strategies / 87 applications"
+          },
+          "config": {
+            "designer": "pinned nvidia/deepseek-ai/deepseek-v4-pro",
+            "provider": "colibri local MoE added",
+            "default_model": "opencode/ling-3.1-flash-free"
+          }
+        },
+        "files_changed": [
+          "opencode.jsonc",
+          "skills/skills/hermes/web-captcha-handling/SKILL.md",
+          "agents/designer.md",
+          "scripts/oc-checkpoint.sh",
+          "shared/checkpoints/**",
+          "~/.bashrc"
+        ],
+        "verification": "audit 35/35 ok; skills-verify 182/182; commit f56c657",
+        "severity": "medium"
       }
     ],
     "memory_loop": [
@@ -4763,6 +4852,29 @@
       "verified": "bun test packages/server/src/session/doom-loop-detector.test.ts passes 9/9, session tests no regressions, commit feat(server): enhance doom-loop detection",
       "deviation": "None",
       "timestamp": "2026-09-15T19:19:50.879518"
+    },
+    "fixer_learning_backlog_20260926": {
+      "ts": "2026-09-26T07:35:56",
+      "task": "Implement remaining ONLINE_LEARNING_ROADMAP backlog (8 tasks) in /tmp/aether packages/server/src/learning/",
+      "changes": [
+        "online.ts: DuckDuckGo HTML tier-4 last-resort search (keyless, 6s timeout, 15m cache, only when GitHub/arXiv/HN empty) + searchDuckDuckGo/resolveDdgHref/stripHtmlTags helpers",
+        "online.ts: extractPattern now also accepts first non-empty line of first code fence as candidate (deduped, imperative line still wins)",
+        "online.ts: per-domain politeness cooldown \u2014 fetch error (throw or null) \u2192 DOMAIN_COOLDOWN_MS (2h) Map<domain,expiry>; skipped in-run and later cycles; exports clearDomainCooldowns/activeDomainCooldowns",
+        "knowledge.ts: storeInsight merge counters \u2014 verifiers = distinct source URLs (metadata.sourceUrls), hitCount (every store), lastSeen (every store)",
+        "knowledge.ts: sweepExpired(now, KNOWLEDGE_EXPIRY_MS=60d) sets metadata.tombstone=1; retrieve()/list()/graph-expansion skip tombstoned entries",
+        "scheduler.ts: zero-result streak \u2014 3 consecutive empty online cycles \u2192 one severity 'major' (schema HIGH tier) finding via writeFinding; reset on any insight; fires once per streak",
+        "scheduler.ts: per-cycle telemetry recordCycleTelemetry(cycle, startedAt, count) \u2192 lastResult[<cycle>Telemetry] + bus publish + log; wired to online/usage/improvement (+gateway token/cost stats); sweepExpired wired into runImprovement",
+        "index.ts: GET /learning/status now surfaces topPerforming/worstPerforming (top/bottom 3 by utility via rankByUtility)",
+        "tests: new utility.test.ts (multi-session utility + retrieval ordering flip), new scheduler.cycle.test.ts (3-empty \u2192 1 finding, reset, re-fire); online.test.ts +3 (DDG tier-4, cooldown, code-fence); knowledge.test.ts +3 (verifiers/hitCount/lastSeen, tombstone exclusion, status perf)"
+      ],
+      "verification": "cd packages/server && node ../../node_modules/typescript/bin/tsc --noEmit \u2192 TSC_EXIT=0 (tests included via src/**); bun test packages/server/src/learning \u2192 39 pass / 0 fail / 172 expects (baseline 29); full suite bun test packages/server \u2192 549 pass / 2 skip / 0 fail",
+      "deviations": [
+        "Roadmap says HIGH severity; findings schema enum is info/minor/major/critical \u2192 used 'major' (the HIGH tier)",
+        "adjustUtility in roadmap = bumpUtility in code (no rename; tests drive bumpUtility)",
+        "sourceUrls array added to metadata to count distinct verifier URLs correctly (alternating urls can't inflate)",
+        "usage.ts untouched \u2014 no backlog task required it (recordSession correlation already covered by bumpUtility)"
+      ],
+      "files": "packages/server/src/learning/{online,knowledge,scheduler,index}.ts, {online,knowledge}.test.ts, + new {utility,scheduler.cycle}.test.ts \u2014 nothing else; not committed"
     }
   },
   "session": {
@@ -4940,7 +5052,25 @@
       "/tmp/aether/packages/server/src/routes/session.ts",
       "/tmp/aether/packages/server/src/session/cross-device.ts",
       "packages/server/src/gateway/subgateway.ts",
-      "packages/server/src/gateway/subgateway.test.ts"
+      "packages/server/src/gateway/subgateway.test.ts",
+      "packages/server/src/learning/online.ts",
+      "packages/server/src/learning/knowledge.ts",
+      "packages/server/src/learning/scheduler.ts",
+      "packages/server/src/learning/index.ts",
+      "packages/server/src/learning/online.test.ts",
+      "packages/server/src/learning/knowledge.test.ts",
+      {
+        "ts": "2026-10-08T14:39:58.682401+00:00",
+        "commit": "f56c657",
+        "files": [
+          "opencode.jsonc",
+          "agents/designer.md",
+          "skills/skills/hermes/web-captcha-handling/SKILL.md",
+          "scripts/oc-checkpoint.sh"
+        ],
+        "change_type": "config_hardening_and_repair",
+        "files_count": 73
+      }
     ],
     "files_deleted": [
       "skills/skills/synthesized/parse-custom-log-format/ (print-stub artifact)",
@@ -4958,7 +5088,9 @@
       "packages/server/src/config/defaults.ts",
       "packages/server/src/config/store.ts",
       "packages/server/src/config/loop.ts",
-      "packages/server/src/config/prompt.ts"
+      "packages/server/src/config/prompt.ts",
+      "packages/server/src/learning/utility.test.ts",
+      "packages/server/src/learning/scheduler.cycle.test.ts"
     ],
     "documentation_updated": [
       "/tmp/aether/docs/H2-3-ORCHESTRATOR-V2.md (new, 220 lines)",
@@ -5056,6 +5188,10 @@
     "test_coverage": "always write tests for new code",
     "documentation": "always update docs for user-facing changes",
     "security": "always check for vulnerabilities",
-    "error_handling": "always handle edge cases"
+    "error_handling": "always handle edge cases",
+    "disk_guard": {
+      "rule": "Before any bulk opencode_improvement op, check df -h /; if <500M free, reclaim caches first",
+      "reason": "Android proot shares / with /sdcard; a full disk silently breaks tsc, tests and du crawls (cost a 120s timeout)"
+    }
   }
 }
