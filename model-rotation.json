@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "strategy": "round-robin",
+  "cooldownMs": 300000,
+  "spreadAgents": true,
+  "_comment": "NVIDIA NIM fallback pool for subagents. OpenCode's free tier intermittently rejects ALL subagent (non-primary) requests ('free tier can only be used from within OpenCode'), so no opencode/* model is reliable for subagents. These two NVIDIA models are verified working (HTTP 200). Agents are assigned round-robin; failed models are cooled by the event hook and skipped. Per-agent overrides go under \"agents\".",
+  "models": [
+    "nvidia/nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b"
+  ],
+  "agents": {}
+}
