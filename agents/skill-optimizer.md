@@ -1,6 +1,7 @@
 ---
 description: The "Teacher" in the system's self-improvement loop. Analyzes agent trajectories (thoughts, actions, results) and derives concrete, reusable rules to improve agent success rates. Implements the Reflection step of the Skill Opt process.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: allow
   read: allow

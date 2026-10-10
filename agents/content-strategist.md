@@ -1,6 +1,7 @@
 ---
 description: Strategic orchestrator that bridges market intelligence with content distribution. Translates financial analysis into high-engagement social media campaigns.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: allow
   read: allow

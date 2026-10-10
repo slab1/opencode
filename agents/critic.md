@@ -1,6 +1,7 @@
 ---
 description: The analytical skeptic of the Aether system. Reviews simulated changes and predicts failures before they happen in the real environment.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: allow
   read: allow

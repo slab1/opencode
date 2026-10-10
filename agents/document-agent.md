@@ -1,6 +1,7 @@
 ---
 description: Specialized subagent for document processing - PDFs, DOCX, spreadsheets, and structured documents
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: deny
   bash: ask

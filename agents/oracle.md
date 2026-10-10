@@ -1,6 +1,7 @@
 ---
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, simplification, and engineering guidance.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: deny
   bash: allow

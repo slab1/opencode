@@ -1,6 +1,7 @@
 ---
 description: The Frontal Lobe of the OpenCode system. Manages Hierarchical Cognitive Memory (HCM) and directs worker agents with high-context cognitive packets.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: allow
   read: allow

@@ -1,6 +1,7 @@
 ---
 description: Specialized agent for programmatic video creation across platforms
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: ask

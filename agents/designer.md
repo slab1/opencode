@@ -1,7 +1,7 @@
 ---
 description: UI/UX design, review, and implementation. Use for styling, responsive design, component architecture and visual polish.
 mode: subagent
-model: nvidia/deepseek-ai/deepseek-v4-pro
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: allow

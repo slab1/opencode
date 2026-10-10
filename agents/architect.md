@@ -1,6 +1,7 @@
 ---
 description: Designs system architecture, evaluates technical decisions, and plans scalable solutions
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: deny
   bash:

@@ -1,6 +1,7 @@
 ---
 description: Investigates bugs, analyzes errors, and diagnoses system issues
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: deny
   bash: ask

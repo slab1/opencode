@@ -1,6 +1,7 @@
 ---
 description: Writes comprehensive tests and improves test coverage for codebases
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: allow

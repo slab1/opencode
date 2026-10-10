@@ -1,6 +1,7 @@
 ---
 description: Full browser automation agent — navigates sites, fills forms, clicks links, books flights
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: allow

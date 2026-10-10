@@ -4576,6 +4576,576 @@
           "Continue using 'add_missing_section' strategy \u2014 100% success rate",
           "Complete 1 pending task(s): multios-kernel-compilation-fix"
         ]
+      },
+      {
+        "generated_at": "2026-10-09T15:00:06.501375Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 24,
+          "total_strategies_logged": 90,
+          "total_workflow_steps": 27,
+          "recent_artifacts": 33
+        },
+        "performance_summary": {
+          "total_tasks": 69,
+          "success_count": 68,
+          "success_rate": 0.99
+        },
+        "key_decisions": [
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          },
+          {
+            "id": "dec_20261008_env_secrets",
+            "description": "",
+            "rationale": "Firecrawl/TRYPOST/BULKPUBLISH/TWENTY_FIRST already followed this; NVIDIA was the outlier"
+          },
+          {
+            "id": "dec_20261008_skill_policy",
+            "description": "",
+            "rationale": "A skill is executable authority; aggregate registries are scale-inflated and self-admittedly unaudited. Vendored upstream conventions (hermes category-name dirs) stay accepted deviations rather than forcing 71 cosmetic renames that risk sync breakage."
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      },
+      {
+        "generated_at": "2026-10-09T16:00:09.302584Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 24,
+          "total_strategies_logged": 90,
+          "total_workflow_steps": 27,
+          "recent_artifacts": 33
+        },
+        "performance_summary": {
+          "total_tasks": 69,
+          "success_count": 68,
+          "success_rate": 0.99
+        },
+        "key_decisions": [
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          },
+          {
+            "id": "dec_20261008_env_secrets",
+            "description": "",
+            "rationale": "Firecrawl/TRYPOST/BULKPUBLISH/TWENTY_FIRST already followed this; NVIDIA was the outlier"
+          },
+          {
+            "id": "dec_20261008_skill_policy",
+            "description": "",
+            "rationale": "A skill is executable authority; aggregate registries are scale-inflated and self-admittedly unaudited. Vendored upstream conventions (hermes category-name dirs) stay accepted deviations rather than forcing 71 cosmetic renames that risk sync breakage."
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
+      },
+      {
+        "generated_at": "2026-10-09T17:00:05.370410Z",
+        "type": "cross_session_feedback",
+        "version": "1.0",
+        "session_state": {
+          "active_tasks": 1,
+          "total_decisions": 24,
+          "total_strategies_logged": 90,
+          "total_workflow_steps": 27,
+          "recent_artifacts": 33
+        },
+        "performance_summary": {
+          "total_tasks": 69,
+          "success_count": 68,
+          "success_rate": 0.99
+        },
+        "key_decisions": [
+          {
+            "id": "strat-016",
+            "description": "AGENTS_SPEC.md formalizes the discoverability protocol for other projects",
+            "rationale": "If others adopt it, our conventions become the standard"
+          },
+          {
+            "id": "db-maint-001",
+            "description": "Created purge CLI tool for opencode session DB orphaned event cleanup",
+            "rationale": "opencode-memfs event-sourcing creates 68K+ events per session lifecycle; none had owner_id set, causing unbounded DB growth (556 MB) and breaking 'opencode --continue'. Purge tool deletes orphaned events while preserving session messages/parts. Weekly cron keeps DB under control."
+          },
+          {
+            "id": "trading-001",
+            "description": "TradingAgents integrated into OpenCode ecosystem",
+            "rationale": "9-agent LLM trading framework (TauricResearch, AAAI 2025) wrapped as trading-admin subagent with yfinance data (no API key needed) and Google Gemini 3.1 Flash Lite LLM"
+          },
+          {
+            "id": "dec_20261008_env_secrets",
+            "description": "",
+            "rationale": "Firecrawl/TRYPOST/BULKPUBLISH/TWENTY_FIRST already followed this; NVIDIA was the outlier"
+          },
+          {
+            "id": "dec_20261008_skill_policy",
+            "description": "",
+            "rationale": "A skill is executable authority; aggregate registries are scale-inflated and self-admittedly unaudited. Vendored upstream conventions (hermes category-name dirs) stay accepted deviations rather than forcing 71 cosmetic renames that risk sync breakage."
+          }
+        ],
+        "strategy_effectiveness_snapshot": {
+          "add_missing_command": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.1
+          },
+          "add_missing_section": {
+            "success_rate": 1.0,
+            "count": 2,
+            "calibration_delta": 0.05
+          },
+          "fix_root_causes_first": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "remove_conflicting_imports": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "deduplicate_names": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.15
+          },
+          "direct_syntax_fix_and_replacement": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "fix_parsing_order": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.45
+          },
+          "add_closing_tag_detection": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.38
+          },
+          "create_golden_datasets": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ci_workflow": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_property_based_eval": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_documentation": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.03
+          },
+          "codify_strategy_library": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "create_baseline": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.0
+          },
+          "add_mock_provider": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "add_task_versioning": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_cohens_kappa": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.2
+          },
+          "add_llm_judge": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_async_executor": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_scorecard_visualization": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_inspect_command": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          },
+          "add_comparison_report": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.07
+          },
+          "add_ab_comparison": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.1
+          },
+          "add_auto_commit_trends": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.08
+          },
+          "transfer_capability": {
+            "success_rate": 1.0,
+            "count": 1,
+            "calibration_delta": 0.05
+          }
+        },
+        "actionable_insights": [
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_command' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          },
+          {
+            "type": "strategy_effectiveness",
+            "finding": "Strategy 'add_missing_section' has 100% success rate across 2 applications",
+            "action": "Prefer this strategy for similar situations in the future",
+            "confidence": 0.95
+          }
+        ],
+        "recommendations_for_next_session": [
+          "Continue using 'add_missing_command' strategy \u2014 100% success rate",
+          "Continue using 'add_missing_section' strategy \u2014 100% success rate",
+          "Complete 1 pending task(s): multios-kernel-compilation-fix"
+        ]
       }
     ],
     "market": {
@@ -5119,7 +5689,8 @@
     "doc": "reference/mira-code-review-2026-08-29.md",
     "typecheck": "0 new errors (pre-existing config.ts TS2589)",
     "tests": "53 pass, 2 skip, 3 pre-existing timeout failures",
-    "timestamp": "2026-08-29T00:43:24.582230+00:00"
+    "timestamp": "2026-08-29T00:43:24.582230+00:00",
+    "last_handoff": "2026-10-09T17:00:05.370410Z"
   },
   "axiom_compiler_v1": {
     "status": "ast_pipeline_wired",
@@ -5159,6 +5730,162 @@
       },
       "opencode": {
         "agents": 23,
+        "plugins": 34,
+        "memory_notes": 0
+      },
+      "commitments": {
+        "overdue": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-09T15:00:03.416993+00:00",
+      "workspace": {
+        "state": "unknown",
+        "branch": "",
+        "dirty_files": 0,
+        "commits_ahead": 0
+      },
+      "system": {
+        "cpu_load": [
+          0.12,
+          0.07,
+          0.02
+        ],
+        "memory_percent": 82,
+        "disk_percent": 99
+      },
+      "opencode": {
+        "agents": 35,
+        "plugins": 34,
+        "memory_notes": 0
+      },
+      "commitments": {
+        "overdue": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-09T15:30:03.829633+00:00",
+      "workspace": {
+        "state": "unknown",
+        "branch": "",
+        "dirty_files": 0,
+        "commits_ahead": 0
+      },
+      "system": {
+        "cpu_load": [
+          0.12,
+          0.07,
+          0.02
+        ],
+        "memory_percent": 85,
+        "disk_percent": 99
+      },
+      "opencode": {
+        "agents": 35,
+        "plugins": 34,
+        "memory_notes": 0
+      },
+      "commitments": {
+        "overdue": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-09T16:00:03.401361+00:00",
+      "workspace": {
+        "state": "unknown",
+        "branch": "",
+        "dirty_files": 0,
+        "commits_ahead": 0
+      },
+      "system": {
+        "cpu_load": [
+          0.12,
+          0.07,
+          0.02
+        ],
+        "memory_percent": 84,
+        "disk_percent": 99
+      },
+      "opencode": {
+        "agents": 35,
+        "plugins": 34,
+        "memory_notes": 0
+      },
+      "commitments": {
+        "overdue": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-09T16:30:08.376367+00:00",
+      "workspace": {
+        "state": "unknown",
+        "branch": "",
+        "dirty_files": 0,
+        "commits_ahead": 0
+      },
+      "system": {
+        "cpu_load": [
+          0.12,
+          0.07,
+          0.02
+        ],
+        "memory_percent": 91,
+        "disk_percent": 99
+      },
+      "opencode": {
+        "agents": 35,
+        "plugins": 34,
+        "memory_notes": 0
+      },
+      "commitments": {
+        "overdue": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-09T17:00:02.840576+00:00",
+      "workspace": {
+        "state": "unknown",
+        "branch": "",
+        "dirty_files": 0,
+        "commits_ahead": 0
+      },
+      "system": {
+        "cpu_load": [
+          0.12,
+          0.07,
+          0.02
+        ],
+        "memory_percent": 89,
+        "disk_percent": 99
+      },
+      "opencode": {
+        "agents": 35,
+        "plugins": 34,
+        "memory_notes": 0
+      },
+      "commitments": {
+        "overdue": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-09T17:30:03.819245+00:00",
+      "workspace": {
+        "state": "unknown",
+        "branch": "",
+        "dirty_files": 0,
+        "commits_ahead": 0
+      },
+      "system": {
+        "cpu_load": [
+          0.12,
+          0.07,
+          0.02
+        ],
+        "memory_percent": 94,
+        "disk_percent": 99
+      },
+      "opencode": {
+        "agents": 35,
         "plugins": 34,
         "memory_notes": 0
       },

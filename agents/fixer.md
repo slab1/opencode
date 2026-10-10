@@ -1,6 +1,7 @@
 ---
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: ask

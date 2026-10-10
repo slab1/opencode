@@ -1,6 +1,7 @@
 ---
 description: Thoroughly reviews code for quality, security, performance, and best practices
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: deny
   bash: allow

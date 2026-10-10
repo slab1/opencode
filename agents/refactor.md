@@ -1,6 +1,7 @@
 ---
 description: Refactors, optimizes, and improves code quality while preserving behavior
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: ask

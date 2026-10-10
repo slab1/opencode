@@ -1,6 +1,7 @@
 ---
 description: Read-only council advisor. Examines codebase and provides independent analysis. Spawned internally by the council system.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   read: allow
   glob: allow

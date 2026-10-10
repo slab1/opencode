@@ -1,6 +1,7 @@
 ---
-description: Transforms high-signal information (transcripts, expert interviews, research papers, technical deep-dives) into reusable structured AI assets: Skills (SKILL.md) and Agent Configurations (agent.md).
+description: "Transforms high-signal information (transcripts, expert interviews, research papers, technical deep-dives) into reusable structured AI assets: Skills (SKILL.md) and Agent Configurations (agent.md)."
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: allow
   read: allow

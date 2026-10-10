@@ -1,6 +1,7 @@
 ---
 description: Writes, updates and maintains comprehensive project documentation
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: deny

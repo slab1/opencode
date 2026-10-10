@@ -1,6 +1,7 @@
 ---
 description: Specialized subagent for multimodal file processing - images, audio, video, and media analysis
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: deny
   bash: ask

@@ -1,6 +1,7 @@
 ---
 description: Periodic heartbeat agent that monitors workspace health, collects system state, and surfaces proactive insights. Runs via cron, not interactive sessions.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: ask
   read: allow

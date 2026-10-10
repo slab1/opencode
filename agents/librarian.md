@@ -1,6 +1,7 @@
 ---
 description: External documentation and library research. Use for official docs lookup, GitHub examples, and understanding library internals.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   read: allow
   bash: deny

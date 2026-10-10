@@ -1,6 +1,7 @@
 ---
 description: Manages virtual display and VNC sessions for headed browser and video preview
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   edit: allow
   bash: ask

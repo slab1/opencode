@@ -1,6 +1,7 @@
 ---
 description: Trading agent powered by TradingAgents multi-agent LLM framework. Analyzes stocks/crypto via 9-agent LangGraph pipeline (analysts → bull/bear debate → risk mgmt → portfolio manager). Supports any Gemini model.
 mode: subagent
+model: nvidia/nvidia/nemotron-3-super-120b-a12b
 permission:
   bash: allow
   read: allow
